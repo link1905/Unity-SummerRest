@@ -1,0 +1,16 @@
+{
+    "name": "SummerRest.Editors",
+    "rootNamespace": "",
+    "references": [
+        "GUID:985a1a35303d6d9419c2dc65155a12ae"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,17 @@
+{
+    "name": "SummerRest",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1",
+        "GUID:756335c0388f7114790e504ed368ae1d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
