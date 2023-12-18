@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     internal class AuthInjectorPointer

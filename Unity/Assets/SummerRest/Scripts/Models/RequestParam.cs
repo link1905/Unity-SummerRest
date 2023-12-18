@@ -1,9 +1,9 @@
 using System;
-using SummerRest.Scripts.Attributes;
-using SummerRest.Scripts.Models.Interfaces;
+using SummerRest.Attributes;
+using SummerRest.Models.Interfaces;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     internal class RequestParam

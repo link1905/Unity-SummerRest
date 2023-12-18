@@ -6,7 +6,7 @@ namespace SharedSourceGenerator.Data
     public class ClassOrStructFieldsData
     {
         public INamedTypeSymbol Self { get; }
-        public ImmutableArray<(IFieldSymbol, AttributeData)> Fields { get; }
+        public ImmutableArray<(IFieldSymbol, AttributeData)> Fields { get; set; }
 
         public ClassOrStructFieldsData(INamedTypeSymbol self, ImmutableArray<(IFieldSymbol, AttributeData)> fields)
         {

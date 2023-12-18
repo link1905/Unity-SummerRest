@@ -1,6 +1,6 @@
 using System;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     internal enum DataFormat

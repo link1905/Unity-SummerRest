@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using RestSourceGenerator.Metadata;
@@ -20,7 +22,7 @@ namespace RestSourceGenerator.Generators
                 var propName = fieldSymbol.Name.FromFieldToPropName();
                 var inheritCheck = $"{fieldSymbol.Name}InheritCheck";
                 bodyBuilder.Append($@"
-private bool {inheritCheck} = true;
+[SerializeField, HideInInspector] private bool {inheritCheck} = true;
 public {fieldData.Item1.Type.ToDisplayString()} {propName} {{
     get {{
         if ({inheritCheck} && {DefaultPropertyNames.Parent} is not null)
@@ -31,7 +33,7 @@ public {fieldData.Item1.Type.ToDisplayString()} {propName} {{
 ");
             }
             context.GenerateFormattedCode(ProjectReflection.Attributes.InheritOrCustom.Name, target.Self, 
-                bodyBuilder.ToString());
+                bodyBuilder.ToString(), usingStatements: "using UnityEngine;");
         }
     }
 }

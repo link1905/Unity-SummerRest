@@ -1,8 +1,8 @@
 using System;
-using SummerRest.Scripts.DataStructures;
+using SummerRest.DataStructures;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     internal class Domain : EndPoint<Service>

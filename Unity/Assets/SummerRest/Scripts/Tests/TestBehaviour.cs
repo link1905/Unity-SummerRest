@@ -1,10 +1,10 @@
 ﻿using System;
 using MemoryPack;
-using SummerRest.Scripts.DataStructures.Primitives;
-using SummerRest.Scripts.Models.Interfaces;
+using SummerRest.DataStructures.Primitives;
+using SummerRest.Models.Interfaces;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
     [Serializable]
     [MemoryPackable]
@@ -16,6 +16,7 @@ namespace SummerRest.Scripts.Tests
     public class TestBehaviour : MonoBehaviour
     {
         [SerializeField] private RestString restString;
+        [SerializeField] private RestFloat c;
         [SerializeField] private float f;
     }
 }

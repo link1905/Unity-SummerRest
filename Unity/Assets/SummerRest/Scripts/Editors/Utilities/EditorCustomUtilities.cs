@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Editors.Utilities
+namespace SummerRest.Editors.Utilities
 {
     public static class EditorCustomUtilities
     {
@@ -21,26 +21,45 @@ namespace SummerRest.Scripts.Editors.Utilities
             }
         }
 
+        public static class Heights
+        {
+            public static float SingleLineHeight => EditorGUIUtility.singleLineHeight;
+            public static float GetPropertyHeight(
+                SerializedProperty property,
+                GUIContent label = null,
+                bool includeChildren = true)
+            {
+                return EditorGUI.GetPropertyHeight(property, label, includeChildren);
+            }
+        }
+        
+
         public static class LayoutOptions
         {
             public static GUILayoutOption Width(float width) => GUILayout.Width(width);
             public static GUILayoutOption MinWidth(float minWidth) => GUILayout.MinWidth(minWidth);
             public static GUILayoutOption MaxWidth(float maxWidth) => GUILayout.MaxWidth(maxWidth);
             public static GUILayoutOption Height(float height) => GUILayout.Height(height);
+            public static GUILayoutOption SingleHeight = GUILayout.Height(Heights.SingleLineHeight);
             public static GUILayoutOption MinHeight(float minHeight) => GUILayout.MinHeight(minHeight);
             public static GUILayoutOption MaxHeight(float maxHeight) => GUILayout.MaxHeight(maxHeight);
             public static GUILayoutOption ExpandWidth(bool expand = true) => GUILayout.ExpandWidth(expand);
             public static GUILayoutOption ExpandHeight(bool expand = true) => GUILayout.ExpandHeight(expand);
             
-            public static GUILayoutOption Width(string content, float space = 20f)
-            {
-                return Width(new GUIContent(content), space);
-            }
-            public static GUILayoutOption Width(GUIContent content, float space = 20f)
-            {
-                var dim = GUI.skin.label.CalcSize(content);
-                return GUILayout.Width(dim.x + space);
-            }
+        }
+        
+        public static GUILayoutOption Width(this string content, float space = 20f)
+        {
+            return Width(new GUIContent(content), space);
+        }
+        public static GUILayoutOption Width(this GUIContent content, float space = 20f)
+        {
+            return LayoutOptions.Width(content.RawWidth(space));
+        }
+        public static float RawWidth(this GUIContent content, float space = 20f)
+        {
+            var dim = GUI.skin.label.CalcSize(content);
+            return dim.x + space;
         }
 
         public static HorizontalLayoutCommand DoHorizontalLayout(params GUILayoutOption[] options)
@@ -90,36 +109,50 @@ namespace SummerRest.Scripts.Editors.Utilities
             EditorGUI.indentLevel--;
         }
 
-        public struct HorizontalSection
+        public struct Section
         {
-            public float Width { get; }
+            public float Size { get; }
             public Action<Rect> DrawCallback { get; }
 
-            public HorizontalSection(float width, Action<Rect> drawCallback)
+            public Section(float size, Action<Rect> drawCallback)
             {
-                Width = width;
+                Size = size;
                 DrawCallback = drawCallback;
             }
 
-            public HorizontalSection(Action<Rect> drawCallback) : this(-1, drawCallback)
+            public Section(Action<Rect> drawCallback) : this(-1, drawCallback)
             {
             }
         }
 
         public static void DrawSequenceHorizontally(Rect rect,
-            params HorizontalSection[] sections)
+            params Section[] sections)
         {
             DrawSequenceHorizontally(rect, 0f, sections);
         }
+        
+        public static void DrawSequenceVertically(Rect rect,
+            float space, params Section[] sections)
+        {
+            foreach (var section in sections)
+            {
+                var tempRect = rect;
+                var size = section.Size;
+                tempRect.height = size;
+                section.DrawCallback?.Invoke(tempRect);
+                var useWidth = space + size;
+                rect.y += useWidth;
+            }
+        }
 
         public static void DrawSequenceHorizontally(Rect rect,
-            float space, params HorizontalSection[] sections)
+            float space, params Section[] sections)
         {
             var remainingWidth = rect.width;
             foreach (var section in sections)
             {
                 var tempRect = rect;
-                var width = section.Width;
+                var width = section.Size;
                 tempRect.width = width > 0 ? width : remainingWidth;
                 section.DrawCallback?.Invoke(tempRect);
 

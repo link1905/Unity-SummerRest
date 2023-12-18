@@ -14,6 +14,10 @@ public class InheritOrCustomSourceGeneratorTests
     public async Task GenerateInheritOrCustomFieldsClasses()
     {
         var code = """
+                   namespace UnityEngine {
+                       using System;
+                       public class SerializeField : Attribute { }
+                   }
                    namespace SummerRest.Attributes {
                        using System;
                        [AttributeUsage(AttributeTargets.Field)]
@@ -28,20 +32,21 @@ public class InheritOrCustomSourceGeneratorTests
                        public partial class InheritOrCustomA
                        {
                            public InheritOrCustomA Parent { get; set; }
-                           [InheritOrCustom] private int _limit;
-                           [InheritOrCustom] private int redirect;
-                           [InheritOrCustom] private string _origin;
+                           [InheritOrCustom, SerializeField] private int _limit;
+                           [InheritOrCustom, SerializeField] private int redirect;
+                           [InheritOrCustom, SerializeField] private string _origin;
                            public string DoNotGen { get; }
                        }
                    }
                    """;
         var generated = $$$"""
                            // Auto-generated
+                           using UnityEngine;
                            namespace RestSourceGenerator.Tests.Samples
                            {
                                public partial class InheritOrCustomA
                                {
-                                   private bool _limitInheritCheck = true;
+                                   [SerializeField, HideInInspector] private bool _limitInheritCheck = true;
                                    public int Limit {
                                        get {
                                            if (_limitInheritCheck && {{{DefaultPropertyNames.Parent}}} is not null)
@@ -49,7 +54,7 @@ public class InheritOrCustomSourceGeneratorTests
                                             return _limit;
                                        }
                                    }
-                                   private bool redirectInheritCheck = true;
+                                   [SerializeField, HideInInspector] private bool redirectInheritCheck = true;
                                    public int Redirect {
                                        get {
                                            if (redirectInheritCheck && {{{DefaultPropertyNames.Parent}}} is not null)
@@ -57,7 +62,7 @@ public class InheritOrCustomSourceGeneratorTests
                                             return redirect;
                                        }
                                    }
-                                   private bool _originInheritCheck = true;
+                                   [SerializeField, HideInInspector] private bool _originInheritCheck = true;
                                    public string Origin {
                                        get {
                                            if (_originInheritCheck && {{{DefaultPropertyNames.Parent}}} is not null)

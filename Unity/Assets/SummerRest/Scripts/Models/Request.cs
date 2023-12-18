@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TypeReferences;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     public interface IAuthDataRepository
     {

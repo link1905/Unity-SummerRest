@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SummerRest.Scripts.Attributes
+namespace SummerRest.Attributes
 {
     public class InheritOrCustomAttribute : PropertyAttribute
     {

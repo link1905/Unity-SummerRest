@@ -1,4 +1,4 @@
-namespace SummerRest.Scripts.Models.Interfaces
+namespace SummerRest.Models.Interfaces
 {
     /// <summary>
     /// Marking class for request data transfer object 

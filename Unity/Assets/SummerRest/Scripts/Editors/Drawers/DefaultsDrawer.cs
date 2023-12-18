@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using SummerRest.Scripts.Attributes;
-using SummerRest.Scripts.Editors.Utilities;
+using SummerRest.Attributes;
+using SummerRest.Editors.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Editors.Drawers
+namespace SummerRest.Editors.Drawers
 {
     [CustomPropertyDrawer(typeof(DefaultsAttribute))]
     internal class DefaultsDrawer : PropertyDrawer
@@ -18,8 +18,8 @@ namespace SummerRest.Scripts.Editors.Drawers
             if (_defaultValues is null)
             {
                 _defaultValues = ((DefaultsAttribute)attribute).Defaults.Prepend("Custom").ToArray();
-                _labelOption = EditorCustomUtilities.LayoutOptions.Width(label);
-                _customOption = EditorCustomUtilities.LayoutOptions.Width(_defaultValues[0]);
+                _labelOption = label.Width();
+                _customOption = _defaultValues[0].Width();
             }
         }
         public int GetIdx(SerializedProperty property)

@@ -1,6 +1,6 @@
 using System;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     public enum HttpMethod

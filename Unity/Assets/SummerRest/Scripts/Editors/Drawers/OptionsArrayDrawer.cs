@@ -1,10 +1,10 @@
-﻿using SummerRest.Scripts.DataStructures;
-using SummerRest.Scripts.Editors.Utilities;
+﻿using SummerRest.DataStructures;
+using SummerRest.Editors.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Editors.Drawers
+namespace SummerRest.Editors.Drawers
 {
     [CustomPropertyDrawer(typeof(OptionsArray<>))]
     internal class OptionsArrayDrawer : PropertyDrawer
@@ -21,13 +21,13 @@ namespace SummerRest.Scripts.Editors.Drawers
             var element = valuesProp.GetArrayElementAtIndex(idx);
             EditorCustomUtilities.DrawSequenceHorizontally(
                 rect, 
-                new EditorCustomUtilities.HorizontalSection(20f, r =>
+                new EditorCustomUtilities.Section(20f, r =>
                 {
                     var enable = EditorGUI.Toggle(r, indexProp.intValue == idx);
                     if (enable)
                         indexProp.intValue = idx;
                 }), 
-                new EditorCustomUtilities.HorizontalSection(r =>
+                new EditorCustomUtilities.Section(r =>
                 {
                     EditorGUI.PropertyField(r, element, GUIContent.none);
                     var val = element.stringValue;

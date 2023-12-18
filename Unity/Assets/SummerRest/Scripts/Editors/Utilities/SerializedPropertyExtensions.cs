@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 
-namespace SummerRest.Scripts.Editors.Utilities
+namespace SummerRest.Editors.Utilities
 {
     public static class SerializedPropertyExtensions
     {
-        private static readonly Dictionary<string, string> CacheBackingName = new();
         public static SerializedProperty FindBackingPropertyRelative(
             this SerializedProperty self, string name)
         {
-            if (!CacheBackingName.TryGetValue(name, out var backingName))
-            {
-                backingName = $"<{name}>k__BackingField";
-                CacheBackingName.Add(name, backingName);
-            }
+            var backingName = $"<{name}>k__BackingField";
             return self.FindPropertyRelative(backingName);
+        }
+        public static SerializedProperty FindSiblingPropertyRelative(
+            this SerializedProperty self, string name)
+        {
+            var dotIndex = self.propertyPath.LastIndexOf('.');
+            var siblingPath = self.propertyPath.ReplaceFromIndexWith(dotIndex + 1, name);
+            return self.serializedObject.FindProperty(siblingPath);
         }
     }
 }

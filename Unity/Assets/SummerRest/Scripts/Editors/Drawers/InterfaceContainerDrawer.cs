@@ -1,9 +1,9 @@
-using SummerRest.Scripts.DataStructures;
-using SummerRest.Scripts.Editors.Utilities;
+using SummerRest.DataStructures;
+using SummerRest.Editors.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Editors.Drawers
+namespace SummerRest.Editors.Drawers
 {
     [CustomPropertyDrawer(typeof(InterfaceContainer<>))]
     internal class InterfaceContainerDrawer : PropertyDrawer
@@ -14,7 +14,7 @@ namespace SummerRest.Scripts.Editors.Drawers
             var typeRefProp = property.FindPropertyRelative("typeRef");
             using (EditorCustomUtilities.DoHorizontalLayout(EditorCustomUtilities.LayoutOptions.ExpandWidth()))
             {
-                EditorGUILayout.LabelField(label, EditorCustomUtilities.LayoutOptions.Width(label));
+                EditorGUILayout.LabelField(label, label.Width());
                 EditorGUILayout.PropertyField(typeRefProp, GUIContent.none, EditorCustomUtilities.LayoutOptions.ExpandWidth());
             }
             EditorGUI.BeginChangeCheck();

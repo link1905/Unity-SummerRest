@@ -6,9 +6,15 @@ namespace RestSourceGenerator.Metadata
     {
         public const string Parent = nameof(Parent);
     }
+
+    public static class UnityEngine
+    {
+        public const string SerializeField = "UnityEngine.SerializeField";
+    }
     public static class ProjectReflection
     {
         public const string ProjectAssemblyName = "SummerRest";
+        
         public static class Attributes
         {
             public const string AttributesRoot = ProjectAssemblyName + CSharpReservedNames.Dot + nameof(Attributes);

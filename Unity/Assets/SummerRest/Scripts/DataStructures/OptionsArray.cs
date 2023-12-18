@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SummerRest.Scripts.DataStructures
+namespace SummerRest.DataStructures
 {
     [Serializable]
     public class GenericObject

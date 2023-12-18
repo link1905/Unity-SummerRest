@@ -1,8 +1,9 @@
 using System;
-using SummerRest.Scripts.Attributes;
+using SummerRest.Attributes;
+using SummerRest.DataStructures.Primitives;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Models
+namespace SummerRest.Models
 {
     [Serializable]
     internal class EndPoint<T> : EndPoint, ISerializationCallbackReceiver where T : EndPoint
@@ -18,17 +19,18 @@ namespace SummerRest.Scripts.Models
         }
     }
     [Serializable]
-    internal class EndPoint
+    internal partial class EndPoint
     {
         [field: SerializeField, HideInInspector] public Domain Domain { get; set; }
         [field: SerializeField, HideInInspector] public EndPoint Parent { get; set; }
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField, InheritOrCustom] public RequestHeader[] Headers { get; private set; }
-        [field: SerializeField, InheritOrCustom] public DataFormat DataFormat { get; private set; }
-        [field: SerializeField, InheritOrCustom] public ContentType ContentType { get; private set; }
-        [field: SerializeField, InheritOrCustom] public int TimeoutSeconds { get; private set; }
-        [field: SerializeField, InheritOrCustom] public int RedirectLimit { get; private set; }
-        [field: SerializeField, InheritOrCustom] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
+        [SerializeField] private RestString restString;
+        [SerializeField, InheritOrCustom] private DataFormat dataFormat;
+        [field: SerializeField] public RequestHeader[] Headers { get; private set; }
+        [field: SerializeField] public ContentType ContentType { get; private set; }
+        [field: SerializeField] public int TimeoutSeconds { get; private set; }
+        [field: SerializeField] public int RedirectLimit { get; private set; }
+        [field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
         public virtual string Path => $"{Parent?.Name}/{Name}";
         public virtual string Url => $"{Domain.ActiveVersion?.Origin}/{Path}";
     }

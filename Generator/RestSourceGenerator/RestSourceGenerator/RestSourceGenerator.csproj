@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9</LangVersion>
@@ -12,4 +11,15 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
         <ProjectReference Include="..\..\SharedSourceGenerator\SharedSourceGenerator.csproj" />
     </ItemGroup>
+
+<!--    <ItemGroup>-->
+<!--        &lt;!&ndash; Specify the files you want to move &ndash;&gt;-->
+<!--        <FilesToMove Include="$(OutputPath)\RestSourceGenerator.dll" />-->
+<!--        <FilesToMove Include="$(OutputPath)\SharedSourceGenerator.dll" />-->
+<!--    </ItemGroup>-->
+
+<!--    <Target Name="AfterBuild" AfterTargets="AfterBuild">-->
+<!--        <Message Text="### Hello world ###"  Importance="high" />-->
+<!--        <Copy SourceFiles="@(FilesToMove)" SkipUnchangedFiles="true" DestinationFolder="..\..\..\Unity\Assets\Plugins\SourceGenerators" />-->
+<!--    </Target>-->
 </Project>

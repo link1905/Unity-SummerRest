@@ -2,7 +2,7 @@ using System;
 using MemoryPack;
 using UnityEngine;
 
-namespace SummerRest.Scripts.DataStructures
+namespace SummerRest.DataStructures
 {
     [Serializable]
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver
