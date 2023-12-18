@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace SummerRest.Scripts.Attributes
 {
-    public class SerializedGenericField : PropertyAttribute
+    public class SerializedGenericFieldAttribute : PropertyAttribute
     {
         public Type DefaultType { get; }
         public Type[] BaseTypes { get; }
-        public SerializedGenericField(Type defaultType, params Type[] baseTypes)
+        public SerializedGenericFieldAttribute(Type defaultType, params Type[] baseTypes)
         {
             DefaultType = defaultType;
             BaseTypes = baseTypes;

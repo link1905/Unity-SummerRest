@@ -12,10 +12,10 @@ namespace SummerRest.Scripts.Editors.Drawers
         {
             EditorGUI.BeginProperty(position, label, property);
             var typeRefProp = property.FindPropertyRelative("typeRef");
-            using (EditorCustomUtilities.DoHorizontalLayout(GUILayout.ExpandWidth(true)))
+            using (EditorCustomUtilities.DoHorizontalLayout(EditorCustomUtilities.LayoutOptions.ExpandWidth()))
             {
-                EditorGUILayout.LabelField(label, EditorCustomUtilities.Width(label));
-                EditorGUILayout.PropertyField(typeRefProp, GUIContent.none, GUILayout.ExpandWidth(true));
+                EditorGUILayout.LabelField(label, EditorCustomUtilities.LayoutOptions.Width(label));
+                EditorGUILayout.PropertyField(typeRefProp, GUIContent.none, EditorCustomUtilities.LayoutOptions.ExpandWidth());
             }
             EditorGUI.BeginChangeCheck();
             var valueProp = property.FindBackingPropertyRelative("Value");

@@ -9,28 +9,50 @@ namespace SummerRest.Scripts.Editors.Utilities
         public readonly struct HorizontalLayoutCommand : IDisposable
         {
             public Rect Rect { get; }
+
             public HorizontalLayoutCommand(GUIStyle style, GUILayoutOption[] options)
             {
                 Rect = EditorGUILayout.BeginHorizontal(style, options);
             }
+
             public void Dispose()
             {
                 EditorGUILayout.EndHorizontal();
             }
         }
+
+        public static class LayoutOptions
+        {
+            public static GUILayoutOption Width(float width) => GUILayout.Width(width);
+            public static GUILayoutOption MinWidth(float minWidth) => GUILayout.MinWidth(minWidth);
+            public static GUILayoutOption MaxWidth(float maxWidth) => GUILayout.MaxWidth(maxWidth);
+            public static GUILayoutOption Height(float height) => GUILayout.Height(height);
+            public static GUILayoutOption MinHeight(float minHeight) => GUILayout.MinHeight(minHeight);
+            public static GUILayoutOption MaxHeight(float maxHeight) => GUILayout.MaxHeight(maxHeight);
+            public static GUILayoutOption ExpandWidth(bool expand = true) => GUILayout.ExpandWidth(expand);
+            public static GUILayoutOption ExpandHeight(bool expand = true) => GUILayout.ExpandHeight(expand);
+            
+            public static GUILayoutOption Width(string content, float space = 20f)
+            {
+                return Width(new GUIContent(content), space);
+            }
+            public static GUILayoutOption Width(GUIContent content, float space = 20f)
+            {
+                var dim = GUI.skin.label.CalcSize(content);
+                return GUILayout.Width(dim.x + space);
+            }
+        }
+
         public static HorizontalLayoutCommand DoHorizontalLayout(params GUILayoutOption[] options)
         {
             return new HorizontalLayoutCommand(GUIStyle.none, options);
-        } 
+        }
+
         public static HorizontalLayoutCommand DoHorizontalLayout(GUIStyle style, params GUILayoutOption[] options)
         {
             return new HorizontalLayoutCommand(style, options);
         }
 
-        public static GUILayoutOption Width(string content, float space = 20f)
-        {
-            return Width(new GUIContent(content), space);
-        }
 
         public static void DrawGenericField(this SerializedProperty property)
         {
@@ -46,8 +68,8 @@ namespace SummerRest.Scripts.Editors.Utilities
                     EditorGUILayout.PropertyField(property, GUIContent.none);
                     break;
             }
-       
         }
+
         public static void DrawNonUnityObject(this SerializedProperty property)
         {
             EditorGUI.indentLevel++;
@@ -64,12 +86,8 @@ namespace SummerRest.Scripts.Editors.Utilities
                 EditorGUILayout.PropertyField(iterator, true);
                 enterChildren = false;
             }
+
             EditorGUI.indentLevel--;
-        }
-        public static GUILayoutOption Width(GUIContent content, float space = 20f)
-        {
-            var dim = GUI.skin.label.CalcSize(content);
-            return GUILayout.Width(dim.x + space);
         }
 
         public struct HorizontalSection
@@ -82,21 +100,22 @@ namespace SummerRest.Scripts.Editors.Utilities
                 Width = width;
                 DrawCallback = drawCallback;
             }
+
             public HorizontalSection(Action<Rect> drawCallback) : this(-1, drawCallback)
             {
             }
         }
 
-        public static void DrawSequenceHorizontally(Rect rect, 
+        public static void DrawSequenceHorizontally(Rect rect,
             params HorizontalSection[] sections)
         {
             DrawSequenceHorizontally(rect, 0f, sections);
         }
 
-        public static void DrawSequenceHorizontally(Rect rect, 
+        public static void DrawSequenceHorizontally(Rect rect,
             float space, params HorizontalSection[] sections)
         {
-            var remainingWidth = rect.width; 
+            var remainingWidth = rect.width;
             foreach (var section in sections)
             {
                 var tempRect = rect;

@@ -1,14 +1,9 @@
 using System;
 using MemoryPack;
-using SummerRest.Scripts.Attributes;
-using SummerRest.Scripts.Models;
 using UnityEngine;
 
 namespace SummerRest.Scripts.DataStructures
 {
-
-
-
     [Serializable]
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver
     {

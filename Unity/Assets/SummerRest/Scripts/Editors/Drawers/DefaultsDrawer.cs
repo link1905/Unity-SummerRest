@@ -18,8 +18,8 @@ namespace SummerRest.Scripts.Editors.Drawers
             if (_defaultValues is null)
             {
                 _defaultValues = ((DefaultsAttribute)attribute).Defaults.Prepend("Custom").ToArray();
-                _labelOption = EditorCustomUtilities.Width(label);
-                _customOption = EditorCustomUtilities.Width(_defaultValues[0]);
+                _labelOption = EditorCustomUtilities.LayoutOptions.Width(label);
+                _customOption = EditorCustomUtilities.LayoutOptions.Width(_defaultValues[0]);
             }
         }
         public int GetIdx(SerializedProperty property)
@@ -40,16 +40,16 @@ namespace SummerRest.Scripts.Editors.Drawers
             var oldIdx = Mathf.Max(0, GetIdx(property));
             var oldVal = property.stringValue;
             using var scope = EditorCustomUtilities.DoHorizontalLayout(
-                GUILayout.ExpandWidth(true));
+                EditorCustomUtilities.LayoutOptions.ExpandWidth());
             EditorGUILayout.LabelField(label, _labelOption);
             var selectIdx = EditorGUILayout.Popup(oldIdx, _defaultValues, 
-                oldIdx != 0 ? GUILayout.ExpandWidth(true) : _customOption);
+                oldIdx != 0 ? EditorCustomUtilities.LayoutOptions.ExpandWidth() : _customOption);
             if (oldIdx != selectIdx)
                 property.stringValue = _defaultValues[selectIdx];
             if (selectIdx == 0)
             {                
                 //property.stringValue = "";
-                EditorGUILayout.PropertyField(property, GUIContent.none, GUILayout.ExpandWidth(true));
+                EditorGUILayout.PropertyField(property, GUIContent.none, EditorCustomUtilities.LayoutOptions.ExpandWidth());
             }
             EditorGUI.EndProperty();
         }

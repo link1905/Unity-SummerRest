@@ -227,15 +227,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55620ecd972444d19ca450aa47917fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testParam:
-    serializedValue: 0a000000
-    typeRef:
-      GuidAssignmentFailed: 0
-      GUID: 
-      _typeNameAndAssembly: System.Int32, mscorlib
-      _suppressLogs: 0
+  restString:
+    <Value>k__BackingField: 123123
+  f:
     <Value>k__BackingField: 10
-    valueChanged: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
