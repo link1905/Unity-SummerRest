@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using RestSourceGenerator.Generators;
 using RestSourceGenerator.Metadata;
+using RestSourceGenerator.Tests.Utilities;
 using SharedSourceGenerator.Metadata;
 using SharedSourceGenerator.Utilities;
 using Xunit;
 
-namespace RestSourceGenerator.Tests;
+namespace RestSourceGenerator.Tests.Tests;
 
 public class InheritOrCustomSourceGeneratorTests
 {
@@ -69,44 +68,9 @@ public class InheritOrCustomSourceGeneratorTests
                                }
                            }
                            """;
-        await new CSharpSourceGeneratorTest<InheritOrCustomFieldSourceGenerator, XUnitVerifier>
-        {
-            TestState =
-            {
-                Sources = { code },
-                GeneratedSources =
-                {
-                    (typeof(InheritOrCustomFieldSourceGenerator),
-                        $"InheritOrCustomA.{nameof(ProjectReflection.Attributes.InheritOrCustom)}.{RoslynDefaultValues.PostFixScriptName}",
-                        generated.FormatSource()),
-                }
-            }
-        }.RunAsync();
-
-        // // Create an instance of the source generator.
-        // var generator = new InheritOrCustomFieldSourceGenerator();
-        // // Source generators should be tested using 'GeneratorDriver'.
-        // var driver = CSharpGeneratorDriver.Create(generator);
-        // // To run generators, we can use an empty compilation.
-        // var compilation = CSharpCompilation.Create("RestSourceGenerator.Tests");
-        // var type = compilation.GetTypeByMetadataName("RestSourceGenerator.Tests.Samples.InheritOrCustomA");
-        // // Run generators. Don't forget to use the new compilation rather than the previous one.
-        // driver.RunGeneratorsAndUpdateCompilation(compilation, out var newCompilation, out _);
-        //
-        // var results = new Dictionary<string, string>
-        // {
-        //     {
-        //         $"{nameof(InheritOrCustomA)}.{nameof(ProjectReflection.Attributes.InheritOrCustom)}.{RoslynDefaultValues.PostFixScriptName}",
-        //         
-        //         }
-        //     };
-        //
-        // // Retrieve all files in the compilation.
-        // foreach (var tree in newCompilation.SyntaxTrees)
-        // {
-        //     if (!results.TryGetValue(tree.FilePath, out var expected))
-        //         Assert.Fail($"The matched result of {tree.FilePath} was not found");
-        //     Assert.True(tree.GetText().ContentEquals(expected.FormatSource()));
-        // }
+        await TestsUtilities.SimpleTest<InheritOrCustomFieldSourceGenerator>(code, 
+            (typeof(InheritOrCustomFieldSourceGenerator), 
+                $"InheritOrCustomA.{ProjectReflection.Attributes.InheritOrCustom.Name}.{RoslynDefaultValues.PostFixScriptName}", 
+                generated.FormatSource()));
     }
 }
