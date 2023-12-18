@@ -1,31 +1,20 @@
 ﻿using System;
 using SummerRest.Scripts.Attributes;
+using SummerRest.Scripts.DataStructures;
 using TypeReferences;
 using UnityEngine;
-
-namespace SummerRest.Scripts.DataStructures
+namespace RestSourceGenerator.Tests.Samples
 {
-    [Serializable]
-    internal partial class RequestParam
+    public partial class RequestParam
     {
-        [SerializedGenericField(typeof(bool), typeof(bool), typeof(string), typeof(float))]
-        private IRequestParamValue _value;
-    }
-    
-    
-    internal partial class RequestParam
-    {
-        //[SerializedGenericField(typeof(bool), typeof(bool), typeof(string), typeof(float))] private IRequestParamValue _value;
-        //Generated
         [SerializeField] private ValueContainer valueContainer;
         public IRequestParamValue Value => valueContainer.Value;
         public Type ValueType => valueContainer.Type;
         [Serializable]
-        public class ValueContainer : InterfaceContainer<SummerRest.Scripts.Models.IRequestParamValue>
+        public class ValueContainer : InterfaceContainer<RestSourceGenerator.Tests.Samples.IRequestParamValue>
         {
-            [SerializeField, Inherits(typeof(bool), IncludeTypes = new []{typeof(float), typeof(string)})] 
+            [SerializeField, Inherits(typeof(bool), typeof(string), typeof(float))]
             private TypeReference typeRef = new(typeof(bool));
         }
-        //
     }
 }
