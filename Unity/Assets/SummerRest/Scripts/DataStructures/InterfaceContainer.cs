@@ -1,5 +1,6 @@
 using System;
 using MemoryPack;
+using TypeReferences;
 using UnityEngine;
 
 namespace SummerRest.DataStructures
@@ -8,11 +9,12 @@ namespace SummerRest.DataStructures
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver
     {
         [SerializeField, HideInInspector] private byte[] serializedValue;
-        //[SerializeField, Inherits(typeof(int), IncludeBaseType = true)] private TypeReference typeRef;
-        public Type Type { get; set; }
-        [field: SerializeField, HideInInspector] public T Value { get; private set; }
+
+        public abstract Type Type { get; }
+        [field: SerializeReference, HideInInspector] public T Value { get; private set; }
         private bool _shouldUpdateValue = true; 
-        [SerializeField, HideInInspector] private bool valueChanged; 
+        [SerializeField, HideInInspector] private bool valueChanged;
+
         public TValue GetValue<TValue>() where TValue : class, T
         {
             return Value as TValue;
@@ -22,7 +24,19 @@ namespace SummerRest.DataStructures
             var type = Type;
             if (Value is not null && Value.GetType() == type && !_shouldUpdateValue) 
                 return;
-            var deserializedValue = MemoryPackSerializer.Deserialize(type, serializedValue) ?? Activator.CreateInstance(type);
+            object deserializedValue;
+            try
+            {
+                if (serializedValue is null || serializedValue.Length == 0)
+                    deserializedValue = Activator.CreateInstance(type);
+                else
+                    deserializedValue = MemoryPackSerializer.Deserialize(type, serializedValue);
+            }
+            catch (MemoryPackSerializationException serializationException)
+            {
+                deserializedValue = Activator.CreateInstance(type);
+            }
+            // var deserializedValue = MemoryPackSerializer.Deserialize(type, serializedValue) ?? Activator.CreateInstance(type);
             Value = (T)deserializedValue;
             _shouldUpdateValue = false;
         }
@@ -33,7 +47,7 @@ namespace SummerRest.DataStructures
                 return;
             if (Value is not null)
             {
-                type ??= Type = Value.GetType();
+                type ??= Value.GetType();
                 serializedValue = MemoryPackSerializer.Serialize(type, Value);
             }
             else

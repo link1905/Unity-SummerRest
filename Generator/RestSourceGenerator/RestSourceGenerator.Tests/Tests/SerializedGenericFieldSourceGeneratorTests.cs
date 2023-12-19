@@ -35,10 +35,11 @@ public class SerializedGenericFieldSourceGeneratorTests
                        using SummerRest.Attributes;
                        public interface IRequestParamValue
                        { }
+                       public class RequestParamValue : IRequestParamValue {}
                        [Serializable]
                        public partial class RequestParam
                        {
-                           [SerializedGenericField(typeof(bool), typeof(bool), typeof(string), typeof(float))]
+                           [SerializedGenericField(typeof(RequestParamValue))]
                            private IRequestParamValue _value;
                        }
                    }
@@ -46,22 +47,31 @@ public class SerializedGenericFieldSourceGeneratorTests
         var generated = """
                         // Auto-generated
                         using System;
-                        using SummerRest.Scripts.Attributes;
-                        using SummerRest.Scripts.DataStructures;
+                        using SummerRest.Attributes;
+                        using SummerRest.DataStructures;
                         using TypeReferences;
                         using UnityEngine;
                         namespace RestSourceGenerator.Tests.Samples
                         {
                             public partial class RequestParam
                             {
-                                [SerializeField] private ValueContainer valueContainer;
+                                [SerializeField, HideInInspector] private ValueContainer valueContainer;
                                 public RestSourceGenerator.Tests.Samples.IRequestParamValue Value => valueContainer.Value;
                                 public Type ValueType => valueContainer.Type;
                                 [Serializable]
                                 public class ValueContainer : InterfaceContainer<RestSourceGenerator.Tests.Samples.IRequestParamValue>
                                 {
-                                    [SerializeField, Inherits(typeof(bool), typeof(string), typeof(float))]
-                                    private TypeReference typeRef = new(typeof(bool));
+                                    [SerializeField, HideInInspector, Inherits(typeof(RestSourceGenerator.Tests.Samples.IRequestParamValue))]
+                                    private TypeReference typeRef = new(typeof(RestSourceGenerator.Tests.Samples.RequestParamValue));
+                                    public override Type Type
+                                    {
+                                        get
+                                        {
+                                            if (typeRef.Type is null)
+                                                typeRef.Type = typeof(RestSourceGenerator.Tests.Samples.RequestParamValue);
+                                            return typeRef.Type;      
+                                        }
+                                    } 
                                 }
                             }
                         }

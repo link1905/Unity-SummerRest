@@ -31,12 +31,14 @@ namespace RestSourceGenerator.Generators
                 return DefaultType.BuildTypeof();
             }
         }
-        private ProcessedAttributeData? ProcessAttribute(AttributeData processedAttributeData)
+        private ProcessedAttributeData? ProcessAttribute(ISymbol symbol,
+            AttributeData processedAttributeData)
         {
             var defaultType = processedAttributeData.ConstructorArguments[0].Value.ToString();
             var baseTypes = processedAttributeData.ConstructorArguments[1].Values
                 .Where(e => !e.IsNull)
-                .Select(e => e.Value.ToString());
+                .Select(e => e.Value.ToString())
+                .Append(symbol.ToDisplayString());
             return new ProcessedAttributeData(baseTypes.ToImmutableArray(), defaultType);
         }
         protected override void Execute(GeneratorExecutionContext context, ClassOrStructFieldsData target)
@@ -44,7 +46,7 @@ namespace RestSourceGenerator.Generators
             var bodyBuilder = new StringBuilder();
             foreach (var (fieldSymbol, fieldAttributeData) in target.Fields)
             {
-                var processedAttData = ProcessAttribute(fieldAttributeData);
+                var processedAttData = ProcessAttribute(fieldSymbol.Type, fieldAttributeData);
                 if (processedAttData is null)
                     continue;
                 var fieldTypeSymbol = fieldSymbol.Type.ToDisplayString();
@@ -54,15 +56,24 @@ namespace RestSourceGenerator.Generators
                 var containerClassName = $"{propName}{ProjectReflection.Attributes.SerializedGenericField.Container}";
                 var fieldTypeName = fieldSymbol.Type.ToDisplayString();
                 bodyBuilder.Append($@"
-[SerializeField] private ValueContainer {containerName};
+[SerializeField, HideInInspector] private ValueContainer {containerName};
 public {fieldTypeSymbol} {propName} => {containerName}.{ProjectReflection.Attributes.SerializedGenericField.Value};
 public Type {propName}Type => {containerName}.{ProjectReflection.Attributes.SerializedGenericField.Type};
 
 [Serializable]
 public class {containerClassName} : InterfaceContainer<{fieldTypeName}>
 {{
-    [SerializeField, Inherits({processedAttData.Value.BuildInherits()})] 
+    [SerializeField, HideInInspector, Inherits({processedAttData.Value.BuildInherits()})] 
     private TypeReference typeRef = new({processedAttData.Value.BuildDefaultType()});
+    public override Type Type
+    {{
+        get
+        {{
+            if (typeRef.Type is null)
+                typeRef.Type = {processedAttData.Value.BuildDefaultType()};
+            return typeRef.Type;      
+        }}
+    }} 
 }}
 ");
             }
@@ -70,8 +81,8 @@ public class {containerClassName} : InterfaceContainer<{fieldTypeName}>
                 bodyBuilder.ToString(), usingStatements: 
                 @"
 using System;
-using SummerRest.Scripts.Attributes;
-using SummerRest.Scripts.DataStructures;
+using SummerRest.Attributes;
+using SummerRest.DataStructures;
 using TypeReferences;
 using UnityEngine;");
         }

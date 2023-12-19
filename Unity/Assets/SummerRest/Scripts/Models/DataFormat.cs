@@ -3,7 +3,7 @@ using System;
 namespace SummerRest.Models
 {
     [Serializable]
-    internal enum DataFormat
+    public enum DataFormat
     {
         Json, Xml, PlainText
     }

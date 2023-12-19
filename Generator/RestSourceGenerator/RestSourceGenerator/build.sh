@@ -1,5 +1,18 @@
 #!/bin/bash
 
+#!/bin/bash
+
+# Run the dotnet test command
+
+dotnet test "../RestSourceGenerator.Tests"
+
+# Check the exit status of the dotnet test command
+if [ $? -ne 0 ]; then
+    echo "Error: Tests failed. Exiting the script."
+    # Add any error-specific message or log here
+    exit 1  # Exit the script with an error code
+fi
+
 # Step 1: Build the .NET project
 dotnet build
 

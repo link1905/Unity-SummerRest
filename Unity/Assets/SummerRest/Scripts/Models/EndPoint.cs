@@ -24,7 +24,6 @@ namespace SummerRest.Models
         [field: SerializeField, HideInInspector] public Domain Domain { get; set; }
         [field: SerializeField, HideInInspector] public EndPoint Parent { get; set; }
         [field: SerializeField] public string Name { get; private set; }
-        [SerializeField] private RestString restString;
         [SerializeField, InheritOrCustom] private DataFormat dataFormat;
         [field: SerializeField] public RequestHeader[] Headers { get; private set; }
         [field: SerializeField] public ContentType ContentType { get; private set; }

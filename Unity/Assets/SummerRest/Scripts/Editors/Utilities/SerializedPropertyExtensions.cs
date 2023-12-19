@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SummerRest.Utilities;
 using UnityEditor;
 
 namespace SummerRest.Editors.Utilities
@@ -16,7 +17,7 @@ namespace SummerRest.Editors.Utilities
             this SerializedProperty self, string name)
         {
             var dotIndex = self.propertyPath.LastIndexOf('.');
-            var siblingPath = self.propertyPath.ReplaceFromIndexWith(dotIndex + 1, name);
+            var siblingPath = dotIndex == -1 ? name : self.propertyPath.ReplaceFromIndexWith(dotIndex + 1, name);
             return self.serializedObject.FindProperty(siblingPath);
         }
     }

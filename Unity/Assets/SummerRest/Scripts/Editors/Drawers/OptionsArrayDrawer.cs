@@ -10,28 +10,19 @@ namespace SummerRest.Editors.Drawers
     internal class OptionsArrayDrawer : PropertyDrawer
     {
         private ReorderableList _reorderableList;
+        private float _lastPosWidth;
         private ReorderableList ReorderableList(SerializedProperty property, GUIContent label)
         {
             return _reorderableList ??= OnEnable(property, label);
         }
-
-        
         private void DrawOptionElement(SerializedProperty indexProp, SerializedProperty valuesProp, Rect rect, int idx)
         {
             var element = valuesProp.GetArrayElementAtIndex(idx);
-            EditorCustomUtilities.DrawSequenceHorizontally(
-                rect, 
-                new EditorCustomUtilities.Section(20f, r =>
-                {
-                    var enable = EditorGUI.Toggle(r, indexProp.intValue == idx);
-                    if (enable)
-                        indexProp.intValue = idx;
-                }), 
-                new EditorCustomUtilities.Section(r =>
-                {
-                    EditorGUI.PropertyField(r, element, GUIContent.none);
-                    var val = element.stringValue;
-                }));
+            using var scope = EditorCustomUtilities.EditorGUIDrawHorizontalLayout.Create(rect);
+            var enable = scope.Toggle(indexProp.intValue == idx, 20f);
+            if (enable)
+                indexProp.intValue = idx;
+            scope.PropertyField(element, label: GUIContent.none);
         }
         private ReorderableList OnEnable(SerializedProperty property, GUIContent label)
         {
@@ -42,9 +33,10 @@ namespace SummerRest.Editors.Drawers
                     drawHeaderCallback = rect => EditorGUI.LabelField(rect, label),
                     drawElementCallback = (rect, index, _, _) =>
                     {
+                        rect.width = _lastPosWidth = Mathf.Max(rect.width, _lastPosWidth);
                         DrawOptionElement(selectedIndex, values, rect, index);
                     },
-                    elementHeight = EditorGUIUtility.singleLineHeight
+                    elementHeight = EditorCustomUtilities.Heights.SingleLineHeight,
                 };
         }
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -53,11 +45,10 @@ namespace SummerRest.Editors.Drawers
             ReorderableList(property, label).DoList(position);
             EditorGUI.EndProperty();
         }
-
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            //var valuesProp = property.FindPropertyRelative("options");
-            return EditorGUIUtility.singleLineHeight + ReorderableList(property, label).GetHeight();
+            var list = ReorderableList(property, label);
+            return list.GetHeight();
         }
     }
 }
