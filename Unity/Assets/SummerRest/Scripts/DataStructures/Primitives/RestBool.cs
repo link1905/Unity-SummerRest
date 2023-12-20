@@ -1,8 +1,10 @@
 using System;
+using MemoryPack;
 
 namespace SummerRest.DataStructures.Primitives
 {
     [Serializable]
-    public class RestBool : Primitive<bool>
+    [MemoryPackable]
+    public partial class RestBool : Primitive<bool>
     { }
 }

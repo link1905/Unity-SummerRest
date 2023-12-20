@@ -11,14 +11,12 @@ namespace SummerRest.Editors.Drawers
     internal class DefaultsDrawer : PropertyDrawer
     {
         private string[] _defaultValues;
-        private GUILayoutOption _labelOption;
         private float _customWidth;
         private void Init(SerializedProperty property, GUIContent label)
         {
             if (_defaultValues is null)
             {
                 _defaultValues = ((DefaultsAttribute)attribute).Defaults.Prepend("Custom").ToArray();
-                _labelOption = label.Width();
                 _customWidth = _defaultValues[0].RawWidth();
             }
         }
@@ -39,7 +37,7 @@ namespace SummerRest.Editors.Drawers
             }
             var oldIdx = Mathf.Max(0, GetIdx(property));
             var oldVal = property.stringValue;
-            using var scope = EditorCustomUtilities.EditorGUIDrawHorizontalLayout.Create(position);
+            using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(position);
             scope.LabelLeftField(label);
             var width = oldIdx != 0 ? -1 : _customWidth;
             var selectIdx = scope.PopupField(_defaultValues, oldIdx, width);

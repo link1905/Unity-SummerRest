@@ -1,8 +1,9 @@
 using System;
+using MemoryPack;
 
 namespace SummerRest.DataStructures.Primitives
 {
-    [Serializable]
-    public class RestString : Primitive<string>
+    [Serializable, MemoryPackable]
+    public partial class RestString : Primitive<string>
     { }
 }

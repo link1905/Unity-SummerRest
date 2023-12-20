@@ -69,7 +69,7 @@ public class SerializedGenericFieldSourceGeneratorTests
                                         {
                                             if (typeRef.Type is null)
                                                 typeRef.Type = typeof(RestSourceGenerator.Tests.Samples.RequestParamValue);
-                                            return typeRef.Type;      
+                                            return System.Type.GetType(typeRef.TypeNameAndAssembly);      
                                         }
                                     } 
                                 }

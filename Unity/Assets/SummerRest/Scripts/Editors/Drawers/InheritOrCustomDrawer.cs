@@ -16,13 +16,16 @@ namespace SummerRest.Editors.Drawers
             out SerializedProperty inheritBakingProp)
         {
             inheritBakingProp = serializedProperty.FindSiblingPropertyRelative($"{serializedProperty.name}InheritCheck");
+            var parentField = serializedProperty.FindSiblingBackingPropertyRelative("Parent");
+            if (parentField.managedReferenceValue is null)
+                return Choice.Custom;
             var idx = inheritBakingProp.boolValue ? Choice.Inherit : Choice.Custom;
             return idx;
         }
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
-            using var scope = EditorCustomUtilities.EditorGUIDrawHorizontalLayout.Create(position);
+            using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(position);
             scope.LabelLeftField(label);
             var idx = CurrentChoice(property, out var inheritBakingProp);
             idx = scope.EnumPopup(idx);
@@ -42,9 +45,9 @@ namespace SummerRest.Editors.Drawers
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             var choice = CurrentChoice(property, out _);
-            var addHeight = EditorCustomUtilities.Heights.SingleLineHeight;
+            var addHeight = SummerRestEditorUtilities.Sizes.SingleLineHeight;
             if (choice == Choice.Custom)
-                addHeight += EditorCustomUtilities.Heights.GetPropertyHeight(property, label);
+                addHeight += SummerRestEditorUtilities.Sizes.GetPropertyHeight(property, label);
             return addHeight;
         }
     }

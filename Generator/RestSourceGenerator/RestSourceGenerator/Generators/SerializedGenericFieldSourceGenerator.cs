@@ -71,7 +71,7 @@ public class {containerClassName} : InterfaceContainer<{fieldTypeName}>
         {{
             if (typeRef.Type is null)
                 typeRef.Type = {processedAttData.Value.BuildDefaultType()};
-            return typeRef.Type;      
+            return System.Type.GetType(typeRef.TypeNameAndAssembly);      
         }}
     }} 
 }}

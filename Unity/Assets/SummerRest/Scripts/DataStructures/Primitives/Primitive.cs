@@ -7,6 +7,6 @@ namespace SummerRest.DataStructures.Primitives
     [Serializable]
     public abstract class Primitive<T> : IRequestParamData
     {
-        [field: SerializeField] public T Value { get; private set; }
+        [field: SerializeField] public T Value { get; set; }
     }
 }

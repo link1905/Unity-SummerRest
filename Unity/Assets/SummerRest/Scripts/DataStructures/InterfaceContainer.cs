@@ -32,11 +32,10 @@ namespace SummerRest.DataStructures
                 else
                     deserializedValue = MemoryPackSerializer.Deserialize(type, serializedValue);
             }
-            catch (MemoryPackSerializationException serializationException)
+            catch (MemoryPackSerializationException)
             {
                 deserializedValue = Activator.CreateInstance(type);
             }
-            // var deserializedValue = MemoryPackSerializer.Deserialize(type, serializedValue) ?? Activator.CreateInstance(type);
             Value = (T)deserializedValue;
             _shouldUpdateValue = false;
         }
@@ -48,7 +47,17 @@ namespace SummerRest.DataStructures
             if (Value is not null)
             {
                 type ??= Value.GetType();
-                serializedValue = MemoryPackSerializer.Serialize(type, Value);
+                try
+                {
+                    if (type == Value.GetType())
+                        serializedValue = MemoryPackSerializer.Serialize(type, Value);
+                    else
+                        serializedValue = Array.Empty<byte>();
+                }
+                catch (MemoryPackSerializationException)
+                {
+                    serializedValue = Array.Empty<byte>();
+                }
             }
             else
                 serializedValue = Array.Empty<byte>();

@@ -10,7 +10,7 @@ namespace SummerRest.Editors.Drawers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            using var scope = EditorCustomUtilities.EditorGUIDrawHorizontalLayout.Create(position);
+            using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(position);
             scope.LabelLeftField(label);
             var valueProp = property
                 .FindBackingPropertyRelative(nameof(Primitive<object>.Value));
@@ -18,7 +18,7 @@ namespace SummerRest.Editors.Drawers
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorCustomUtilities.Heights.SingleLineHeight;
+            return SummerRestEditorUtilities.Sizes.SingleLineHeight;
         }
     }
 }

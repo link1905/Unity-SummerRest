@@ -18,7 +18,7 @@ namespace SummerRest.Editors.Drawers
         private void DrawOptionElement(SerializedProperty indexProp, SerializedProperty valuesProp, Rect rect, int idx)
         {
             var element = valuesProp.GetArrayElementAtIndex(idx);
-            using var scope = EditorCustomUtilities.EditorGUIDrawHorizontalLayout.Create(rect);
+            using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(rect);
             var enable = scope.Toggle(indexProp.intValue == idx, 20f);
             if (enable)
                 indexProp.intValue = idx;
@@ -36,7 +36,7 @@ namespace SummerRest.Editors.Drawers
                         rect.width = _lastPosWidth = Mathf.Max(rect.width, _lastPosWidth);
                         DrawOptionElement(selectedIndex, values, rect, index);
                     },
-                    elementHeight = EditorCustomUtilities.Heights.SingleLineHeight,
+                    elementHeight = SummerRestEditorUtilities.Sizes.SingleLineHeight,
                 };
         }
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

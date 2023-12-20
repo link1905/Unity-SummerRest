@@ -21,8 +21,8 @@ namespace SummerRest.Models
     [Serializable]
     internal partial class EndPoint
     {
-        [field: SerializeField, HideInInspector] public Domain Domain { get; set; }
-        [field: SerializeField, HideInInspector] public EndPoint Parent { get; set; }
+        [field: SerializeReference, HideInInspector] public Domain Domain { get; set; }
+        [field: SerializeReference, HideInInspector] public EndPoint Parent { get; set; }
         [field: SerializeField] public string Name { get; private set; }
         [SerializeField, InheritOrCustom] private DataFormat dataFormat;
         [field: SerializeField] public RequestHeader[] Headers { get; private set; }

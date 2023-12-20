@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - <Name>k__BackingField: 
-    restString:
-      <Value>k__BackingField: asdasd
     dataFormat: 0
     <Headers>k__BackingField: []
     <ContentType>k__BackingField:
@@ -27,7 +25,7 @@ MonoBehaviour:
     <AuthInjectorPointer>k__BackingField:
       <Type>k__BackingField: 0
       <AuthId>k__BackingField: 
-    dataFormatInheritCheck: 0
+    dataFormatInheritCheck: 1
     <Children>k__BackingField: []
     <VersionOrigins>k__BackingField:
       <Value>k__BackingField:

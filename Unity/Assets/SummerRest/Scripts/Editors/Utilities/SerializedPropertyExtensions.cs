@@ -13,6 +13,12 @@ namespace SummerRest.Editors.Utilities
             var backingName = $"<{name}>k__BackingField";
             return self.FindPropertyRelative(backingName);
         }
+        public static SerializedProperty FindSiblingBackingPropertyRelative(
+            this SerializedProperty self, string name)
+        {
+            var backingName = $"<{name}>k__BackingField";
+            return self.FindSiblingPropertyRelative(backingName);
+        }
         public static SerializedProperty FindSiblingPropertyRelative(
             this SerializedProperty self, string name)
         {

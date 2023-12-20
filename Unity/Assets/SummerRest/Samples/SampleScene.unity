@@ -251,9 +251,9 @@ MonoBehaviour:
     rid: -2
   dataFormatInheritCheck: 0
   valueContainer:
-    serializedValue: 
+    serializedValue: 029100000000000000
     <Value>k__BackingField:
-      rid: 2163763457217265664
+      rid: 2163763473122852946
     valueChanged: 0
     typeRef:
       GuidAssignmentFailed: 0
@@ -265,8 +265,8 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 2163763457217265664
+    - rid: 2163763473122852946
       type: {class: RequestParamData, ns: SummerRest.Tests, asm: SummerRest}
       data:
-        A: 0
+        A: 145
         B: 0
