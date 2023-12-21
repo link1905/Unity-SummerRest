@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="header" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: stretch; align-self: stretch; flex-direction: row; justify-content: flex-start; height: auto; width: auto; flex-shrink: 0; flex-basis: 10%;">
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="false" name="prop-name" enable-rich-text="false" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-grow: 0; flex-shrink: 1; width: auto; -unity-text-align: middle-center;" />
+        <ui:EnumField type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="prop-choice" include-obsolete-values="true" style="align-self: stretch; align-items: flex-start; justify-content: flex-start; flex-direction: column; width: auto; flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap;" />
+    </ui:VisualElement>
+    <uie:PropertyField style="height: auto; flex-grow: 1;" />
+</ui:UXML>

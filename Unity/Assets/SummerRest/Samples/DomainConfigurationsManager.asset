@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: DomainConfigurationsManager
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
-  - <Name>k__BackingField: 
+  - <Domain>k__BackingField:
+      rid: -2
+    <Parent>k__BackingField:
+      rid: -2
+    <Name>k__BackingField: 
     dataFormat: 0
     <Headers>k__BackingField: []
     <ContentType>k__BackingField:
-      <CharSet>k__BackingField: 
+      <CharSet>k__BackingField: Custom
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
     <TimeoutSeconds>k__BackingField: 0
@@ -25,9 +29,54 @@ MonoBehaviour:
     <AuthInjectorPointer>k__BackingField:
       <Type>k__BackingField: 0
       <AuthId>k__BackingField: 
-    dataFormatInheritCheck: 1
-    <Children>k__BackingField: []
-    <VersionOrigins>k__BackingField:
-      <Value>k__BackingField:
-        <Origin>k__BackingField: 
-      <Enable>k__BackingField: 0
+    dataFormatInheritCheck: 0
+    <Services>k__BackingField:
+    - <Domain>k__BackingField:
+        rid: -2
+      <Parent>k__BackingField:
+        rid: -2
+      <Name>k__BackingField: 
+      dataFormat: 0
+      <Headers>k__BackingField: []
+      <ContentType>k__BackingField:
+        <CharSet>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+      <TimeoutSeconds>k__BackingField: 0
+      <RedirectLimit>k__BackingField: 0
+      <AuthInjectorPointer>k__BackingField:
+        <Type>k__BackingField: 0
+        <AuthId>k__BackingField: 
+      dataFormatInheritCheck: 0
+      <Services>k__BackingField: []
+      <Requests>k__BackingField: []
+    <Requests>k__BackingField:
+    - <Domain>k__BackingField:
+        rid: -2
+      <Parent>k__BackingField:
+        rid: -2
+      <Name>k__BackingField: 
+      dataFormat: 0
+      <Headers>k__BackingField: []
+      <ContentType>k__BackingField:
+        <CharSet>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+      <TimeoutSeconds>k__BackingField: 0
+      <RedirectLimit>k__BackingField: 0
+      <AuthInjectorPointer>k__BackingField:
+        <Type>k__BackingField: 0
+        <AuthId>k__BackingField: 
+      dataFormatInheritCheck: 0
+      <Method>k__BackingField: 0
+      <Params>k__BackingField: []
+    versions:
+      values:
+      - asd
+      - asdsa
+      selectedIndex: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

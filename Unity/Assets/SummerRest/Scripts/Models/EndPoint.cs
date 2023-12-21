@@ -1,25 +1,11 @@
 using System;
 using SummerRest.Attributes;
-using SummerRest.DataStructures.Primitives;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
     [Serializable]
-    internal class EndPoint<T> : EndPoint, ISerializationCallbackReceiver where T : EndPoint
-    {
-        [field: SerializeField] public T[] Children { get; private set; }
-        public void OnBeforeSerialize()
-        {
-        }
-        public void OnAfterDeserialize()
-        {
-            foreach (var child in Children)
-                child.Parent = this;
-        }
-    }
-    [Serializable]
-    internal partial class EndPoint
+    public partial class EndPoint
     {
         [field: SerializeReference, HideInInspector] public Domain Domain { get; set; }
         [field: SerializeReference, HideInInspector] public EndPoint Parent { get; set; }
@@ -31,6 +17,6 @@ namespace SummerRest.Models
         [field: SerializeField] public int RedirectLimit { get; private set; }
         [field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
         public virtual string Path => $"{Parent?.Name}/{Name}";
-        public virtual string Url => $"{Domain.ActiveVersion?.Origin}/{Path}";
+        public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
     }
 }

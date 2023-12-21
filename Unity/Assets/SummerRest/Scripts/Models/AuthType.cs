@@ -3,7 +3,7 @@ using System;
 namespace SummerRest.Models
 {
     [Serializable]
-    internal enum AuthType
+    public enum AuthType
     {
         None, Advanced
     }

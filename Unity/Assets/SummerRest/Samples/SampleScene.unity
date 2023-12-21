@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
-  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -218,55 +217,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &705507996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705507993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55620ecd972444d19ca450aa47917fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  f:
-    values:
-    - asdasd
-    - asdasd
-    - asdasd
-    - asdasd
-    - asdasd
-    - asdasd
-    - asdasd
-    - asdasd
-    selectedIndex: 0
-  restString:
-    <Value>k__BackingField: 
-  restFloat:
-    <Value>k__BackingField: 0
-  defaultTest: 
-  dataFormat: 1
-  _value:
-    rid: -2
-  dataFormatInheritCheck: 0
-  valueContainer:
-    serializedValue: 029100000000000000
-    <Value>k__BackingField:
-      rid: 2163763473122852946
-    valueChanged: 0
-    typeRef:
-      GuidAssignmentFailed: 0
-      GUID: 
-      _typeNameAndAssembly: SummerRest.Tests.RequestParamData, SummerRest
-      _suppressLogs: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2163763473122852946
-      type: {class: RequestParamData, ns: SummerRest.Tests, asm: SummerRest}
-      data:
-        A: 145
-        B: 0

@@ -52,7 +52,7 @@ namespace SummerRest.Models
     }
 
     [Serializable]
-    internal class Request
+    public class Request : EndPoint 
     {
         [field: SerializeField] public HttpMethod Method { get; private set; }
         [field: SerializeField] public RequestParam[] Params { get; private set; }

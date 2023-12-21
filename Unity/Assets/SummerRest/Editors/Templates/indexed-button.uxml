@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="False">
+    <SummerRest.Editors.Window.Elements.IndexedButton text="Button" display-tooltip-when-elided="true" name="domain-button" style="flex-grow: 0; flex-basis: auto; align-items: stretch; justify-content: center; align-self: stretch; -unity-text-align: middle-center; white-space: nowrap; flex-direction: column; flex-wrap: nowrap; height: 100%; width: auto; min-width: auto;" />
+</ui:UXML>

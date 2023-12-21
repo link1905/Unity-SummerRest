@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SummerRest.Models
 {
     [Serializable]
-    internal class ApiVersion
+    public class ApiVersion
     {
         [field: SerializeField] public string Origin { get; private set; }
     }
