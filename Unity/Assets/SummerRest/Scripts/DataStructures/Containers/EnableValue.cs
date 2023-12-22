@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SummerRest.DataStructures
+namespace SummerRest.DataStructures.Containers
 {
     [Serializable]
     internal class EnableValue<T>

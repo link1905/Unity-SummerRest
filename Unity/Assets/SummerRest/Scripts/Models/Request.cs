@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using SummerRest.Attributes;
+using SummerRest.DataStructures;
+using SummerRest.DataStructures.Primitives;
+using SummerRest.Models.Interfaces;
 using TypeReferences;
 using UnityEngine;
 
@@ -52,9 +56,36 @@ namespace SummerRest.Models
     }
 
     [Serializable]
-    public class Request : EndPoint 
+    public partial class Request : EndPoint 
     {
-        [field: SerializeField] public HttpMethod Method { get; private set; }
-        [field: SerializeField] public RequestParam[] Params { get; private set; }
+        [SerializeField] private HttpMethod method;
+        [SerializeField] private RequestParam[] requestParams;
+
+        public HttpMethod Method
+        {
+            get => method;
+            private set => method = value;
+        }
+
+        public RequestParam[] RequestParams
+        {
+            get => requestParams;
+            private set => requestParams = value;
+        }
     }
+
+
+    public enum BodyType
+    {
+        Text, Data
+    }
+    [Serializable]
+    public partial class RequestBody
+    {
+        [SerializeField] private BodyType type;
+        [SerializeField, Multiline(20)] private string text;
+        [SerializeReference, SerializedGenericField(typeof(RestString))] private IRequestBodyData value;
+
+    }
+    
 }

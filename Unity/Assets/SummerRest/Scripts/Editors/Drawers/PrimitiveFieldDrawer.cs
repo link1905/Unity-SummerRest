@@ -13,7 +13,7 @@ namespace SummerRest.Editors.Drawers
             using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(position);
             scope.LabelLeftField(label);
             var valueProp = property
-                .FindBackingPropertyRelative(nameof(Primitive<object>.Value));
+                .FindPropertyRelative("value");
             scope.PropertyField(valueProp, label: GUIContent.none);
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

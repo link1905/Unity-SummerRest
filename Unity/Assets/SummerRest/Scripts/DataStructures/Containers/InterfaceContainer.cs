@@ -1,19 +1,25 @@
 using System;
 using MemoryPack;
-using TypeReferences;
 using UnityEngine;
 
-namespace SummerRest.DataStructures
+namespace SummerRest.DataStructures.Containers
 {
     [Serializable]
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver
     {
         [SerializeField, HideInInspector] private byte[] serializedValue;
-
         public abstract Type Type { get; }
-        [field: SerializeReference, HideInInspector] public T Value { get; private set; }
+
+        
+        public T Value
+        {
+            get => value;
+            private set => this.value = value;
+        }
+
         private bool _shouldUpdateValue = true; 
         [SerializeField, HideInInspector] private bool valueChanged;
+        [SerializeReference, HideInInspector] private T value;
 
         public TValue GetValue<TValue>() where TValue : class, T
         {

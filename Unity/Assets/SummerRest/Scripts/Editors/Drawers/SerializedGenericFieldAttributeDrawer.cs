@@ -1,5 +1,6 @@
 using SummerRest.Attributes;
 using SummerRest.DataStructures;
+using SummerRest.DataStructures.Containers;
 using SummerRest.Editors.Utilities;
 using SummerRest.Utilities;
 using UnityEditor;
@@ -16,7 +17,7 @@ namespace SummerRest.Editors.Drawers
             valueContainerProp =
                 property.FindSiblingPropertyRelative($"{property.name.FromFieldToUnityFieldName()}Container");
             typeRefProp = valueContainerProp.FindPropertyRelative("typeRef");
-            valueProp = valueContainerProp.FindBackingPropertyRelative(nameof(InterfaceContainer<object>.Value));
+            valueProp = valueContainerProp.FindPropertyRelative("value");
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

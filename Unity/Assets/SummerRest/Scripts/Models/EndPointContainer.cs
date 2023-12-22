@@ -1,22 +1,34 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
     [Serializable]
-    public abstract class EndPointContainer : EndPoint, ISerializationCallbackReceiver
+    public abstract partial class EndPointContainer : EndPoint
     {
-        [field: SerializeField, HideInInspector] public Service[] Services { get; private set; }
-        [field: SerializeField, HideInInspector] public Request[] Requests { get; private set; }
-        public void OnBeforeSerialize()
-        {
+        [SerializeReference, HideInInspector] private List<Service> services;
+        [SerializeReference, HideInInspector] private List<Request> requests;
+        public List<Service> Services { get => services;
+            protected set => services = value;
         }
-        public void OnAfterDeserialize()
+        public List<Request> Requests { get => requests;
+            protected set => requests = value;
+        }
+        public override void OnBeforeSerialize()
         {
-            // foreach (var child in Services)
-            //     child.Parent = this;
-            // foreach (var child in Requests)
-            //     child.Parent = this;
+            if (Services is not { Count: > 0 }) 
+                return;
+            foreach (var service in Services)
+                service.Parent = this;
+            foreach (var request in Requests)
+                request.Parent = this;
+            base.OnBeforeSerialize();
+        }
+
+        public override void OnAfterDeserialize()
+        {
+
         }
     }
 }

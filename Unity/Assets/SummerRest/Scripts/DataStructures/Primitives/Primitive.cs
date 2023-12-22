@@ -5,8 +5,13 @@ using UnityEngine;
 namespace SummerRest.DataStructures.Primitives
 {
     [Serializable]
-    public abstract class Primitive<T> : IRequestParamData
+    public abstract class Primitive<T>
     {
-        [field: SerializeField] public T Value { get; set; }
+        [SerializeField] private T value;
+        public T Value
+        {
+            get => value;
+            set => this.value = value;
+        }
     }
 }
