@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MemoryPack;
 using SummerRest.Attributes;
 using SummerRest.DataStructures;
 using SummerRest.DataStructures.Primitives;
@@ -56,6 +57,7 @@ namespace SummerRest.Models
     }
 
     [Serializable]
+    [MemoryPackable]
     public partial class Request : EndPoint 
     {
         [SerializeField] private HttpMethod method;

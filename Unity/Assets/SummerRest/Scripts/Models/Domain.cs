@@ -1,11 +1,12 @@
 using System;
-using SummerRest.DataStructures;
+using MemoryPack;
 using SummerRest.DataStructures.Containers;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
     [Serializable]
+    [MemoryPackable]
     public partial class Domain : EndPointContainer
     {
         [SerializeField] private OptionsArray<string> versions;

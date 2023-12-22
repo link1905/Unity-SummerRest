@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
+using MemoryPack;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
     [Serializable]
+    [MemoryPackable]
+    [MemoryPackUnion(0, typeof(Service))]
+    [MemoryPackUnion(1, typeof(Domain))]
     public abstract partial class EndPointContainer : EndPoint
     {
         [SerializeReference, HideInInspector] private List<Service> services;
         [SerializeReference, HideInInspector] private List<Request> requests;
-        public List<Service> Services { get => services;
+        [MemoryPackIgnore] public List<Service> Services { get => services;
             protected set => services = value;
         }
-        public List<Request> Requests { get => requests;
+        [MemoryPackIgnore] public List<Request> Requests { get => requests;
             protected set => requests = value;
         }
         public override void OnBeforeSerialize()

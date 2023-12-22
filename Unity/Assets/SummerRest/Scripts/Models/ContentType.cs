@@ -1,12 +1,14 @@
 using System;
 using System.Runtime.InteropServices;
+using MemoryPack;
 using SummerRest.Attributes;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
     [Serializable]
-    public class ContentType
+    [MemoryPackable]
+    public partial class ContentType
     {
         [field: SerializeField, Defaults("UTF-8", "UTF-16", "US-ASCII")] 
         public string CharSet { get; private set; }
