@@ -5,10 +5,11 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editors.Window.Elements
 {
-    public class IndexedButton : Button, IIndexedElement<IndexedButton, string>
+    public abstract class IndexedButton<TSelf, TData> : Button, IIndexedElement<TSelf, TData> where TSelf : IndexedButton<TSelf, TData>, new()
     {
-        public int Index { get; private set; }
-        public event Action<IndexedButton> OnClicked;
+        public event Action<TSelf> OnDeleted;
+        public int Index { get; set; }
+        public event Action<TSelf> OnClicked;
         private Color _originalColor;
         public void Init(int index, string text)
         {
@@ -17,15 +18,18 @@ namespace SummerRest.Editors.Window.Elements
             _originalColor = style.backgroundColor.value;
             clicked += () =>
             {
-                OnClicked?.Invoke(this);
+                OnClicked?.Invoke((TSelf)this);
+            };
+            this.Q<Button>("del-btn").clicked += () =>
+            {
+                OnDeleted?.Invoke((TSelf)this);
             };
         }
+  
+        public abstract void Init(int index, TData data);
         public void Disable()
         {
             style.ReplaceBackgroundColor(_originalColor);
-        }
-        public new class UxmlFactory : UxmlFactory<IndexedButton, UxmlTraits>
-        {
         }
         public IndexedButton()
         {

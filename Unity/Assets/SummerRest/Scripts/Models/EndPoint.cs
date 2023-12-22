@@ -12,46 +12,44 @@ namespace SummerRest.Models
     [MemoryPackable]
     public partial class EndPoint : ISerializationCallbackReceiver
     {
-        [field: MemoryPackIgnore, SerializeReference, HideInInspector]
+        [field: SerializeReference, HideInInspector]
+        [MemoryPackIgnore]
         public Domain Domain { get; protected internal set; }
-        [field: MemoryPackIgnore, SerializeReference, HideInInspector]
+        
+        [field: SerializeReference, HideInInspector]
+        [MemoryPackIgnore] 
         public EndPoint Parent { get; protected internal set; }
 
 
-        [SerializeField] private string name;
-        public string Name => name;
+        [SerializeField, MemoryPackInclude] private string name;
+        [MemoryPackIgnore] public string Name => name;
 
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
+        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<DataFormat> dataFormat;
+        [MemoryPackIgnore] public DataFormat DataFormat => dataFormat.Value;
 
-        public DataFormat DataFormat => dataFormat.Value;
-
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit,
+        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit,
              InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
-        private InheritOrCustomContainer<RequestHeader[]> headers;
+        private InheritOrCustomContainer<KeyValue[]> headers;
+        [MemoryPackIgnore] public KeyValue[] Headers => headers.Value;
 
-        public RequestHeader[] Headers => headers.Value;
-
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
+        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<ContentType> contentType;
+        [MemoryPackIgnore] public ContentType ContentType => contentType.Value;
 
-        public ContentType ContentType => contentType.Value;
-
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
+        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<int> timeoutSeconds;
+        [MemoryPackIgnore] public int TimeoutSeconds => timeoutSeconds.Value;
 
-        public int TimeoutSeconds => timeoutSeconds.Value;
-
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
+        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<int> redirectsLimit;
-
-        public int RedirectsLimit => redirectsLimit.Value;
+        [MemoryPackIgnore] public int RedirectsLimit => redirectsLimit.Value;
 
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
-        public string ParentPath => Parent is null ? string.Empty : Parent.Path;
-        [SerializeField, HideInInspector] private string parentPath;
-        public virtual string Path => Parent is null ? Name : $"{Parent.Path}/{Name}";
-        public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
+        [MemoryPackIgnore] public string ParentPath => Parent is null ? string.Empty : Parent.Path;
+        [SerializeField, HideInInspector, MemoryPackIgnore] private string parentPath;
+        [MemoryPackIgnore] public virtual string Path => Parent is null ? Name : $"{Parent.Path}/{Name}";
+        [MemoryPackIgnore] public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
 
         public virtual void OnBeforeSerialize()
         {

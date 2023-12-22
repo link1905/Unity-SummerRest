@@ -11,8 +11,8 @@ namespace SummerRest.Models
     [MemoryPackUnion(1, typeof(Domain))]
     public abstract partial class EndPointContainer : EndPoint
     {
-        [SerializeReference, HideInInspector] private List<Service> services;
-        [SerializeReference, HideInInspector] private List<Request> requests;
+        [SerializeReference, HideInInspector, MemoryPackInclude] private List<Service> services;
+        [SerializeReference, HideInInspector, MemoryPackInclude] private List<Request> requests;
         [MemoryPackIgnore] public List<Service> Services { get => services;
             protected set => services = value;
         }
