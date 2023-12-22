@@ -3,7 +3,8 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editors.Window.Elements
 {
-    public class IndexedButtonListElement : SelectableListElement<IndexedButtonListElement, IndexedButton, string>
+    public class IndexedButtonListElement<TSelf, TButton, TButtonData> : SelectableListElement<TSelf, TButton, TButtonData> 
+        where TButton : IndexedButton<TButton, TButtonData>, new() where TSelf : VisualElement, new() where TButtonData : class
     {
         public IndexedButtonListElement(VisualTreeAsset elementTreeAsset, Color selectColor) : base(elementTreeAsset, selectColor)
         {
@@ -11,8 +12,6 @@ namespace SummerRest.Editors.Window.Elements
         public IndexedButtonListElement() : base()
         {
         }
-        public new class UxmlFactory : UxmlFactory<IndexedButtonListElement, UxmlTraits>
-        {
-        }
+
     }
 }

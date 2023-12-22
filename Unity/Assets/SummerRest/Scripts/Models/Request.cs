@@ -60,8 +60,8 @@ namespace SummerRest.Models
     [MemoryPackable]
     public partial class Request : EndPoint 
     {
-        [SerializeField] private HttpMethod method;
-        [SerializeField] private RequestParam[] requestParams;
+        [SerializeField, MemoryPackInclude] private HttpMethod method;
+        [SerializeField, MemoryPackInclude] private KeyValue[] requestParams;
 
         public HttpMethod Method
         {
@@ -69,7 +69,7 @@ namespace SummerRest.Models
             private set => method = value;
         }
 
-        public RequestParam[] RequestParams
+        public KeyValue[] RequestParams
         {
             get => requestParams;
             private set => requestParams = value;

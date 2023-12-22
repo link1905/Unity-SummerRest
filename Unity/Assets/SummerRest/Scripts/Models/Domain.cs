@@ -9,8 +9,8 @@ namespace SummerRest.Models
     [MemoryPackable]
     public partial class Domain : EndPointContainer
     {
-        [SerializeField] private OptionsArray<string> versions;
-        public string ActiveVersion => versions.Value;
+        [SerializeField, MemoryPackInclude] private OptionsArray<string> versions;
+        [MemoryPackIgnore] public string ActiveVersion => versions.Value;
         public override void OnBeforeSerialize()
         {
             if (Services is not { Count: > 0 }) 

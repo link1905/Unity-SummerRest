@@ -231,41 +231,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   request:
-    domain:
-      rid: -2
-    parent:
-      rid: -2
-    name: 
-    dataFormat:
-      inherit: 8
-      value: 0
-      cache: 0
-    headers:
-      inherit: 8
-      value: []
-      cache: []
-    contentType:
-      inherit: 8
-      value:
-        <CharSet>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-      cache:
-        <CharSet>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    timeoutSeconds:
-      inherit: 8
-      value: 0
-      cache: 0
-    redirectsLimit:
-      inherit: 8
-      value: 0
-      cache: 0
-    method: 0
-    requestParams: []
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  - C:
+      D: 
+  - C:
+      D: 
+  - C:
+      D: 
+  - C:
+      D: 
+  - C:
+      D: 

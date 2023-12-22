@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using SummerRest.Configurations;
 using SummerRest.Editors.Window.Elements;
+using SummerRest.Models;
 using SummerRest.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -22,25 +24,33 @@ namespace SummerRest.Editors.Window
             // Each editor window contains a root VisualElement object
             var root = rootVisualElement;
             var mainContainer = tree.Instantiate();
-            DomainSection(mainContainer);
-            EndpointsTree(mainContainer);
+            var configurationsManager = DomainConfigurationsManager.instance;
+            DomainSection(mainContainer, configurationsManager);
+            EndpointsTree(mainContainer, configurationsManager);
             mainContainer.StretchToParentSize();
             root.Add(mainContainer);
         }
-        private void DomainSection(VisualElement mainContainer)
+        private void DomainSection(VisualElement mainContainer, DomainConfigurationsManager configurationsManager)
         {
-            var domainsContainer = mainContainer.Q<VisualElement>("domains").Q<IndexedButtonListElement>();
+            var domainsContainer = mainContainer.Q<VisualElement>("domains").Q<DomainListElement>();
             domainsContainer.Init(domainButtonTemplate, Color.gray);
-            var testDomains = new[]
+            domainsContainer.OnDeleteElement += i =>
             {
-                "ABC", "Example.com", "DDS"
+                configurationsManager.Domains.RemoveAt(i);
+                return true;
             };
-            foreach (var domain in testDomains)
+            domainsContainer.OnAdd += () =>
+            {
+                var newDomain = new Domain();
+                configurationsManager.Domains.Add(newDomain);
+                return newDomain;
+            };
+            foreach (var domain in configurationsManager.Domains)
             {
                 domainsContainer.AddChild(domain);
             }
         }
-        private void EndpointsTree(VisualElement mainContainer)
+        private void EndpointsTree(VisualElement mainContainer, DomainConfigurationsManager configurationsManager)
         {
             var endpointsTree = mainContainer.Q<VisualElement>("endpoint-container").Q<TreeView>("endpoint-tree");
             var samples = new TreeViewItemData<string>[]
