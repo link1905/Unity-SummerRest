@@ -16,6 +16,7 @@ namespace SummerRest.Configurations
 #if UNITY_EDITOR
     public partial class DomainConfigurationsManager : ISerializationCallbackReceiver
     {
+
         public void OnBeforeSerialize()
         {
         }

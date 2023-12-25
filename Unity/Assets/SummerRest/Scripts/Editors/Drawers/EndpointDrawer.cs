@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editors.Drawers
 {
-    [CustomPropertyDrawer(typeof(EndPoint), true)]
+    [CustomPropertyDrawer(typeof(Endpoint), true)]
     public class EndpointDrawer : PropertyDrawer
     {        
         private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/endpoint_UXML.uxml";

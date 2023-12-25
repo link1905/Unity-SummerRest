@@ -3,7 +3,8 @@ using System;
 namespace SummerRest.Models
 {
     [Serializable]
-    public class Service : EndPointContainer
+    public class Service : EndpointContainer
     {
+        public override string TypeName => nameof(Service);
     }
 }

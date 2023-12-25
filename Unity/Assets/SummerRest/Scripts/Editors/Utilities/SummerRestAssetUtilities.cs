@@ -41,6 +41,13 @@ namespace SummerRest.Editors.Utilities
                 Message = "Do you really want to remove the domain including its children?",
                 Ok = "Yes, please remove it!",
             };
+            public static readonly AskToRemoveMessage RemoveService = new()
+            {
+                Title = "Remove service",
+                Message = "Do you really want to remove the service including its children?",
+                Ok = "Yes, please remove it!",
+            };
+
 
             public bool ShowDialog()
             {

@@ -4,43 +4,12 @@ using System.Reflection;
 using SolidUtilities.UnityEditorInternals;
 using SummerRest.Utilities;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace SummerRest.Editors.Utilities
 {
-    public static class SerializedPropertyExtensions
+    public static class EditorPropertyExtensions
     {
-        public static void BindOrDisable<T>(this T field, SerializedProperty property) where T : VisualElement, IBindable
-        {
-            if (property is null)
-                field.style.display = DisplayStyle.None;
-            else
-                field.BindProperty(property);
-        }
-        
-        public static void BindOrDisable<T>(this T field, SerializedProperty property, string relativeName) where T : VisualElement, IBindable
-        {
-            field.BindOrDisable(property.FindPropertyRelative(relativeName));
-        }
-
-        public static void BindPropertyNoLabel(this PropertyField field, SerializedProperty property)
-        {
-            field.BindProperty(property);
-            field.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                field.Q<Label>().style.display = DisplayStyle.None;
-            });
-        }
-        
-        public static void RemoveLabel(this PropertyField field)
-        {
-            field.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                field.Q<Label>().style.display = DisplayStyle.None;
-            });
-        }
 
         public static object GetReference(this SerializedProperty self)
         {

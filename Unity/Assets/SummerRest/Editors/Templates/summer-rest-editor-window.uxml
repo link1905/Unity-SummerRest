@@ -2,9 +2,18 @@
     <ui:Template name="domain-list" src="project://database/Assets/SummerRest/Editors/Templates/domain-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#domain-list" />
     <ui:VisualElement name="main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: column; align-items: stretch; justify-content: center;">
         <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: 103px; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 3px;" />
-        <ui:TwoPaneSplitView fixed-pane-initial-dimension="150" style="flex-direction: row;">
-            <ui:TreeView view-data-key="unity-tree-view" focusable="true" virtualization-method="DynamicHeight" reorderable="false" horizontal-scrolling="true" auto-expand="true" fixed-item-height="10" show-alternating-row-backgrounds="None" name="endpoint-tree" style="height: auto; width: auto; flex-direction: column; max-height: none; min-height: auto; align-items: flex-start; align-self: stretch; flex-shrink: 1; flex-wrap: wrap; flex-basis: auto; justify-content: flex-start; flex-grow: 1; border-right-color: rgb(0, 0, 0); border-right-width: 3px; min-width: 10%; max-width: none;" />
-            <uie:PropertyField style="flex-grow: 1; align-self: stretch; justify-content: flex-end; flex-basis: auto; flex-shrink: 1;" />
+        <ui:TwoPaneSplitView fixed-pane-initial-dimension="150" name="endpoint-container" style="flex-direction: row;">
+            <ui:VisualElement name="domain" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; align-self: flex-start; justify-content: flex-start; align-items: flex-start;">
+                <uie:Toolbar>
+                    <uie:ToolbarPopupSearchField focusable="true" name="search-field" style="flex-direction: row; align-self: stretch; justify-content: center;" />
+                </uie:Toolbar>
+                <ui:VisualElement name="add-container" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-self: stretch; align-items: flex-start; justify-content: flex-start; flex-shrink: 0;">
+                    <ui:Button text="Add service" display-tooltip-when-elided="true" name="add-service" style="align-self: stretch; flex-grow: 1; flex-shrink: 1; white-space: nowrap; -unity-font-style: normal; justify-content: center; align-items: stretch;" />
+                    <ui:Button text="Add request" display-tooltip-when-elided="true" name="add-request" style="flex-grow: 1; flex-shrink: 1; align-self: stretch; justify-content: center;" />
+                </ui:VisualElement>
+                <ui:TreeView view-data-key="unity-tree-view" focusable="true" virtualization-method="DynamicHeight" reorderable="false" horizontal-scrolling="true" auto-expand="true" fixed-item-height="10" show-alternating-row-backgrounds="None" name="endpoint-tree" style="height: auto; width: auto; flex-direction: column; max-height: none; min-height: auto; align-items: flex-start; align-self: stretch; flex-shrink: 1; flex-wrap: wrap; flex-basis: auto; justify-content: flex-start; flex-grow: 1; border-right-color: rgb(0, 0, 0); border-right-width: 3px; min-width: 10%; max-width: none;" />
+            </ui:VisualElement>
+            <uie:PropertyField name="endpoint-prop" style="flex-grow: 1; align-self: stretch; justify-content: flex-end; flex-basis: auto; flex-shrink: 1;" />
         </ui:TwoPaneSplitView>
     </ui:VisualElement>
 </ui:UXML>

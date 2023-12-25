@@ -55,7 +55,7 @@ namespace SummerRest.Models
     }
 
     [Serializable]
-    public class Request : EndPoint 
+    public class Request : Endpoint 
     {
         [SerializeField] private HttpMethod method;
         [SerializeField] private KeyValue[] requestParams;
@@ -69,8 +69,10 @@ namespace SummerRest.Models
             get => requestParams;
             private set => requestParams = value;
         }
+#if UNITY_EDITOR
+        public override string TypeName => nameof(Request);
+#endif
     }
-
 
     public enum BodyType
     {

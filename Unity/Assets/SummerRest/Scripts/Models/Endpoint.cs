@@ -12,21 +12,29 @@ namespace SummerRest.Models
     using UnityEngine.UIElements;
     public interface ITreeBuilder
     {
-        TreeViewItemData<EndPoint> BuildTree(int id);
+        TreeViewItemData<Endpoint>? BuildTree(int id, string search);
     }
-    public partial class EndPoint : ITreeBuilder
+    public abstract partial class Endpoint : ITreeBuilder
     {
-        public virtual TreeViewItemData<EndPoint> BuildTree(int id) => new(++id, this);
+        public virtual TreeViewItemData<Endpoint>? BuildTree(int id, string search)
+        {
+            if (Path.Contains(search, StringComparison.InvariantCultureIgnoreCase))
+                return new TreeViewItemData<Endpoint>(++id, this);
+            return null;
+        }
+
+        public virtual bool IsContainer => false;
+        public abstract string TypeName { get; }
     }
 #endif
     [Serializable]
-    public partial class EndPoint : ScriptableObject, ISerializationCallbackReceiver
+    public partial class Endpoint : ScriptableObject, ISerializationCallbackReceiver
     {
         [field: SerializeReference, HideInInspector]
         public Domain Domain { get; protected internal set; }
 
         [field: SerializeReference, HideInInspector]
-        public EndPoint Parent { get; protected internal set; }
+        public Endpoint Parent { get; protected internal set; }
 
         [SerializeField] private string endpointName;
         public string EndpointName
