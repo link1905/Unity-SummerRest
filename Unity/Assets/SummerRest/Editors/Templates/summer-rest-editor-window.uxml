@@ -1,21 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="indexed-button-list" src="project://database/Assets/SummerRest/Editors/Templates/indexed-button-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#indexed-button-list" />
+    <ui:Template name="domain-list" src="project://database/Assets/SummerRest/Editors/Templates/domain-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#domain-list" />
     <ui:VisualElement name="main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: column; align-items: stretch; justify-content: center;">
-        <ui:Instance template="indexed-button-list" name="domains" style="align-self: stretch; height: 103px; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 3px;" />
-        <ui:VisualElement name="endpoint-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; flex-direction: row; flex-wrap: nowrap; align-items: flex-start; align-self: auto;">
-            <ui:TreeView view-data-key="unity-tree-view" focusable="true" virtualization-method="DynamicHeight" reorderable="false" horizontal-scrolling="true" auto-expand="true" fixed-item-height="10" show-alternating-row-backgrounds="None" name="endpoint-tree" style="height: auto; width: auto; flex-direction: row; max-height: none; min-height: auto; align-items: flex-start; align-self: stretch; flex-shrink: 1; flex-wrap: wrap; flex-basis: auto; justify-content: flex-start; flex-grow: 1; border-right-color: rgb(0, 0, 0); border-right-width: 3px;" />
-            <ui:VisualElement name="endpoint-details" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: auto; justify-content: flex-start; align-self: stretch; align-items: flex-start; flex-basis: 60%; flex-wrap: nowrap; flex-shrink: 0;">
-                <ui:TextField picking-mode="Ignore" label="https:://example.com/" value="sample_call" name="name" style="align-self: stretch;" />
-                <ui:EnumField label="Method" type="SummerRest.Models.HttpMethod, SummerRest" name="method" style="align-self: stretch; flex-shrink: 1; flex-grow: 0; flex-direction: row; white-space: normal; -unity-text-align: middle-left;" />
-                <uie:PropertyField name="data-format" label="Data format" style="flex-grow: 1; flex-direction: row; align-self: stretch;" />
-                <ui:ListView focusable="true" header-title="Headers" name="headers" reorder-mode="Animated" show-add-remove-footer="true" reorderable="false" show-foldout-header="true" fixed-item-height="18" style="flex-direction: column; align-self: stretch;" />
-                <uie:PropertyField name="content-type" style="align-self: stretch; flex-grow: 1;" />
-                <uie:PropertyField name="timeout" style="align-self: stretch; flex-grow: 1;" />
-                <uie:PropertyField name="redirect" style="align-self: stretch; flex-grow: 1;" />
-                <ui:ListView focusable="true" header-title="Params" name="params" reorder-mode="Animated" show-add-remove-footer="true" reorderable="false" show-foldout-header="true" fixed-item-height="18" style="flex-direction: column; align-self: stretch;" />
-                <ui:VisualElement name="body" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch;" />
-                <ui:Button text="Request" display-tooltip-when-elided="true" name="request" style="justify-content: flex-start; align-items: auto; align-self: center;" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: 103px; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 3px;" />
+        <ui:TwoPaneSplitView fixed-pane-initial-dimension="150" style="flex-direction: row;">
+            <ui:TreeView view-data-key="unity-tree-view" focusable="true" virtualization-method="DynamicHeight" reorderable="false" horizontal-scrolling="true" auto-expand="true" fixed-item-height="10" show-alternating-row-backgrounds="None" name="endpoint-tree" style="height: auto; width: auto; flex-direction: column; max-height: none; min-height: auto; align-items: flex-start; align-self: stretch; flex-shrink: 1; flex-wrap: wrap; flex-basis: auto; justify-content: flex-start; flex-grow: 1; border-right-color: rgb(0, 0, 0); border-right-width: 3px; min-width: 10%; max-width: none;" />
+            <uie:PropertyField style="flex-grow: 1; align-self: stretch; justify-content: flex-end; flex-basis: auto; flex-shrink: 1;" />
+        </ui:TwoPaneSplitView>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="False">
+    <SummerRest.Editors.Window.Elements.DomainListElement style="flex-direction: row; justify-content: flex-start; align-items: flex-start; align-self: stretch; height: auto; flex-wrap: nowrap; flex-grow: 1;">
+        <ui:VisualElement name="container" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: row; flex-shrink: 0; flex-wrap: nowrap; align-items: flex-start;" />
+        <ui:Button text="New domain" display-tooltip-when-elided="true" name="add-btn" style="flex-grow: 0; flex-shrink: 0; align-self: stretch; border-left-color: rgb(41, 255, 0); border-right-color: rgb(41, 255, 0); border-top-color: rgb(41, 255, 0); border-bottom-color: rgb(41, 255, 0); flex-direction: column;" />
+    </SummerRest.Editors.Window.Elements.DomainListElement>
+</ui:UXML>

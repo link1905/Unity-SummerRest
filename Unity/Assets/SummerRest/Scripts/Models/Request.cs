@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using MemoryPack;
 using SummerRest.Attributes;
-using SummerRest.DataStructures;
 using SummerRest.DataStructures.Primitives;
 using SummerRest.Models.Interfaces;
 using TypeReferences;
@@ -57,18 +55,15 @@ namespace SummerRest.Models
     }
 
     [Serializable]
-    [MemoryPackable]
-    public partial class Request : EndPoint 
+    public class Request : EndPoint 
     {
-        [SerializeField, MemoryPackInclude] private HttpMethod method;
-        [SerializeField, MemoryPackInclude] private KeyValue[] requestParams;
-
+        [SerializeField] private HttpMethod method;
+        [SerializeField] private KeyValue[] requestParams;
         public HttpMethod Method
         {
             get => method;
             private set => method = value;
         }
-
         public KeyValue[] RequestParams
         {
             get => requestParams;

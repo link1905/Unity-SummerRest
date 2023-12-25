@@ -1,13 +1,10 @@
 ﻿using System;
-using MemoryPack;
 using SummerRest.DataStructures.Enums;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SummerRest.DataStructures.Containers
 {
     [Serializable]
-    [MemoryPackable]
     public partial class InheritOrCustomContainer<T>
     {
         [SerializeField] private InheritChoice inherit = InheritChoice.Inherit;

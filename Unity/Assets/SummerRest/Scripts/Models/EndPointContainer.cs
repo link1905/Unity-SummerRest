@@ -1,38 +1,48 @@
 using System;
 using System.Collections.Generic;
-using MemoryPack;
+using System.Linq;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
+#if UNITY_EDITOR
+    using UnityEngine.UIElements;
+    public partial class EndPointContainer : ITreeBuilder
+    {
+        public List<TreeViewItemData<EndPoint>> BuildChildrenTree(int id)
+        {
+            var children = new List<TreeViewItemData<EndPoint>>();
+            foreach (var tree in services.Select(service => service.BuildTree(id)))
+            {
+                id = tree.id;
+                children.Add(tree);
+            }
+            foreach (var tree in requests.Select(r => r.BuildTree(id)))
+            {
+                id = tree.id;
+                children.Add(tree);
+            }
+            return children;
+        }
+        public override TreeViewItemData<EndPoint> BuildTree(int id)
+        {
+            var children = BuildChildrenTree(id);
+            if (children.Count > 0)
+                id = children[^1].id; //Set new id if has at least 1 child
+            return new TreeViewItemData<EndPoint>(++id, this, children);
+        }
+    }
+#endif
     [Serializable]
-    [MemoryPackable]
-    [MemoryPackUnion(0, typeof(Service))]
-    [MemoryPackUnion(1, typeof(Domain))]
     public abstract partial class EndPointContainer : EndPoint
     {
-        [SerializeReference, HideInInspector, MemoryPackInclude] private List<Service> services;
-        [SerializeReference, HideInInspector, MemoryPackInclude] private List<Request> requests;
-        [MemoryPackIgnore] public List<Service> Services { get => services;
+        [SerializeReference, HideInInspector] private List<Service> services;
+        [SerializeReference, HideInInspector] private List<Request> requests;
+        public List<Service> Services { get => services;
             protected set => services = value;
         }
-        [MemoryPackIgnore] public List<Request> Requests { get => requests;
+        public List<Request> Requests { get => requests;
             protected set => requests = value;
-        }
-        public override void OnBeforeSerialize()
-        {
-            if (Services is not { Count: > 0 }) 
-                return;
-            foreach (var service in Services)
-                service.Parent = this;
-            foreach (var request in Requests)
-                request.Parent = this;
-            base.OnBeforeSerialize();
-        }
-
-        public override void OnAfterDeserialize()
-        {
-
         }
     }
 }

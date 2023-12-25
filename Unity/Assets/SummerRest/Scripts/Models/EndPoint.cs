@@ -1,55 +1,71 @@
 using System;
 using System.Linq;
-using MemoryPack;
 using SummerRest.Attributes;
 using SummerRest.DataStructures.Containers;
 using SummerRest.DataStructures.Enums;
+using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Models
 {
+#if UNITY_EDITOR
+    using UnityEngine.UIElements;
+    public interface ITreeBuilder
+    {
+        TreeViewItemData<EndPoint> BuildTree(int id);
+    }
+    public partial class EndPoint : ITreeBuilder
+    {
+        public virtual TreeViewItemData<EndPoint> BuildTree(int id) => new(++id, this);
+    }
+#endif
     [Serializable]
-    [MemoryPackable]
-    public partial class EndPoint : ISerializationCallbackReceiver
+    public partial class EndPoint : ScriptableObject, ISerializationCallbackReceiver
     {
         [field: SerializeReference, HideInInspector]
-        [MemoryPackIgnore]
         public Domain Domain { get; protected internal set; }
-        
+
         [field: SerializeReference, HideInInspector]
-        [MemoryPackIgnore] 
         public EndPoint Parent { get; protected internal set; }
 
+        [SerializeField] private string endpointName;
+        public string EndpointName
+        {
+            get => endpointName;
+            set => endpointName = value;
+        }
 
-        [SerializeField, MemoryPackInclude] private string name;
-        [MemoryPackIgnore] public string Name => name;
-
-        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<DataFormat> dataFormat;
-        [MemoryPackIgnore] public DataFormat DataFormat => dataFormat.Value;
 
-        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit,
+        public DataFormat DataFormat => dataFormat.Value;
+
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit,
              InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
         private InheritOrCustomContainer<KeyValue[]> headers;
-        [MemoryPackIgnore] public KeyValue[] Headers => headers.Value;
 
-        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
+        public KeyValue[] Headers => headers.Value;
+
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<ContentType> contentType;
-        [MemoryPackIgnore] public ContentType ContentType => contentType.Value;
 
-        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
+        public ContentType ContentType => contentType.Value;
+
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<int> timeoutSeconds;
-        [MemoryPackIgnore] public int TimeoutSeconds => timeoutSeconds.Value;
 
-        [SerializeField, MemoryPackInclude, InheritOrCustom(InheritChoice.Inherit)]
+        public int TimeoutSeconds => timeoutSeconds.Value;
+
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<int> redirectsLimit;
-        [MemoryPackIgnore] public int RedirectsLimit => redirectsLimit.Value;
+
+        public int RedirectsLimit => redirectsLimit.Value;
 
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
-        [MemoryPackIgnore] public string ParentPath => Parent is null ? string.Empty : Parent.Path;
-        [SerializeField, HideInInspector, MemoryPackIgnore] private string parentPath;
-        [MemoryPackIgnore] public virtual string Path => Parent is null ? Name : $"{Parent.Path}/{Name}";
-        [MemoryPackIgnore] public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
+        public string ParentPath => Parent is null ? string.Empty : Parent.Path;
+        [SerializeField, HideInInspector] private string parentPath;
+        public virtual string Path => Parent is null ? EndpointName : $"{Parent.Path}/{EndpointName}";
+        public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
 
         public virtual void OnBeforeSerialize()
         {
@@ -65,6 +81,13 @@ namespace SummerRest.Models
 
         public virtual void OnAfterDeserialize()
         {
+// #if UNITY_EDITOR
+//             if (name != endpointName && !string.IsNullOrEmpty(endpointName))
+//             {
+//                 AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), Path);
+//                 AssetDatabase.SaveAssets();
+//             }
+// #endif
         }
     }
 }

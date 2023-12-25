@@ -11,7 +11,6 @@
     }
   ],
   "dependencies": {
-    "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
     "com.solidalloy.unity-dropdown": "1.2.0",
     "com.solidalloy.util": "1.40.0",
     "com.unity.ide.rider": "3.0.27",

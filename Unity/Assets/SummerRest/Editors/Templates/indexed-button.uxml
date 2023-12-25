@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="False">
-    <SummerRest.Editors.Window.Elements.DomainButton text="Button" display-tooltip-when-elided="true" name="domain-button" style="flex-grow: 1; flex-basis: auto; align-items: auto; justify-content: flex-start; align-self: stretch; -unity-text-align: middle-center; white-space: nowrap; flex-direction: column; flex-wrap: nowrap; height: 100%; width: auto; min-width: auto; flex-shrink: 1;">
-        <ui:Button text="Delete" display-tooltip-when-elided="true" enable-rich-text="false" name="del-btn" style="align-items: stretch; align-self: flex-end; -unity-text-align: middle-center; flex-direction: column; overflow: visible; justify-content: space-around; left: auto; top: auto; position: relative; background-color: rgb(253, 106, 106); right: auto; bottom: auto; flex-grow: 1; flex-shrink: 0;" />
-    </SummerRest.Editors.Window.Elements.DomainButton>
-</ui:UXML>
