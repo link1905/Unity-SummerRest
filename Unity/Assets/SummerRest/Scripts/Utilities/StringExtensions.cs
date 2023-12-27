@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SummerRest.Utilities
+namespace SummerRest.Scripts.Utilities
 {
     public static class StringExtensions
     {

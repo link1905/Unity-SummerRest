@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="True">
-    <SummerRest.Editors.Window.Elements.EndpointElement name="endpoint-element" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0; align-self: flex-start; align-items: stretch; justify-content: flex-start;">
-        <ui:TextField picking-mode="Ignore" value="Option" binding-path="endpointName" name="name" />
-        <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Add" name="action-menu" style="align-self: auto; justify-content: center; align-items: stretch; visibility: visible; display: flex;" />
-    </SummerRest.Editors.Window.Elements.EndpointElement>
-</ui:UXML>

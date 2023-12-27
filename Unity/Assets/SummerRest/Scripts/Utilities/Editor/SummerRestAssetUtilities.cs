@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace SummerRest.Editors.Utilities
+namespace SummerRest.Scripts.Utilities.Editor
 {
     public static class SummerRestAssetUtilities
     {
@@ -10,8 +12,10 @@ namespace SummerRest.Editors.Utilities
         {
             var obj = ScriptableObject.CreateInstance<T>();
             obj.name = name;
-            AssetDatabase.CreateAsset(obj, Path.Combine(path, $"{name}.asset"));
+            var assetPath = Path.Combine(path, $"{name}.asset");
+            AssetDatabase.CreateAsset(obj, assetPath);
             AssetDatabase.SaveAssets();
+            AssetDatabase.ForceReserializeAssets(new[] { assetPath});
             return obj;
         }
 
@@ -55,11 +59,23 @@ namespace SummerRest.Editors.Utilities
             }
         }
 
-        public static bool RemoveAsset(this Object obj, AskToRemoveMessage message = null)
+        public static void MakeDirty(this Object o)
         {
-            if (message is not null && message.ShowDialog())
-                return AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(obj));
+            EditorUtility.SetDirty(o);
+        }
+        
+        public static bool AskToRemoveAsset<T>(this T obj, Action<T> deleteAction, AskToRemoveMessage message = null) where T : Object
+        {
+            if (message is null || message.ShowDialog())
+            {
+                deleteAction.Invoke(obj);
+                return true;
+            }
             return false;
+        }
+        public static bool RemoveAsset<T>(this T obj) where T : Object
+        {
+            return AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(obj));
         }
 
         public static string GetAssetFolder(this Object obj) => 

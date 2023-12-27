@@ -1,9 +1,9 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using SummerRest.Configurations;
-using SummerRest.Editors.Utilities;
 using SummerRest.Editors.Window.Elements;
 using SummerRest.Models;
+using SummerRest.Scripts.Utilities.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -17,6 +17,11 @@ namespace SummerRest.Editors.Window
         [SerializeField] private VisualTreeAsset domainButtonTemplate;
         [SerializeField] private VisualTreeAsset endpointElementTemplate;
         private Domain _currentSelectedDomain;
+        private VisualElement _mainContainer;
+        private TreeView _endpointTree;
+        private EndpointElement _endpointElement;
+        private VisualElement _domainElement;
+        private DomainListElement _domainListElement;
 
         [MenuItem("Tools/SummerRest")]
         public static void ShowExample()
@@ -26,7 +31,7 @@ namespace SummerRest.Editors.Window
         }
         private void CheckDataExisting()
         {
-            var configurationsManager = DomainConfigurationsManager.instance;
+            var configurationsManager = DomainConfigurationsManager.Instance;
             var path = configurationsManager.GetAssetFolder();
             // Check the domain folder existing
             SummerRestAssetUtilities.CreateFolderIfNotExists(path, nameof(Domain));
@@ -38,134 +43,167 @@ namespace SummerRest.Editors.Window
         public void CreateGUI()
         {
             var root = rootVisualElement;
-            var mainContainer = tree.Instantiate();
-            SetupDomainListSection(mainContainer);
-            SetupEndpointsTree(mainContainer);
-            SetupDomainSection(mainContainer);
-            mainContainer.StretchToParentSize();
-            root.Add(mainContainer);
+            _mainContainer = tree.Instantiate();
+            SetupDomainListSection();
+            SetupEndpointsTree();
+            SetupDomainSection();
+            _mainContainer.StretchToParentSize();
+            root.Add(_mainContainer);
         }
+        
         // Setup domain list on top of the window
-        private void SetupDomainListSection(VisualElement mainContainer)
+        private void SetupDomainListSection()
         {
-            var configurationsManager = DomainConfigurationsManager.instance;
-            var domainsContainer = mainContainer.Q<VisualElement>("domains").Q<DomainListElement>();
-            domainsContainer.Init(domainButtonTemplate, Color.gray);
-            domainsContainer.OnDeleteElement += i =>
+            var configurationsManager = DomainConfigurationsManager.Instance;
+            var domains = configurationsManager.Domains;
+            var domainsContainer = _mainContainer.Q<VisualElement>("domains").Q<DomainListElement>();
+            _domainListElement = domainsContainer;
+            _domainListElement.Init(domainButtonTemplate, Color.gray);
+            _domainListElement.OnDeleteElement += (i, isSelected) =>
             {
-                var domain = configurationsManager.Domains[i];
-                if (!domain.RemoveAsset(SummerRestAssetUtilities.AskToRemoveMessage.RemoveDomain))
+                var domain = domains[i];
+                if (!domain.AskToRemoveAsset(d =>
+                    {
+                        domains.Remove(d);
+                        d.Delete(false);
+                    }, SummerRestAssetUtilities.AskToRemoveMessage.RemoveDomain))
                     return false;
-                configurationsManager.Domains.RemoveAt(i);
+                if (isSelected)
+                    ClearWindows();
+                configurationsManager.MakeDirty();
                 return true;
             };
-            domainsContainer.OnAdd += () =>
-            {
-                var path = configurationsManager.GetAssetFolder(nameof(Domain));
-                var domain = SummerRestAssetUtilities.CreateAndSaveObject<Domain>(path);
-                domain.EndpointName = "New domain";
-                configurationsManager.Domains.Add(domain);
-                return domain;
-            };
-            domainsContainer.OnElementClicked += i =>
-            {
-                var domain = configurationsManager.Domains[i];
-                ShowEndpointsTree(mainContainer, domain, string.Empty);
-                ShowDomainAction(mainContainer, domain);
-            };
-            foreach (var domain in configurationsManager.Domains)
-                domainsContainer.AddChild(domain);
+            // _domainListElement.OnAdd += OnAddDomain;
+            _domainListElement.OnElementClicked += OnSelectDomain;
+            foreach (var domain in domains)
+                _domainListElement.AddChild(domain, false);
+        }
+
+        private Domain OnAddDomain()
+        {
+            var configurationsManager = DomainConfigurationsManager.Instance;
+            var path = configurationsManager.GetAssetFolder(nameof(Domain));
+            var domain = SummerRestAssetUtilities.CreateAndSaveObject<Domain>(path);
+            configurationsManager.Domains.Add(domain);
+            domain.EndpointName = $"Domain {configurationsManager.Domains.Count}";
+            configurationsManager.MakeDirty();
+            return domain;
+        }
+        private void OnSelectDomain(int domainIndex)
+        {
+            var domain = DomainConfigurationsManager.Instance.Domains[domainIndex];
+            if (domain == _currentSelectedDomain)
+                return;
+            ShowEndpointsTree(domain, string.Empty);
+            ShowDomainAction(domain);
         }
         // Setup domain search section
-        private void SetupDomainSection(VisualElement mainContainer)
+        private void SetupDomainSection()
         {
-            var domainElement = mainContainer
-                .Q<VisualElement>("domain")
+            _domainElement = _mainContainer
                 .Q<VisualElement>("endpoint-container")
                 .Q<VisualElement>("domain");
-                        
-            var addServiceBtn = domainElement.Q<Button>("add-service");
-            var addRequestBtn = domainElement.Q<Button>("add-request");
-            domainElement.style.Show(true);
-            var searchField = domainElement.Q<ToolbarSearchField>();
+            var addMenu = _domainElement.Q<ToolbarMenu>("add-menu");
+            addMenu.menu.AppendAction(nameof(Domain), _ =>
+            {
+                var domain = OnAddDomain();
+                _domainListElement.AddChild(domain, true);
+            });
+            addMenu.menu.AppendAction(
+                ElementAddAction.Service.ToString(),
+                _ => { OnEndpointElementOnOnAddChild(ElementAddAction.Service, _currentSelectedDomain); }
+            );
+            addMenu.menu.AppendAction(
+                ElementAddAction.Request.ToString(),
+                _ => { OnEndpointElementOnOnAddChild(ElementAddAction.Request, _currentSelectedDomain); }
+            );
+            var searchField = _domainElement.Q<ToolbarSearchField>();
             searchField.RegisterValueChangedCallback(e =>
             {
-                if (_currentSelectedDomain is null)
+                if (_currentSelectedDomain is null || e.newValue is null)
                     return;
-                ShowEndpointsTree(mainContainer, _currentSelectedDomain, e.newValue);
+                FindEndpoint(e.newValue);
             });
-            addServiceBtn.clicked += () =>
-            {
-                OnEndpointElementOnOnAddChild(ElementAddAction.Service, _currentSelectedDomain);
-            };
-            addRequestBtn.clicked += () =>
-            {
-                OnEndpointElementOnOnAddChild(ElementAddAction.Request, _currentSelectedDomain);
-            };
         }
-        private void SetupEndpointsTree(VisualElement mainContainer)
+        private void SetupEndpointsTree()
         {
-            var endpointContainer = mainContainer.Q<VisualElement>("endpoint-container");
-            var endpointsTree = endpointContainer.Q<VisualElement>("domain").Q<TreeView>("endpoint-tree");
-            var endpointPropElement = endpointContainer.Q<PropertyField>("endpoint-prop");
-            
-            endpointsTree.makeItem = () =>
+            var endpointContainer = _mainContainer.Q<VisualElement>("endpoint-container");
+            _endpointTree = endpointContainer.Q<VisualElement>("domain").Q<TreeView>("endpoint-tree");
+            _endpointElement = endpointContainer.Q<EndpointElement>();
+            _endpointElement.Init();
+            _endpointTree.makeItem = () =>
             {
-                var endpointElement = endpointElementTemplate.Instantiate();
-                return endpointElement;
+                var endpointTreeElement = endpointElementTemplate.Instantiate().Q<EndpointTreeElement>();
+                endpointTreeElement.OnAddChild += OnEndpointElementOnOnAddChild;
+                endpointTreeElement.OnDelete += OnEndpointElementOnOnRemoveChild;
+                return endpointTreeElement;
             };
-            endpointsTree.bindItem = (element, index) =>
+            _endpointTree.bindItem = (element, index) =>
             {
-                if (element is not EndpointElement endpointElement)
+                if (element is not EndpointTreeElement endpointElement)
                     return;
-                endpointElement.Init(endpointsTree.GetItemDataForIndex<Endpoint>(index));
-                endpointElement.OnAddChild += OnEndpointElementOnOnAddChild;
-                endpointElement.OnDelete += OnEndpointElementOnOnRemoveChild;
+                endpointElement.Init(_endpointTree.GetItemDataForIndex<Endpoint>(index));
             };
-            endpointsTree.selectionChanged += items =>
+            _endpointTree.selectionChanged += items =>
             {
                 if (items.First() is not Endpoint domain)
                     return;
-                var serializedObj = new SerializedObject(domain);
-                endpointPropElement.Unbind();
-                endpointPropElement.Bind(serializedObj);
+                _endpointElement.Init(domain);
             };
         }
-        
-        private void ShowDomainAction(VisualElement mainContainer, Domain domain)
+        private void FindEndpoint(string search)
         {
-            var domainElement = mainContainer
-                .Q<VisualElement>("domain")
-                .Q<VisualElement>("endpoint-container")
-                .Q<VisualElement>("domain");
-            domainElement.style.Show(true);
+            foreach (var id in _endpointTree.GetRootIds())
+            {
+                var endpoint = _endpointTree.GetItemDataForId<Endpoint>(id);
+                if (endpoint.Path.Contains(search))
+                {
+                    _endpointTree.ScrollToItemById(id);
+                    return;
+                }
+            }
+        }
+
+        private void ShowDomainAction(Domain domain)
+        {
             _currentSelectedDomain = domain;
         }
-        private void ShowEndpointsTree(VisualElement mainContainer, Domain domain, string search)
+        private void ShowEndpointsTree(Domain domain, string search)
         {
-            var endpointsTree = mainContainer.Q<VisualElement>("endpoint-container").Q<TreeView>("endpoint-tree");
-            var treeView = domain.BuildChildrenTree(0, search);
-            endpointsTree.SetRootItems(treeView);
+            var treeView = domain is not null ? domain.BuildChildrenTree(0, search) : new List<TreeViewItemData<Endpoint>>();
+            _endpointTree.SetRootItems(treeView);
+            _endpointTree.Rebuild();
+        }
+        
+        private void ClearWindows()
+        {
+            ShowEndpointsTree(null, null);
+            _endpointElement.UnBindAllChildren();
         }
         private void OnEndpointElementOnOnAddChild(ElementAddAction elementAddAction, Endpoint endpoint)
         {
-            if (endpoint is not EndpointContainer endpointContainer) 
+            if (endpoint is not EndpointContainer parent) 
                 return;
-            var configurationsManager = DomainConfigurationsManager.instance;
+            var configurationsManager = DomainConfigurationsManager.Instance;
             var path = configurationsManager.GetAssetFolder(nameof(Domain));
             switch (elementAddAction)
             {
                 case ElementAddAction.Service:
                     var service = SummerRestAssetUtilities.CreateAndSaveObject<Service>(path);
-                    endpointContainer.Services.Add(service);
+                    var idx = parent.AddService(service);
+                    service.EndpointName = $"Service {idx}";
                     break;
                 case ElementAddAction.Request:
                     var request = SummerRestAssetUtilities.CreateAndSaveObject<Request>(path);
-                    endpointContainer.Requests.Add(request);
+                    idx = parent.AddRequest(request);
+                    request.EndpointName = $"Request {idx}";
                     break;
                 default:
                     return;
             }
+            parent.MakeDirty();
+            // Update the endpoint tree
+            ShowEndpointsTree(_currentSelectedDomain, string.Empty);
         }
         private void OnEndpointElementOnOnRemoveChild(Endpoint endpoint)
         {
@@ -174,18 +212,18 @@ namespace SummerRest.Editors.Window
             switch (endpoint)
             {
                 case Service service:
-                    if (!service.RemoveAsset(SummerRestAssetUtilities.AskToRemoveMessage.RemoveService))
+                    if (!service.AskToRemoveAsset(deleteAction: s => s.Delete(true), SummerRestAssetUtilities.AskToRemoveMessage.RemoveService))
                         return;
-                    parent.Services.Remove(service);
                     break;
                 case Request request:
-                    request.RemoveAsset();
-                    parent.Requests.Remove(request);
+                    request.Delete(true);
                     break;
                 default:
                     return;
             }
+            parent.MakeDirty();
+            // Update the endpoint tree
+            ShowEndpointsTree(_currentSelectedDomain, string.Empty);
         }
-
     }
 }

@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Reflection;
 using SummerRest.Attributes;
+using SummerRest.DataStructures.Containers;
 using SummerRest.DataStructures.Primitives;
 using SummerRest.Models.Interfaces;
+using SummerRest.Scripts.Utilities.Editor;
 using TypeReferences;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SummerRest.Models
 {
@@ -55,10 +60,26 @@ namespace SummerRest.Models
     }
 
     [Serializable]
-    public class Request : Endpoint 
+    public class Response
+    {
+        [SerializeField] private HttpStatusCode statusCode = HttpStatusCode.OK;
+        public HttpStatusCode StatusCode => statusCode;
+        [SerializeField] private KeyValue[] headers;
+        public KeyValue[] Header
+        {
+            get => headers;
+            set => headers = value;
+        }
+        [SerializeField] private string body;
+        public string Body => body;
+    }
+    
+    [Serializable]
+    public partial class Request : Endpoint 
     {
         [SerializeField] private HttpMethod method;
         [SerializeField] private KeyValue[] requestParams;
+        [SerializeField] private RequestBody requestBody;
         public HttpMethod Method
         {
             get => method;
@@ -69,22 +90,47 @@ namespace SummerRest.Models
             get => requestParams;
             private set => requestParams = value;
         }
-#if UNITY_EDITOR
-        public override string TypeName => nameof(Request);
-#endif
+
     }
 
-    public enum BodyType
+#if UNITY_EDITOR
+    public partial class Request : Endpoint
     {
-        Text, Data
+        public override void Delete(bool fromParent)
+        {
+            if (fromParent && Parent is EndpointContainer parent)
+                parent.Requests.Remove(this);
+            base.Delete(fromParent);
+        }
+
+        [SerializeField] private Response latestResponse;
+
+        public Response LatestResponse
+        {
+            get => latestResponse;
+            set => latestResponse = value;
+        }
+
+        public override string TypeName => nameof(Request);
+    }
+#endif
+    public enum RequestBodyType
+    {
+        PlainText = 0, Data = 1
     }
     [Serializable]
-    public partial class RequestBody
+    public class RequestBody
     {
-        [SerializeField] private BodyType type;
-        [SerializeField, Multiline(20)] private string text;
-        [SerializeReference, SerializedGenericField(typeof(RestString))] private IRequestBodyData value;
-
+        [SerializeField] private RequestBodyType type;
+        [SerializeField] private string text;
+        [SerializeField] private RequestBodyContainer bodyContainer;
+        public string SerializedData => type == RequestBodyType.PlainText ? text : bodyContainer.SerializedData;
+        
+        [Serializable]
+        public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
+        {
+            [SerializeField, Inherits(typeof(IRequestBodyData))] private TypeReference typeReference;
+            public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
+        }
     }
-    
 }

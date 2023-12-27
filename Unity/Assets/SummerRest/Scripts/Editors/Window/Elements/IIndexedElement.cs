@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editors.Window.Elements
@@ -9,6 +10,7 @@ namespace SummerRest.Editors.Window.Elements
         event Action<TElement> OnDeleted;
         int Index { get; set; }
         void Init(int index, TSetupData data);
+        void Enable(Color highlight);
         void Disable();
     }
 }

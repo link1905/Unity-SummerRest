@@ -4,7 +4,7 @@ using SolidUtilities.UnityEditorInternals;
 using UnityEditor;
 using UnityEngine;
 
-namespace SummerRest.Editors.Utilities
+namespace SummerRest.Scripts.Utilities.Editor
 {
     public static class SummerRestEditorUtilities
     {

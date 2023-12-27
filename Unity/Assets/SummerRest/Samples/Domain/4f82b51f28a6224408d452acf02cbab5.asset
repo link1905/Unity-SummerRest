@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: e755c6a7248d77d45a392a7be15fbfff
+  m_Name: 4f82b51f28a6224408d452acf02cbab5
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 0}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: asdasdsad
+  endpointName: New domain
   dataFormat:
     inherit: 8
     value: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
   redirectsLimit:
     inherit: 8
     value: 0
-  parentPath: 
-  services: []
+  services:
+  - {fileID: 11400000, guid: df901f3899f4433499620362fc05457f, type: 2}
   requests: []
   versions:
     values: []

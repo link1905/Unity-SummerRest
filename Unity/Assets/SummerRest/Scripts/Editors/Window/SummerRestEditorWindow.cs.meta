@@ -7,6 +7,7 @@ MonoImporter:
   - m_ViewDataDictionary: {instanceID: 0}
   - tree: {fileID: 9197481963319205126, guid: fc8db62a75b1f2040b7510168736217d, type: 3}
   - domainButtonTemplate: {fileID: 9197481963319205126, guid: 48814b89dc7d98d4f90c5af97f1b2e7d, type: 3}
+  - endpointElementTemplate: {fileID: 9197481963319205126, guid: 454d46f1400d6354d8c784506bdf3eb4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

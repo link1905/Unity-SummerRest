@@ -1,6 +1,6 @@
 ﻿using SummerRest.DataStructures;
 using SummerRest.DataStructures.Containers;
-using SummerRest.Editors.Utilities;
+using SummerRest.Scripts.Utilities.Editor;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

@@ -1,5 +1,5 @@
 ﻿using System;
-using SummerRest.Utilities;
+using SummerRest.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,6 +8,7 @@ namespace SummerRest.Editors.Window.Elements
     public abstract class IndexedButton<TSelf, TData> : Button, IIndexedElement<TSelf, TData> where TSelf : IndexedButton<TSelf, TData>, new()
     {
         public event Action<TSelf> OnDeleted;
+        public abstract IStyle Style { get; }
         public int Index { get; set; }
         public event Action<TSelf> OnClicked;
         private Color _originalColor;
@@ -27,6 +28,7 @@ namespace SummerRest.Editors.Window.Elements
         }
   
         public abstract void Init(int index, TData data);
+        public abstract void Enable(Color highlight);
         public void Disable()
         {
             style.ReplaceBackgroundColor(_originalColor);

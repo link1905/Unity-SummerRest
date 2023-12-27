@@ -3,12 +3,13 @@ using System.Linq;
 using SummerRest.Attributes;
 using SummerRest.DataStructures.Containers;
 using SummerRest.DataStructures.Enums;
-using UnityEditor;
+
 using UnityEngine;
 
 namespace SummerRest.Models
 {
 #if UNITY_EDITOR
+    using Scripts.Utilities.Editor;
     using UnityEngine.UIElements;
     public interface ITreeBuilder
     {
@@ -23,6 +24,10 @@ namespace SummerRest.Models
             return null;
         }
 
+        public virtual void Delete(bool fromParent)
+        {
+            this.RemoveAsset();
+        }
         public virtual bool IsContainer => false;
         public abstract string TypeName { get; }
     }
@@ -33,8 +38,7 @@ namespace SummerRest.Models
         [field: SerializeReference, HideInInspector]
         public Domain Domain { get; protected internal set; }
 
-        [field: SerializeReference, HideInInspector]
-        public Endpoint Parent { get; protected internal set; }
+        [field: SerializeReference] public Endpoint Parent { get; protected internal set; }
 
         [SerializeField] private string endpointName;
         public string EndpointName
@@ -71,7 +75,6 @@ namespace SummerRest.Models
 
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
         public string ParentPath => Parent is null ? string.Empty : Parent.Path;
-        [SerializeField, HideInInspector] private string parentPath;
         public virtual string Path => Parent is null ? EndpointName : $"{Parent.Path}/{EndpointName}";
         public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
 
@@ -84,7 +87,6 @@ namespace SummerRest.Models
             contentType.Cache(whenInherit: () => Parent?.ContentType);
             timeoutSeconds.Cache(whenInherit: () => Parent?.TimeoutSeconds ?? default);
             redirectsLimit.Cache(whenInherit: () => Parent?.RedirectsLimit ?? default);
-            parentPath = ParentPath;
         }
 
         public virtual void OnAfterDeserialize()

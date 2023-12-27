@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SummerRest.Utilities
+namespace SummerRest.Scripts.Utilities
 {
     public static class StylesExtensions
     {

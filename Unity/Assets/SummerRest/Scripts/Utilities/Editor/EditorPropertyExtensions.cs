@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using SolidUtilities.UnityEditorInternals;
-using SummerRest.Utilities;
 using UnityEditor;
-using UnityEngine;
 
-namespace SummerRest.Editors.Utilities
+namespace SummerRest.Scripts.Utilities.Editor
 {
     public static class EditorPropertyExtensions
     {

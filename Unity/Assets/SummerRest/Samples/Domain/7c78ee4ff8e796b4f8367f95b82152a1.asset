@@ -10,30 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: ef7f4dd34cb400d4bbfc41933cf1d61f
+  m_Name: 7c78ee4ff8e796b4f8367f95b82152a1
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 0}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: asdasdsad
+  endpointName: 
   dataFormat:
-    inherit: 8
+    inherit: 2
     value: 0
   headers:
-    inherit: 8
+    inherit: 2
     value: []
   contentType:
-    inherit: 8
+    inherit: 2
     value:
       <CharSet>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
-    inherit: 8
+    inherit: 2
     value: 0
   redirectsLimit:
-    inherit: 8
+    inherit: 2
     value: 0
-  parentPath: 
   services: []
   requests: []
   versions:

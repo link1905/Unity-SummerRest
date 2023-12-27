@@ -1,5 +1,5 @@
 ﻿using System;
-using SummerRest.Utilities;
+using SummerRest.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,8 +11,8 @@ namespace SummerRest.Editors.Window.Elements
         where TData : class
     {
         public event Action<int> OnElementClicked;
-        public event Func<TData> OnAdd;
-        public event Func<int, bool> OnDeleteElement;
+        // public event Func<TData> OnAdd;
+        public event Func<int, bool, bool> OnDeleteElement;
         
         private VisualTreeAsset _elementTreeAsset;
         private string m_Test;
@@ -44,25 +44,15 @@ namespace SummerRest.Editors.Window.Elements
                 this.m_selectColor = selectColorDes;
             }
         }
-        public TElement AddChild(TData data)
+
+        public virtual TElement AddChild(TElement element, TData data, bool alsoSelect)
         {
-            var templateContainer = _elementTreeAsset.Instantiate();
-            var element = templateContainer.Q<TElement>();
             element.Init(_container.childCount, data);
-            element.OnClicked += e =>
-            {
-                var idx = e.Index;
-                if (idx == _previousSelect)
-                    return;
-                e.style.ReplaceBackgroundColor(_selectColor);
-                if (_previousSelect is not null)
-                    _container.ElementAt(_previousSelect.Value).Q<TElement>().Disable();
-                HandleClick(idx);
-            };
+            element.OnClicked += HandleClick;
             element.OnDeleted += e =>
             {
                 var idx = e.Index;
-                var del = OnDeleteElement?.Invoke(idx);
+                var del = OnDeleteElement?.Invoke(idx, _previousSelect == idx);
                 if (del is null || !del.Value)
                     return;
                 if (_previousSelect == idx)
@@ -72,11 +62,26 @@ namespace SummerRest.Editors.Window.Elements
                     _container[i].Q<TElement>().Index = i;
             };
             _container.Add(element);
+            if (alsoSelect)
+                HandleClick(element);
             return element;
         }
 
-        private void HandleClick(int idx)
+        public virtual TElement AddChild(TData data, bool alsoSelect)
         {
+            var templateContainer = _elementTreeAsset.Instantiate();
+            var element = templateContainer.Q<TElement>();
+            return AddChild(element, data, alsoSelect);
+        }
+
+        protected virtual void HandleClick(TElement element)
+        {
+            var idx = element.Index;
+            if (idx == _previousSelect)
+                return;
+            element.Enable(_selectColor);
+            if (_previousSelect is not null)
+                _container.ElementAt(_previousSelect.Value).Q<TElement>().Disable();
             _previousSelect = idx;
             OnElementClicked?.Invoke(idx);
         }
@@ -84,16 +89,14 @@ namespace SummerRest.Editors.Window.Elements
         public void Init(VisualTreeAsset elementTreeAsset, Color selectColor)
         {
             _elementTreeAsset = elementTreeAsset;
+            Init(selectColor);
+        }
+        public virtual void Init(Color selectColor)
+        {
             _selectColor = selectColor;
             _container = this.Q<VisualElement>("container");
-            var addBtn = this.Q<Button>("add-btn");
-            addBtn.clicked += () =>
-            {
-                var newElement = OnAdd?.Invoke();
-                if (newElement != null)
-                    AddChild(newElement);
-            };
         }
+
         public SelectableListElement(VisualTreeAsset elementTreeAsset, Color selectColor)
         {
             Init(elementTreeAsset, selectColor);

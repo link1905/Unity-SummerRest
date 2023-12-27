@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="True">
+    <SummerRest.Editors.Window.Elements.ResponseElement name="response" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-shrink: 0; align-self: stretch;">
+        <ui:TextField picking-mode="Ignore" label="Status code" value="200 (Success)" readonly="true" name="status-code" style="flex-grow: 0; align-self: stretch; align-items: stretch; flex-shrink: 1; flex-direction: row;" />
+        <uie:PropertyField name="headers" style="flex-grow: 0; align-self: stretch;" />
+        <ui:TextField picking-mode="Ignore" label="Body" multiline="true" name="body" readonly="true" style="flex-grow: 1; align-self: stretch; flex-direction: column; flex-shrink: 1; min-height: 100px;" />
+    </SummerRest.Editors.Window.Elements.ResponseElement>
+</ui:UXML>

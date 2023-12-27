@@ -1,6 +1,6 @@
 ﻿using System;
 using SummerRest.Models;
-using SummerRest.Utilities;
+using SummerRest.Scripts.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -13,27 +13,34 @@ namespace SummerRest.Editors.Window.Elements
         public event Action<DomainElement> OnClicked;
         public event Action<DomainElement> OnDeleted;
         private Color _originalColor;
+        private Button _mainBtn;
+        public IStyle Style => _mainBtn.style;
         public int Index { get; set; }
         public void Init(int index, Domain data)
         {
             Index = index;
             _originalColor = style.backgroundColor.value;
-            var mainBtn = this.Q<Button>(name: "main-btn");
-            mainBtn.BindProperty(new SerializedObject(data));
-            var delBtn = this.Q<Button>(name: "del-btn");
-            mainBtn.clicked += () =>
+            _mainBtn = this.Q<Button>(name: "main-btn");
+            _mainBtn.BindProperty(new SerializedObject(data));
+            _mainBtn.clicked += () =>
             {
                 OnClicked?.Invoke(this);
             };
-            delBtn.clicked += () =>
-            {
-                OnDeleted?.Invoke(this);
-            };
+            this.AddManipulator(new ContextualMenuManipulator(OnContextClick));
         }
 
+        public void Enable(Color highlight)
+        {
+            _mainBtn.style.ReplaceBackgroundColor(highlight);
+        }
+
+        private void OnContextClick(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction("Delete", _ => OnDeleted?.Invoke(this));
+        }
         public void Disable()
         {
-            style.ReplaceBackgroundColor(_originalColor);
+            _mainBtn.style.ReplaceBackgroundColor(_originalColor);
         }
         public new class UxmlFactory : UxmlFactory<DomainElement, UxmlTraits>
         {

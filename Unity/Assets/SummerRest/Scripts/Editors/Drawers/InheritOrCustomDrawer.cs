@@ -3,7 +3,7 @@ using SummerRest.Attributes;
 using SummerRest.DataStructures;
 using SummerRest.DataStructures.Containers;
 using SummerRest.DataStructures.Enums;
-using SummerRest.Editors.Utilities;
+using SummerRest.Scripts.Utilities.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
