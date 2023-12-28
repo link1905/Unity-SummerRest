@@ -61,7 +61,7 @@ namespace SummerRest.Editors.Drawers
             var newIdx = GetIdx(newVal);
             if (currentIdx != newIdx) //Custom values always return 0
                 customElement.value = newVal;
-            customElement.style.Show(newIdx == 0);
+            customElement.Show(newIdx == 0);
         }
     }
 }

@@ -26,11 +26,11 @@ namespace SummerRest.Editors.Window.Elements
         public void Enable(Color highlight)
         {
             style.ReplaceBackgroundColor(highlight);
-            _associatedContainer.style.Show(true);
+            _associatedContainer.Show(true);
         }
         public void Disable()
         {
-            _associatedContainer.style.Show(false);
+            _associatedContainer.Show(false);
             style.ReplaceBackgroundColor(_original);
         }
         public new class UxmlFactory : UxmlFactory<TabSwitchButton, UxmlTraits>

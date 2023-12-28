@@ -16,10 +16,10 @@ namespace SummerRest.Editors.Window.Elements
         {
             if (serializedProperty is null)
             {
-                style.Show(false);
+                this.Show(false);
                 return;
             }
-            style.Show(true);
+            this.Show(true);
             var statusCodeProp = serializedProperty.FindPropertyRelative("statusCode");
             _statusCodeElement = this.Q<TextField>("status-code");
             _statusCodeElement.Unbind();

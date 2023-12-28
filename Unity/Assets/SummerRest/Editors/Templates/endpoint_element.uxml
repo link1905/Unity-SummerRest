@@ -2,17 +2,21 @@
     <ui:Template name="request_body_element" src="project://database/Assets/SummerRest/Editors/Templates/request_body_element.uxml?fileID=9197481963319205126&amp;guid=abc0082e036b829488839dddfbe33e53&amp;type=3#request_body_element" />
     <ui:Template name="response-element" src="project://database/Assets/SummerRest/Editors/Templates/response-element.uxml?fileID=9197481963319205126&amp;guid=b65a2fa1daa3bd74486e3f4163b1b07b&amp;type=3#response-element" />
     <SummerRest.Editors.Window.Elements.EndpointElement style="flex-grow: 1;">
-        <ui:TextField picking-mode="Ignore" label="Label" name="name" binding-path="endpointName" style="align-items: stretch; align-self: stretch; flex-shrink: 1;" />
-        <uie:PropertyField name="versions" binding-path="versions" style="align-self: stretch; flex-grow: 0; flex-shrink: 1;" />
-        <uie:PropertyField name="data-format" binding-path="dataFormat" style="flex-shrink: 1;" />
-        <uie:PropertyField name="headers" binding-path="headers" style="flex-shrink: 1; flex-grow: 0;" />
-        <uie:PropertyField name="content-type" binding-path="contentType" style="flex-shrink: 1;" />
-        <uie:PropertyField name="timeout-seconds" binding-path="timeoutSeconds" style="flex-shrink: 1;" />
-        <uie:PropertyField name="redirects-limit" binding-path="redirectsLimit" style="flex-shrink: 1;" />
+        <ui:TextField picking-mode="Ignore" label="Service" value="filler text" name="name" binding-path="endpointName" style="align-self: center; flex-shrink: 0; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch;" />
+        <ui:VisualElement name="shared-elements" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-self: stretch; min-width: auto; min-height: auto;">
+            <ui:TextField picking-mode="Ignore" label="Example.com" name="path" binding-path="path" style="align-items: stretch; align-self: stretch; flex-shrink: 1;" />
+            <uie:PropertyField name="versions" binding-path="versions" style="align-self: stretch; flex-grow: 0; flex-shrink: 1;" />
+            <uie:PropertyField name="data-format" binding-path="dataFormat" style="flex-shrink: 1;" />
+            <uie:PropertyField name="headers" binding-path="headers" style="flex-shrink: 1; flex-grow: 0;" />
+            <uie:PropertyField name="content-type" binding-path="contentType" style="flex-shrink: 1;" />
+            <uie:PropertyField name="timeout-seconds" binding-path="timeoutSeconds" style="flex-shrink: 1;" />
+            <uie:PropertyField name="redirects-limit" binding-path="redirectsLimit" style="flex-shrink: 1;" />
+        </ui:VisualElement>
         <ui:EnumField label="Method" type="SummerRest.Models.HttpMethod, SummerRest" name="method" binding-path="method" style="flex-shrink: 1;" />
         <uie:PropertyField name="params" binding-path="requestParams" style="flex-shrink: 1;" />
         <ui:Instance template="request_body_element" name="request_body_element" style="flex-grow: 0;" />
         <ui:Button text="Do request" display-tooltip-when-elided="true" name="request-btn" style="margin-bottom: 30px; margin-top: 10px; flex-shrink: 1; align-self: stretch; flex-grow: 0;" />
         <ui:Instance template="response-element" name="response-element" />
+        <ui:Foldout text="Advanced settings" name="advanced-settings" />
     </SummerRest.Editors.Window.Elements.EndpointElement>
 </ui:UXML>

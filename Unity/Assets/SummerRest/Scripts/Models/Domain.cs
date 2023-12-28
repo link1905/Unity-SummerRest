@@ -10,7 +10,7 @@ namespace SummerRest.Models
         [SerializeField] private OptionsArray<string> versions;
         public string ActiveVersion => versions.Value;
 
-        public override string TypeName => nameof(Domain);
+        public override string TypeName => nameof(SummerRest.Models.Domain);
     }
 #if UNITY_EDITOR
     public partial class Domain

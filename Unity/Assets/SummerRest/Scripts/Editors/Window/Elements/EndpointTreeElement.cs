@@ -16,6 +16,8 @@ namespace SummerRest.Editors.Window.Elements
     {
         private ToolbarMenu _actionMenu;
         private Label _nameElement;
+        private Label _path;
+        private Label _method;
         private Button _delBtn;
         private Endpoint _endpoint;
         public event Action<ElementAddAction, Endpoint> OnAddChild; 
@@ -25,26 +27,46 @@ namespace SummerRest.Editors.Window.Elements
         }
         public void Init(Endpoint endpoint)
         {
+            var isContainer = endpoint.IsContainer;
             _actionMenu = this.Q<ToolbarMenu>("action-menu");
             _nameElement = this.Q<Label>("name");
+            _method = this.Q<Label>("method");
+            _path = this.Q<Label>("path");
             
             _endpoint = endpoint;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.BindProperty(serializedObj);
-                
-            this.AddManipulator(new ContextualMenuManipulator(OnContextClick));
-            _actionMenu.style.Show(endpoint.IsContainer);
-            _actionMenu.menu.ClearItems();
-            _actionMenu.menu.AppendAction(ElementAddAction.Service.ToString(), ClickCreate);
-            _actionMenu.menu.AppendAction(ElementAddAction.Request.ToString(), ClickCreate);
-            if (!endpoint.IsContainer)
-                return;
+            _path.SetAndTrackPropertyValue(serializedObj.FindProperty("path"), SetPath);
+            this.AddManipulator(new ContextualMenuManipulator(e => OnContextClick(isContainer, e.menu)));
+            _actionMenu.Show(isContainer);
+            _method.Show(!isContainer);
+            if (isContainer)
+            {
+                OnContextClick(true, _actionMenu.menu);
+            }
+            else //Single action => request
+            {
+                _method.SetAndTrackPropertyValue(serializedObj.FindProperty("method"), SetMethod);
+            }
         }
-        private void OnContextClick(ContextualMenuPopulateEvent evt)
+
+        private void SetMethod(SerializedProperty methodProp)
         {
-            // Populate the context menu with options
-            evt.menu.AppendAction("Delete", _ => OnDelete?.Invoke(_endpoint));
-            // Add more options as needed
+            _method.text = methodProp.enumDisplayNames[methodProp.enumValueIndex];
+        }
+        private void SetPath(SerializedProperty pathProp)
+        {
+            _path.text = $"({pathProp.stringValue})";
+        }
+        private void OnContextClick(bool container, DropdownMenu menu)
+        {
+            menu.ClearItems();
+            if (container)
+            {
+                menu.AppendAction(ElementAddAction.Service.ToString(), ClickCreate);
+                menu.AppendAction(ElementAddAction.Request.ToString(), ClickCreate); 
+            }
+            menu.AppendAction("Delete", _ => OnDelete?.Invoke(_endpoint));
         }
         private void ClickCreate(DropdownMenuAction action)
         {

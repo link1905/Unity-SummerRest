@@ -156,7 +156,7 @@ namespace SummerRest.Editors.Window
             foreach (var id in _endpointTree.GetRootIds())
             {
                 var endpoint = _endpointTree.GetItemDataForId<Endpoint>(id);
-                if (endpoint.Path.Contains(search))
+                if (endpoint.FullPath.Contains(search))
                 {
                     _endpointTree.ScrollToItemById(id);
                     return;

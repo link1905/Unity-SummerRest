@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   domains:
   - {fileID: 11400000, guid: a02a587eddc3aef4fa079831f53d75ea, type: 2}
+  - {fileID: 11400000, guid: ceec711d267500643ae61721a02949a5, type: 2}

@@ -19,7 +19,7 @@ namespace SummerRest.Models
     {
         public virtual TreeViewItemData<Endpoint>? BuildTree(int id, string search)
         {
-            if (Path.Contains(search, StringComparison.InvariantCultureIgnoreCase))
+            if (FullPath.Contains(search, StringComparison.InvariantCultureIgnoreCase))
                 return new TreeViewItemData<Endpoint>(++id, this);
             return null;
         }
@@ -46,6 +46,14 @@ namespace SummerRest.Models
             get => endpointName;
             set => endpointName = value;
         }
+
+        [SerializeField] private string path;
+        public string Path
+        {
+            get => path;
+            set => path = value;
+        }
+        
 
         [SerializeField, InheritOrCustom(InheritChoice.Inherit)]
         private InheritOrCustomContainer<DataFormat> dataFormat;
@@ -74,9 +82,9 @@ namespace SummerRest.Models
         public int RedirectsLimit => redirectsLimit.Value;
 
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
-        public string ParentPath => Parent is null ? string.Empty : Parent.Path;
-        public virtual string Path => Parent is null ? EndpointName : $"{Parent.Path}/{EndpointName}";
-        public virtual string Url => $"{Domain.ActiveVersion}/{Path}";
+        public string ParentPath => Parent is null ? string.Empty : $"{Parent.FullPath}/";
+        public virtual string FullPath => Parent is null ? EndpointName : $"{Parent.FullPath}/{EndpointName}";
+        public virtual string Url => $"{Domain.ActiveVersion}/{FullPath}";
 
         public virtual void OnBeforeSerialize()
         {

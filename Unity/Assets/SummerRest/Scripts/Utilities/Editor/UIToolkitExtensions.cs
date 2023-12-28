@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -24,14 +25,25 @@ namespace SummerRest.Scripts.Utilities.Editor
                 bindableElement.Unbind();
             }
         } 
-        public static void Visible(this IStyle style, bool visible)
-        {
-            style.visibility = visible ? Visibility.Visible : Visibility.Hidden;
-        }
+
         public static void Show(this IStyle style, bool show)
         {
             style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
         }
+        public static void Show(this VisualElement visualElement, bool show)
+        {
+            visualElement.style.Show(show);
+        }
+        public static void SetAndTrackPropertyValue(
+            this VisualElement element,
+            SerializedProperty property,
+            Action<SerializedProperty> callback)
+        {
+            callback.Invoke(property);
+            element.Unbind();
+            element.TrackPropertyValue(property);
+        }
+
         public static void BindOrDisable<T>(this T field, SerializedProperty property) where T : VisualElement, IBindable
         {
             if (property is null)

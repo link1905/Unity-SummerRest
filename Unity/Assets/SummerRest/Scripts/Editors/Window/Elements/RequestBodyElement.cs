@@ -21,7 +21,7 @@ namespace SummerRest.Editors.Window.Elements
         {
             if (serializedProperty is null)
             {
-                style.Show(false);
+                this.Show(false);
                 return;
             }
 
@@ -45,8 +45,8 @@ namespace SummerRest.Editors.Window.Elements
         private void BindValueElement(RequestBodyType value)
         {
             var showPlain = value == RequestBodyType.PlainText;
-            _textValueElement.style.Show(showPlain);
-            _genericValueElement.style.Show(!showPlain);
+            _textValueElement.Show(showPlain);
+            _genericValueElement.Show(!showPlain);
         }
     }
 }
