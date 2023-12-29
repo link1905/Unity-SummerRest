@@ -1,10 +1,9 @@
 using System;
-using SummerRest.Scripts.Utilities.Editor;
 
 namespace SummerRest.Models
 {
-    [Serializable]
-    public class Service : EndpointContainer
+#if UNITY_EDITOR
+    public partial class Service
     {
         public override void Delete(bool fromParent)
         {
@@ -13,5 +12,9 @@ namespace SummerRest.Models
             base.Delete(fromParent);
         }
         public override string TypeName => nameof(Service);
+    }
+#endif
+    public partial class Service : EndpointContainer
+    {
     }
 }

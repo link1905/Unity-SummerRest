@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace SummerRest.Scripts.Utilities.Editor
 {
-    public static class SummerRestAssetUtilities
+    public static class EditorAssetUtilities
     {
         public static T CreateAndSaveObject<T>(string name, string path) where T : ScriptableObject
         {

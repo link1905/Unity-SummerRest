@@ -36,7 +36,7 @@ namespace SummerRest.Editors.Window.Elements
             _endpoint = endpoint;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.BindProperty(serializedObj);
-            _path.SetAndTrackPropertyValue(serializedObj.FindProperty("path"), SetPath);
+            _path.BindWithCallback<Label, string>(serializedObj, SetPath);
             this.AddManipulator(new ContextualMenuManipulator(e => OnContextClick(isContainer, e.menu)));
             _actionMenu.Show(isContainer);
             _method.Show(!isContainer);
@@ -46,17 +46,17 @@ namespace SummerRest.Editors.Window.Elements
             }
             else //Single action => request
             {
-                _method.SetAndTrackPropertyValue(serializedObj.FindProperty("method"), SetMethod);
+                _method.BindWithCallback<Label, string>(serializedObj, SetMethod);
             }
         }
 
-        private void SetMethod(SerializedProperty methodProp)
+        private void SetMethod(string val)
         {
-            _method.text = methodProp.enumDisplayNames[methodProp.enumValueIndex];
+            _method.SetTextValueWithoutNotify($"({val})");
         }
-        private void SetPath(SerializedProperty pathProp)
+        private void SetPath(string value)
         {
-            _path.text = $"({pathProp.stringValue})";
+            _path.SetTextValueWithoutNotify($"({value})");
         }
         private void OnContextClick(bool container, DropdownMenu menu)
         {

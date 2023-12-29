@@ -10,12 +10,13 @@ namespace SummerRest.Editors.Window.Elements
     public class EndpointElement : VisualElement
     {
         public event Action<Endpoint> OnRequest;
-        private Button _requestBtn;
         private Endpoint _endpoint;
         private Foldout _advancedSettingsFoldout;
+        private int _sharedElementsOriginalIndex;
         private VisualElement _sharedElements;
         private TextField _nameElement;
         private TextField _pathElement;
+        private TextField _urlElement;
         private RequestBodyElement _requestBodyElement; 
         private ResponseElement _responseElement; 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
@@ -34,14 +35,22 @@ namespace SummerRest.Editors.Window.Elements
 
         public void Init()
         {
-            _requestBtn = this.Q<Button>("request-btn");
-            _requestBtn.clicked += OnClick;
+            _requestBodyElement = this.Q<RequestBodyElement>();
+             var requestBtn = _requestBodyElement.Q<Button>("request-btn");
+            requestBtn.clicked += OnClick;
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");
             _sharedElements = this.Q<VisualElement>("shared-elements");
             _nameElement = this.Q<TextField>("name");
             _pathElement = this.Q<TextField>("path");
-            _requestBodyElement = this.Q<RequestBodyElement>();
+            _urlElement = this.Q<TextField>("url");
+            _pathElement.RegisterValueChangedCallback(_ =>
+            {
+                if (_endpoint is null)
+                    return;
+                _urlElement.value = _endpoint.Url;
+            });
             _responseElement = this.Q<ResponseElement>();
+            _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
 
         private void ShowAdvancedSettings(bool shouldBeMovedToAdvancedPart)
@@ -50,20 +59,21 @@ namespace SummerRest.Editors.Window.Elements
             if (shouldBeMovedToAdvancedPart)
                 _advancedSettingsFoldout.Add(_sharedElements);
             else
-                Insert(0, _sharedElements);
+                Insert(_sharedElementsOriginalIndex, _sharedElements);
         }
 
         
-        public void Init(Endpoint endpoint)
+        public void ShowEndpoint(Endpoint endpoint)
         {
             _endpoint = endpoint;
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.label = endpoint.TypeName;
-            _pathElement.label = endpoint.ParentPath;
+            _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
+            _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
             _requestBodyElement.Init(serializedObj.FindProperty("requestBody"));
             _responseElement.Init(serializedObj.FindProperty("latestResponse"));
-            _requestBtn.Show(isRequest);
+            
             ShowAdvancedSettings(isRequest);
             _sharedElements.BindChildrenToProperties(serializedObj);
             this.BindChildrenToProperties(serializedObj);

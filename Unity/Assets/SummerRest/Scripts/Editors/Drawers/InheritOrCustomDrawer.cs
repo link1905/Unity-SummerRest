@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using SummerRest.Attributes;
 using SummerRest.DataStructures;
 using SummerRest.DataStructures.Containers;
@@ -24,14 +25,18 @@ namespace SummerRest.Editors.Drawers
             if (_att is null)
             {
                 return new Label(
-                    $"Must you {nameof(InheritOrCustomContainer<object>)} with an attribute {nameof(InheritOrCustomAttribute)}");
+                    $"Must use {nameof(InheritOrCustomContainer<object>)} with an attribute {nameof(InheritOrCustomAttribute)}");
             }
             var tree = _treeAsset.Instantiate();
             var nameElement = tree.Q<Label>(name: "prop-name");
             nameElement.text = property.displayName;
                         
             var valueElement = tree.Q<PropertyField>(name: "prop");
-            valueElement.BindPropertyNoLabel(property.FindPropertyRelative("value"));
+            valueElement.BindProperty(property.FindPropertyRelative("value"));
+            
+            var cacheElement = tree.Q<PropertyField>(name: "cache");
+            cacheElement.SetEnabled(false);
+            //cacheElement.BindProperty(property.FindSiblingBackingPropertyRelative(_att.CachePropName));
             
             var choiceElement = tree.Q<EnumField>(name: "prop-choice");
             var choiceProp = property.FindPropertyRelative("inherit");
@@ -40,15 +45,15 @@ namespace SummerRest.Editors.Drawers
             {
                 if (c.newValue is null)
                     return;
-                ShowProp(valueElement, property, choiceProp, (InheritChoice)c.newValue);
+                ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)c.newValue);
             });
-            ShowProp(valueElement, property, choiceProp, (InheritChoice)choiceProp.enumValueFlag);
+            ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)choiceProp.enumValueFlag);
             return tree;
         }
 
         private InheritChoice? ShouldMoveBackToDefault(SerializedProperty mainProp, InheritChoice selection)
         {
-            var parentField = mainProp.FindSiblingPropertyRelative("parent");
+            var parentField = mainProp.FindSiblingBackingPropertyRelative("Parent");
             if (selection is InheritChoice.Inherit or InheritChoice.AppendToParent && parentField?.GetReference() is null)
                 return _att.DefaultWhenNoParent;
             var allow = _att.Allow;
@@ -57,8 +62,15 @@ namespace SummerRest.Editors.Drawers
                 return _att.Default;
             return null;
         }
-        
-        private void ShowProp(VisualElement valueElement, SerializedProperty mainProp, SerializedProperty choiceProp, InheritChoice selection)
+
+        private static readonly Dictionary<InheritChoice, (bool showValue, bool showCache)> ShowState = new()
+        {
+            { InheritChoice.None, (false, false)},
+            { InheritChoice.Inherit, (false, true)},
+            { InheritChoice.AppendToParent, (true, true)},
+            { InheritChoice.Custom, (true, false)},
+        };
+        private void ShowProp(VisualElement valueElement, VisualElement cacheElement, SerializedProperty mainProp, SerializedProperty choiceProp, InheritChoice selection)
         {
             var backToDefault = ShouldMoveBackToDefault(mainProp, selection);
             if (backToDefault != null)
@@ -66,22 +78,10 @@ namespace SummerRest.Editors.Drawers
                 choiceProp.enumValueFlag = (int)backToDefault;
                 choiceProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
             }
-            else
-            {
-                var validChangeProp = mainProp.FindPropertyRelative("validChange");
-            }
-            switch (selection)
-            {
-                case InheritChoice.None or InheritChoice.Inherit:
-                    valueElement.style.display = DisplayStyle.None;
-                    break;
-                case InheritChoice.Custom or InheritChoice.AppendToParent:
-                    valueElement.style.display = DisplayStyle.Flex;
-                    break;
-                default:
-                    return;
-            }
-            
+            if (!ShowState.TryGetValue(selection, out var show)) 
+                return;
+            valueElement.Show(show.showValue);
+            cacheElement.Show(show.showCache);
         }
     }
 }

@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Reflection;
-using SummerRest.Attributes;
-using SummerRest.DataStructures.Containers;
-using SummerRest.DataStructures.Primitives;
-using SummerRest.Models.Interfaces;
-using SummerRest.Scripts.Utilities.Editor;
+using Newtonsoft.Json;
 using TypeReferences;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SummerRest.Models
 {
@@ -30,13 +24,21 @@ namespace SummerRest.Models
     public interface IAuthData
     {
     }
-
+    public interface IWebResponse<out TBody>
+    {
+        TBody Data { get; }
+        string RawData { get; }
+        byte[] RawDataBytes { get; }
+        IEnumerable<KeyValue> Headers { get; }
+        HttpStatusCode StatusCode { get; }
+        string Error { get; }
+        object Requester { get; }
+    }
     public interface IWebRequest<TBody>
     {
-        Uri Uri { get; set; }
         string Url { get; set; }
-        IDictionary<string, object> Params { get; }
         IDictionary<string, string> Headers { get; }
+        IDictionary<string, string> Params { get; }
         HttpMethod Method { get; set; }
         int RedirectLimit { get; set; }
         int TimeoutSeconds { get; set; }
@@ -59,27 +61,11 @@ namespace SummerRest.Models
         [field: SerializeField] internal AuthConfiguration[] Configurations { get; private set; }
     }
 
-    [Serializable]
-    public class Response
-    {
-        [SerializeField] private HttpStatusCode statusCode = HttpStatusCode.OK;
-        public HttpStatusCode StatusCode => statusCode;
-        [SerializeField] private KeyValue[] headers;
-        public KeyValue[] Header
-        {
-            get => headers;
-            set => headers = value;
-        }
-        [SerializeField] private string body;
-        public string Body => body;
-    }
-    
-    [Serializable]
     public partial class Request : Endpoint 
     {
-        [SerializeField] private HttpMethod method;
-        [SerializeField] private KeyValue[] requestParams;
-        [SerializeField] private RequestBody requestBody;
+        [SerializeField, JsonIgnore] private HttpMethod method;
+        [SerializeField, JsonIgnore] private KeyValue[] requestParams;
+        [SerializeField, JsonIgnore] private RequestBody requestBody;
         public HttpMethod Method
         {
             get => method;
@@ -90,11 +76,16 @@ namespace SummerRest.Models
             get => requestParams;
             private set => requestParams = value;
         }
+        public RequestBody RequestBody
+        {
+            get => requestBody;
+            private set => requestBody = value;
+        }
 
     }
 
 #if UNITY_EDITOR
-    public partial class Request : Endpoint
+    public partial class Request
     {
         public override void Delete(bool fromParent)
         {
@@ -103,34 +94,17 @@ namespace SummerRest.Models
             base.Delete(fromParent);
         }
 
-        [SerializeField] private Response latestResponse;
-
-        public Response LatestResponse
+        [SerializeField, JsonIgnore] private Response latestResponse;
+        [JsonIgnore] public Response LatestResponse
         {
             get => latestResponse;
             set => latestResponse = value;
         }
-
         public override string TypeName => nameof(Request);
     }
 #endif
     public enum RequestBodyType
     {
         PlainText = 0, Data = 1
-    }
-    [Serializable]
-    public class RequestBody
-    {
-        [SerializeField] private RequestBodyType type;
-        [SerializeField] private string text;
-        [SerializeField] private RequestBodyContainer bodyContainer;
-        public string SerializedData => type == RequestBodyType.PlainText ? text : bodyContainer.SerializedData;
-        
-        [Serializable]
-        public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
-        {
-            [SerializeField, Inherits(typeof(IRequestBodyData))] private TypeReference typeReference;
-            public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
-        }
     }
 }

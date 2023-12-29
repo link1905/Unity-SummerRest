@@ -3,5 +3,6 @@
         <ui:Label tabindex="-1" text="asdasdasdasdasdasdasdsad" display-tooltip-when-elided="false" name="prop-name" enable-rich-text="false" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-grow: 0; flex-shrink: 1; width: auto; -unity-text-align: middle-center;" />
         <ui:EnumField type="SummerRest.DataStructures.Enums.InheritChoice, SummerRest" name="prop-choice" include-obsolete-values="true" value="Inherit" style="align-self: stretch; align-items: flex-start; justify-content: flex-start; flex-direction: column; width: auto; flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap;" />
     </ui:VisualElement>
-    <uie:PropertyField name="prop" tooltip="Custom value" style="height: auto; flex-grow: 1; display: flex; visibility: visible; overflow: visible; align-self: stretch;" />
+    <uie:PropertyField name="prop" tooltip="Custom value" label="Custom value" style="height: auto; flex-grow: 0; display: flex; visibility: visible; overflow: visible; align-self: stretch; flex-shrink: 0;" />
+    <uie:PropertyField name="cache" tooltip="Final value" label="Final value" style="flex-shrink: 0; align-self: stretch;" />
 </ui:UXML>

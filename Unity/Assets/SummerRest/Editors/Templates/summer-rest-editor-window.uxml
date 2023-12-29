@@ -2,6 +2,11 @@
     <ui:Template name="domain-list" src="project://database/Assets/SummerRest/Editors/Templates/domain-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#domain-list" />
     <ui:Template name="endpoint_UXML" src="project://database/Assets/SummerRest/Editors/Templates/endpoint_element.uxml?fileID=9197481963319205126&amp;guid=58449a5f23d6d324ba75a61f0255e158&amp;type=3#endpoint_element" />
     <ui:VisualElement name="main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: column; align-items: stretch; justify-content: center;">
+        <uie:Toolbar name="toolbar" style="align-self: auto; justify-content: flex-start;">
+            <uie:ToolbarButton text="Endpoints" display-tooltip-when-elided="true" name="shared-btn" />
+            <uie:ToolbarButton text="Authentication" display-tooltip-when-elided="true" name="auth-tab-btn" />
+            <uie:ToolbarButton text="Generate source" display-tooltip-when-elided="true" name="gen-btn" style="justify-content: flex-start; align-self: auto; flex-grow: 0; align-items: auto;" />
+        </uie:Toolbar>
         <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: 103px; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 3px;" />
         <ui:TwoPaneSplitView fixed-pane-initial-dimension="300" name="endpoint-container" style="flex-direction: row; visibility: visible;">
             <ui:VisualElement name="domain" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-shrink: 1; min-width: 15%; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: auto;">

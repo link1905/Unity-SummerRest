@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using SolidUtilities.UnityEditorInternals;
+using SummerRest.Scripts.Utilities.Common;
 using UnityEditor;
 
 namespace SummerRest.Scripts.Utilities.Editor
@@ -19,27 +20,11 @@ namespace SummerRest.Scripts.Utilities.Editor
                     return null;
             }
         }
-        public static T GetNonSerializedPropertyValue<T>(this SerializedProperty serializedProperty, string fieldName)
+        public static SerializedProperty FindSiblingBackingPropertyRelative(
+            this SerializedProperty self, string name)
         {
-            // Ensure that the property is valid and its serialized object is not null
-            if (serializedProperty is { serializedObject: not null })
-            {
-                // Get the target object from the serialized object
-                var type = serializedProperty.GetFieldInfoAndType().Type;
-                var prop = type.GetProperty(fieldName, BindingFlags.Instance | BindingFlags.Public);
-                if (prop != null)
-                {
-                    var target = serializedProperty.serializedObject.targetObject;
-                    return (T)prop.GetValue(target);
-                }
-            }
-            return default;
-        }
-        public static SerializedProperty FindParentProperty(this SerializedProperty self)
-        {
-            var dotIndex = self.propertyPath.LastIndexOf('.');
-            var siblingPath = dotIndex == -1 ? "" : self.propertyPath[..(dotIndex + 1)];
-            return self.serializedObject.FindProperty(siblingPath);
+            var backingName = $"<{name}>k__BackingField";
+            return self.FindSiblingPropertyRelative(backingName);
         }
         public static SerializedProperty FindSiblingPropertyRelative(
             this SerializedProperty self, string name)

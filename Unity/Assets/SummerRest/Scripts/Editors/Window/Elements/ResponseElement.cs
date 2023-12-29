@@ -1,4 +1,6 @@
-﻿using SummerRest.Models;
+﻿using System;
+using System.Net;
+using SummerRest.Models;
 using SummerRest.Scripts.Utilities.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -23,15 +25,15 @@ namespace SummerRest.Editors.Window.Elements
             var statusCodeProp = serializedProperty.FindPropertyRelative("statusCode");
             _statusCodeElement = this.Q<TextField>("status-code");
             _statusCodeElement.Unbind();
-            _statusCodeElement.TrackPropertyValue(statusCodeProp, SetStatusCodeValue);
+            _statusCodeElement.BindWithCallback<TextField, string>(statusCodeProp, SetStatusCodeValue);
             this.Q<PropertyField>("headers").BindProperty(serializedProperty.FindPropertyRelative("headers"));
             this.Q<TextField>("body").BindProperty(serializedProperty.FindPropertyRelative("body"));
-            SetStatusCodeValue(statusCodeProp);
         }
 
-        private void SetStatusCodeValue(SerializedProperty p)
+        private void SetStatusCodeValue(string p)
         {
-            _statusCodeElement.value = $"{p.enumValueFlag} ({p.enumDisplayNames[p.enumValueIndex]})";
+            var statusCode = Enum.Parse<HttpStatusCode>(p, true);
+            _statusCodeElement.SetValueWithoutNotify($"{(int)statusCode} ({p})");
         }
         public ResponseElement()
         {

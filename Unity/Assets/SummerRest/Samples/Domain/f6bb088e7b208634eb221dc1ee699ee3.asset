@@ -10,62 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: 5ef2ba30a58cedb428ef78d0dbbe271a
+  m_Name: f6bb088e7b208634eb221dc1ee699ee3
   m_EditorClassIdentifier: 
-  <Domain>k__BackingField: {fileID: 0}
-  <Parent>k__BackingField: {fileID: 11400000, guid: df901f3899f4433499620362fc05457f, type: 2}
-  endpointName: sadsadasd
+  <Domain>k__BackingField: {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 430784cd43bdc7f4692a0f087cd2cc4a, type: 2}
+  endpointName: Request 1
+  path: qwewqe
   dataFormat:
-    inherit: 8
+    inherit: 2
     value: 0
   headers:
-    inherit: 8
-    value:
-    - key: 
-      value: 
-    - key: 
-      value: 
-    - key: 
-      value: 
-    - key: 
-      value: 
+    inherit: 2
+    value: []
   contentType:
-    inherit: 8
+    inherit: 2
     value:
       <CharSet>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
-    inherit: 1
+    inherit: 2
     value: 0
   redirectsLimit:
-    inherit: 1
+    inherit: 2
     value: 0
   method: 0
-  requestParams: []
+  requestParams:
+  - key: 
+    value: 
   requestBody:
     type: 0
-    text: 'asda
-
-      as
-
-      da
-
-      sd
-
-      a
-
-      sd
-
-      as
-
-      d
-
-      sa
-
-      d
-
-'
+    text: 
     bodyContainer:
       serializedValue: 
       valueChanged: 0

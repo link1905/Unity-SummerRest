@@ -25,8 +25,8 @@ namespace SummerRest.Editors.Window.Elements
                 return;
             }
 
-            this.Q<Label>("name").text = serializedProperty.displayName;
-            var typeElement = this.Q<EnumField>();
+            this.Show(true);
+            var typeElement = this.Q<EnumField>("type");
             var typeProp = serializedProperty.FindPropertyRelative("type");
             typeElement.BindProperty(typeProp);
             typeElement.RegisterValueChangedCallback(e =>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SummerRest.Configurations;
+using SummerRest.Editors.Manager;
 using SummerRest.Editors.Window.Elements;
 using SummerRest.Models;
 using SummerRest.Scripts.Utilities.Editor;
@@ -34,7 +35,7 @@ namespace SummerRest.Editors.Window
             var configurationsManager = DomainConfigurationsManager.Instance;
             var path = configurationsManager.GetAssetFolder();
             // Check the domain folder existing
-            SummerRestAssetUtilities.CreateFolderIfNotExists(path, nameof(Domain));
+            EditorAssetUtilities.CreateFolderIfNotExists(path, nameof(Domain));
         }
         public void Awake()
         {
@@ -47,8 +48,15 @@ namespace SummerRest.Editors.Window
             SetupDomainListSection();
             SetupEndpointsTree();
             SetupDomainSection();
+            SetupGenerateSourceButton();
             _mainContainer.StretchToParentSize();
             root.Add(_mainContainer);
+        }
+
+        private void SetupGenerateSourceButton()
+        {
+            var genBtn = _mainContainer.Q<ToolbarButton>("gen-btn");
+            genBtn.clicked += SourceGenerator.GenerateAdditionalFile;
         }
         
         // Setup domain list on top of the window
@@ -66,14 +74,13 @@ namespace SummerRest.Editors.Window
                     {
                         domains.Remove(d);
                         d.Delete(false);
-                    }, SummerRestAssetUtilities.AskToRemoveMessage.RemoveDomain))
+                    }, EditorAssetUtilities.AskToRemoveMessage.RemoveDomain))
                     return false;
                 if (isSelected)
                     ClearWindows();
                 configurationsManager.MakeDirty();
                 return true;
             };
-            // _domainListElement.OnAdd += OnAddDomain;
             _domainListElement.OnElementClicked += OnSelectDomain;
             foreach (var domain in domains)
                 _domainListElement.AddChild(domain, false);
@@ -83,8 +90,9 @@ namespace SummerRest.Editors.Window
         {
             var configurationsManager = DomainConfigurationsManager.Instance;
             var path = configurationsManager.GetAssetFolder(nameof(Domain));
-            var domain = SummerRestAssetUtilities.CreateAndSaveObject<Domain>(path);
+            var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(path);
             configurationsManager.Domains.Add(domain);
+            domain.Domain = domain;
             domain.EndpointName = $"Domain {configurationsManager.Domains.Count}";
             configurationsManager.MakeDirty();
             return domain;
@@ -94,7 +102,7 @@ namespace SummerRest.Editors.Window
             var domain = DomainConfigurationsManager.Instance.Domains[domainIndex];
             if (domain == _currentSelectedDomain)
                 return;
-            ShowEndpointsTree(domain, string.Empty);
+            ShowEndpointsTree(domain);
             ShowDomainAction(domain);
         }
         // Setup domain search section
@@ -146,9 +154,9 @@ namespace SummerRest.Editors.Window
             };
             _endpointTree.selectionChanged += items =>
             {
-                if (items.First() is not Endpoint domain)
+                if (items.First() is not Endpoint selectedEndpoint)
                     return;
-                _endpointElement.Init(domain);
+                _endpointElement.ShowEndpoint(selectedEndpoint);
             };
         }
         private void FindEndpoint(string search)
@@ -163,21 +171,24 @@ namespace SummerRest.Editors.Window
                 }
             }
         }
-
         private void ShowDomainAction(Domain domain)
         {
             _currentSelectedDomain = domain;
         }
-        private void ShowEndpointsTree(Domain domain, string search)
+        private void ShowEndpointsTree(Domain domain)
         {
-            var treeView = domain is not null ? domain.BuildChildrenTree(0, search) : new List<TreeViewItemData<Endpoint>>();
+            var treeView = domain is not null ? new List<TreeViewItemData<Endpoint>>
+                {
+                    domain.BuildTree(0)
+                } 
+                : new List<TreeViewItemData<Endpoint>>();
             _endpointTree.SetRootItems(treeView);
             _endpointTree.Rebuild();
         }
         
         private void ClearWindows()
         {
-            ShowEndpointsTree(null, null);
+            ShowEndpointsTree(null);
             _endpointElement.UnBindAllChildren();
         }
         private void OnEndpointElementOnOnAddChild(ElementAddAction elementAddAction, Endpoint endpoint)
@@ -189,21 +200,18 @@ namespace SummerRest.Editors.Window
             switch (elementAddAction)
             {
                 case ElementAddAction.Service:
-                    var service = SummerRestAssetUtilities.CreateAndSaveObject<Service>(path);
-                    var idx = parent.AddService(service);
-                    service.EndpointName = $"Service {idx}";
+                    endpoint = EditorAssetUtilities.CreateAndSaveObject<Service>(path);
                     break;
                 case ElementAddAction.Request:
-                    var request = SummerRestAssetUtilities.CreateAndSaveObject<Request>(path);
-                    idx = parent.AddRequest(request);
-                    request.EndpointName = $"Request {idx}";
+                    endpoint = EditorAssetUtilities.CreateAndSaveObject<Request>(path);
                     break;
                 default:
                     return;
             }
+            parent.AddEndpoint(endpoint);
             parent.MakeDirty();
             // Update the endpoint tree
-            ShowEndpointsTree(_currentSelectedDomain, string.Empty);
+            ShowEndpointsTree(_currentSelectedDomain);
         }
         private void OnEndpointElementOnOnRemoveChild(Endpoint endpoint)
         {
@@ -212,7 +220,7 @@ namespace SummerRest.Editors.Window
             switch (endpoint)
             {
                 case Service service:
-                    if (!service.AskToRemoveAsset(deleteAction: s => s.Delete(true), SummerRestAssetUtilities.AskToRemoveMessage.RemoveService))
+                    if (!service.AskToRemoveAsset(deleteAction: s => s.Delete(true), EditorAssetUtilities.AskToRemoveMessage.RemoveService))
                         return;
                     break;
                 case Request request:
@@ -223,7 +231,7 @@ namespace SummerRest.Editors.Window
             }
             parent.MakeDirty();
             // Update the endpoint tree
-            ShowEndpointsTree(_currentSelectedDomain, string.Empty);
+            ShowEndpointsTree(_currentSelectedDomain);
         }
     }
 }

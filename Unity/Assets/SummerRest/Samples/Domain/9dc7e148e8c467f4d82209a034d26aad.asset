@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
+  m_Name: 9dc7e148e8c467f4d82209a034d26aad
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
+  endpointName: Service 1
+  path: asd
+  dataFormat:
+    inherit: 2
+    value: 1
+  <DataFormat>k__BackingField: 0
+  headers:
+    inherit: 4
+    value:
+    - key: asdasdasdasdas
+      value: asdsadasd
+    - key: qqw
+      value: asdsad
+    - key: qqw
+      value: asdsad
+  <Headers>k__BackingField:
+  - key: HJasdasd
+    value: asdasd
+  - key: asdas
+    value: sad
+  - key: asdasdasdasdas
+    value: asdsadasd
+  - key: qqw
+    value: asdsad
+  - key: qqw
+    value: asdsad
+  contentType:
+    inherit: 2
+    value:
+      <CharSet>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  <ContentType>k__BackingField:
+    <CharSet>k__BackingField: 
+    <MediaType>k__BackingField: 
+    <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    value: 0
+  <TimeoutSeconds>k__BackingField: 0
+  redirectsLimit:
+    inherit: 2
+    value: 0
+  <RedirectsLimit>k__BackingField: 0
+  services: []
+  requests:
+  - {fileID: 11400000, guid: 4ad42049585ac6d4f91a70890aaeef0c, type: 2}
