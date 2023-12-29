@@ -17,7 +17,7 @@ namespace SummerRest.Models
                     "audio/mpeg", "audio/wav")] 
         public string MediaType { get; private set; }
         [field: SerializeField] public string Boundary { get; private set; }
-
+        public string FormedContentType { get; } 
         // public static readonly string[] DefaultCharsets = {
         //     "UTF-8", "UTF-16", "US-ASCII",
         // };
