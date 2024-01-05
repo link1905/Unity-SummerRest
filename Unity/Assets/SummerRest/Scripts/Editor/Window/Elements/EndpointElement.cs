@@ -17,7 +17,7 @@ namespace SummerRest.Editor.Window.Elements
         private TextField _nameElement;
         private TextField _pathElement;
         private TextField _urlElement;
-        private TextOrCustomDataElement _requestBodyElement; 
+        private VisualElement _requestBodyElement; 
         private ResponseElement _responseElement; 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
@@ -35,7 +35,7 @@ namespace SummerRest.Editor.Window.Elements
 
         public void Init()
         {
-            _requestBodyElement = this.Q<TextOrCustomDataElement>();
+            _requestBodyElement = this.Q<VisualElement>("request-body-element");
              var requestBtn = _requestBodyElement.Q<Button>("request-btn");
             requestBtn.clicked += OnClick;
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");
@@ -69,11 +69,16 @@ namespace SummerRest.Editor.Window.Elements
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.label = endpoint.TypeName;
-            _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
-            _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
-            _requestBodyElement.Init(serializedObj.FindProperty("requestBody"));
-            _responseElement.Init(serializedObj.FindProperty("latestResponse"));
             
+            _requestBodyElement.Show(isRequest);
+            if (isRequest)
+            {
+                _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
+                _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
+                _requestBodyElement.Q<PropertyField>("body").BindProperty(serializedObj);
+            }
+
+            _responseElement.Init(serializedObj.FindProperty("latestResponse"));
             ShowAdvancedSettings(isRequest);
             _sharedElements.BindChildrenToProperties(serializedObj);
             this.BindChildrenToProperties(serializedObj);

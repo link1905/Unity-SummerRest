@@ -25,7 +25,7 @@ MonoBehaviour:
   contentType:
     inherit: 2
     value:
-      <CharSet>k__BackingField: 
+      <Charset>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
@@ -36,20 +36,19 @@ MonoBehaviour:
     value: 0
   method: 0
   requestParams:
-  - key: 
-    value: 
+  - key: asdasd
+    value: asd
   requestBody:
-    type: 0
-    text: 
-    bodyContainer:
-      serializedValue: 
-      valueChanged: 0
+    type: 1
+    text: asas
+    body:
       value:
-        rid: -2
+        rid: 6516271172897734656
       typeReference:
         GuidAssignmentFailed: 0
         GUID: 
-        _typeNameAndAssembly: 
+        _typeNameAndAssembly: SummerRest.Samples.Behaviours.TestMonoBehaviour+CustomRequestBodyData,
+          Sameple.Behaviours
         _suppressLogs: 0
   latestResponse:
     statusCode: 200
@@ -58,5 +57,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 6516271172897734656
+      type: {class: TestMonoBehaviour/CustomRequestBodyData, ns: SummerRest.Samples.Behaviours, asm: Sameple.Behaviours}
+      data:
+        a: 
+        b: 0

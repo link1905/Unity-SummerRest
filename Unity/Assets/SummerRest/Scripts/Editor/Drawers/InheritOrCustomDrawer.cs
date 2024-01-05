@@ -10,21 +10,19 @@ using UnityEngine.UIElements;
 namespace SummerRest.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(InheritOrCustomContainer<>))]
-    internal class InheritOrCustomDrawer : PropertyDrawer
+    internal class InheritOrCustomDrawer : UIToolkitDrawer
     {
-        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/inherit-or-custom.uxml";
-        private VisualTreeAsset _treeAsset;
+        public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/inherit-or-custom.uxml";
         private InheritOrCustomAttribute _att;
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            _treeAsset ??= AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AssetPath);
+            var tree = Tree;
             _att ??= fieldInfo.GetCustomAttribute(typeof(InheritOrCustomAttribute)) as InheritOrCustomAttribute;
             if (_att is null)
             {
                 return new Label(
                     $"Must use {nameof(InheritOrCustomContainer<object>)} with an attribute {nameof(InheritOrCustomAttribute)}");
             }
-            var tree = _treeAsset.Instantiate();
             var nameElement = tree.Q<Label>(name: "prop-name");
             nameElement.text = property.displayName;
                         
@@ -80,5 +78,6 @@ namespace SummerRest.Editor.Drawers
             valueElement.Show(show.showValue);
             cacheElement.Show(show.showCache);
         }
+
     }
 }

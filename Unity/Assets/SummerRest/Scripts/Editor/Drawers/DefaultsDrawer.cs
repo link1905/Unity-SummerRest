@@ -10,18 +10,13 @@ using UnityEngine.UIElements;
 namespace SummerRest.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(DefaultsAttribute))]
-    internal class DefaultsDrawer : PropertyDrawer
+    internal class DefaultsDrawer : UIToolkitDrawer
     {
-        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/default-or-custom.uxml";
-        private VisualTreeAsset _treeAsset;
+        public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/default-or-custom.uxml";
+
         private List<string> _defaultValues;
         private void Init()
         {
-            if (_defaultValues is null)
-            {
-                _defaultValues = ((DefaultsAttribute)attribute).Defaults.Prepend("Custom").ToList();
-                _treeAsset ??= AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AssetPath);
-            }
         }
         public int GetIdx(string value)
         {
@@ -31,8 +26,9 @@ namespace SummerRest.Editor.Drawers
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            Init();
-            var tree = _treeAsset.Instantiate();
+            var tree = Tree;
+            
+            _defaultValues ??= ((DefaultsAttribute)attribute).Defaults.Prepend("Custom").ToList();
             
             var nameElement = tree.Q<Label>(name: "name");
             nameElement.text = property.displayName;
@@ -61,5 +57,6 @@ namespace SummerRest.Editor.Drawers
                 customElement.value = newVal;
             customElement.Show(newIdx == 0);
         }
+
     }
 }

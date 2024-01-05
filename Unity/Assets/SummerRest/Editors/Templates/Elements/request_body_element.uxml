@@ -1,11 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <SummerRest.Editor.Window.Elements.TextOrCustomDataElement style="flex-grow: 1;">
+    <ui:VisualElement style="flex-grow: 1;">
         <ui:EnumField label="Method" type="SummerRest.Scripts.Utilities.RequestComponents.HttpMethod, SummerRest.Utilities" name="method" binding-path="method" />
         <uie:PropertyField name="params" binding-path="requestParams" style="flex-shrink: 0; align-self: stretch;" />
         <ui:Label tabindex="-1" text="Request body" display-tooltip-when-elided="true" name="name" />
-        <ui:EnumField label="Type" type="SummerRest.Scripts.Utilities.DataStructures.TextOrCustomDataType, SummerRest.Utilities" name="type" binding-path="type" style="flex-shrink: 0; align-self: stretch;" />
-        <ui:TextField picking-mode="Ignore" value="ASD&#10;asd&#10;&#10;asd&#10;sa&#10;d&#10;sa&#10;d&#10;sad&#10;sa&#10;d&#10;sad&#10;" multiline="true" name="value" style="min-height: 60px; flex-grow: 0; flex-shrink: 0; align-self: stretch;" />
-        <uie:PropertyField name="value" style="flex-shrink: 0; align-self: stretch;" />
+        <uie:PropertyField name="body" binding-path="requestBody" style="flex-shrink: 0; align-self: stretch;" />
         <ui:Button text="Do request" display-tooltip-when-elided="true" name="request-btn" style="margin-bottom: 30px; margin-top: 10px; flex-shrink: 0; align-self: stretch; flex-grow: 0;" />
-    </SummerRest.Editor.Window.Elements.TextOrCustomDataElement>
+    </ui:VisualElement>
 </ui:UXML>

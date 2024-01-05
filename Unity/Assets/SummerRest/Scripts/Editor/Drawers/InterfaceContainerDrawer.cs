@@ -1,40 +1,39 @@
 using SummerRest.Editor.Utilities;
+using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(InterfaceContainer<>), true)]
-    internal class InterfaceContainerDrawer : PropertyDrawer
+    internal class InterfaceContainerDrawer : UIToolkitDrawer
     {
-        private void GetProps(SerializedProperty property,
-            out SerializedProperty typeRefProp, out SerializedProperty valueProp)
+        public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/interface-container.uxml";
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            typeRefProp = property.FindPropertyRelative("typeReference");
-            valueProp = property.FindPropertyRelative("value");
-        }
+            var tree = Tree;
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            EditorGUI.BeginProperty(position, label, property);
-            GetProps(property, out var typeRefProp, out var valueProp);
-            using var scope = SummerRestEditorUtilities.LayoutOptions.EditorGUIDrawHorizontalLayout.Create(position);
-            scope.PropertyField(typeRefProp);
-            EditorGUI.BeginChangeCheck();
-            SummerRestEditorUtilities.Drawers.DrawGenericField(scope.NextPosition, valueProp);
-            if (EditorGUI.EndChangeCheck())
+            var valueProp = property.FindPropertyRelative("value");
+            var valuePropField = tree.Q<PropertyField>("value");
+            var typePropField = tree.Q<PropertyField>("type");
+            typePropField.RegisterValueChangeCallback(e =>
             {
-                property.serializedObject.ApplyModifiedProperties();
-                property.FindPropertyRelative("valueChanged").boolValue = true;
-            }
-            EditorGUI.EndProperty();
+                var newProp = e.changedProperty;
+                if (newProp is null)
+                    return;
+                RebindValuePropField(valuePropField, valueProp);
+            });
+            return tree;
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        private void RebindValuePropField(PropertyField valuePropField, SerializedProperty property)
         {
-            GetProps(property, out _, out var valueProp);
-            return SummerRestEditorUtilities.Sizes.SingleLineHeight + SummerRestEditorUtilities.Sizes.GetGenericPropertyHeight(valueProp);
+            valuePropField.Unbind();
+            property.serializedObject.Update();
+            valuePropField.BindProperty(property);
         }
     }
 }

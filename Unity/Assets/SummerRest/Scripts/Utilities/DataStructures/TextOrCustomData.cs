@@ -8,12 +8,12 @@ namespace SummerRest.Scripts.Utilities.DataStructures
         PlainText, Data
     }
     [Serializable]
-    public class TextOrCustomData<TBody, TBodyContainer> where TBodyContainer : InterfaceContainer<TBody>
+    public class TextOrCustomData<TBody, TBodyContainer> where TBodyContainer : InterfaceContainer<TBody> where TBody : class
     {
-
         [SerializeField] private TextOrCustomDataType type;
         [SerializeField] private string text;
-        [SerializeField] private TBodyContainer bodyContainer;
-        public string SerializedData => type == TextOrCustomDataType.PlainText ? text : bodyContainer.SerializedData;
+        [SerializeField] private TBodyContainer body;
+        //[SerializeField] private TBodyContainer bodyContainer;
+        //public string SerializedData => type == TextOrCustomDataType.PlainText ? text : bodyContainer.SerializedData;
     }
 }

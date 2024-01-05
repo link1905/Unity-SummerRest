@@ -7,14 +7,12 @@ using UnityEngine.UIElements;
 namespace SummerRest.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(TextOrCustomData<,>), true)]
-    public class TextOrCustomDataDrawer : PropertyDrawer
+    internal class TextOrCustomDataDrawer : UIToolkitDrawer
     {
-        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/text-or-custom.uxml";
-        private VisualTreeAsset _treeAsset;
+        public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/text-or-custom.uxml";
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            _treeAsset ??= AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AssetPath);
-            var tree = _treeAsset.Instantiate();
+            var tree = Tree;
             var typeElement = tree.Q<EnumField>("type");
             var typeProp = property.FindPropertyRelative("type");
             var textValueElement = tree.Q<TextField>("value");
@@ -36,5 +34,6 @@ namespace SummerRest.Editor.Drawers
             textValueElement.Show(showPlain);
             genericValueElement.Show(!showPlain);
         }
+
     }
 }

@@ -10,9 +10,11 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private string key;
         public string Key => key;
+        [Serializable]
         public class BodyContainer : InterfaceContainer<Scripts.Utilities.RequestComponents.IAuthData>
         {
-            [SerializeField, Inherits(typeof(Scripts.Utilities.RequestComponents.IAuthData))] private TypeReference typeReference;
+            [SerializeField, Inherits(typeof(Scripts.Utilities.RequestComponents.IAuthData), ShowAllTypes = true, AllowInternal = true)] 
+            private TypeReference typeReference;
             public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
         }
     }

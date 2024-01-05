@@ -231,13 +231,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testRequestBody:
-    type: 1
+    type: 0
     text: 
-    bodyContainer:
-      serializedValue: '{}'
-      valueChanged: 0
+    body:
       value:
-        rid: 6516271172000415744
+        rid: 6516271172897734665
       typeReference:
         GuidAssignmentFailed: 0
         GUID: 
@@ -247,8 +245,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6516271172000415744
+    - rid: 6516271172897734665
       type: {class: TestMonoBehaviour/CustomRequestBodyData, ns: SummerRest.Samples.Behaviours, asm: Sameple.Behaviours}
       data:
-        a: asdasdasd
-        b: 1111
+        a: asdasd
+        b: 0
