@@ -12,7 +12,7 @@ namespace SummerRest.Editor.Models
         [Serializable]
         public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
         {
-            [SerializeField, Inherits(typeof(IRequestBodyData), ShowAllTypes = true, AllowInternal = true)] private TypeReference typeReference;
+            [SerializeField, Inherits(typeof(IRequestBodyData), ShowAllTypes = true, AllowInternal = true, ShortName = true)] private TypeReference typeReference;
             public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
         }
     }

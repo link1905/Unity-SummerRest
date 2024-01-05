@@ -5,7 +5,7 @@ using SummerRest.Scripts.Utilities.DataStructures;
 namespace SummerRest.Runtime.Authenticate.Appenders
 {
     public interface IAuthAppender : 
-        IDefaultSupport<IAuthAppender, BearerAuthAppender>
+        IDefaultSupport<IAuthAppender, BearerTokenAuthAppender>
     {
     }
 

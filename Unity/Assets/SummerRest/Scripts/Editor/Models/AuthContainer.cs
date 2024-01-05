@@ -11,11 +11,12 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private string key;
         public string Key => key;
-        [SerializeField, Inherits(typeof(IAuthAppender<>), ShowAllTypes = true, AllowInternal = true)] private TypeReference appenderType = new(typeof(BearerAuthAppender));
+        [SerializeField, Inherits(typeof(IAuthAppender), ShowAllTypes = true, AllowInternal = true, ShowNoneElement = false, ShortName = true)] 
+        private TypeReference appenderType = new(typeof(BearerTokenAuthAppender));
         [Serializable]
         public class BodyContainer : InterfaceContainer<Scripts.Utilities.RequestComponents.IAuthData>
         {
-            [SerializeField, Inherits(typeof(Scripts.Utilities.RequestComponents.IAuthData), ShowAllTypes = true, AllowInternal = true)] 
+            [SerializeField, Inherits(typeof(Scripts.Utilities.RequestComponents.IAuthData), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
             private TypeReference typeReference;
             public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
         }

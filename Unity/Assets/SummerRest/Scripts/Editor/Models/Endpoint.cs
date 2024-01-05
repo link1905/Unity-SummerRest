@@ -52,6 +52,11 @@ namespace SummerRest.Editor.Models
         [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(DataFormat))]
         private InheritOrCustomContainer<DataFormat> dataFormat;
         public DataFormat DataFormat => dataFormat.Cache(whenInherit: () => Parent?.DataFormat ?? default);
+        
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit, nameof(Authentication))] 
+        private InheritOrCustomContainer<AuthPointer> authentication;
+        public AuthContainer Authentication =>
+            authentication.Cache(whenInherit: () => Parent is null ? null : Parent.Authentication);
 
         [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(Headers),
              InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]

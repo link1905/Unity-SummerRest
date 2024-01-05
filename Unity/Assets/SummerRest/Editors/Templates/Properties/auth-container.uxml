@@ -1,5 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="interface-container" src="project://database/Assets/SummerRest/Editors/Templates/Properties/interface-container.uxml?fileID=9197481963319205126&amp;guid=15a4bfc797ceebe4282cb4000c6adece&amp;type=3#interface-container" />
-    <ui:TextField picking-mode="Ignore" label="Key" value="My authenticator" binding-path="key" />
-    <ui:Instance template="interface-container" name="interface-container" />
+    <ui:Template name="text-or-custom" src="project://database/Assets/SummerRest/Editors/Templates/Properties/text-or-custom.uxml?fileID=9197481963319205126&amp;guid=b0c7610fa47212d4f85f91ef7acc56a1&amp;type=3#text-or-custom" />
+    <ui:TextField picking-mode="Ignore" label="Key" value="My authenticator" binding-path="key" name="key" />
+    <uie:PropertyField name="appender" binding-path="appenderType" tooltip="Type of appender class for appending the value" />
+    <ui:Foldout text="Authenticate value">
+        <ui:Instance template="text-or-custom" name="text-or-custom" />
+    </ui:Foldout>
 </ui:UXML>

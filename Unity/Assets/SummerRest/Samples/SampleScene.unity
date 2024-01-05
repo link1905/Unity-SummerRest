@@ -230,4 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa25f1df9d9c4c3b8be9d09bb2a00583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: Custom
+  authentication:
+    inherit: 8
+    value:
+      authKey: my token

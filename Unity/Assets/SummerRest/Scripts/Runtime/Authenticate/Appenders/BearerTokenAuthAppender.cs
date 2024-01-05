@@ -2,7 +2,7 @@
 
 namespace SummerRest.Runtime.Authenticate.Appenders
 {
-    public class BearerAuthAppender : IAuthAppender<BearerAuthAppender>
+    public class BearerTokenAuthAppender : IAuthAppender<BearerTokenAuthAppender>
     {
         public void Append<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor)
         {

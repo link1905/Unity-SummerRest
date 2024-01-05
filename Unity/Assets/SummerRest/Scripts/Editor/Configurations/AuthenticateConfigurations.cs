@@ -12,13 +12,13 @@ namespace SummerRest.Editor.Configurations
     public class AuthenticateConfigurations : ScriptableObject
     {
         [SerializeField] private AuthContainer[] auths;
-        public IReadOnlyList<AuthContainer> AuthContainers => auths;
+        public AuthContainer[] AuthContainers => auths;
         [SerializeField] private AuthRepositoryContainer defaultRepository;
         
         [Serializable]
         public class AuthRepositoryContainer : InterfaceContainer<IAuthDataRepository>
         {
-            [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true)] 
+            [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
             private TypeReference typeReference;
             public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
         }

@@ -5,6 +5,7 @@ using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,13 +36,28 @@ namespace SummerRest.Editor.Drawers
             selectionsDropdown.Show(!noOption);
 
             var keyProp = property.FindPropertyRelative("authKey");
+            var previewField = tree.Q<PropertyField>("preview");
+            // previewField.SetEnabled(false);
             // If no key ids are matched => get the first one 
             if (!noOption)
             {
                 keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
                 selectionsDropdown.choices = allIds;
+                selectionsDropdown.BindWithCallback<DropdownField, string>(keyProp, s =>
+                {
+                    ShowPreview(previewField, s);
+                });
             }
             return tree;
+        }
+        private void ShowPreview(PropertyField previewField, string val)
+        {
+            var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
+            var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.Key == val); 
+            var authSerObj = new SerializedObject(authConfigure);
+            var authsArr = authSerObj.FindProperty("auths");
+            // authConfigure.AuthContainers.FirstOrDefault(e => e.Key == val)
+            previewField.BindProperty(authsArr.GetArrayElementAtIndex(idx));
         }
     }
 }
