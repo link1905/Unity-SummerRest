@@ -8,6 +8,7 @@ namespace SummerRest.Scripts.Utilities.DataStructures
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver where T : class
     {
         public abstract Type Type { get; }
+        
         [SerializeReference] private T value;
         public T Value => value;
         public void OnBeforeSerialize()

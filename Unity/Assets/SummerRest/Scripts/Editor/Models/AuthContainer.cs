@@ -1,4 +1,5 @@
 ﻿using System;
+using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Scripts.Utilities.DataStructures;
 using TypeReferences;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private string key;
         public string Key => key;
+        [SerializeField, Inherits(typeof(IAuthAppender<>), ShowAllTypes = true, AllowInternal = true)] private TypeReference appenderType = new(typeof(BearerAuthAppender));
         [Serializable]
         public class BodyContainer : InterfaceContainer<Scripts.Utilities.RequestComponents.IAuthData>
         {

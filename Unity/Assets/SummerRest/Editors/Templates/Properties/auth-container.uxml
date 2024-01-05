@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="interface-container" src="project://database/Assets/SummerRest/Editors/Templates/Properties/interface-container.uxml?fileID=9197481963319205126&amp;guid=15a4bfc797ceebe4282cb4000c6adece&amp;type=3#interface-container" />
+    <ui:TextField picking-mode="Ignore" label="Key" value="My authenticator" binding-path="key" />
+    <ui:Instance template="interface-container" name="interface-container" />
+</ui:UXML>

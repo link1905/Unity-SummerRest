@@ -1,5 +1,7 @@
 ﻿using System;
 using SummerRest.Editor.Models;
+using SummerRest.Scripts.Utilities.Attributes;
+using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
 using UnityEngine;
 
@@ -13,6 +15,7 @@ namespace SummerRest.Samples.Behaviours
             [SerializeField] private string a;
             [SerializeField] private int b;
         } 
-        [SerializeField] private RequestBody testRequestBody;
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit, "")] 
+        private AuthPointer value;
     }
 }

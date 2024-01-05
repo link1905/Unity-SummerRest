@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20861b636bc4735ab70e078a61211be, type: 3}
   m_Name: DomainConfigurationsManager
   m_EditorClassIdentifier: 
-  domains:
+  <Domains>k__BackingField:
   - {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
+  <AuthenticateConfigurations>k__BackingField: {fileID: 11400000, guid: 9da7520c00f08f944b74f92c37762a19, type: 2}

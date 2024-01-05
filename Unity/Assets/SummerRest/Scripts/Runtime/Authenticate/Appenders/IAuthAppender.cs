@@ -7,11 +7,11 @@ namespace SummerRest.Runtime.Authenticate.Appenders
     public interface IAuthAppender : 
         IDefaultSupport<IAuthAppender, BearerAuthAppender>
     {
-        void Append<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor);
     }
 
     public interface IAuthAppender<TAuthAppender> : IAuthAppender, ISingleton<TAuthAppender>
         where TAuthAppender : class, new()
     {
+        void Append<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor);
     }
 }

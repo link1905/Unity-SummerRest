@@ -1,44 +1,10 @@
-using System;
 using Newtonsoft.Json;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
-using TypeReferences;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
-    public interface IAuthDataRepository
-    {
-        IAuthData GetAuthData(string id);
-    }
-    public interface IAuthInjector<in T> where T : IAuthData
-    {
-        void InjectAuthData();
-    }
-    public class DefaultAuthDataRepository
-    {
-    }
-    public class BearerTokenAuthInjector
-    {
-    }
-    public interface IAuthData
-    {
-    }
-
-    [Serializable]
-    internal class AuthConfiguration
-    {
-        [field: SerializeField] public string Id { get; private set; }
-        [field: SerializeField] public TypeReference Injector { get; private set; }
-        public Type InjectorType => Injector.Type;
-        [field: SerializeField] public object AuthValue { get; private set; }
-    }
-
-    internal class AuthConfigurationsManager : ScriptableObject
-    {
-        [field: SerializeField] internal AuthConfiguration[] Configurations { get; private set; }
-    }
-
     public partial class Request : Endpoint 
     {
         [SerializeField, JsonIgnore] private HttpMethod method;

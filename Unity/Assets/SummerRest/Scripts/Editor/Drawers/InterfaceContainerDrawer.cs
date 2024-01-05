@@ -1,9 +1,6 @@
-using SummerRest.Editor.Utilities;
-using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
