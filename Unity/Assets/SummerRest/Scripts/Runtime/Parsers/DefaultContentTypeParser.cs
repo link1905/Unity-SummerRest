@@ -12,10 +12,12 @@ namespace SummerRest.Runtime.Parsers
         public const string Xml = "application/xml";
         public const string Plain = "text/plain";
         public const string Octet = "application/octet-stream";
+        public const string WwwForm = "application/x-www-form-urlencoded";
         public const string CharSet = "charset";
         public const string MediaType = "media-type";
         public const string Boundary = "boundary";
         public const string UnityWebRequestContentTypeHeader = "Content-Type";
+        public ContentType DefaultContentType { get; } = new(WwwForm);
         public string ContentTypeHeaderKey => UnityWebRequestContentTypeHeader;
 
         public DataFormat ParseDataFormatFromResponse(string contentTypeHeader)
@@ -56,6 +58,8 @@ namespace SummerRest.Runtime.Parsers
             var boundarySpan = Boundary.AsSpan();
             foreach (var entry in segment)
             {
+                if (entry.Line.IsEmpty)
+                    continue;
                 if (entry.Line.SplitKeyValue(out var key, out var value))
                 {
                     switch (key)

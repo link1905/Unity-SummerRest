@@ -6,6 +6,7 @@ namespace SummerRest.Runtime.Request
 {
     public interface IWebResponse<out TBody>
     {
+        object WrappedRequest { get; }
         string RawData { get; }
         IEnumerable<KeyValuePair<string, string>> Headers { get; }
         HttpStatusCode StatusCode { get; }

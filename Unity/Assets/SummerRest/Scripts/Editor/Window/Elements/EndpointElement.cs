@@ -17,7 +17,7 @@ namespace SummerRest.Editor.Window.Elements
         private TextField _nameElement;
         private TextField _pathElement;
         private TextField _urlElement;
-        private RequestBodyElement _requestBodyElement; 
+        private TextOrCustomDataElement _requestBodyElement; 
         private ResponseElement _responseElement; 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
@@ -35,7 +35,7 @@ namespace SummerRest.Editor.Window.Elements
 
         public void Init()
         {
-            _requestBodyElement = this.Q<RequestBodyElement>();
+            _requestBodyElement = this.Q<TextOrCustomDataElement>();
              var requestBtn = _requestBodyElement.Q<Button>("request-btn");
             requestBtn.clicked += OnClick;
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");

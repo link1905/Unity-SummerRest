@@ -81,8 +81,4 @@ namespace SummerRest.Editor.Models
         public override string TypeName => nameof(Request);
     }
 #endif
-    public enum RequestBodyType
-    {
-        PlainText = 0, Data = 1
-    }
 }

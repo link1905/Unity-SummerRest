@@ -6,10 +6,12 @@ using SummerRest.Scripts.Utilities.RequestComponents;
 
 namespace SummerRest.Runtime.RequestAdaptor
 {
-    internal interface IWebRequestAdaptor<TResponse> : IDisposable
+    public interface IWebRequestAdaptor<TResponse> : IDisposable
     {
         string Url { get; set; }
         void SetHeader(string key, string value);
+        bool IsError(out string error);
+        string GetHeader(string key);
         HttpMethod Method { get; set; }
         int RedirectLimit { get; set; }
         int TimeoutSeconds { get; set; }

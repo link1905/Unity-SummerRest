@@ -12,8 +12,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(InheritOrCustomContainer<>))]
     internal class InheritOrCustomDrawer : PropertyDrawer
     {
-
-        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/inherit_or_custom_UXML.uxml";
+        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/inherit-or-custom.uxml";
         private VisualTreeAsset _treeAsset;
         private InheritOrCustomAttribute _att;
         public override VisualElement CreatePropertyGUI(SerializedProperty property)

@@ -21,7 +21,8 @@ namespace SummerRest.Scripts.Utilities.DataStructures
             var span = _str;
             if (span.Length == 0) // Reach the end of the string
                 return false;
-            var index = span.IndexOfAny(' ', _separator);
+            ReadOnlySpan<char> escapes = stackalloc char[] {' ', '\n', '\r', '\t', _separator};
+            var index = span.IndexOfAny(escapes);
             if (index == -1) // The string is composed of only one line
             {
                 _str = ReadOnlySpan<char>.Empty; // The remaining string is an empty string

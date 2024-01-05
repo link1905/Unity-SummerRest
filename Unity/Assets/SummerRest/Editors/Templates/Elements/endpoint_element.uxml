@@ -1,7 +1,10 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="request_body_element" src="project://database/Assets/SummerRest/Editors/Templates/request_body_element.uxml?fileID=9197481963319205126&amp;guid=abc0082e036b829488839dddfbe33e53&amp;type=3#request_body_element" />
-    <ui:Template name="response-element" src="project://database/Assets/SummerRest/Editors/Templates/response-element.uxml?fileID=9197481963319205126&amp;guid=b65a2fa1daa3bd74486e3f4163b1b07b&amp;type=3#response-element" />
-    <SummerRest.Editors.Window.Elements.EndpointElement style="flex-grow: 1;">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xmlns:summer="SummerRest.Editor.Window.Elements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" 
+         editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="request_body_element" src="request_body_element.uxml" />
+    <ui:Template name="response-element" src="response-element.uxml" />
+    <summer:EndpointElement style="flex-grow: 1;">
         <ui:TextField picking-mode="Ignore" label="Service" value="filler text" name="name" binding-path="endpointName" style="align-self: stretch; flex-shrink: 0; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch;" />
         <ui:TextField picking-mode="Ignore" label="Path" name="path" binding-path="path" style="align-items: stretch; align-self: stretch; flex-shrink: 0;" />
         <ui:TextField picking-mode="Ignore" label="Url" name="url" readonly="true" style="align-items: stretch; align-self: stretch; flex-shrink: 0;" />
@@ -16,5 +19,5 @@
         <ui:Instance template="request_body_element" name="request_body_element" style="flex-grow: 0; flex-shrink: 0;" />
         <ui:Instance template="response-element" name="response-element" style="flex-shrink: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
         <ui:Foldout text="Advanced settings" name="advanced-settings" value="false" style="flex-shrink: 0;" />
-    </SummerRest.Editors.Window.Elements.EndpointElement>
+    </summer:EndpointElement>
 </ui:UXML>

@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="True">
-    <SummerRest.Editors.Window.Elements.DomainElement name="domain" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0; align-self: stretch;">
-        <ui:Button text="Button" display-tooltip-when-elided="true" name="main-btn" binding-path="endpointName" style="align-self: stretch;" />
-    </SummerRest.Editors.Window.Elements.DomainElement>
-</ui:UXML>

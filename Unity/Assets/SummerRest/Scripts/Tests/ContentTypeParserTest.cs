@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Scripts.Utilities.RequestComponents;
+using UnityEngine;
 
 namespace SummerRest.Scripts.Tests
 {
@@ -42,7 +42,7 @@ namespace SummerRest.Scripts.Tests
             foreach (var entry in table)
             {
                 var result = defaultParser.ParseContentTypeFromHeader(entry.text);
-                Assert.AreEqual(result, entry.contentType);
+                Assert.That(result.Equals(entry.contentType), "{0} not equals to {1}", result.FormedContentType, entry.contentType.FormedContentType);
             }
         }
         

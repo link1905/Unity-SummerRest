@@ -227,17 +227,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55620ecd972444d19ca450aa47917fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: fa25f1df9d9c4c3b8be9d09bb2a00583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  request:
-  - C:
-      D: 
-  - C:
-      D: 
-  - C:
-      D: 
-  - C:
-      D: 
-  - C:
-      D: 
+  testRequestBody:
+    type: 1
+    text: 
+    bodyContainer:
+      serializedValue: '{}'
+      valueChanged: 0
+      value:
+        rid: 6516271172000415744
+      typeReference:
+        GuidAssignmentFailed: 0
+        GUID: 
+        _typeNameAndAssembly: SummerRest.Samples.Behaviours.TestMonoBehaviour+CustomRequestBodyData,
+          Sameple.Behaviours
+        _suppressLogs: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 6516271172000415744
+      type: {class: TestMonoBehaviour/CustomRequestBodyData, ns: SummerRest.Samples.Behaviours, asm: Sameple.Behaviours}
+      data:
+        a: asdasdasd
+        b: 1111

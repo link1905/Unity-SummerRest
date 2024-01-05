@@ -5,23 +5,23 @@ using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.RequestAdaptor
 {
-    internal static class WebRequestProvider
+    public class UnityWebRequestAdaptorProvider : IWebRequestAdaptorProvider
     {
-        internal static IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable)
+        public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable)
         {
             var request = UnityWebRequestTexture.GetTexture(url, readable);
-            return UnityWebRequestAdaptor<Texture2D>.Create(request);
+            return TextureUnityWebRequestAdaptor.Create(request);
         }
-        internal static IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType)
+        public IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType)
         {
             var request = UnityWebRequestMultimedia.GetAudioClip(url, audioType);
-            return UnityWebRequestAdaptor<AudioClip>.Create(request);
+            return AudioUnityWebRequestAdaptor.Create(request);
         }
-        internal static IWebRequestAdaptor<TResponse> GetFromUnityWebRequest<TResponse>(UnityWebRequest webRequest)
+        public IWebRequestAdaptor<TResponse> GetFromUnityWebRequest<TResponse>(UnityWebRequest webRequest)
         {
-            return UnityWebRequestAdaptor<TResponse>.Create(webRequest);
+            return RawUnityWebRequestAdaptor<TResponse>.Create(webRequest);
         }
-        internal static IWebRequestAdaptor<TBody> GetDataRequest<TBody>(
+        public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
             string url, HttpMethod method, string bodyData)
         {
             UnityWebRequest request;
@@ -46,7 +46,7 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = new UnityWebRequest(url, method.ToUnityHttpMethod());
                     break;
             }
-            return UnityWebRequestAdaptor<TBody>.Create(request);
+            return RawUnityWebRequestAdaptor<TResponse>.Create(request);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SummerRest.Runtime.Parsers
 {
-    public interface IDataSerializer : IDefaultSupport<IDataSerializer, NewtonSoftDataSerializer>
+    public interface IDataSerializer : IDefaultSupport<IDataSerializer, DefaultDataSerializer>
     {
         T Deserialize<T>(string data, DataFormat dataFormat);
         string Serialize<T>(T data, DataFormat dataFormat);

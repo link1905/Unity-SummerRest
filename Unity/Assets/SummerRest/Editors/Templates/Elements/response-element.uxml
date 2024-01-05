@@ -1,9 +1,9 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editors.Window.Elements" editor-extension-mode="True">
-    <SummerRest.Editors.Window.Elements.ResponseElement name="response" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-shrink: 0; align-self: stretch;">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:summer="SummerRest.Editor.Window.Elements" editor-extension-mode="True">
+    <summer:ResponseElement name="response" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-shrink: 0; align-self: stretch;">
         <ui:Foldout text="Response" name="foldout" style="flex-grow: 0; flex-shrink: 0;">
             <ui:TextField picking-mode="Ignore" label="Status code" value="200 (Success)" readonly="true" name="status-code" style="flex-grow: 0; align-self: stretch; align-items: stretch; flex-shrink: 1; flex-direction: row;" />
             <uie:PropertyField name="headers" style="flex-grow: 0; align-self: stretch;" />
             <ui:TextField picking-mode="Ignore" label="Body" multiline="true" name="body" readonly="true" style="flex-grow: 0; align-self: stretch; flex-direction: column; flex-shrink: 0; min-height: 200px;" />
         </ui:Foldout>
-    </SummerRest.Editors.Window.Elements.ResponseElement>
+    </summer:ResponseElement>
 </ui:UXML>

@@ -1,17 +1,17 @@
-﻿using SummerRest.Editor.Models;
-using SummerRest.Editor.Utilities;
+﻿using SummerRest.Editor.Utilities;
+using SummerRest.Scripts.Utilities.DataStructures;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
 {
-    public class RequestBodyElement : VisualElement
+    public class TextOrCustomDataElement : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<RequestBodyElement, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TextOrCustomDataElement, UxmlTraits>
         {
         }
-        public RequestBodyElement()
+        public TextOrCustomDataElement()
         {
         }
 
@@ -24,7 +24,6 @@ namespace SummerRest.Editor.Window.Elements
                 this.Show(false);
                 return;
             }
-
             this.Show(true);
             var typeElement = this.Q<EnumField>("type");
             var typeProp = serializedProperty.FindPropertyRelative("type");
@@ -34,17 +33,17 @@ namespace SummerRest.Editor.Window.Elements
                 var newVal = e.newValue;
                 if (newVal is null)
                     return;
-                BindValueElement((RequestBodyType)newVal);
+                BindValueElement((TextOrCustomDataType)newVal);
             });
             _textValueElement = this.Q<TextField>("value");
             _genericValueElement = this.Q<PropertyField>("value");
             _textValueElement.BindProperty(serializedProperty.FindPropertyRelative("text"));
             _genericValueElement.BindPropertyNoLabel(serializedProperty.FindPropertyRelative("bodyContainer"));
-            BindValueElement((RequestBodyType)typeProp.enumValueIndex);
+            BindValueElement((TextOrCustomDataType)typeProp.enumValueIndex);
         }
-        private void BindValueElement(RequestBodyType value)
+        private void BindValueElement(TextOrCustomDataType value)
         {
-            var showPlain = value == RequestBodyType.PlainText;
+            var showPlain = value == TextOrCustomDataType.PlainText;
             _textValueElement.Show(showPlain);
             _genericValueElement.Show(!showPlain);
         }

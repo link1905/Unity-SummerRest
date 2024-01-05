@@ -12,7 +12,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(DefaultsAttribute))]
     internal class DefaultsDrawer : PropertyDrawer
     {
-        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/default_or_custom.uxml";
+        private const string AssetPath = "Assets/SummerRest/Editors/Templates/Properties/default-or-custom.uxml";
         private VisualTreeAsset _treeAsset;
         private List<string> _defaultValues;
         private void Init()
