@@ -1,11 +1,30 @@
-﻿using SummerRest.Scripts.Utilities.Extensions;
+﻿using System.Reflection;
+using SummerRest.Scripts.Utilities.Extensions;
 using UnityEditor;
+using UnityEngine;
 
 namespace SummerRest.Editor.Utilities
 {
     public static class EditorPropertyExtensions
     {
-
+        public static void CallMethodOnSerializedObject(this SerializedProperty serializedProperty, string methodName)
+        {
+            // Use reflection to get the underlying object
+            object targetObject = serializedProperty.serializedObject.targetObject;
+            // Ensure the object is not null
+            if (targetObject != null)
+            {
+                // Use reflection to find and invoke the method
+                var targetType = targetObject.GetType();
+                Debug.Log(targetType);
+                var methodInfo = targetType.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                Debug.Log(methodInfo);
+                if (methodInfo != null)
+                {
+                    methodInfo.Invoke(targetObject, null);
+                }
+            }
+        }
         public static object GetReference(this SerializedProperty self)
         {
             switch(self.propertyType)

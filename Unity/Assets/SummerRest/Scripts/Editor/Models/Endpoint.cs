@@ -4,6 +4,7 @@ using SummerRest.Editor.Utilities;
 using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,13 +27,19 @@ namespace SummerRest.Editor.Models
         }
         [JsonIgnore] public virtual bool IsContainer => false;
         public abstract string TypeName { get; }
+        [SerializeReference] private KeyValue[] test;
+        private void OnCache()
+        {
+            test = headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => t.ToArray());
+        }
     }
 #endif
     public partial class Endpoint : ScriptableObject
     {
         [field: SerializeReference][JsonIgnore]
         public Domain Domain { get; set; }
-        [field: SerializeReference][JsonIgnore] public Endpoint Parent { get; protected internal set; }
+        [field: SerializeReference][JsonIgnore] 
+        public Endpoint Parent { get; protected internal set; }
 
         [SerializeField][JsonIgnore] private string endpointName;
         
@@ -61,8 +68,12 @@ namespace SummerRest.Editor.Models
         [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(Headers),
              InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
         private InheritOrCustomContainer<KeyValue[]> headers;
-        public KeyValue[] Headers => headers.Cache(whenInherit: () => Parent.Headers, 
-            whenAppend: t => Parent.Headers is not null ? Parent.Headers.Concat(t).ToArray() : t);
+        // public void CacheHeaders()
+        // {
+        //     headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => t);
+        // }
+        //public KeyValue[] Headers 
+        public KeyValue[] Headers => headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => Parent.Headers is not null ? Parent.Headers.Concat(t).ToArray() : t);
 
         [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(ContentType))]
         private InheritOrCustomContainer<ContentType> contentType;

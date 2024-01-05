@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using SummerRest.Editor.Utilities;
 using SummerRest.Scripts.Utilities.Attributes;
@@ -28,24 +29,23 @@ namespace SummerRest.Editor.Drawers
                         
             var valueElement = tree.Q<PropertyField>(name: "prop");
             valueElement.BindProperty(property.FindPropertyRelative("value"));
+     
             
             var cacheElement = tree.Q<PropertyField>(name: "cache");
             cacheElement.SetEnabled(false);
-            //cacheElement.BindProperty(property.FindSiblingBackingPropertyRelative(_att.CachePropName));
+            var cacheProp = property.FindSiblingPropertyRelative(_att.CachePropName);
+            if (cacheProp is not null)
+                cacheElement.BindProperty(cacheProp);
             
             var choiceElement = tree.Q<EnumField>(name: "prop-choice");
             var choiceProp = property.FindPropertyRelative("inherit");
-            choiceElement.BindProperty(choiceProp);
-            choiceElement.RegisterValueChangedCallback(c =>
+            choiceElement.BindWithCallback<EnumField, Enum>(choiceProp, c =>
             {
-                if (c.newValue is null)
-                    return;
-                ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)c.newValue);
+                ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)c);
             });
             ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)choiceProp.enumValueFlag);
             return tree;
         }
-
         private InheritChoice? ShouldMoveBackToDefault(SerializedProperty mainProp, InheritChoice selection)
         {
             var parentField = mainProp.FindSiblingBackingPropertyRelative("Parent");

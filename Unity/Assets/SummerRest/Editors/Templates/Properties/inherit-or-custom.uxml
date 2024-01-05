@@ -4,5 +4,5 @@
         <ui:EnumField type="SummerRest.Scripts.Utilities.DataStructures.InheritChoice, SummerRest.Utilities" name="prop-choice" include-obsolete-values="true" value="None" style="align-self: stretch; align-items: flex-start; justify-content: flex-start; flex-direction: column; width: auto; flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap;" />
     </ui:VisualElement>
     <uie:PropertyField name="prop" tooltip="Custom value" label="Custom value" style="height: auto; flex-grow: 0; display: flex; visibility: visible; overflow: visible; align-self: stretch; flex-shrink: 0;" />
-    <uie:PropertyField name="cache" tooltip="Final value" label="Final value" style="flex-shrink: 0; align-self: stretch;" />
+    <uie:PropertyField name="cache" tooltip="Final value" label="Preview" style="flex-shrink: 0; align-self: stretch;" />
 </ui:UXML>

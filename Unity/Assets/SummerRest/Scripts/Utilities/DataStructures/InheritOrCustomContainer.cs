@@ -8,7 +8,12 @@ namespace SummerRest.Scripts.Utilities.DataStructures
     {
         [SerializeField] private InheritChoice inherit = InheritChoice.Inherit;
         [SerializeField] private T value;
+        // [SerializeField] private T cache;
         public T Cache(Func<T> whenInherit = null, Func<T, T> whenAppend = null)
+        {
+            return CacheInternal(whenInherit, whenAppend);
+        }
+        private T CacheInternal(Func<T> whenInherit = null, Func<T, T> whenAppend = null)
         {
             switch (inherit)
             {
@@ -25,5 +30,6 @@ namespace SummerRest.Scripts.Utilities.DataStructures
             }
             return default;
         }
+
     }
 }
