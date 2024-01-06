@@ -10,55 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: e1c4470f17105dc4aa44352e0ce29a4e
+  m_Name: c953c79faba73494a9e4f2bae87cfcb5
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: Domain 1
-  path: asdasd
+  endpointName: Domain 2
+  path: 
   dataFormat:
     inherit: 8
     value: 0
-  <DataFormat>k__BackingField: 0
-  authPointer:
+  authentication:
     inherit: 8
     value:
-      authKey: 
-  <AuthPointer>k__BackingField:
-    authKey: 
+      authKey: my token
   headers:
     inherit: 8
-    value:
-    - key: asdasdsad
-      value: asdasd
-    - key: asdas
-      value: sad
-  <Headers>k__BackingField:
-  - key: asdasdsad
-    value: asdasd
-  - key: asdas
-    value: sad
+    value: []
+  <Headers>k__BackingField: []
   contentType:
-    inherit: 1
+    inherit: 8
     value:
       <Charset>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
-  <ContentType>k__BackingField:
-    <Charset>k__BackingField: 
-    <MediaType>k__BackingField: 
-    <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 8
-    value: 3
-  <TimeoutSeconds>k__BackingField: 3
+    value: 0
   redirectsLimit:
     inherit: 8
-    value: 3
-  <RedirectsLimit>k__BackingField: 3
-  services:
-  - {fileID: 11400000, guid: 430784cd43bdc7f4692a0f087cd2cc4a, type: 2}
+    value: 0
+  services: []
   requests: []
   versions:
     values: []
     selectedIndex: 0
+  references:
+    version: 2
+    RefIds: []

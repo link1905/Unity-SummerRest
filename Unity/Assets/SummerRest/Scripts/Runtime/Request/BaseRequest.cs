@@ -29,7 +29,7 @@ namespace SummerRest.Runtime.Request
         public int? RedirectLimit { get; set; }
         public int? TimeoutSeconds { get; set; }
         // public IAuthData AuthData { get; set; }
-        public ContentType ContentType { get; set; }
+        public ContentType? ContentType { get; set; }
         public virtual string SerializedBody => null;
         protected BaseRequest(string url)
         {

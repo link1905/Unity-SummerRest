@@ -15,7 +15,5 @@ namespace SummerRest.Samples.Behaviours
             [SerializeField] private string a;
             [SerializeField] private int b;
         }
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit, "")] 
-        private InheritOrCustomContainer<AuthPointer> authentication;
     }
 }

@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
   m_Name: 9dc7e148e8c467f4d82209a034d26aad
   m_EditorClassIdentifier: 
-  test:
-  - rid: 6516271177271869535
-  - rid: 6516271177271869536
-  - rid: 6516271177271869537
   <Domain>k__BackingField: {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: d04f53637e0f9ab469b540a0eb97b640, type: 2}
   endpointName: Service 1
@@ -23,49 +19,51 @@ MonoBehaviour:
   dataFormat:
     inherit: 1
     value: 1
-  authentication:
-    inherit: 2
+  <DataFormat>k__BackingField: 0
+  authPointer:
+    inherit: 8
     value:
-      authKey: 
+      authKey: my token
+  <AuthPointer>k__BackingField:
+    authKey: my token
   headers:
     inherit: 4
     value:
-    - key: q
-      value: 12312
-    - key: 123123123
+    - key: wqewqeqwewqe
+      value: zzcxczxc
+    - key: ccccccc
+      value: jjhkhk
+    - key: asdasdasdasdsad
       value: asdsad
-    - key: 123123
-      value: asdsad
+  <Headers>k__BackingField:
+  - key: wqewqeqwewqe
+    value: zzcxczxc
+  - key: ccccccc
+    value: jjhkhk
+  - key: asdasdasdasdsad
+    value: asdsad
+  - key: asdasdsad
+    value: asdasd
+  - key: asdas
+    value: sad
   contentType:
     inherit: 1
     value:
       <Charset>k__BackingField: 1233123123
       <MediaType>k__BackingField: asdasd
       <Boundary>k__BackingField: 12312
+  <ContentType>k__BackingField:
+    <Charset>k__BackingField: 
+    <MediaType>k__BackingField: 
+    <Boundary>k__BackingField: 
   timeoutSeconds:
-    inherit: 8
+    inherit: 2
     value: 12
+  <TimeoutSeconds>k__BackingField: 3
   redirectsLimit:
     inherit: 2
     value: 0
+  <RedirectsLimit>k__BackingField: 3
   services: []
   requests:
   - {fileID: 11400000, guid: 4ad42049585ac6d4f91a70890aaeef0c, type: 2}
-  references:
-    version: 2
-    RefIds:
-    - rid: 6516271177271869535
-      type: {class: KeyValue, ns: SummerRest.Scripts.Utilities.DataStructures, asm: SummerRest.Utilities}
-      data:
-        key: asdasdasd
-        value: 12312
-    - rid: 6516271177271869536
-      type: {class: KeyValue, ns: SummerRest.Scripts.Utilities.DataStructures, asm: SummerRest.Utilities}
-      data:
-        key: 123123123
-        value: asdsad
-    - rid: 6516271177271869537
-      type: {class: KeyValue, ns: SummerRest.Scripts.Utilities.DataStructures, asm: SummerRest.Utilities}
-      data:
-        key: 123123
-        value: asdsad

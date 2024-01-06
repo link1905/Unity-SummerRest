@@ -8,13 +8,13 @@ using UnityEngine.Serialization;
 namespace SummerRest.Editor.Models
 {
     [Serializable]
-    public partial class AuthPointer
+    public partial struct AuthPointer
     {
         [SerializeField] private string authKey;
 
     }
 #if UNITY_EDITOR
-    public partial class AuthPointer : ISerializationCallbackReceiver
+    public partial struct AuthPointer : ISerializationCallbackReceiver
     {
         public static implicit operator AuthContainer(AuthPointer p)
         {

@@ -69,6 +69,15 @@ namespace SummerRest.Editor.Models
                 endpoint.EndpointName = $"{endpoint.TypeName} {count}";
             endpoint.Domain = Domain;
         }
+
+        public override void CacheValues()
+        {
+            base.CacheValues();
+            foreach (var r in requests)
+                r.CacheValues();
+            foreach (var s in services)
+                s.CacheValues();
+        }
     }
 #endif
     public abstract partial class EndpointContainer : Endpoint

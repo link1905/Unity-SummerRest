@@ -19,9 +19,14 @@ MonoBehaviour:
   dataFormat:
     inherit: 2
     value: 0
+  authentication:
+    inherit: 2
+    value:
+      authKey: 
   headers:
     inherit: 2
     value: []
+  <Headers>k__BackingField: []
   contentType:
     inherit: 2
     value:

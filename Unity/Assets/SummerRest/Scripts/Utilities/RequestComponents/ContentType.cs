@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SummerRest.Scripts.Utilities.RequestComponents
 {
     [Serializable]
-    public class ContentType
+    public struct ContentType
     {
         [field: SerializeField, Defaults("UTF-8", "UTF-16", "US-ASCII")]
         public string Charset { get; private set; }

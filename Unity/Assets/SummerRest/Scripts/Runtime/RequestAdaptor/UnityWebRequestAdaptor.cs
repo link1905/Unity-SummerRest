@@ -68,8 +68,8 @@ namespace SummerRest.Runtime.RequestAdaptor
             get => WebRequest.timeout;
             set => WebRequest.timeout = value;
         }
-        private ContentType _contentType = IContentTypeParser.Current.DefaultContentType; 
-        public ContentType ContentType
+        private ContentType? _contentType = IContentTypeParser.Current.DefaultContentType; 
+        public ContentType? ContentType
         {
             get
             {
@@ -83,7 +83,7 @@ namespace SummerRest.Runtime.RequestAdaptor
                     return;
                 _contentType = value;
                 _contentType ??= IContentTypeParser.Current.DefaultContentType;
-                WebRequest.uploadHandler.contentType = _contentType.FormedContentType;
+                WebRequest.uploadHandler.contentType = _contentType.Value.FormedContentType;
             }
         }
 
@@ -139,7 +139,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             public IEnumerable<KeyValuePair<string, string>> Headers
                 => _headers ??= _webRequest.GetResponseHeaders();
 
-            private ContentType _contentType;
+            private ContentType? _contentType;
             public ContentType ContentType
                 => _contentType ??= IContentTypeParser.Current.ParseContentTypeFromHeader(
                     _webRequest.GetRequestHeader(IContentTypeParser.Current.ContentTypeHeaderKey));

@@ -12,7 +12,7 @@ namespace SummerRest.Runtime.Request
         int? RedirectLimit { get; set; }
         int? TimeoutSeconds { get; set; }
         // IAuthData AuthData { get; set; }
-        ContentType ContentType { get; set; }
+        ContentType? ContentType { get; set; }
     }
     public interface IWebRequest<TBody> : IWebRequest
     {

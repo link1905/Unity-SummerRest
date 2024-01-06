@@ -255,7 +255,7 @@ namespace SummerRest.Scripts.Tests
                 set => Wrapped.TimeoutSeconds = value;
             }
 
-            public ContentType ContentType
+            public ContentType? ContentType
             {
                 get => Wrapped.ContentType;
                 set => Wrapped.ContentType = value;

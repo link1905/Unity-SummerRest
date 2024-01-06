@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using NUnit.Framework;
 using SummerRest.Editor.Utilities;
 using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
@@ -15,6 +17,18 @@ namespace SummerRest.Editor.Drawers
     {
         public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/inherit-or-custom.uxml";
         private InheritOrCustomAttribute _att;
+        private List<string> _allows;
+        private List<string> GetAllows(InheritChoice allow)
+        {
+            var result = new List<string>();
+            foreach (InheritChoice choice in Enum.GetValues(typeof(InheritChoice)))
+            {
+                var overlap = choice & allow;
+                if (overlap != 0)
+                    result.Add(choice.ToString());
+            }
+            return result;
+        }
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
@@ -24,6 +38,8 @@ namespace SummerRest.Editor.Drawers
                 return new Label(
                     $"Must use {nameof(InheritOrCustomContainer<object>)} with an attribute {nameof(InheritOrCustomAttribute)}");
             }
+            _allows ??= GetAllows(_att.Allow);
+            
             var nameElement = tree.Q<Label>(name: "prop-name");
             nameElement.text = property.displayName;
                         
@@ -33,31 +49,27 @@ namespace SummerRest.Editor.Drawers
             
             var cacheElement = tree.Q<PropertyField>(name: "cache");
             cacheElement.SetEnabled(false);
-            var cacheProp = property.FindSiblingPropertyRelative(_att.CachePropName);
+            var cacheProp = property.FindSiblingBackingPropertyRelative(_att.CachePropName);
             if (cacheProp is not null)
                 cacheElement.BindProperty(cacheProp);
             
-            var choiceElement = tree.Q<EnumField>(name: "prop-choice");
+            var choiceElement = tree.Q<DropdownField>(name: "prop-choice");
             var choiceProp = property.FindPropertyRelative("inherit");
-            choiceElement.BindWithCallback<EnumField, Enum>(choiceProp, c =>
+            choiceElement.choices = _allows;
+            choiceElement.SetValueWithoutNotify(((InheritChoice)choiceProp.enumValueFlag).ToString());
+            choiceElement.RegisterValueChangedCallback(c =>
             {
-                ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)c);
+                if (!Enum.TryParse<InheritChoice>(c.newValue, out var val))
+                {
+                    return;
+                }
+                choiceProp.enumValueFlag = (int)val;
+                choiceProp.serializedObject.ApplyModifiedProperties();
+                ShowProp(valueElement, cacheElement, val);
             });
-            ShowProp(valueElement, cacheElement, property, choiceProp, (InheritChoice)choiceProp.enumValueFlag);
+            ShowProp(valueElement, cacheElement, (InheritChoice)choiceProp.enumValueFlag);
             return tree;
         }
-        private InheritChoice? ShouldMoveBackToDefault(SerializedProperty mainProp, InheritChoice selection)
-        {
-            var parentField = mainProp.FindSiblingBackingPropertyRelative("Parent");
-            if (selection is InheritChoice.Inherit or InheritChoice.AppendToParent && parentField?.GetReference() is null)
-                return _att.DefaultWhenNoParent;
-            var allow = _att.Allow;
-            var overlap = allow & selection;
-            if (overlap == 0) // Does not overlap
-                return _att.Default;
-            return null;
-        }
-
         private static readonly Dictionary<InheritChoice, (bool showValue, bool showCache)> ShowState = new()
         {
             { InheritChoice.None, (false, false)},
@@ -65,14 +77,8 @@ namespace SummerRest.Editor.Drawers
             { InheritChoice.AppendToParent, (true, true)},
             { InheritChoice.Custom, (true, false)},
         };
-        private void ShowProp(VisualElement valueElement, VisualElement cacheElement, SerializedProperty mainProp, SerializedProperty choiceProp, InheritChoice selection)
+        private void ShowProp(VisualElement valueElement, VisualElement cacheElement, InheritChoice selection)
         {
-            var backToDefault = ShouldMoveBackToDefault(mainProp, selection);
-            if (backToDefault != null)
-            {
-                choiceProp.enumValueFlag = (int)backToDefault;
-                choiceProp.serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
             if (!ShowState.TryGetValue(selection, out var show)) 
                 return;
             valueElement.Show(show.showValue);

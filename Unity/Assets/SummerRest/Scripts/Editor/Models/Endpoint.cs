@@ -4,7 +4,6 @@ using SummerRest.Editor.Utilities;
 using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,10 +26,30 @@ namespace SummerRest.Editor.Models
         }
         [JsonIgnore] public virtual bool IsContainer => false;
         public abstract string TypeName { get; }
-        [SerializeReference] private KeyValue[] test;
-        private void OnCache()
+
+        public virtual void CacheValues()
         {
-            test = headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => t.ToArray());
+            // Encountering a problem when trying to wrap AppendToParent as func parameter to Cache method
+            // So I need to show it here
+            // const InheritChoice defaultAllow = InheritChoice.Inherit | InheritChoice.None | InheritChoice.Custom;
+            // const InheritChoice defaultSetWhenNoParent = InheritChoice.Custom;
+            // if (headers.Choice == InheritChoice.AppendToParent)
+            //     Headers = headers.Value.Concat(Parent.Headers).ToArray();
+            // else
+            //     Headers = headers.Cache(Parent, whenInherit: p => p.Headers);
+            Headers = headers.Cache(Parent, whenInherit: p => p.Headers,
+                whenAppend: (p, t) => t.Concat(p.Headers).ToArray(),
+                allow: InheritChoice.Inherit | InheritChoice.None | InheritChoice.Custom | InheritChoice.AppendToParent);
+            DataFormat = dataFormat.Cache(Parent, whenInherit: p => p.DataFormat);
+            ContentType = contentType.Cache(Parent, whenInherit: p => p.ContentType);
+            TimeoutSeconds = timeoutSeconds.Cache(Parent, whenInherit: p => p.TimeoutSeconds);
+            RedirectsLimit = redirectsLimit.Cache(Parent, whenInherit: p => p.RedirectsLimit);
+            AuthPointer = authPointer.Cache(Parent, whenInherit: p => Parent.AuthPointer);
+        }
+        
+        private void OnValidate()
+        {
+            CacheValues();
         }
     }
 #endif
@@ -56,36 +75,30 @@ namespace SummerRest.Editor.Models
             set => path = value;
         }
 
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(DataFormat))]
+        [SerializeField, JsonIgnore, InheritOrCustom(nameof(DataFormat))]
         private InheritOrCustomContainer<DataFormat> dataFormat;
-        public DataFormat DataFormat => dataFormat.Cache(whenInherit: () => Parent?.DataFormat ?? default);
+        [field: SerializeField] public DataFormat DataFormat { get; private set; }
         
-        [SerializeField, InheritOrCustom(InheritChoice.Inherit, nameof(Authentication))] 
-        private InheritOrCustomContainer<AuthPointer> authentication;
-        public AuthContainer Authentication =>
-            authentication.Cache(whenInherit: () => Parent is null ? null : Parent.Authentication);
+        [SerializeField, InheritOrCustom(nameof(AuthPointer))] 
+        private InheritOrCustomContainer<AuthPointer> authPointer;
+        [field: SerializeField] public AuthPointer AuthPointer { get; private set; }
 
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(Headers),
+        [SerializeField, JsonIgnore, InheritOrCustom(nameof(Headers),
              InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
         private InheritOrCustomContainer<KeyValue[]> headers;
-        // public void CacheHeaders()
-        // {
-        //     headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => t);
-        // }
-        //public KeyValue[] Headers 
-        public KeyValue[] Headers => headers.Cache(whenInherit: () => Parent.Headers, whenAppend: t => Parent.Headers is not null ? Parent.Headers.Concat(t).ToArray() : t);
+        [field: SerializeField] public KeyValue[] Headers { get; private set; }
 
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(ContentType))]
+        [SerializeField, JsonIgnore, InheritOrCustom(nameof(ContentType))]
         private InheritOrCustomContainer<ContentType> contentType;
-        public ContentType ContentType => contentType.Cache(whenInherit: () => Parent?.ContentType);
+        [field: SerializeField] public ContentType ContentType { get; private set; }
 
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(TimeoutSeconds))]
+        [SerializeField, JsonIgnore, InheritOrCustom(nameof(TimeoutSeconds))]
         private InheritOrCustomContainer<int> timeoutSeconds;
-        public int TimeoutSeconds => timeoutSeconds.Cache(whenInherit: () => Parent?.TimeoutSeconds ?? default);
+        [field: SerializeField] public int TimeoutSeconds { get; private set; }
 
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit, nameof(RedirectsLimit))]
+        [SerializeField, JsonIgnore, InheritOrCustom(nameof(RedirectsLimit))]
         private InheritOrCustomContainer<int> redirectsLimit;
-        public int RedirectsLimit => redirectsLimit.Cache(whenInherit: () => Parent?.RedirectsLimit ?? default);
+        [field: SerializeField] public int RedirectsLimit { get; private set; }
 
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
         public virtual string FullPath => Parent is null ? Path : $"{Parent.FullPath}/{Path}";

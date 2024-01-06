@@ -53,7 +53,13 @@ namespace SummerRest.Editor.Drawers
         private void ShowPreview(PropertyField previewField, string val)
         {
             var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
-            var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.Key == val); 
+            var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.Key == val);
+            if (idx < 0)
+            {
+                previewField.Show(false);
+                return;
+            }
+            previewField.Show(true);
             var authSerObj = new SerializedObject(authConfigure);
             var authsArr = authSerObj.FindProperty("auths");
             // authConfigure.AuthContainers.FirstOrDefault(e => e.Key == val)

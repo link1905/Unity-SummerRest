@@ -15,7 +15,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         HttpMethod Method { get; set; }
         int RedirectLimit { get; set; }
         int TimeoutSeconds { get; set; }
-        ContentType ContentType { get; set; }
+        ContentType? ContentType { get; set; }
         IEnumerator RequestInstruction { get; }
         IWebResponse<TResponse> WebResponse { get; }
         TResponse ResponseData { get; }
