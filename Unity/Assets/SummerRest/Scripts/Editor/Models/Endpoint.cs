@@ -44,7 +44,7 @@ namespace SummerRest.Editor.Models
             ContentType = contentType.Cache(Parent, whenInherit: p => p.ContentType);
             TimeoutSeconds = timeoutSeconds.Cache(Parent, whenInherit: p => p.TimeoutSeconds);
             RedirectsLimit = redirectsLimit.Cache(Parent, whenInherit: p => p.RedirectsLimit);
-            AuthPointer = authPointer.Cache(Parent, whenInherit: p => Parent.AuthPointer);
+            AuthPointer = auth.Cache(Parent, whenInherit: p => p.AuthPointer);
         }
         
         private void OnValidate()
@@ -80,7 +80,7 @@ namespace SummerRest.Editor.Models
         [field: SerializeField] public DataFormat DataFormat { get; private set; }
         
         [SerializeField, InheritOrCustom(nameof(AuthPointer))] 
-        private InheritOrCustomContainer<AuthPointer> authPointer;
+        private InheritOrCustomContainer<AuthPointer> auth;
         [field: SerializeField] public AuthPointer AuthPointer { get; private set; }
 
         [SerializeField, JsonIgnore, InheritOrCustom(nameof(Headers),

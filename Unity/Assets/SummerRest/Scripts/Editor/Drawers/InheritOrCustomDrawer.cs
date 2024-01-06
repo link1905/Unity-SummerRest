@@ -40,7 +40,7 @@ namespace SummerRest.Editor.Drawers
             }
             _allows ??= GetAllows(_att.Allow);
             
-            var nameElement = tree.Q<Label>(name: "prop-name");
+            var nameElement = tree.Q<Foldout>(name: "container");
             nameElement.text = property.displayName;
                         
             var valueElement = tree.Q<PropertyField>(name: "prop");

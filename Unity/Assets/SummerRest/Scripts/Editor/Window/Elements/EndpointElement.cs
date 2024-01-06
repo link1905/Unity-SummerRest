@@ -2,7 +2,6 @@
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
@@ -18,14 +17,10 @@ namespace SummerRest.Editor.Window.Elements
         private TextField _pathElement;
         private TextField _urlElement;
         private VisualElement _requestBodyElement; 
-        private ResponseElement _responseElement; 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
         }
-        public EndpointElement()
-        {
-        }
-
+ 
         private void OnClick()
         {
             if (_endpoint is null)
@@ -49,7 +44,7 @@ namespace SummerRest.Editor.Window.Elements
                     return;
                 _urlElement.value = _endpoint.Url;
             });
-            _responseElement = this.Q<ResponseElement>();
+            //_responseElement = this.Q<PropertyField>();
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
 
@@ -65,22 +60,20 @@ namespace SummerRest.Editor.Window.Elements
         
         public void ShowEndpoint(Endpoint endpoint)
         {
+            this.UnBindAllChildren();
+
             _endpoint = endpoint;
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.label = endpoint.TypeName;
             
             _requestBodyElement.Show(isRequest);
-            if (isRequest)
-            {
-                _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
-                _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
-                _requestBodyElement.Q<PropertyField>("body").BindProperty(serializedObj);
-            }
+            // _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
+            // _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
+            // _requestBodyElement.Q<PropertyField>("body").BindProperty(serializedObj);
+            // _responseElement.Init(serializedObj.FindProperty("latestResponse"));
 
-            _responseElement.Init(serializedObj.FindProperty("latestResponse"));
             ShowAdvancedSettings(isRequest);
-            _sharedElements.BindChildrenToProperties(serializedObj);
             this.BindChildrenToProperties(serializedObj);
         }
     }

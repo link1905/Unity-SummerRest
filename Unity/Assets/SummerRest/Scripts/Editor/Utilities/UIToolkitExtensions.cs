@@ -11,15 +11,29 @@ namespace SummerRest.Editor.Utilities
         {
             foreach (var child in visualElement.Children())
             {
+                if (child.childCount > 0)
+                    BindChildrenToProperties(child, serializedObject);
                 if (child is not IBindable bindableElement || string.IsNullOrEmpty(bindableElement.bindingPath))
                     continue;
-                bindableElement.BindProperty(serializedObject);
+                var prop = serializedObject.FindProperty(bindableElement.bindingPath);
+                if (prop is null)
+                {
+                    child.Show(false);
+                    child.Unbind();
+                }
+                else
+                {
+                    child.Show(true);
+                    bindableElement.BindProperty(prop);
+                }
             }
         } 
         public static void UnBindAllChildren(this VisualElement visualElement)
         {
             foreach (var child in visualElement.Children())
             {
+                if (child.childCount > 0)
+                    UnBindAllChildren(child);
                 if (child is not BindableElement bindableElement)
                     continue;
                 bindableElement.Unbind();
@@ -87,10 +101,10 @@ namespace SummerRest.Editor.Utilities
                 field.BindProperty(property);
         }
         
-        public static void BindOrDisable<T>(this T field, SerializedProperty property, string relativeName) where T : VisualElement, IBindable
-        {
-            field.BindOrDisable(property.FindPropertyRelative(relativeName));
-        }
+        // public static void BindOrDisable<T>(this T field, SerializedProperty property, string relativeName) where T : VisualElement, IBindable
+        // {
+        //     field.BindOrDisable(property.FindPropertyRelative(relativeName));
+        // }
 
         public static void BindPropertyNoLabel(this PropertyField field, SerializedProperty property)
         {

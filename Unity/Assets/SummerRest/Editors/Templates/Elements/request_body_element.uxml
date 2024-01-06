@@ -2,8 +2,9 @@
     <ui:VisualElement style="flex-grow: 1;">
         <ui:EnumField label="Method" type="SummerRest.Scripts.Utilities.RequestComponents.HttpMethod, SummerRest.Utilities" name="method" binding-path="method" />
         <uie:PropertyField name="params" binding-path="requestParams" style="flex-shrink: 0; align-self: stretch;" />
-        <ui:Label tabindex="-1" text="Request body" display-tooltip-when-elided="true" name="name" />
-        <uie:PropertyField name="body" binding-path="requestBody" style="flex-shrink: 0; align-self: stretch;" />
-        <ui:Button text="Do request" display-tooltip-when-elided="true" name="request-btn" style="margin-bottom: 30px; margin-top: 10px; flex-shrink: 0; align-self: stretch; flex-grow: 0;" />
+        <ui:Foldout text="Request body" style="flex-shrink: 0;">
+            <uie:PropertyField name="body" binding-path="requestBody" style="flex-shrink: 0; align-self: stretch;" />
+        </ui:Foldout>
+        <ui:Button text="Do request" display-tooltip-when-elided="true" name="request-btn" style="margin-bottom: 0; margin-top: 0; flex-shrink: 0; align-self: stretch; flex-grow: 0; margin-left: 0; margin-right: 0;" />
     </ui:VisualElement>
 </ui:UXML>

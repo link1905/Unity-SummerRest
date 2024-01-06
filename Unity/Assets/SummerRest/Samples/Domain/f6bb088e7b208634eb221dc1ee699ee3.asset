@@ -19,26 +19,45 @@ MonoBehaviour:
   dataFormat:
     inherit: 2
     value: 0
-  authentication:
+  <DataFormat>k__BackingField: 0
+  auth:
     inherit: 2
     value:
-      authKey: 
+      authKey: my token
+  <AuthPointer>k__BackingField:
+    authKey: my token
   headers:
     inherit: 2
     value: []
-  <Headers>k__BackingField: []
+  <Headers>k__BackingField:
+  - key: wqewqeqwewqe
+    value: zzcxczxc
+  - key: ccccccc
+    value: jjhkhk
+  - key: asdasdasdasdsad
+    value: asdsad
+  - key: asdasdsad
+    value: asdasd
+  - key: asdas
+    value: sad
   contentType:
     inherit: 2
     value:
       <Charset>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
+  <ContentType>k__BackingField:
+    <Charset>k__BackingField: 
+    <MediaType>k__BackingField: 
+    <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
     value: 0
+  <TimeoutSeconds>k__BackingField: 3
   redirectsLimit:
     inherit: 2
     value: 0
+  <RedirectsLimit>k__BackingField: 3
   method: 0
   requestParams:
   - key: asdasd
@@ -48,7 +67,7 @@ MonoBehaviour:
     text: asas
     body:
       value:
-        rid: 6516271172897734656
+        rid: 8309015010666086516
       typeReference:
         GuidAssignmentFailed: 0
         GUID: 
@@ -62,7 +81,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6516271172897734656
+    - rid: 8309015010666086516
       type: {class: TestMonoBehaviour/CustomRequestBodyData, ns: SummerRest.Samples.Behaviours, asm: Sameple.Behaviours}
       data:
         a: 

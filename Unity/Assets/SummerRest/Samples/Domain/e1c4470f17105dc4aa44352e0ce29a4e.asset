@@ -20,12 +20,12 @@ MonoBehaviour:
     inherit: 8
     value: 0
   <DataFormat>k__BackingField: 0
-  authPointer:
+  auth:
     inherit: 8
     value:
-      authKey: 
+      authKey: my token
   <AuthPointer>k__BackingField:
-    authKey: 
+    authKey: my token
   headers:
     inherit: 8
     value:

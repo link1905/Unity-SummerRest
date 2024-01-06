@@ -1,8 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="header" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: stretch; align-self: stretch; flex-direction: row; justify-content: flex-start; height: auto; width: auto; flex-shrink: 0; flex-basis: 18px;">
-        <ui:Label tabindex="-1" text="asdasdasdasdasdasdasdsad" display-tooltip-when-elided="false" name="prop-name" enable-rich-text="false" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-grow: 0; flex-shrink: 1; width: auto; -unity-text-align: middle-center;" />
-        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="prop-choice" style="flex-grow: 1;" />
-    </ui:VisualElement>
-    <uie:PropertyField name="prop" tooltip="Custom value" label="Custom value" style="height: auto; flex-grow: 0; display: flex; visibility: visible; overflow: visible; align-self: stretch; flex-shrink: 0;" />
-    <uie:PropertyField name="cache" tooltip="Final value" label="Preview" style="flex-shrink: 0; align-self: stretch;" />
+    <ui:Foldout text="Foldout" name="container" style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(7, 7, 7); border-right-color: rgb(7, 7, 7); border-top-color: rgb(7, 7, 7); border-bottom-color: rgb(7, 7, 7); flex-shrink: 0; margin-bottom: 0;">
+        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="prop-choice" style="flex-grow: 0;" />
+        <uie:PropertyField name="prop" tooltip="Custom value" label="Custom value" style="height: auto; flex-grow: 0; display: flex; visibility: visible; overflow: visible; align-self: stretch; flex-shrink: 0;" />
+        <uie:PropertyField name="cache" tooltip="Final value" label="Preview" style="flex-shrink: 0; align-self: stretch;" />
+    </ui:Foldout>
 </ui:UXML>
