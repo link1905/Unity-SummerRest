@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Scripts.Utilities.RequestComponents;
@@ -28,7 +29,8 @@ namespace SummerRest.Runtime.Request
         public HttpMethod Method { get; set; }
         public int? RedirectLimit { get; set; }
         public int? TimeoutSeconds { get; set; }
-        // public IAuthData AuthData { get; set; }
+        public string AuthKey { get; set; }
+        public IAuthAppender AuthAppender { get; set; }
         public ContentType? ContentType { get; set; }
         public virtual string SerializedBody => null;
         protected BaseRequest(string url)
@@ -50,6 +52,16 @@ namespace SummerRest.Runtime.Request
         {
             AbsoluteUrl = IUrlBuilder.Current.BuildUrl(_url, Params.ParamMapper);
         }
+
+        private void SetAuthData<TResponse>(
+            IWebRequestAdaptor<TResponse> requestAdaptor)
+        {
+            if (string.IsNullOrEmpty(AuthKey))
+                return;
+            var appender = AuthAppender ?? IAuthAppender.Current;
+            appender.Append(AuthKey, requestAdaptor);
+        }
+
         private IEnumerator SetRequestDataAndWait<TResponse>(
             IWebRequestAdaptor<TResponse> requestAdaptor)
         {
@@ -61,6 +73,7 @@ namespace SummerRest.Runtime.Request
                 requestAdaptor.ContentType = ContentType;
             foreach (var (k, v) in Headers)
                 requestAdaptor.SetHeader(k, v);
+            SetAuthData(requestAdaptor);
             yield return requestAdaptor.RequestInstruction;
         }
     

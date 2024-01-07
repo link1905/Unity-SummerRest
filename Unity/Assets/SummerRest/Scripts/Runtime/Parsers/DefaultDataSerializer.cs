@@ -14,11 +14,12 @@ namespace SummerRest.Runtime.Parsers
         {
             try
             {
+
                 switch (dataFormat)
                 {
-                    case DataFormat.PlainText:
-                        return data is T str ? str : JsonConvert.DeserializeObject<T>(data);
-                    case DataFormat.Json:
+                    case DataFormat.Json or DataFormat.PlainText:
+                        if (data is T str)
+                            return str;
                         return JsonConvert.DeserializeObject<T>(data);
                     case DataFormat.Bson:
                         break;

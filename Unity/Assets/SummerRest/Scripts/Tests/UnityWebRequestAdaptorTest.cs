@@ -136,11 +136,11 @@ namespace SummerRest.Scripts.Tests
         {
             using var adaptor = RawUnityWebRequestAdaptor<TResponse>.Create(WebRequest);
             var response = adaptor.BuildResponse("application/json", json);
-            Assert.AreEqual(response, expected);
+            Assert.AreEqual(expected, response);
             response = adaptor.BuildResponse("application/xml", xml);
-            Assert.AreEqual(response, expected);
+            Assert.AreEqual(expected, response);
             response = adaptor.BuildResponse("text/plain", plain);
-            Assert.AreEqual(response, expected);
+            Assert.AreEqual(expected, response);
         }
         [Test]
         public void Test_Build_Primitive_String_Response()

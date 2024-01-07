@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Scripts.Utilities.RequestComponents;
 
 namespace SummerRest.Runtime.Request
@@ -11,9 +12,12 @@ namespace SummerRest.Runtime.Request
         HttpMethod Method { get; set; }
         int? RedirectLimit { get; set; }
         int? TimeoutSeconds { get; set; }
+        string AuthKey { get; set; }
+        IAuthAppender AuthAppender { get; set; }
         // IAuthData AuthData { get; set; }
         ContentType? ContentType { get; set; }
     }
+
     public interface IWebRequest<TBody> : IWebRequest
     {
         TBody BodyData { get; set; }

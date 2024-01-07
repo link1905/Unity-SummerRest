@@ -9,7 +9,7 @@ using SharedSourceGenerator.Utilities;
 
 namespace RestSourceGenerator.Generators
 {
-    [Generator]
+    // [Generator]
     public class SerializedGenericFieldSourceGenerator : AttributedFieldSourceGenerator
     {
         public override string AttributeDisplayName => ProjectReflection.Attributes.SerializedGenericField.FullName;
