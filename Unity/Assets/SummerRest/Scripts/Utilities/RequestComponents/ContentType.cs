@@ -32,6 +32,7 @@ namespace SummerRest.Scripts.Utilities.RequestComponents
                 return builder.ToString();
             }
         }
+
         public ContentType(string mediaType = "text/plain", string charset = null, string boundary = null)
         {
             Charset = charset;

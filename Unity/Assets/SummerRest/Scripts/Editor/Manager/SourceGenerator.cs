@@ -11,7 +11,7 @@ namespace SummerRest.Editor.Manager
 
     public static class SourceGenerator
     {
-        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
+        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile.txt";
         public static void GenerateAdditionalFile()
         {
             var path = SummerRestConfigurations.Instance.GetAssetFolder() + "/" + FileName;
@@ -25,7 +25,7 @@ namespace SummerRest.Editor.Manager
             }
             File.WriteAllText(path, string.Empty);
             File.WriteAllText(path, configureJson);
-            jsonAsset.MakeDirty();
+            AssetDatabase.ImportAsset(path);
         }
     }
 }

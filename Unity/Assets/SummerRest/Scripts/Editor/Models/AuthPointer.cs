@@ -18,11 +18,11 @@ namespace SummerRest.Editor.Models
         public static implicit operator AuthContainer(AuthPointer p)
         {
             var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
-            return authConfigure.AuthContainers.FirstOrDefault(e => e.Key == p.authKey);
+            return authConfigure.AuthContainers.FirstOrDefault(e => e.AuthKey == p.authKey);
         }
         public static implicit operator AuthPointer(AuthContainer key) => new()
         {
-            authKey = key.Key
+            authKey = key.AuthKey
         };
         public void OnBeforeSerialize()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SummerRest.Scripts.Utilities.DataStructures
@@ -19,6 +20,9 @@ namespace SummerRest.Scripts.Utilities.DataStructures
         {
             return new KeyValue(key, value);
         }
+
+        public static implicit operator KeyValuePair<string, string>(KeyValue key) => new(key.Key, key.Value);
+ 
         public void Deconstruct(out string outKey, out string outValue)
         {
             outKey = Key;

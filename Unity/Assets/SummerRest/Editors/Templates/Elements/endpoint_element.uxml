@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Template name="request_body_element" src="project://database/Assets/SummerRest/Editors/Templates/Elements/request_body_element.uxml?fileID=9197481963319205126&amp;guid=abc0082e036b829488839dddfbe33e53&amp;type=3#request_body_element" />
     <SummerRest.Editor.Window.Elements.EndpointElement style="flex-grow: 1;">
-        <ui:TextField picking-mode="Ignore" label="Service" value="filler text" name="name" binding-path="endpointName" style="align-self: stretch; flex-shrink: 0; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch;" />
+        <ui:TextField picking-mode="Ignore" label="Service" value="filler text" name="name" binding-path="endpointName" tooltip="Also the name of the generated class, please input class name" style="align-self: stretch; flex-shrink: 0; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch;" />
         <ui:TextField picking-mode="Ignore" label="Path" name="path" binding-path="path" style="align-items: stretch; align-self: stretch; flex-shrink: 0;" />
         <ui:TextField picking-mode="Ignore" label="Url" name="url" readonly="true" style="align-items: stretch; align-self: stretch; flex-shrink: 0;" />
         <ui:Foldout text="Advanced settings" name="advanced-settings" value="false" style="flex-shrink: 0;" />

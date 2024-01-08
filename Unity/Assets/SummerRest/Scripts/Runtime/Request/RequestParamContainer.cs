@@ -7,7 +7,7 @@ namespace SummerRest.Runtime.Request
     {
         private readonly Dictionary<string, ICollection<string>> _paramMapper = new();
         public IDictionary<string, ICollection<string>> ParamMapper => _paramMapper;
-        public event Action OnChangedParams;
+        internal event Action OnChangedParams;
         public void AddParam(string key, string value)
         {
             if (!_paramMapper.TryGetValue(key, out var values))

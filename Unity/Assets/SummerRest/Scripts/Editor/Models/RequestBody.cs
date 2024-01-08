@@ -1,4 +1,5 @@
 ﻿using System;
+using SummerRest.Runtime.Parsers;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
 using TypeReferences;
@@ -9,6 +10,8 @@ namespace SummerRest.Editor.Models
     [Serializable]
     public class RequestBody : TextOrCustomData<IRequestBodyData, RequestBody.RequestBodyContainer>
     {
+        public string SerializedData => type == TextOrCustomDataType.PlainText ? text : DefaultDataSerializer.StaticSerialize(body.Value, DataFormat.Json);
+
         [Serializable]
         public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
         {

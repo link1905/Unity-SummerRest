@@ -33,9 +33,10 @@ namespace SummerRest.Runtime.Request
         public IAuthAppender AuthAppender { get; set; }
         public ContentType? ContentType { get; set; }
         public virtual string SerializedBody => null;
-        protected BaseRequest(string url)
+        protected BaseRequest(string url, string absoluteUrl)
         {
             _url = url;
+            AbsoluteUrl = absoluteUrl;
         }
         public static TRequest Create()
         {
@@ -45,7 +46,6 @@ namespace SummerRest.Runtime.Request
         protected void Init()
         {
             Params.OnChangedParams += RebuildUrl;
-            RebuildUrl();
         }
         // Gen this constructor
         protected void RebuildUrl()
@@ -158,16 +158,16 @@ namespace SummerRest.Runtime.Request
         }
     }
 
-    public abstract class BaseRequest<TRequest, TRequestBody> : BaseRequest<TRequest>, IWebRequest<TRequestBody>
-        where TRequest : BaseRequest<TRequest>, new()
-    {
-        public TRequestBody BodyData { get; set; }
-        public DataFormat BodyFormat { get; set; }
-
-        public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-
-        protected BaseRequest(string url) : base(url)
-        {
-        }
-    }
+    // public abstract class BaseRequest<TRequest, TRequestBody> : BaseRequest<TRequest>, IWebRequest<TRequestBody>
+    //     where TRequest : BaseRequest<TRequest>, new()
+    // {
+    //     public TRequestBody BodyData { get; set; }
+    //     public DataFormat BodyFormat { get; set; }
+    //
+    //     public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
+    //
+    //     protected BaseRequest(string url) : base(url)
+    //     {
+    //     }
+    // }
 }

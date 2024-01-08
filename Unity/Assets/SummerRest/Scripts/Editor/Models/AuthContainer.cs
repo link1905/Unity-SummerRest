@@ -10,9 +10,10 @@ namespace SummerRest.Editor.Models
     public class AuthContainer : TextOrCustomData<Scripts.Utilities.RequestComponents.IAuthData, AuthContainer.BodyContainer>
     {
         [SerializeField] private string key;
-        public string Key => key;
+        public string AuthKey => key;
         [SerializeField, Inherits(typeof(IAuthAppender), ShowAllTypes = true, AllowInternal = true, ShowNoneElement = false, ShortName = true)] 
         private TypeReference appenderType = new(typeof(BearerTokenAuthAppender));
+        public string AppenderType => appenderType?.Type?.FullName; 
         [Serializable]
         public class BodyContainer : InterfaceContainer<Scripts.Utilities.RequestComponents.IAuthData>
         {

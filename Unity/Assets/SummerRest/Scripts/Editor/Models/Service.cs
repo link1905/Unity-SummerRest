@@ -1,7 +1,6 @@
 namespace SummerRest.Editor.Models
 {
-#if UNITY_EDITOR
-    public partial class Service
+    public class Service : EndpointContainer
     {
         public override void Delete(bool fromParent)
         {
@@ -10,9 +9,5 @@ namespace SummerRest.Editor.Models
             base.Delete(fromParent);
         }
         public override string TypeName => nameof(Service);
-    }
-#endif
-    public partial class Service : EndpointContainer
-    {
     }
 }

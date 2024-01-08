@@ -133,7 +133,7 @@ namespace SummerRest.Scripts.Tests
         }
         public class TestRequest : BaseRequest<TestRequest>
         {
-            public TestRequest() : base(string.Empty)
+            public TestRequest() : base(string.Empty, string.Empty)
             {
                 Init();
             }

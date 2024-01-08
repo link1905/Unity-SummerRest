@@ -57,13 +57,18 @@ namespace SummerRest.Scripts.Tests
                 Assert.AreEqual(expect, result);
             }
         }
-        public class TestRequest : BaseRequest<TestRequest, TestRequest.TestRequestBody>
+        public class TestRequest : BaseRequest<TestRequest>
         {
             public class TestRequestBody
             {
                 public int A { get; set; }
             }
-            public TestRequest() : base(ExampleUrl)
+            public TestRequestBody BodyData { get; set; }
+            public DataFormat BodyFormat { get; set; }
+
+            public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
+
+            public TestRequest() : base(ExampleUrl, ExampleUrl)
             {
                 Init();
             }

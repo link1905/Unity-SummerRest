@@ -2,6 +2,7 @@
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
@@ -38,16 +39,8 @@ namespace SummerRest.Editor.Window.Elements
             _nameElement = this.Q<TextField>("name");
             _pathElement = this.Q<TextField>("path");
             _urlElement = this.Q<TextField>("url");
-            _pathElement.RegisterValueChangedCallback(_ =>
-            {
-                if (_endpoint is null)
-                    return;
-                _urlElement.value = _endpoint.Url;
-            });
-            //_responseElement = this.Q<PropertyField>();
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
-
         private void ShowAdvancedSettings(bool shouldBeMovedToAdvancedPart)
         {
             _advancedSettingsFoldout.Show(shouldBeMovedToAdvancedPart);
@@ -57,22 +50,23 @@ namespace SummerRest.Editor.Window.Elements
                 Insert(_sharedElementsOriginalIndex, _sharedElements);
         }
 
+        private void UnbindAll()
+        {
+            this.UnBindAllChildren();
+        }
         
         public void ShowEndpoint(Endpoint endpoint)
         {
-            this.UnBindAllChildren();
-
+            UnbindAll();
             _endpoint = endpoint;
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.label = endpoint.TypeName;
-            
             _requestBodyElement.Show(isRequest);
-            // _requestBodyElement.Q<EnumField>("method").BindProperty(serializedObj);
-            // _requestBodyElement.Q<PropertyField>("params").BindProperty(serializedObj);
-            // _requestBodyElement.Q<PropertyField>("body").BindProperty(serializedObj);
-            // _responseElement.Init(serializedObj.FindProperty("latestResponse"));
-
+            // If domain => use activeVersion instead of path
+            _pathElement.bindingPath = endpoint is Domain ? "activeVersion" : "path";
+            // If request => rather than urlWithParams
+            _urlElement.bindingPath = endpoint is Request ? "urlWithParam" : "url";
             ShowAdvancedSettings(isRequest);
             this.BindChildrenToProperties(serializedObj);
         }

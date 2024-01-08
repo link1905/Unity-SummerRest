@@ -43,6 +43,8 @@ namespace SummerRest.Runtime.Parsers
             => StaticDeserialize<T>(data, dataFormat);
         public static string StaticSerialize<T>(T data, DataFormat dataFormat)
         {
+            if (data is null)
+                return default;
             if (data is string str)
                 return str;
             switch (dataFormat)

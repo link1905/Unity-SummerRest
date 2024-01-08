@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using SummerRest.Editor.Utilities;
+using SummerRest.Runtime.Parsers;
 using SummerRest.Scripts.Utilities.Attributes;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
@@ -28,7 +31,9 @@ namespace SummerRest.Editor.Models
             get => endpointName;
             set => endpointName = value;
         }
-
+        [SerializeField, JsonIgnore] private string url;
+        public string Url => url;
+        
         [SerializeField][JsonIgnore] private string path;
         public string Path
         {
@@ -65,10 +70,20 @@ namespace SummerRest.Editor.Models
         private InheritOrCustomContainer<int> redirectsLimit;
         public int? RedirectsLimit => 
             redirectsLimit.Choice == InheritChoice.None ? null : redirectsLimit.CacheValue;
-        
+
         //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
-        public virtual string FullPath => Parent is null ? Path : $"{Parent.FullPath}/{Path}";
-        public virtual string Url => $"{Domain.ActiveVersion}{FullPath}";
+        private string FullPath
+        {
+            get
+            {
+                if (Parent is null)
+                    return Path;
+                if (string.IsNullOrEmpty(Path))
+                    return Parent.FullPath;
+                return $"{Parent.FullPath}/{Path}";
+            }
+        }
+
         
         public virtual TreeViewItemData<Endpoint> BuildTree(int id)
         {
@@ -92,6 +107,8 @@ namespace SummerRest.Editor.Models
             timeoutSeconds.Cache(Parent, whenInherit: p => p.timeoutSeconds.CacheValue);
             redirectsLimit.Cache(Parent, whenInherit: p => p.redirectsLimit.CacheValue);
             auth.Cache(Parent, whenInherit: p => p.auth.CacheValue);
+            url = $"{Domain.ActiveVersion}{FullPath}";
+            
         }
         
         private void OnValidate()

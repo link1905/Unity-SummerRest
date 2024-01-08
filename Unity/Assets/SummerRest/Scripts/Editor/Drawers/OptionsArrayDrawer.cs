@@ -23,6 +23,7 @@ namespace SummerRest.Editor.Drawers
             if (enable)
                 indexProp.intValue = idx;
             scope.PropertyField(element, label: GUIContent.none);
+            element.serializedObject.ApplyModifiedProperties();
         }
         private ReorderableList OnEnable(SerializedProperty property, GUIContent label)
         {

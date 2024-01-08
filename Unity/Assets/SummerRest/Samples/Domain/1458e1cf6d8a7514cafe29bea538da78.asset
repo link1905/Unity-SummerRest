@@ -10,40 +10,55 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: c953c79faba73494a9e4f2bae87cfcb5
+  m_Name: 1458e1cf6d8a7514cafe29bea538da78
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: Domain 2
+  endpointName: Domain 1
+  url: example2.com
   path: 
   dataFormat:
     inherit: 8
+    cache: 0
     value: 0
-  authentication:
+  auth:
     inherit: 8
+    cache:
+      authKey: my token
     value:
       authKey: my token
   headers:
     inherit: 8
-    value: []
-  <Headers>k__BackingField: []
+    cache:
+    - key: header1
+      value: value1
+    value:
+    - key: header1
+      value: value1
   contentType:
     inherit: 8
+    cache:
+      <Charset>k__BackingField: UTF-8
+      <MediaType>k__BackingField: application/json
+      <Boundary>k__BackingField: 
     value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
+      <Charset>k__BackingField: UTF-8
+      <MediaType>k__BackingField: application/json
       <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 8
+    cache: 0
     value: 0
   redirectsLimit:
     inherit: 8
+    cache: 0
     value: 0
-  services: []
+  services:
+  - {fileID: 11400000, guid: 1c72f74f7db5f1149b5e539e5b8bfd74, type: 2}
   requests: []
   versions:
-    values: []
-    selectedIndex: 0
-  references:
-    version: 2
-    RefIds: []
+    values:
+    - example.com
+    - example2.com
+    selectedIndex: 1
+  activeVersion: example2.com

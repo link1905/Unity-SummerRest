@@ -1,15 +1,20 @@
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
+using SummerRest.Runtime.Parsers;
 using SummerRest.Scripts.Utilities.DataStructures;
 using SummerRest.Scripts.Utilities.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
-    public partial class Request : Endpoint 
+    public class Request : Endpoint 
     {
         [SerializeField, JsonIgnore] private HttpMethod method;
         [SerializeField, JsonIgnore] private KeyValue[] requestParams;
         [SerializeField, JsonIgnore] private RequestBody requestBody;
+        [SerializeField, JsonIgnore] private string urlWithParam;
+        public string UrlWithParams => urlWithParam;
         public HttpMethod Method
         {
             get => method;
@@ -20,17 +25,21 @@ namespace SummerRest.Editor.Models
             get => requestParams;
             private set => requestParams = value;
         }
+
         public RequestBody RequestBody
         {
             get => requestBody;
             private set => requestBody = value;
         }
 
-    }
+        public string SerializedBody => RequestBody.SerializedData;
 
-#if UNITY_EDITOR
-    public partial class Request
-    {
+        private IEnumerable<KeyValuePair<string, string>> Params => requestParams?.Select(e => (KeyValuePair<string, string>)e);
+        public override void CacheValues()
+        {
+            urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
+            base.CacheValues();
+        }
         public override void Delete(bool fromParent)
         {
             if (fromParent && Parent is EndpointContainer parent)
@@ -46,5 +55,4 @@ namespace SummerRest.Editor.Models
         }
         public override string TypeName => nameof(Request);
     }
-#endif
 }

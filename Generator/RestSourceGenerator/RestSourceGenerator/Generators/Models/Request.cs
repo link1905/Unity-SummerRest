@@ -7,8 +7,9 @@ namespace RestSourceGenerator.Generators.Models
     public struct Request
     {
         public string TypeName { get; set; }
-        public string Url { get; set; }
         public string EndpointName { get; set; }
+        public string? Url { get; set; }
+        public string? UrlWithParams { get; set; }
         public HttpMethod? Method { get; set; }
         public int? TimeoutSeconds { get; set; }
         public int? RedirectsLimit { get; set; }
@@ -16,7 +17,7 @@ namespace RestSourceGenerator.Generators.Models
         public KeyValue[]? Headers { get; set; }
         public KeyValue[]? RequestParams { get; set; }
         public AuthContainer? AuthContainer { get; set; }
-        public DataFormat DataFormat { get; set; }
+        public DataFormat? DataFormat { get; set; }
         public string? SerializedBody { get; set; }
         public IEnumerable<Request>? Services { get; set; }
         public IEnumerable<Request>? Requests { get; set; }
@@ -47,7 +48,7 @@ AuthKey = {AuthContainer.Value.AuthKey};
 
         private string BuildBody()
         {
-            if (SerializedBody is null)
+            if (string.IsNullOrEmpty(SerializedBody))
                 return string.Empty;
             return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody}"", DataFormat.Json)";
         }
@@ -66,7 +67,7 @@ AuthKey = {AuthContainer.Value.AuthKey};
             builder.Append($@"
 public class {EndpointName} : BaseRequest<{EndpointName}>
 {{
-    public {EndpointName}() : base({Url}) 
+    public {EndpointName}() : base(""{Url}"", ""{UrlWithParams}"") 
     {{
         Method = {method};
         {timeout}

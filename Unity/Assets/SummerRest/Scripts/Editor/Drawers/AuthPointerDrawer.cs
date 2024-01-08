@@ -27,7 +27,7 @@ namespace SummerRest.Editor.Drawers
             var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
             if (authConfigure is null)
                 throw new Exception($"There is no {nameof(AuthenticateConfigurations)} in the project");
-            var allIds = authConfigure.AuthContainers.Select(e => e.Key).ToList();
+            var allIds = authConfigure.AuthContainers.Select(e => e.AuthKey).ToList();
             var noOption = allIds.Count == 0;
             
             var noOptionHelpBox = tree.Q<HelpBox>("no-option");
@@ -53,7 +53,7 @@ namespace SummerRest.Editor.Drawers
         private void ShowPreview(PropertyField previewField, string val)
         {
             var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
-            var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.Key == val);
+            var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.AuthKey == val);
             if (idx < 0)
             {
                 previewField.Show(false);

@@ -71,6 +71,12 @@ namespace SummerRest.Scripts.Tests
             Assert.IsNull(result);
         }
         [Test]
+        public void Test_Serialize_From_Null_Return_Null()
+        {
+            var result = IDataSerializer.Current.Serialize<string>(null, DataFormat.Json);
+            Assert.IsNull(result);
+        }
+        [Test]
         public void Test_Serialize_String_Then_Return_The_String_Itself()
         {
             const string model = "no need to be serialized";

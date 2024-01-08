@@ -25,8 +25,8 @@ namespace SummerRest.Editor.Utilities
             if (asset is not null) 
                 return asset;
             asset = onCreate.Invoke();
-            AssetDatabase.CreateAsset(asset, path);
-            AssetDatabase.SaveAssets();
+            if (!File.Exists(path))
+                File.Create(path).Dispose();
             return asset;
         }
 
