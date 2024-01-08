@@ -137,10 +137,9 @@ namespace {@namespace}
         {
             return $"{param.TypeName} {param.Name}";
         }
-
-        public static string BuildParams(this IEnumerable<SimpleMethodParam> @params)
+        public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, string> builder, string separator = ", ")
         {
-            return BuildSequentialValues(@params.Select(BuildParam), ",");
+            return BuildSequentialValues(@params.Select(builder), separator);
         }
         public static string BuildSequentialValues(this IEnumerable<string> values, string separator = ", ")
         {
@@ -150,7 +149,7 @@ namespace {@namespace}
             {
                 0 => "",
                 1 => paramsArray.First(),
-                _ => string.Join(", ", paramsArray)
+                _ => string.Join(separator, paramsArray)
             };
         }
         public static string BuildArg(this SimpleMethodParam param)
