@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SharedSourceGenerator.Metadata
+namespace RestSourceGenerator.Metadata
 {
     public static class RoslynDefaultValues
     {

@@ -4,8 +4,7 @@ using Microsoft.CodeAnalysis.Testing.Verifiers;
 using RestSourceGenerator.Generators;
 using RestSourceGenerator.Metadata;
 using RestSourceGenerator.Tests.Utilities;
-using SharedSourceGenerator.Metadata;
-using SharedSourceGenerator.Utilities;
+using RestSourceGenerator.Utilities;
 using Xunit;
 
 namespace RestSourceGenerator.Tests.Tests;

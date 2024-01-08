@@ -25,11 +25,4 @@ public static class TestsUtilities
         };
         return test.RunAsync();
     }
-    public static Task SimpleTest<TSourceGen>(SourceFileCollection sources, SourceFileCollection generatedFiles) where TSourceGen : ISourceGenerator, new()
-    {
-        var test = new CSharpSourceGeneratorTest<TSourceGen, XUnitVerifier>();
-        test.TestState.Sources.AddRange(sources);
-        test.TestState.GeneratedSources.AddRange(generatedFiles);
-        return test.RunAsync();
-    }
 }
