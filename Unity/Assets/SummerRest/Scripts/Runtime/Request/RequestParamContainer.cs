@@ -36,7 +36,7 @@ namespace SummerRest.Runtime.Request
                 OnChangedParams?.Invoke();
             return rev;
         }
-        public void AddParams(string key, IEnumerable<string> addValues)
+        public void AddParams(string key, params string[] addValues)
         {
             if (!_paramMapper.TryGetValue(key, out var values))
             {

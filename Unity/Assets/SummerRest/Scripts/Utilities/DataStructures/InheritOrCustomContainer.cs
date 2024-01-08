@@ -7,6 +7,8 @@ namespace SummerRest.Scripts.Utilities.DataStructures
     public class InheritOrCustomContainer<T>
     {
         [SerializeField] private InheritChoice inherit = InheritChoice.Inherit;
+        [SerializeField] private T cache;
+        public T CacheValue => cache;
         public InheritChoice Choice => inherit;
         [SerializeField] private T value;
         public void Validate(InheritChoice allow, InheritChoice defaultWhenNoParent, object parent)
@@ -24,8 +26,7 @@ namespace SummerRest.Scripts.Utilities.DataStructures
                 return defaultWhenNoParent;
             return null;
         }
-        public T Value => value;
-        public T Cache<TParent>(TParent parent, 
+        public void Cache<TParent>(TParent parent, 
             Func<TParent, T> whenInherit, 
             Func<TParent, T, T> whenAppend = null,
             InheritChoice allow = InheritChoice.None | InheritChoice.Inherit | InheritChoice.Custom, 
@@ -36,16 +37,16 @@ namespace SummerRest.Scripts.Utilities.DataStructures
             {
                 case InheritChoice.AppendToParent:
                     if (whenAppend != null) 
-                        return whenAppend.Invoke(parent, value);
+                        cache = whenAppend.Invoke(parent, value);
                     break;
                 case InheritChoice.Inherit:
                     if (whenInherit != null) 
-                        return whenInherit.Invoke(parent);
+                         cache = whenInherit.Invoke(parent);
                     break;
                 case InheritChoice.Custom:
-                    return value;
+                     cache = value;
+                     break;
             }
-            return default;
         }
 
     }

@@ -49,7 +49,7 @@ namespace SummerRest.Editor.Drawers
             
             var cacheElement = tree.Q<PropertyField>(name: "cache");
             cacheElement.SetEnabled(false);
-            var cacheProp = property.FindSiblingBackingPropertyRelative(_att.CachePropName);
+            var cacheProp = property.FindPropertyRelative("cache");
             if (cacheProp is not null)
                 cacheElement.BindProperty(cacheProp);
             

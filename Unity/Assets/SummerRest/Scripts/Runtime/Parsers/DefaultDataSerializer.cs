@@ -9,8 +9,7 @@ namespace SummerRest.Runtime.Parsers
 {
     public class DefaultDataSerializer : IDataSerializer
     {
-
-        public T Deserialize<T>(string data, DataFormat dataFormat)
+        public static T StaticDeserialize<T>(string data, DataFormat dataFormat)
         {
             try
             {
@@ -40,8 +39,9 @@ namespace SummerRest.Runtime.Parsers
             return default;
         }
 
-        private const string RootName = "root";
-        public string Serialize<T>(T data, DataFormat dataFormat)
+        public T Deserialize<T>(string data, DataFormat dataFormat)
+            => StaticDeserialize<T>(data, dataFormat);
+        public static string StaticSerialize<T>(T data, DataFormat dataFormat)
         {
             if (data is string str)
                 return str;
@@ -59,5 +59,9 @@ namespace SummerRest.Runtime.Parsers
             }
             return default;
         }
+
+        private const string RootName = "root";
+        public string Serialize<T>(T data, DataFormat dataFormat)
+            => StaticSerialize(data, dataFormat);
     }
 }

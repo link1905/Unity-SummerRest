@@ -6,10 +6,13 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Models
 {
-#if UNITY_EDITOR
-    public abstract partial class EndpointContainer : ITreeBuilder
+    public abstract  class EndpointContainer : Endpoint
     {
-        public override bool IsContainer => true;
+        [SerializeReference, JsonIgnore] private List<Service> services = new();
+        [SerializeReference, JsonIgnore] private List<Request> requests = new();
+        public List<Service> Services => services;
+        public List<Request> Requests => requests;
+              public override bool IsContainer => true;
 
         public List<TreeViewItemData<Endpoint>> BuildChildrenTree(int id)
         {
@@ -78,13 +81,5 @@ namespace SummerRest.Editor.Models
             foreach (var s in services)
                 s.CacheValues();
         }
-    }
-#endif
-    public abstract partial class EndpointContainer : Endpoint
-    {
-        [SerializeReference, JsonIgnore] private List<Service> services = new();
-        [SerializeReference, JsonIgnore] private List<Request> requests = new();
-        public List<Service> Services => services;
-        public List<Request> Requests => requests;
     }
 }

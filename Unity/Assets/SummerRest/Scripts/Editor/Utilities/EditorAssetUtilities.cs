@@ -19,6 +19,17 @@ namespace SummerRest.Editor.Utilities
             return obj;
         }
 
+        public static T LoadOrCreate<T>(string path, Func<T> onCreate) where T : Object
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<T>(path);
+            if (asset is not null) 
+                return asset;
+            asset = onCreate.Invoke();
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets();
+            return asset;
+        }
+
         public static void CreateFolderIfNotExists(string parent, string name)
         {
             if (!AssetDatabase.IsValidFolder(Path.Combine(parent, name)))

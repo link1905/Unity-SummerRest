@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
-    public partial class Domain : EndpointContainer
+    public abstract class Domain : EndpointContainer
     {
         [SerializeField] private OptionsArray<string> versions;
         public string ActiveVersion
@@ -20,9 +20,4 @@ namespace SummerRest.Editor.Models
         public override string TypeName => nameof(Models.Domain);
 
     }
-#if UNITY_EDITOR
-    public partial class Domain
-    {
-    }
-#endif
 }

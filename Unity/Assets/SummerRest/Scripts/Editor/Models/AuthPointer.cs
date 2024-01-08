@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SummerRest.Editor.Models
 {
     [Serializable]
     public partial struct AuthPointer
     {
-        [SerializeField] private string authKey;
-
+        [SerializeField, JsonIgnore] private string authKey;
+        public string AuthKey => authKey;
     }
 #if UNITY_EDITOR
     public partial struct AuthPointer : ISerializationCallbackReceiver
