@@ -15,44 +15,57 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 5d43a7a649b6e7644855c3e628405d1d, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 5d43a7a649b6e7644855c3e628405d1d, type: 2}
   endpointName: My service
+  url: example.com/service1
   path: service1
   dataFormat:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 1
+      value: 0
     value: 0
   auth:
     inherit: 2
     cache:
-      authKey: my token
+      hasValue: 1
+      value:
+        authKey: 
     value:
-      authKey: my token
+      authKey: 
   headers:
     inherit: 4
     cache:
-    - key: header2
-      value: value2
-    - key: header1
-      value: value1
+      hasValue: 1
+      value:
+      - key: header2
+        value: value2
+      - key: header1
+        value: value1
     value:
     - key: header2
       value: value2
   contentType:
     inherit: 2
     cache:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 0
+      value: 0
     value: 0
   redirectsLimit:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 0
+      value: 0
     value: 0
   services: []
   requests:

@@ -24,7 +24,7 @@ namespace SummerRest.Editor.Window.Elements
  
         private void OnClick()
         {
-            if (_endpoint is null)
+            if (_endpoint is not Request)
                 return;
             OnRequest?.Invoke(_endpoint);
         }

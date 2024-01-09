@@ -32,13 +32,14 @@ namespace SummerRest.Editor.Models
             private set => requestBody = value;
         }
 
-        public string SerializedBody => RequestBody.SerializedData;
+        public string SerializedBody => RequestBody.SerializedData(DataFormat, false);
 
         private IEnumerable<KeyValuePair<string, string>> Params => requestParams?.Select(e => (KeyValuePair<string, string>)e);
         public override void CacheValues()
         {
             urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
             base.CacheValues();
+            requestBody.CacheValue(DataFormat);
         }
         public override void Delete(bool fromParent)
         {

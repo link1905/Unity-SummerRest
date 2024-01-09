@@ -20,10 +20,10 @@ namespace SummerRest.Editor.Models
             var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
             return authConfigure.AuthContainers.FirstOrDefault(e => e.AuthKey == p.authKey);
         }
-        public static implicit operator AuthPointer(AuthContainer key) => new()
+        public static implicit operator AuthPointer(AuthContainer key) => key is not null ? new AuthPointer()
         {
             authKey = key.AuthKey
-        };
+        } : default;
         public void OnBeforeSerialize()
         {
         }

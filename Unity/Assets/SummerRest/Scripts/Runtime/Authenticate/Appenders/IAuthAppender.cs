@@ -10,7 +10,7 @@ namespace SummerRest.Runtime.Authenticate.Appenders
     }
 
     public interface IAuthAppender<TAuthAppender> : IAuthAppender, ISingleton<TAuthAppender>
-        where TAuthAppender : class, new()
+        where TAuthAppender : class, ISingleton<TAuthAppender>, new()
     {
         
     }

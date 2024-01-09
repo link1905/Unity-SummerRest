@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace SummerRest.Editor.Models
             get => headers;
             set => headers = value;
         }
-        [SerializeField] private string body;
+        [SerializeField, TextMultiline] private string body;
         public string Body => body;
     }
 }

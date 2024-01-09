@@ -15,7 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
   endpointName: Domain 1
-  url: example2.com
+  url: example.com
   path: 
   dataFormat:
     inherit: 8
@@ -28,9 +28,9 @@ MonoBehaviour:
     cache:
       hasValue: 1
       value:
-        authKey: my token
+        authKey: 
     value:
-      authKey: my token
+      authKey: 
   headers:
     inherit: 8
     cache:
@@ -72,5 +72,5 @@ MonoBehaviour:
     values:
     - example.com
     - example2.com
-    selectedIndex: 1
-  activeVersion: example2.com
+    selectedIndex: 0
+  activeVersion: example.com

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using SummerRest.Editor.DataStructures;
+using System.Linq;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate.TokenRepository;
+using SummerRest.Utilities.DataStructures;
 using TypeReferences;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SummerRest.Editor.Configurations
 {
@@ -13,14 +15,22 @@ namespace SummerRest.Editor.Configurations
     {
         [SerializeField] private AuthContainer[] auths;
         public AuthContainer[] AuthContainers => auths;
-        [SerializeField] private AuthRepositoryContainer defaultRepository;
-        
-        [Serializable]
-        public class AuthRepositoryContainer : InterfaceContainer<IAuthDataRepository>
+        [FormerlySerializedAs("defaultRepositoryType")] [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
+        private TypeReference defaultTokenRepositoryType = new(typeof(PlayerPrefsAuthDataRepository));
+        [SerializeField] private string[] previousKeys;
+
+        private void OnValidate()
         {
-            [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
-            private TypeReference typeReference;
-            public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
+            Cache();
+        }
+
+        private void Cache()
+        {
+            var authRepos =
+                IGenericSingleton.GetSingleton<IAuthDataRepository, PlayerPrefsAuthDataRepository>(defaultTokenRepositoryType.Type);
+            foreach (var key in previousKeys)
+                authRepos.Delete(key);
+            previousKeys = auths.Select(e => e.Cache(authRepos)).Where(e => !string.IsNullOrEmpty(e)).ToArray();
         }
     }
 }

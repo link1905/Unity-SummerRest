@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
@@ -41,27 +44,45 @@ namespace SummerRest.Runtime.Parsers
 
         public T Deserialize<T>(string data, DataFormat dataFormat)
             => StaticDeserialize<T>(data, dataFormat);
-        public static string StaticSerialize<T>(T data, DataFormat dataFormat)
+        public static string StaticSerialize<T>(T data, DataFormat dataFormat, bool beauty = false)
         {
             if (data is null)
                 return default;
             if (data is string str)
                 return str;
+            var format = beauty ? Formatting.Indented : Formatting.None;
             switch (dataFormat)
             {
                 case DataFormat.Json:
-                    return JsonConvert.SerializeObject(data);
+                    return JsonConvert.SerializeObject(data, format);
                 case DataFormat.Bson:
                     break;
                 case DataFormat.Xml:
                     var node = JsonConvert.DeserializeXmlNode(
                         JsonConvert.SerializeObject(data), 
                         RootName);
+                    if (beauty)
+                        return GetIndentedXmlString(node);
                     return node.OuterXml;
             }
             return default;
         }
 
+        private static string GetIndentedXmlString(XmlDocument xmlDoc)
+        {
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "    ", // Use spaces for indentation, adjust as needed
+                NewLineChars = "\n",   // Use newline character for line breaks, adjust as needed
+                NewLineHandling = NewLineHandling.Replace,
+                OmitXmlDeclaration = true // Set to true if you don't want an XML declaration
+            };
+            using var stringWriter = new StringWriter();
+            using (var xmlWriter = XmlWriter.Create(stringWriter, settings)) 
+                xmlDoc.Save(xmlWriter);
+            return stringWriter.ToString();
+        }
         private const string RootName = "root";
         public string Serialize<T>(T data, DataFormat dataFormat)
             => StaticSerialize(data, dataFormat);

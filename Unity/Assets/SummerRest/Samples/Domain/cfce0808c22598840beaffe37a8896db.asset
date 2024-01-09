@@ -15,7 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 5d43a7a649b6e7644855c3e628405d1d, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 1c72f74f7db5f1149b5e539e5b8bfd74, type: 2}
   endpointName: Request 1
-  url: example2.com/service1/asdasdas
+  url: example.com/service1/asdasdas
   path: asdasdas
   dataFormat:
     inherit: 2
@@ -80,12 +80,35 @@ MonoBehaviour:
         GUID: 
         _typeNameAndAssembly: 
         _suppressLogs: 0
-  urlWithParam: example2.com/service1/asdasdas?123123=aaaaaa
+  urlWithParam: example.com/service1/asdasdas?123123=aaaaaa
   latestResponse:
     dateTime: 01/08/2024 14:12:53
     statusCode: 200
     headers: []
-    body: 
+    body: 'asdasdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+      asd
+
+
+      asd
+
+      as
+
+      d
+
+      asd
+
+      as
+
+      d
+
+      asd
+
+      as
+
+      das
+
+      dasd'
   references:
     version: 2
     RefIds:

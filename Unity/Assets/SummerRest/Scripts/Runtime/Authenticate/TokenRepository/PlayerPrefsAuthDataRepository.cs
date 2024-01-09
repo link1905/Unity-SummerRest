@@ -3,12 +3,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using SummerRest.Runtime.Parsers;
+using SummerRest.Utilities.DataStructures;
 using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Runtime.Authenticate.TokenRepository
 {
-    public class PlayerRefAuthDataRepository : IAuthDataRepository
+    public class PlayerPrefsAuthDataRepository : IAuthDataRepository<PlayerPrefsAuthDataRepository>
     {
         private readonly ConcurrentDictionary<string, string> _cache = new();
         private readonly IDataSerializer _dataSerializer = new DefaultDataSerializer();

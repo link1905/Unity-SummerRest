@@ -230,7 +230,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa25f1df9d9c4c3b8be9d09bb2a00583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  authentication:
-    inherit: 8
-    value:
-      authKey: my token
+  authContainer:
+    type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+      typeReference:
+        GuidAssignmentFailed: 0
+        GUID: 
+        _typeNameAndAssembly: 
+        _suppressLogs: 0
+    key: 
+    appenderType:
+      GuidAssignmentFailed: 0
+      GUID: 7e8b6b7dc0134fedb3fccab7a74807f2
+      _typeNameAndAssembly: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
+        SummerRest
+      _suppressLogs: 0
+  requestBody:
+    type: 1
+    text: asdasdsadsad
+    body:
+      value:
+        rid: 6516271267311779840
+      typeReference:
+        GuidAssignmentFailed: 0
+        GUID: 
+        _typeNameAndAssembly: SummerRest.Samples.Behaviours.TestMonoBehaviour+CustomRequestBodyData,
+          Sameple.Behaviours
+        _suppressLogs: 0
+    serializedData: "{\r\n  \"A\": \"sadasdsa\",\r\n  \"B\": 123123\r\n}"
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6516271267311779840
+      type: {class: TestMonoBehaviour/CustomRequestBodyData, ns: SummerRest.Samples.Behaviours, asm: Sameple.Behaviours}
+      data:
+        a: sadasdsa
+        b: 123123

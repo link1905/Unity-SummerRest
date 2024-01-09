@@ -3,7 +3,12 @@ using SummerRest.Utilities.DataStructures;
 
 namespace SummerRest.Runtime.Authenticate.TokenRepository
 {
-    public interface IAuthDataRepository : IDefaultSupport<IAuthDataRepository, PlayerRefAuthDataRepository>
+    public interface IAuthDataRepository<TSelf> : ISingleton<TSelf>, IAuthDataRepository where TSelf : class, IAuthDataRepository<TSelf>, new()
+    {
+    
+    }
+
+    public interface IAuthDataRepository : IDefaultSupport<IAuthDataRepository, PlayerPrefsAuthDataRepository>
     {
         void Save<TData>(string key, TData data);
         void Delete(string key);

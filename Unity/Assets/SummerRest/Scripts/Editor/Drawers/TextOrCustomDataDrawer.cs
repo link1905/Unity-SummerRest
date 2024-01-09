@@ -2,11 +2,12 @@
 using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
 {
-    [CustomPropertyDrawer(typeof(TextOrCustomData<,>), true)]
+    [CustomPropertyDrawer(typeof(TextOrCustomData<,>))]
     internal class TextOrCustomDataDrawer : UIToolkitDrawer
     {
         public override string AssetPath => "Assets/SummerRest/Editors/Templates/Properties/text-or-custom.uxml";

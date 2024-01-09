@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   auths:
   - type: 0
-    text: asdasdasdasdasdsa
+    text: 
     body:
       value:
         rid: -2
@@ -23,21 +23,19 @@ MonoBehaviour:
         GUID: 
         _typeNameAndAssembly: 
         _suppressLogs: 0
-    key: my token
+    key: my key
     appenderType:
       GuidAssignmentFailed: 0
       GUID: 7e8b6b7dc0134fedb3fccab7a74807f2
       _typeNameAndAssembly: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
         SummerRest
       _suppressLogs: 0
-  defaultRepository:
-    value:
-      rid: -2
-    typeReference:
-      GuidAssignmentFailed: 0
-      GUID: 
-      _typeNameAndAssembly: 
-      _suppressLogs: 0
+  defaultTokenRepositoryType:
+    GuidAssignmentFailed: 0
+    GUID: 9aba7cb4d05a42b0b0cef2e08ba58429
+    _typeNameAndAssembly: SummerRest.Runtime.Authenticate.TokenRepository.PlayerRefAuthDataRepository,
+      SummerRest
+    _suppressLogs: 0
   references:
     version: 2
     RefIds:
