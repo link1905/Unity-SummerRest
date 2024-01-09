@@ -7,6 +7,8 @@ namespace SummerRest.Runtime.RequestAdaptor
     public class RawUnityWebRequestAdaptor<TResponse> : UnityWebRequestAdaptor<RawUnityWebRequestAdaptor<TResponse>, TResponse>
     {
         private string _rawResponse;
+        public override string RawResponse => _rawResponse;
+
         protected override void DoneRequest()
         {
             _rawResponse = WebRequest.downloadHandler.text;
@@ -29,7 +31,6 @@ namespace SummerRest.Runtime.RequestAdaptor
             var parser = IContentTypeParser.Current;
             return BuildResponse(request.GetResponseHeader(parser.ContentTypeHeaderKey), rawResponse);
         }
-        public override IWebResponse<TResponse> WebResponse => new UnityWebResponse(WebRequest, _rawResponse, ResponseData);
         public override void Dispose()
         {
             _rawResponse = default;

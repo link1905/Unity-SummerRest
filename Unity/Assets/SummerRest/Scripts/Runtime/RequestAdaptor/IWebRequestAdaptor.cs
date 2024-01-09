@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.Request;
 using SummerRest.Scripts.Utilities.RequestComponents;
 
@@ -17,8 +18,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         int TimeoutSeconds { get; set; }
         ContentType? ContentType { get; set; }
         IEnumerator RequestInstruction { get; }
-        IWebResponse<TResponse> WebResponse { get; }
+        WebResponse<TResponse> WebResponse { get; }
         TResponse ResponseData { get; }
-        Task<TResponse> RequestAsync { get; }
     }
 }

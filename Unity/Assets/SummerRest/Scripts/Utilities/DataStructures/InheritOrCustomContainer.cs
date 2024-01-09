@@ -7,9 +7,8 @@ namespace SummerRest.Scripts.Utilities.DataStructures
     public class InheritOrCustomContainer<T>
     {
         [SerializeField] private InheritChoice inherit = InheritChoice.Inherit;
-        [SerializeField] private T cache;
-        public T CacheValue => cache;
-        public InheritChoice Choice => inherit;
+        [SerializeField] private Present<T> cache;
+        public Present<T> CacheValue => cache;
         [SerializeField] private T value;
         public void Validate(InheritChoice allow, InheritChoice defaultWhenNoParent, object parent)
         {
@@ -26,9 +25,9 @@ namespace SummerRest.Scripts.Utilities.DataStructures
                 return defaultWhenNoParent;
             return null;
         }
-        public void Cache<TParent>(TParent parent, 
-            Func<TParent, T> whenInherit, 
-            Func<TParent, T, T> whenAppend = null,
+        public Present<T> Cache<TParent>(TParent parent, 
+            Func<TParent, Present<T>> whenInherit, 
+            Func<TParent, T, Present<T>> whenAppend = null,
             InheritChoice allow = InheritChoice.None | InheritChoice.Inherit | InheritChoice.Custom, 
             InheritChoice defaultWhenNoParent = InheritChoice.Custom)
         {
@@ -37,16 +36,16 @@ namespace SummerRest.Scripts.Utilities.DataStructures
             {
                 case InheritChoice.AppendToParent:
                     if (whenAppend != null) 
-                        cache = whenAppend.Invoke(parent, value);
+                        return cache = whenAppend.Invoke(parent, value);
                     break;
                 case InheritChoice.Inherit:
                     if (whenInherit != null) 
-                         cache = whenInherit.Invoke(parent);
+                        return cache = whenInherit.Invoke(parent);
                     break;
                 case InheritChoice.Custom:
-                     cache = value;
-                     break;
+                    return cache = new Present<T>(true, value);
             }
+            return new Present<T>(false, value);
         }
 
     }

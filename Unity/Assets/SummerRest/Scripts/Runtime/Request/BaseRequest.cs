@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Scripts.Utilities.RequestComponents;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.Request
 {
@@ -14,6 +14,7 @@ namespace SummerRest.Runtime.Request
     {
         public string AbsoluteUrl { get; private set; }
         private string _url;
+
         public string Url
         {
             get => _url;
@@ -23,9 +24,12 @@ namespace SummerRest.Runtime.Request
                 RebuildUrl();
             }
         }
+
         public RequestParamContainer Params { get; } = new();
-        public IDictionary<string, string> Headers { get; } = 
+
+        public IDictionary<string, string> Headers { get; } =
             new Dictionary<string, string>();
+
         public HttpMethod Method { get; set; }
         public int? RedirectLimit { get; set; }
         public int? TimeoutSeconds { get; set; }
@@ -33,20 +37,24 @@ namespace SummerRest.Runtime.Request
         public IAuthAppender AuthAppender { get; set; }
         public ContentType? ContentType { get; set; }
         public virtual string SerializedBody => null;
+
         protected BaseRequest(string url, string absoluteUrl)
         {
             _url = url;
             AbsoluteUrl = absoluteUrl;
         }
+
         public static TRequest Create()
         {
             var request = new TRequest();
             return request;
         }
+
         protected void Init()
         {
             Params.OnChangedParams += RebuildUrl;
         }
+
         // Gen this constructor
         protected void RebuildUrl()
         {
@@ -62,8 +70,7 @@ namespace SummerRest.Runtime.Request
             appender.Append(AuthKey, requestAdaptor);
         }
 
-        private IEnumerator SetRequestDataAndWait<TResponse>(
-            IWebRequestAdaptor<TResponse> requestAdaptor)
+        private void SetRequestData<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor)
         {
             if (RedirectLimit.HasValue)
                 requestAdaptor.RedirectLimit = RedirectLimit.Value;
@@ -74,9 +81,17 @@ namespace SummerRest.Runtime.Request
             foreach (var (k, v) in Headers)
                 requestAdaptor.SetHeader(k, v);
             SetAuthData(requestAdaptor);
+        }
+
+        #region Coroutine
+
+        private IEnumerator SetRequestDataAndWait<TResponse>(
+            IWebRequestAdaptor<TResponse> requestAdaptor)
+        {
+            SetRequestData(requestAdaptor);
             yield return requestAdaptor.RequestInstruction;
         }
-    
+
         private bool HandleError<TResponse>(
             IWebRequestAdaptor<TResponse> request, Action<string> errorCallback)
         {
@@ -86,88 +101,138 @@ namespace SummerRest.Runtime.Request
                 if (errorCallback is not null)
                     errorCallback(msg);
                 else
-                    Debug.LogErrorFormat(@"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it", msg, AbsoluteUrl);
+                    Debug.LogErrorFormat(
+                        @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
+                        msg, AbsoluteUrl);
             }
+
             return error;
         }
-        private IEnumerator SimpleResponseCoroutine<TResponse>(
-            IWebRequestAdaptor<TResponse> request, 
+
+        private IEnumerator SimpleRequestCoroutine<TResponse>(
+            IWebRequestAdaptor<TResponse> request,
             Action<TResponse> doneCallback, Action<string> errorCallback)
         {
             yield return SetRequestDataAndWait(request);
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.ResponseData);
         }
-        public IEnumerator SimpleResponseCoroutine<TResponse>(UnityWebRequest webRequest, 
-            Action<TResponse> doneCallback, Action<string> errorCallback = null)
+
+        // public IEnumerator SimpleRequestCoroutine<TResponse>(UnityWebRequest webRequest,
+        //     Action<TResponse> doneCallback, Action<string> errorCallback = null)
+        // {
+        //     using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest<TResponse>(webRequest);
+        //     request.Url = AbsoluteUrl;
+        //     request.Method = Method;
+        //     yield return SimpleRequestCoroutine(request, doneCallback, errorCallback);
+        // }
+        public IEnumerator SimpleRequestCoroutine<TBody>(Action<TBody> doneCallback,
+            Action<string> errorCallback = null)
         {
-            using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest<TResponse>(webRequest);
-            request.Url = AbsoluteUrl;
-            request.Method = Method;
-            yield return SimpleResponseCoroutine(request, doneCallback, errorCallback);
+            using var request =
+                IWebRequestAdaptorProvider.Current.GetDataRequest<TBody>(AbsoluteUrl, Method, SerializedBody);
+            yield return SimpleRequestCoroutine(request, doneCallback, errorCallback);
         }
-        public IEnumerator SimpleResponseCoroutine(Action<Texture2D> doneCallback, 
+        public IEnumerator SimpleTextureRequestCoroutine(Action<Texture2D> doneCallback,
             bool readable, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-            yield return SimpleResponseCoroutine(request, doneCallback, errorCallback);
+            yield return SimpleRequestCoroutine(request, doneCallback, errorCallback);
         }
-        public IEnumerator SimpleResponseCoroutine(Action<AudioClip> doneCallback, 
+        public IEnumerator SimpleAudioRequestCoroutine(Action<AudioClip> doneCallback,
             AudioType audioType, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-            yield return SimpleResponseCoroutine(request, doneCallback, errorCallback);
+            yield return SimpleRequestCoroutine(request, doneCallback, errorCallback);
         }
-        public IEnumerator SimpleResponseCoroutine<TBody>(Action<TBody> doneCallback, 
-            Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TBody>(AbsoluteUrl, Method, SerializedBody);
-            yield return SimpleResponseCoroutine(request, doneCallback, errorCallback);
-        }
-    
-        private IEnumerator DetailedResponseCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request, 
-            Action<IWebResponse<TResponse>> doneCallback, Action<string> errorCallback)
+
+
+        private IEnumerator DetailedRequestCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request,
+            Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback)
         {
             yield return SetRequestDataAndWait(request);
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.WebResponse);
         }
-        public IEnumerator DetailedResponseCoroutine<TResponse>(UnityWebRequest webRequest, 
-            Action<IWebResponse<TResponse>> doneCallback, Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest<TResponse>(webRequest);
-            yield return DetailedResponseCoroutine(request, doneCallback, errorCallback);
-        }
-        public IEnumerator DetailedResponseCoroutine(Action<IWebResponse<Texture2D>> doneCallback, 
+
+        // public IEnumerator DetailedRequestCoroutine<TResponse>(UnityWebRequest webRequest,
+        //     Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback = null)
+        // {
+        //     using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest<TResponse>(webRequest);
+        //     yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
+        // }
+
+        public IEnumerator DetailedTextureRequestCoroutine(Action<WebResponse<Texture2D>> doneCallback,
             bool readable, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-            yield return DetailedResponseCoroutine(request, doneCallback, errorCallback);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
-        public IEnumerator DetailedResponseCoroutine(Action<IWebResponse<AudioClip>> doneCallback, 
+
+        public IEnumerator DetailedAudioRequestCoroutine(Action<WebResponse<AudioClip>> doneCallback,
             AudioType audioType, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-            yield return DetailedResponseCoroutine(request, doneCallback, errorCallback);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
-        public IEnumerator DetailedResponseCoroutine<TBody>(Action<IWebResponse<TBody>> doneCallback,
+
+        public IEnumerator DetailedRequestCoroutine<TBody>(Action<WebResponse<TBody>> doneCallback,
             Action<string> errorCallback = null)
         {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TBody>(AbsoluteUrl, Method, SerializedBody);
-            yield return DetailedResponseCoroutine(request, doneCallback, errorCallback);
+            using var request =
+                IWebRequestAdaptorProvider.Current.GetDataRequest<TBody>(AbsoluteUrl, Method, SerializedBody);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
-    }
 
-    // public abstract class BaseRequest<TRequest, TRequestBody> : BaseRequest<TRequest>, IWebRequest<TRequestBody>
-    //     where TRequest : BaseRequest<TRequest>, new()
-    // {
-    //     public TRequestBody BodyData { get; set; }
-    //     public DataFormat BodyFormat { get; set; }
-    //
-    //     public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-    //
-    //     protected BaseRequest(string url) : base(url)
-    //     {
-    //     }
-    // }
+        #endregion
+
+        #region Task
+        private async UniTask<TResponse> SimpleRequestAsync<TResponse>(
+            IWebRequestAdaptor<TResponse> request)
+        {
+            await SetRequestDataAndWait(request);
+            if (request.IsError(out var msg))
+                throw new Exception(msg);
+            return request.ResponseData;
+        }
+
+        public UniTask<TResponse> SimpleRequestAsync<TResponse>()
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+            return SimpleRequestAsync(request);
+        }        
+        public UniTask<Texture2D> SimpleTextureRequestAsync(bool readable)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
+            return SimpleRequestAsync(request);
+        }        
+        public UniTask<AudioClip> SimpleAudioRequestAsync(AudioType audioType)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            return SimpleRequestAsync(request);
+        }        
+        
+        private async UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>(
+            IWebRequestAdaptor<TResponse> request)
+        {
+            await SetRequestDataAndWait(request);
+            return request.WebResponse;
+        }
+        public UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>()
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+            return DetailedRequestAsync(request);
+        }        
+        public UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(bool readable)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
+            return DetailedRequestAsync(request);
+        }        
+        public UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(AudioType audioType)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            return DetailedRequestAsync(request);
+        }        
+        #endregion
+    }
 }

@@ -50,7 +50,7 @@ MonoBehaviour:
     cache: 0
     value: 0
   redirectsLimit:
-    inherit: 8
+    inherit: 1
     cache: 0
     value: 0
   services:

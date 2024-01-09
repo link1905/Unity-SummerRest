@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -18,102 +17,102 @@ namespace SummerRest.Scripts.Tests
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_200_And_Json_Data()
         {
-            var provider = new TestWebRequestAdaptorProvider("application/json", @"{""A"":5}", 200, null);
+            var provider = new TestWebRequestAdaptorProvider("application/json", @"{""A"":5}", HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestRequest.Create();
             var expected = new TestRequest.TestResponseData
             {
                 A = 5
             };
-            yield return request.SimpleResponseCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.SimpleRequestCoroutine<TestRequest.TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.SimpleResponseCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty), e =>
+            // yield return request.SimpleRequestCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty), e =>
+            // {
+            //     Assert.That(e.Equals(expected));
+            // });
+            yield return request.DetailedRequestCoroutine<TestRequest.TestResponseData>(e =>
             {
-                Assert.That(e.Equals(expected));
-            });
-            yield return request.DetailedResponseCoroutine<TestRequest.TestResponseData>(e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.OK);
+                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
                 Assert.IsNull(e.Error);
                 Assert.That(e.Data.Equals(expected));
             });
-            yield return request.DetailedResponseCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty),e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.OK);
-                Assert.IsNull(e.Error);
-                Assert.That(e.Data.Equals(expected));
-            });
+            // yield return request.DetailedRequestCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty),e =>
+            // {
+            //     Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
+            //     Assert.IsNull(e.Error);
+            //     Assert.That(e.Data.Equals(expected));
+            // });
         }
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_201_And_Xml_Data()
         {
-            var provider = new TestWebRequestAdaptorProvider("application/xml", "<root><A>3</A></root>", 201, null);
+            var provider = new TestWebRequestAdaptorProvider("application/xml", "<root><A>3</A></root>", HttpStatusCode.Created, null);
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestRequest.Create();
             var expected = new TestRequest.TestResponseData
             {
                 A = 3
             };
-            yield return request.SimpleResponseCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.SimpleRequestCoroutine<TestRequest.TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.SimpleResponseCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty), e =>
+            // yield return request.SimpleRequestCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty), e =>
+            // {
+            //     Assert.That(e.Equals(expected));
+            // });
+            yield return request.DetailedRequestCoroutine<TestRequest.TestResponseData>(e =>
             {
-                Assert.That(e.Equals(expected));
-            });
-            yield return request.DetailedResponseCoroutine<TestRequest.TestResponseData>(e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.Created);
+                Assert.AreEqual(HttpStatusCode.Created, e.StatusCode);
                 Assert.IsNull(e.Error);
                 Assert.That(e.Data.Equals(expected));
             });
-            yield return request.DetailedResponseCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty),e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.Created);
-                Assert.IsNull(e.Error);
-                Assert.That(e.Data.Equals(expected));
-            });
+            // yield return request.DetailedAudioRequestCoroutine<TestRequest.TestResponseData>(UnityWebRequest.Get(string.Empty),e =>
+            // {
+            //     Assert.AreEqual(HttpStatusCode.Created, e.StatusCode);
+            //     Assert.IsNull(e.Error);
+            //     Assert.That(e.Data.Equals(expected));
+            // });
         }
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_500_And_Plain()
         {
             const string result = "internal server error response";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", result, 500, null);
+            var provider = new TestWebRequestAdaptorProvider("text/plain", result, HttpStatusCode.InternalServerError, null);
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestRequest.Create();
-            yield return request.SimpleResponseCoroutine<string>(e =>
+            yield return request.SimpleRequestCoroutine<string>(e =>
             {
                 Assert.AreEqual(result, e);
             });
-            yield return request.SimpleResponseCoroutine<string>(UnityWebRequest.Get(string.Empty), e =>
+            // yield return request.SimpleRequestCoroutine<string>(UnityWebRequest.Get(string.Empty), e =>
+            // {
+            //     Assert.AreEqual(result, e);
+            // });
+            yield return request.DetailedRequestCoroutine<string>(e =>
             {
-                Assert.AreEqual(result, e);
-            });
-            yield return request.DetailedResponseCoroutine<string>(e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.InternalServerError);
+                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
                 Assert.IsNull(e.Error);
                 Assert.AreEqual(result, e.Data);
             });
-            yield return request.DetailedResponseCoroutine<string>(UnityWebRequest.Get(string.Empty),e =>
-            {
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.InternalServerError);
-                Assert.IsNull(e.Error);
-                Assert.AreEqual(result, e.Data);
-            });
+            // yield return request.DetailedAudioRequestCoroutine<string>(UnityWebRequest.Get(string.Empty),e =>
+            // {
+            //     Assert.AreEqual(e.StatusCode, HttpStatusCode.InternalServerError);
+            //     Assert.IsNull(e.Error);
+            //     Assert.AreEqual(result, e.Data);
+            // });
         }
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_On_Error_Callback()
         {
             const string error = "connection error";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, 500, error);
+            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestRequest.Create().SimpleResponseCoroutine<string>(null, e =>
+            yield return TestRequest.Create().SimpleRequestCoroutine<string>(null, e =>
             {
                 Assert.AreEqual(error, e);
             });
@@ -123,9 +122,9 @@ namespace SummerRest.Scripts.Tests
         public IEnumerator Test_Internal_Request_Missing_Log_When_Error_Callback_Absent()
         {
             const string error = "connection error";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, 500, error);
+            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestRequest.Create().SimpleResponseCoroutine<string>(null);
+            yield return TestRequest.Create().SimpleRequestCoroutine<string>(null);
             var msg = string.Format(
                 @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
                 error, string.Empty);
@@ -156,10 +155,10 @@ namespace SummerRest.Scripts.Tests
         {
             private readonly string _fixedContentType;
             private readonly string _fixedRawResponse;
-            private readonly int _code;
+            private readonly HttpStatusCode _code;
             private readonly string _fixedError;
             private readonly IWebRequestAdaptorProvider _wrapped;
-            public TestWebRequestAdaptorProvider(string fixedContentType, string fixedRawResponse, int code,
+            public TestWebRequestAdaptorProvider(string fixedContentType, string fixedRawResponse, HttpStatusCode code,
                 string fixedError)
             {
                 this._fixedContentType = fixedContentType;
@@ -195,7 +194,7 @@ namespace SummerRest.Scripts.Tests
             RawUnityWebRequestAdaptor<TResponse>, TResponse>
         {
             public RawTestWebRequestAdaptor(RawUnityWebRequestAdaptor<TResponse> webRequest,
-                string fixedContentType, string fixedRawResponse, int code, string fixedError) :
+                string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
                 base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
             {
             }
@@ -262,13 +261,13 @@ namespace SummerRest.Scripts.Tests
             }
 
             protected readonly TWrappedAdaptor Wrapped;
-            protected readonly int StatusCode;
+            protected readonly HttpStatusCode StatusCode;
             protected readonly string FixedContentType;
             protected readonly string FixedRawResponse;
             protected readonly string FixedError;
 
             public TestWebRequestAdaptor(TWrappedAdaptor wrapped, string fixedContentType, string fixedRawResponse,
-                int code, string fixedError)
+                HttpStatusCode code, string fixedError)
             {
                 Wrapped = wrapped;
                 FixedContentType = fixedContentType;
@@ -277,33 +276,15 @@ namespace SummerRest.Scripts.Tests
                 FixedError = fixedError;
             }
 
-            public IWebResponse<TResponse> WebResponse =>
-                new UnityWebResponse(StatusCode, FixedContentType, FixedRawResponse, ResponseData, FixedError);
-            private readonly struct UnityWebResponse : IWebResponse<TResponse>
-            {
-                public object WrappedRequest => null;
-
-                public UnityWebResponse(int code, string contentType, string rawResponse,
-                    TResponse response, string error)
-                {
-                    RawData = rawResponse;
-                    StatusCode = (HttpStatusCode)code;
-                    _contentTypeStr = contentType;
-                    Error = error;
-                    Data = response;
-                }
-                public string RawData { get; }
-                public IEnumerable<KeyValuePair<string, string>> Headers => null;
-                private readonly string _contentTypeStr;
-
-                public ContentType ContentType
-                    => IContentTypeParser.Current.ParseContentTypeFromHeader(_contentTypeStr);
-                public HttpStatusCode StatusCode { get; }
-                public string Error { get; }
-                public TResponse Data { get; }
-            }
+            public WebResponse<TResponse> WebResponse             => new(null,
+                StatusCode,
+                IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
+                null,
+                FixedError,
+                FixedRawResponse ,
+                ResponseData
+            );
             public TResponse ResponseData { get; protected set; }
-            public Task<TResponse> RequestAsync { get; }
         }
     }
 }
