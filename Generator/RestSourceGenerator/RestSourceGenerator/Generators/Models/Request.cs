@@ -50,7 +50,7 @@ AuthKey = ""{AuthContainer.Value.AuthKey}"";
         {
             if (string.IsNullOrEmpty(SerializedBody))
                 return string.Empty;
-            return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody.Replace("\"", "\"\"")}"", DataFormat.Json);";
+            return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody.Replace("\"", "\"\"")}"", DataFormat.{DataFormat});";
         }
         public void BuildRequest(StringBuilder builder)
         {
