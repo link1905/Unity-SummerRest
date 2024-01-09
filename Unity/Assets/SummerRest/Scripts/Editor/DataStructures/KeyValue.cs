@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.DataStructures
+namespace SummerRest.Editor.DataStructures
 {
     [Serializable]
     public struct KeyValue

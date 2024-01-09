@@ -1,4 +1,4 @@
-using SummerRest.Scripts.Utilities.DataStructures;
+using SummerRest.Editor.DataStructures;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;

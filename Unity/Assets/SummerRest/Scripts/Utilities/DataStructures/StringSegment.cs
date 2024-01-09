@@ -1,6 +1,6 @@
 using System;
 
-namespace SummerRest.Scripts.Utilities.DataStructures
+namespace SummerRest.Utilities.DataStructures
 {
     // Utility struct for string non-alloc splitting
     // https://www.meziantou.net/split-a-string-into-lines-without-allocation.htm

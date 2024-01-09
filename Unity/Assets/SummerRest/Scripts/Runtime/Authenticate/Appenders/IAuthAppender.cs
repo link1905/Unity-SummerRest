@@ -1,6 +1,6 @@
 ﻿using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
-using SummerRest.Scripts.Utilities.DataStructures;
+using SummerRest.Utilities.DataStructures;
 
 namespace SummerRest.Runtime.Authenticate.Appenders
 {

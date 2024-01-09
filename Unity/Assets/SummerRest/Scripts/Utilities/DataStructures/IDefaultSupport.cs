@@ -1,4 +1,4 @@
-﻿namespace SummerRest.Runtime.Parsers
+﻿namespace SummerRest.Utilities.DataStructures
 {
     public interface IDefaultSupport<TInterface, TDefault> where TDefault : TInterface, new()
     {

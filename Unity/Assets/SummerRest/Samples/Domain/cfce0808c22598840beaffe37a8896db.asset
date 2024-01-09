@@ -19,39 +19,51 @@ MonoBehaviour:
   path: asdasdas
   dataFormat:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 1
+      value: 0
     value: 0
   auth:
     inherit: 2
     cache:
-      authKey: my token
+      hasValue: 1
+      value:
+        authKey: my token
     value:
       authKey: my token
   headers:
     inherit: 2
     cache:
-    - key: header2
-      value: value2
-    - key: header1
-      value: value1
+      hasValue: 1
+      value:
+      - key: header2
+        value: value2
+      - key: header1
+        value: value1
     value: []
   contentType:
     inherit: 2
     cache:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 0
+      value: 0
     value: 0
   redirectsLimit:
     inherit: 2
-    cache: 0
+    cache:
+      hasValue: 0
+      value: 0
     value: 0
   method: 0
   requestParams:
@@ -59,7 +71,7 @@ MonoBehaviour:
     value: aaaaaa
   requestBody:
     type: 0
-    text: 
+    text: I need to call the "cat" request
     body:
       value:
         rid: -2

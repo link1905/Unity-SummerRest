@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Request;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
     public class RequestBuilderTest
     {

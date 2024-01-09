@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate.TokenRepository;
-using SummerRest.Scripts.Utilities.DataStructures;
 using TypeReferences;
 using UnityEngine;
 

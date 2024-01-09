@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SummerRest.Scripts.Utilities.DataStructures
+namespace SummerRest.Editor.DataStructures
 {
     [Flags]
     public enum InheritChoice

@@ -26,14 +26,14 @@ namespace RestSourceGenerator.Generators.Models
         {
             if (Headers is not { Length: > 0 })
                 return string.Empty;
-            return Headers.BuildSequentialValues(e => $@"Headers.Add(""{e.Key})"", ""{e.Value})""", ";");
+            return Headers.BuildSequentialValues(e => $@"Headers.Add(""{e.Key}"", ""{e.Value}"")", ";") + ";";
         }
 
         private string BuildParams()
         {
             if (RequestParams is not { Length: > 0 })
                 return string.Empty;
-            return RequestParams.BuildSequentialValues(e => $@"Params.AddParam(""{e.Key})"", ""{e.Value})""", ";");
+            return RequestParams.BuildSequentialValues(e => $@"Params.AddParam(""{e.Key}"", ""{e.Value}"")", ";") + ";";
         }
 
         private string BuildAuth()
@@ -42,7 +42,7 @@ namespace RestSourceGenerator.Generators.Models
                 return string.Empty;
             return $@"
 AuthAppender = IAuthAppender<{AuthContainer.Value.AppenderType}>.GetSingleton();
-AuthKey = {AuthContainer.Value.AuthKey};
+AuthKey = ""{AuthContainer.Value.AuthKey}"";
 ";
         }
 
@@ -50,24 +50,25 @@ AuthKey = {AuthContainer.Value.AuthKey};
         {
             if (string.IsNullOrEmpty(SerializedBody))
                 return string.Empty;
-            return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody}"", DataFormat.Json)";
+            return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody.Replace("\"", "\"\"")}"", DataFormat.Json);";
         }
         public void BuildRequest(StringBuilder builder)
         {
+            var className = EndpointName.ToClassName();
             var method = $"HttpMethod.{Method}";
             var timeout = TimeoutSeconds.HasValue ? $"{nameof(TimeoutSeconds)} = {TimeoutSeconds.Value};" : string.Empty;
             var redirects = RedirectsLimit.HasValue ? $"{nameof(RedirectsLimit)} = {RedirectsLimit.Value};" : string.Empty;
             var contentType = ContentType.HasValue ? 
-                $@"{nameof(ContentType)} = new ContentType(""{ContentType.Value.MediaType}"", ""{ContentType.Value.CharSet}"", ""{ContentType.Value.Boundary}"")" : string.Empty;
+                $@"{nameof(ContentType)} = new ContentType(""{ContentType.Value.MediaType}"", ""{ContentType.Value.CharSet}"", ""{ContentType.Value.Boundary}"");" : string.Empty;
             var headers = BuildHeaders();
             var @params = BuildParams();
             var auth = BuildAuth();
-            var dataFormat = $"BodyFormat = DataFormat.{DataFormat}";
+            var dataFormat = $"BodyFormat = DataFormat.{DataFormat};";
             var body = BuildBody();
             builder.Append($@"
-public class {EndpointName} : BaseRequest<{EndpointName}>
+public class {className} : BaseRequest<{className}>
 {{
-    public {EndpointName}() : base(""{Url}"", ""{UrlWithParams}"") 
+    public {className}() : base(""{Url}"", ""{UrlWithParams}"") 
     {{
         Method = {method};
         {timeout}
@@ -79,12 +80,12 @@ public class {EndpointName} : BaseRequest<{EndpointName}>
         Init();
     }}
 }}
-public class {EndpointName}<TRequestBody> : {EndpointName}, IWebRequest<TRequestBody>
+public class {className}<TRequestBody> : {className}, IWebRequest<TRequestBody>
 {{
     public TRequestBody BodyData {{ get; set; }}
     public DataFormat BodyFormat {{ get; set; }}
     public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-    public {EndpointName}() : base({Url}) 
+    public {className}() : base(""{Url}"", ""{UrlWithParams}"") 
     {{
         {dataFormat}
         {body}
@@ -100,7 +101,7 @@ public class {EndpointName}<TRequestBody> : {EndpointName}, IWebRequest<TRequest
             }
             else
             {
-                builder.Append($"public class {EndpointName} {{");
+                builder.Append($"public class {EndpointName.ToClassName()} {{");
                 if (Requests is not null)
                 {
                     foreach (var request in Requests)
@@ -111,8 +112,8 @@ public class {EndpointName}<TRequestBody> : {EndpointName}, IWebRequest<TRequest
                     foreach (var service in Services)
                         service.BuildClass(builder);
                 }   
+                builder.Append("}");
             }
-            builder.Append("}");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
-using SummerRest.Scripts.Utilities.DataStructures;
+using SummerRest.Editor.DataStructures;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models

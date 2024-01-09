@@ -1,4 +1,5 @@
 ﻿using SummerRest.Runtime.Parsers;
+using SummerRest.Utilities.DataStructures;
 
 namespace SummerRest.Runtime.Authenticate.TokenRepository
 {

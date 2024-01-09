@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using SummerRest.Scripts.Utilities.DataStructures;
+using SummerRest.Editor.DataStructures;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models

@@ -1,6 +1,6 @@
-﻿using SummerRest.Scripts.Utilities.RequestComponents;
+﻿using SummerRest.Utilities.RequestComponents;
 
-namespace SummerRest.Scripts.Utilities.Extensions
+namespace SummerRest.Utilities.Extensions
 {
     public static class HttpMethodExtensions
     {

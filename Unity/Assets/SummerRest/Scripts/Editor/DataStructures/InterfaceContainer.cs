@@ -1,8 +1,7 @@
 using System;
-using Newtonsoft.Json;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.DataStructures
+namespace SummerRest.Editor.DataStructures
 {
     [Serializable]
     public abstract class InterfaceContainer<T> : ISerializationCallbackReceiver where T : class

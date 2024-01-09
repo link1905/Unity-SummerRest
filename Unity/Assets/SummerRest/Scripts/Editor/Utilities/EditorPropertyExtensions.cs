@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using SummerRest.Scripts.Utilities.Extensions;
+using SummerRest.Utilities.Extensions;
 using UnityEditor;
 using UnityEngine;
 

@@ -1,4 +1,5 @@
-﻿using SummerRest.Scripts.Utilities.RequestComponents;
+﻿using SummerRest.Utilities.DataStructures;
+using SummerRest.Utilities.RequestComponents;
 
 namespace SummerRest.Runtime.Parsers
 {

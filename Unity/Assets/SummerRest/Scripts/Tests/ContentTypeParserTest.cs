@@ -1,9 +1,8 @@
 ﻿using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Scripts.Utilities.RequestComponents;
-using UnityEngine;
+using SummerRest.Utilities.RequestComponents;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
     public class ContentTypeParserTest
     {

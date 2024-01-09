@@ -1,4 +1,4 @@
-﻿namespace SummerRest.Scripts.Utilities.DataStructures
+﻿namespace SummerRest.Utilities.DataStructures
 {
     public interface ISingleton<TType> where TType : class, new()
     {

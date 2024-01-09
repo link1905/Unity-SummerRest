@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.Attributes
+namespace SummerRest.Utilities.Attributes
 {
     public class DefaultsAttribute : PropertyAttribute
     {

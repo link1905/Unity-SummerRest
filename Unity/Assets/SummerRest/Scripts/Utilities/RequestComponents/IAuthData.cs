@@ -1,4 +1,4 @@
-﻿namespace SummerRest.Scripts.Utilities.RequestComponents
+﻿namespace SummerRest.Utilities.RequestComponents
 {
     public interface IAuthData { }
 

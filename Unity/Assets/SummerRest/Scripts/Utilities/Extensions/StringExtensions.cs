@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SummerRest.Scripts.Utilities.Extensions
+namespace SummerRest.Utilities.Extensions
 {
     public static class StringExtensions
     {

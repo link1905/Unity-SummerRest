@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
-using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace SummerRest.Editor.Manager
 
     public static class SourceGenerator
     {
-        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile.txt";
+        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
         public static void GenerateAdditionalFile()
         {
             var path = SummerRestConfigurations.Instance.GetAssetFolder() + "/" + FileName;

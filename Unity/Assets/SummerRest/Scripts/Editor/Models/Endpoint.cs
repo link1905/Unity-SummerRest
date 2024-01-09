@@ -1,9 +1,9 @@
 using System.Linq;
 using Newtonsoft.Json;
+using SummerRest.Editor.Attributes;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
-using SummerRest.Scripts.Utilities.Attributes;
-using SummerRest.Scripts.Utilities.DataStructures;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 using UnityEngine.UIElements;
 

@@ -1,5 +1,5 @@
-﻿using SummerRest.Runtime.Parsers;
-using SummerRest.Scripts.Utilities.RequestComponents;
+﻿using SummerRest.Utilities.DataStructures;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
 

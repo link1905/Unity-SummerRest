@@ -1,9 +1,9 @@
 using System;
 using System.Text;
-using SummerRest.Scripts.Utilities.Attributes;
+using SummerRest.Utilities.Attributes;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.RequestComponents
+namespace SummerRest.Utilities.RequestComponents
 {
     [Serializable]
     public struct ContentType

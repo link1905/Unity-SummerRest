@@ -1,7 +1,7 @@
 ﻿using System;
-using SummerRest.Scripts.Utilities.DataStructures;
-using SummerRest.Scripts.Utilities.Extensions;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.DataStructures;
+using SummerRest.Utilities.Extensions;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Runtime.Parsers

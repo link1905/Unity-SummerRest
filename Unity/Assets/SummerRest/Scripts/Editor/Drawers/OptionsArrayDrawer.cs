@@ -1,5 +1,5 @@
-﻿using SummerRest.Editor.Utilities;
-using SummerRest.Scripts.Utilities.DataStructures;
+﻿using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

@@ -1,6 +1,6 @@
 using System;
 
-namespace SummerRest.Scripts.Utilities.RequestComponents
+namespace SummerRest.Utilities.RequestComponents
 {
     [Serializable]
     public enum HttpMethod

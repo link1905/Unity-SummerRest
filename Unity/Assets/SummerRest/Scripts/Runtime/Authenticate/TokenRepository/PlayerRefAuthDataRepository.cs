@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Runtime.Authenticate.TokenRepository

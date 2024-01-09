@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Net;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.Request;
-using SummerRest.Scripts.Utilities.Extensions;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.Extensions;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine.Networking;
 using UnityEngine.Pool;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 using Newtonsoft.Json;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 using Formatting = Newtonsoft.Json.Formatting;
 

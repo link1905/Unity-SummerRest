@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 
 namespace SummerRest.Runtime.Request
 {

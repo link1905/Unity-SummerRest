@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
     public class AuthAppenderTests
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.DataStructures
+namespace SummerRest.Editor.DataStructures
 {
     [Serializable]
     public struct Present<T>

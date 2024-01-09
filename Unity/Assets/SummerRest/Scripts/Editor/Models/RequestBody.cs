@@ -1,7 +1,7 @@
 ﻿using System;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Scripts.Utilities.DataStructures;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using TypeReferences;
 using UnityEngine;
 

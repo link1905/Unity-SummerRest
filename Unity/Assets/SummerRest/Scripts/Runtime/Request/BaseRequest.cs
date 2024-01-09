@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Runtime.Request

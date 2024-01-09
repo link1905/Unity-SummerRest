@@ -1,5 +1,4 @@
 ﻿using SummerRest.Runtime.Parsers;
-using SummerRest.Runtime.Request;
 using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.RequestAdaptor

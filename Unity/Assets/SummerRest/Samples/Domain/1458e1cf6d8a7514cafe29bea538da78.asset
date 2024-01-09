@@ -19,39 +19,51 @@ MonoBehaviour:
   path: 
   dataFormat:
     inherit: 8
-    cache: 0
+    cache:
+      hasValue: 1
+      value: 0
     value: 0
   auth:
     inherit: 8
     cache:
-      authKey: my token
+      hasValue: 1
+      value:
+        authKey: my token
     value:
       authKey: my token
   headers:
     inherit: 8
     cache:
-    - key: header1
-      value: value1
+      hasValue: 1
+      value:
+      - key: header1
+        value: value1
     value:
     - key: header1
       value: value1
   contentType:
-    inherit: 8
+    inherit: 1
     cache:
-      <Charset>k__BackingField: UTF-8
-      <MediaType>k__BackingField: application/json
-      <Boundary>k__BackingField: 
+      hasValue: 1
+      value:
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: application/json
+        <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: UTF-8
       <MediaType>k__BackingField: application/json
       <Boundary>k__BackingField: 
   timeoutSeconds:
-    inherit: 8
-    cache: 0
+    inherit: 1
+    cache:
+      hasValue: 1
+      value: 0
     value: 0
   redirectsLimit:
     inherit: 1
-    cache: 0
+    cache:
+      hasValue: 0
+      value: 0
     value: 0
   services:
   - {fileID: 11400000, guid: 1c72f74f7db5f1149b5e539e5b8bfd74, type: 2}

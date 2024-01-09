@@ -1,7 +1,7 @@
-﻿using SummerRest.Scripts.Utilities.DataStructures;
+﻿using SummerRest.Editor.DataStructures;
 using UnityEngine;
 
-namespace SummerRest.Scripts.Utilities.Attributes
+namespace SummerRest.Editor.Attributes
 {
     public class InheritOrCustomAttribute : PropertyAttribute
     {

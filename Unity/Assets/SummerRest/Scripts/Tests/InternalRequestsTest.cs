@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Net;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Request;
 using SummerRest.Runtime.RequestAdaptor;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
     public class InternalRequestsTest
     {

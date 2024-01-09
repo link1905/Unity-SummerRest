@@ -11,7 +11,7 @@ namespace RestSourceGenerator.Generators
     [Generator]
     public class SummerRestRequestsSourceGenerator : ISourceGenerator
     {
-        private const string FileName = "summer-rest-generated.GeneratorTest.additionalfile";
+        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
         private const string AssemblyName = "SummerRest";
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -19,7 +19,7 @@ namespace RestSourceGenerator.Generators
         public void Execute(GeneratorExecutionContext context)
         {
             var files = context.AdditionalFiles;
-            var file = files.FirstOrDefault(e => Path.GetFileName(e.Path) == FileName);
+            var file = files.FirstOrDefault(e => e.Path.Contains(FileName));
             var text = file?.GetText();
             if (context.Compilation.AssemblyName != AssemblyName || file is null || text is null)
             {
@@ -29,8 +29,8 @@ namespace RestSourceGenerator.Generators
                     FileName));
                 return;
             }
-            Request? request = JsonConvert.DeserializeObject<Request>(text.ToString());
-            if (request is null)
+            var requests = JsonConvert.DeserializeObject<Request[]>(text.ToString());
+            if (requests is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
                     new DiagnosticDescriptor(nameof(SummerRestRequestsSourceGenerator), "Wrong format", 
@@ -38,8 +38,11 @@ namespace RestSourceGenerator.Generators
                 return;
             }
             var builder = new StringBuilder();
-            request.Value.BuildClass(builder);
-            context.GenerateFormattedCode("SummerRestRequests.g.cs", builder.ToString());
+            builder.Append("namespace SummerRest.Requests {");
+            foreach (var request in requests)
+                request.BuildClass(builder);
+            builder.Append("}");
+            context.GenerateFormattedCode("SummerRestRequests", builder.ToString());
         }
     }
 }

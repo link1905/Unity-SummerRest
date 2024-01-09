@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SummerRest.Editor.Utilities;
-using SummerRest.Scripts.Utilities.Attributes;
+using SummerRest.Utilities.Attributes;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;

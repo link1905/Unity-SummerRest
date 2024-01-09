@@ -1,12 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Scripts.Utilities.Extensions;
-using SummerRest.Scripts.Utilities.RequestComponents;
+using SummerRest.Utilities.Extensions;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace SummerRest.Scripts.Tests
+namespace SummerRest.Tests
 {
 
     public class SerializerTest
