@@ -10,7 +10,7 @@ namespace SummerRest.Editor.Window.Elements
 {
     public class EndpointElement : VisualElement
     {
-        public event Action<Endpoint> OnRequest;
+        public event Action<Request, Action> OnRequest;
         private Endpoint _endpoint;
         private Foldout _advancedSettingsFoldout;
         private int _sharedElementsOriginalIndex;
@@ -18,23 +18,26 @@ namespace SummerRest.Editor.Window.Elements
         private TextField _nameElement;
         private TextField _pathElement;
         private TextField _urlElement;
-        private VisualElement _requestBodyElement; 
+        private VisualElement _requestBodyElement;
+        private Button _requestBtn;
+
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
         }
  
         private void OnClick()
         {
-            if (_endpoint is not Request)
+            if (_endpoint is not Request request)
                 return;
-            OnRequest?.Invoke(_endpoint);
+            _requestBtn.SetEnabled(false);
+            OnRequest?.Invoke(request, () => _requestBtn.SetEnabled(true));
         }
 
         public void Init()
         {
             _requestBodyElement = this.Q<VisualElement>("request-body-element");
-             var requestBtn = _requestBodyElement.Q<Button>("request-btn");
-            requestBtn.clicked += OnClick;
+             _requestBtn = _requestBodyElement.Q<Button>("request-btn");
+            _requestBtn.clicked += OnClick;
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");
             _sharedElements = this.Q<VisualElement>("shared-elements");
             _nameElement = this.Q<TextField>("name");

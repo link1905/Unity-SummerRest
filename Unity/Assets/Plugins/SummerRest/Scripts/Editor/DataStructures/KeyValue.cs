@@ -22,6 +22,7 @@ namespace SummerRest.Editor.DataStructures
         }
 
         public static implicit operator KeyValuePair<string, string>(KeyValue key) => new(key.Key, key.Value);
+        public static implicit operator KeyValue(KeyValuePair<string, string> key) => new(key.Key, key.Value);
  
         public void Deconstruct(out string outKey, out string outValue)
         {

@@ -98,7 +98,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             => new(WebRequest,
                 (HttpStatusCode)WebRequest.responseCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(
-                    WebRequest.GetRequestHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
+                    WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
                 WebRequest.GetResponseHeaders(),
                 WebRequest.error,
                 RawResponse,
@@ -109,7 +109,15 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             get
             {
+#if UNITY_EDITOR
+                WebRequest.SendWebRequest();
+                while (!WebRequest.isDone)
+                {
+                    yield return null;
+                }
+#else
                 yield return WebRequest.SendWebRequest();
+#endif
                 if (WebRequest.result != UnityWebRequest.Result.Success)
                     DoneRequest();
             }
@@ -118,7 +126,6 @@ namespace SummerRest.Runtime.RequestAdaptor
 
         public virtual void Dispose()
         {
-            WebRequest?.Dispose();
             WebRequest = default;
             ResponseData = default;
             if (Pool is null || this is not TSelf self)

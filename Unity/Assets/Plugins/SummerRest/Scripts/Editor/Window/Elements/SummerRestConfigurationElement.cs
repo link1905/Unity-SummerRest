@@ -4,6 +4,7 @@ using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Manager;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -139,6 +140,10 @@ namespace SummerRest.Editor.Window.Elements
             _endpointTree = endpointContainer.Q<VisualElement>("domain").Q<TreeView>("endpoint-tree");
             _endpointElement = endpointContainer.Q<EndpointElement>();
             _endpointElement.Init();
+            _endpointElement.OnRequest += (e, callback) =>
+            {
+                EditorCoroutineUtility.StartCoroutine(EditorRequest.Create(e).MakeRequest(callback), this);
+            };
             _endpointTree.makeItem = () =>
             {
                 var endpointTreeElement = _endpointElementTemplate.Instantiate().Q<EndpointTreeElement>();

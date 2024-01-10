@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Authenticate.TokenRepository;
@@ -16,6 +17,7 @@ namespace SummerRest.Editor.Models
         [SerializeField, Inherits(typeof(IAuthAppender), ShowAllTypes = true, AllowInternal = true, ShowNoneElement = false, ShortName = true)] 
         private TypeReference appenderType = new(typeof(BearerTokenAuthAppender));
         public string AppenderType => appenderType?.Type?.FullName;
+        [JsonIgnore] public Type Appender => appenderType.Type; 
         public string Cache(IAuthDataRepository authDataRepository)
         {
             if (string.IsNullOrEmpty(key))

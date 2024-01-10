@@ -11,7 +11,7 @@ namespace SummerRest.Runtime.Request
 {
     public abstract class BaseRequest<TRequest> : IWebRequest where TRequest : BaseRequest<TRequest>, new() 
     {
-        public string AbsoluteUrl { get; private set; }
+        public string AbsoluteUrl { get; protected set; }
         private string _url;
 
         public string Url
