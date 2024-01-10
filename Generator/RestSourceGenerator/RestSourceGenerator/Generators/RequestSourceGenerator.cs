@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
@@ -12,7 +11,7 @@ namespace RestSourceGenerator.Generators
     public class SummerRestRequestsSourceGenerator : ISourceGenerator
     {
         private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
-        private const string AssemblyName = "SummerRest";
+        // private const string AssemblyName = "SummerRest";
         public void Initialize(GeneratorInitializationContext context)
         {
         }
@@ -21,7 +20,7 @@ namespace RestSourceGenerator.Generators
             var files = context.AdditionalFiles;
             var file = files.FirstOrDefault(e => e.Path.Contains(FileName));
             var text = file?.GetText();
-            if (context.Compilation.AssemblyName != AssemblyName || file is null || text is null)
+            if (file is null || text is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
                     new DiagnosticDescriptor(nameof(SummerRestRequestsSourceGenerator), "No file", 
@@ -29,17 +28,19 @@ namespace RestSourceGenerator.Generators
                     FileName));
                 return;
             }
-            var requests = JsonConvert.DeserializeObject<Request[]>(text.ToString());
-            if (requests is null)
+            Configuration? conf = JsonConvert.DeserializeObject<Configuration>(text.ToString());
+            if (conf is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
                     new DiagnosticDescriptor(nameof(SummerRestRequestsSourceGenerator), "Wrong format", 
                         "The format of the generated file can not be deserialized as JSON object", "Debug", DiagnosticSeverity.Warning, true), Location.None));
                 return;
             }
+            if (context.Compilation.AssemblyName != conf.Value.Assembly)
+                return;
             var builder = new StringBuilder();
             builder.Append("namespace SummerRest.Requests {");
-            foreach (var request in requests)
+            foreach (var request in conf.Value.Domains)
                 request.BuildClass(builder);
             builder.Append("}");
             context.GenerateFormattedCode("SummerRestRequests", builder.ToString());

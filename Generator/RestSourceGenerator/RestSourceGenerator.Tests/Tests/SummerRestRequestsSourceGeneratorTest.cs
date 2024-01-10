@@ -1,6 +1,4 @@
-using System.Collections.Immutable;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
@@ -10,9 +8,8 @@ using Xunit;
 
 namespace RestSourceGenerator.Tests.Tests;
 
-
-public class SummerRestRequestsSourceGeneratorTest : 
-  CSharpSourceGeneratorTest<SummerRestRequestsSourceGenerator, XUnitVerifier> 
+public class SummerRestRequestsSourceGeneratorTest :
+    CSharpSourceGeneratorTest<SummerRestRequestsSourceGenerator, XUnitVerifier>
 {
     protected override string DefaultTestProjectName => "SummerRest";
 
@@ -20,7 +17,9 @@ public class SummerRestRequestsSourceGeneratorTest :
     public async Task Test_Generate_Request_From_Json()
     {
         var json = """
-                   [
+                   {
+                      "Assembly": "SummerRest",
+                      "Domains": [
                      {
                        "ActiveVersion": "example2.com",
                        "TypeName": "Domain",
@@ -128,6 +127,7 @@ public class SummerRestRequestsSourceGeneratorTest :
                        "hideFlags": 0
                      }
                    ]
+                   }
                    """;
 
         var expected = """
@@ -135,7 +135,7 @@ public class SummerRestRequestsSourceGeneratorTest :
                        namespace SummerRest.Requests {
                            public class Domain1 {
                                public class MyService {
-                                   public class Request1 : BaseRequest<Request1> {
+                                   public class Request1 : BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
                                        public Request1() : base("example2.com/service1/asdasdas", "example2.com/service1/asdasdas?123123=aaaaaa")
                                        {
                                            Method = HttpMethod.Get;
@@ -144,7 +144,6 @@ public class SummerRestRequestsSourceGeneratorTest :
                                            Headers.Add("header2", "value2");
                                            Headers.Add("header1", "value1");
                                            Params.AddParam("123123", "aaaaaa");
-                                           AuthAppender = IAuthAppender<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender>.GetSingleton();
                                            AuthKey = "my token";
                                            Init();
                                        }

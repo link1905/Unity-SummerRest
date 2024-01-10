@@ -1,0 +1,16 @@
+{
+    "name": "Sample.Behaviours",
+    "rootNamespace": "",
+    "references": [
+        "GUID:02f41f6caf82a0a43952cb6179925d9b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

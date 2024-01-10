@@ -36,14 +36,17 @@ namespace RestSourceGenerator.Generators.Models
             return RequestParams.BuildSequentialValues(e => $@"Params.AddParam(""{e.Key}"", ""{e.Value}"")", ";") + ";";
         }
 
+        private string BuildBaseClass()
+        {
+            if (!AuthContainer.HasValue)
+                return $"BaseRequest<{EndpointName.ToClassName()}>";
+            return $"BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}>";
+        }
         private string BuildAuth()
         {
             if (!AuthContainer.HasValue)
                 return string.Empty;
-            return $@"
-AuthAppender = IAuthAppender<{AuthContainer.Value.AppenderType}>.GetSingleton();
-AuthKey = ""{AuthContainer.Value.AuthKey}"";
-";
+            return $@"AuthKey = ""{AuthContainer.Value.AuthKey}"";";
         }
 
         private string BuildBody()
@@ -66,7 +69,7 @@ AuthKey = ""{AuthContainer.Value.AuthKey}"";
             var dataFormat = $"BodyFormat = DataFormat.{DataFormat};";
             var body = BuildBody();
             builder.Append($@"
-public class {className} : BaseRequest<{className}>
+public class {className} : {BuildBaseClass()}
 {{
     public {className}() : base(""{Url}"", ""{UrlWithParams}"") 
     {{
