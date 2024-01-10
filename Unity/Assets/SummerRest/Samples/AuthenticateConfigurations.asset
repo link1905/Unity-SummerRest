@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   auths:
   - type: 0
-    text: 
+    text: as
     body:
       value:
         rid: -2
@@ -33,9 +33,11 @@ MonoBehaviour:
   defaultTokenRepositoryType:
     GuidAssignmentFailed: 0
     GUID: 9aba7cb4d05a42b0b0cef2e08ba58429
-    _typeNameAndAssembly: SummerRest.Runtime.Authenticate.TokenRepository.PlayerRefAuthDataRepository,
+    _typeNameAndAssembly: SummerRest.Runtime.Authenticate.TokenRepository.PlayerPrefsAuthDataRepository,
       SummerRest
     _suppressLogs: 0
+  previousKeys:
+  - my key
   references:
     version: 2
     RefIds:

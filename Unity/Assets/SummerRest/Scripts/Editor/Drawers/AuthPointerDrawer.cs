@@ -24,9 +24,9 @@ namespace SummerRest.Editor.Drawers
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
-            var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
+            var authConfigure= SummerRestConfiguration.Instance.AuthenticateConfiguration;
             if (authConfigure is null)
-                throw new Exception($"There is no {nameof(AuthenticateConfigurations)} in the project");
+                throw new Exception($"There is no {nameof(AuthenticateConfiguration)} in the project");
             var allIds = authConfigure.AuthContainers.Select(e => e.AuthKey).ToList();
             var noOption = allIds.Count == 0;
             
@@ -52,7 +52,7 @@ namespace SummerRest.Editor.Drawers
         }
         private void ShowPreview(PropertyField previewField, string val)
         {
-            var authConfigure= SummerRestConfigurations.Instance.AuthenticateConfigurations;
+            var authConfigure= SummerRestConfiguration.Instance.AuthenticateConfiguration;
             var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.AuthKey == val);
             if (idx < 0)
             {

@@ -3,16 +3,7 @@ using System.Collections.Generic;
 
 namespace SummerRest.Utilities.DataStructures
 {
-    public interface ISingleton<TType> where TType : class, ISingleton<TType>, new()
-    {
-        private static TType _singleton;
-        public static TType GetSingleton()
-        {
-            return _singleton ??= new TType();
-        }
-    }
-
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     public interface IGenericSingleton
     {
         private static readonly Dictionary<Type, object> Singletons = new();

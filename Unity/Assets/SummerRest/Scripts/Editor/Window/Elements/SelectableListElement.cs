@@ -94,6 +94,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             _selectColor = selectColor;
             _container = this.Q<VisualElement>("container");
+            _previousSelect = null;
         }
 
         public SelectableListElement(VisualTreeAsset elementTreeAsset, Color selectColor)

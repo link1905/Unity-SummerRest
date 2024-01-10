@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate.TokenRepository;
 using SummerRest.Utilities.DataStructures;
 using TypeReferences;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SummerRest.Editor.Configurations
 {
-    [CreateAssetMenu(menuName = "Summer/Rest/AuthenticateConfigurations", fileName = "AuthenticateConfigurations", order = 0)]
-    public class AuthenticateConfigurations : ScriptableObject
+    //[CreateAssetMenu(menuName = "Summer/Rest/AuthenticateConfigurations", fileName = "AuthenticateConfigurations", order = 0)]
+    public class AuthenticateConfiguration : ScriptableObject
     {
         [SerializeField] private AuthContainer[] auths;
         public AuthContainer[] AuthContainers => auths;
-        [FormerlySerializedAs("defaultRepositoryType")] [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
+        [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
         private TypeReference defaultTokenRepositoryType = new(typeof(PlayerPrefsAuthDataRepository));
         [SerializeField] private string[] previousKeys;
 

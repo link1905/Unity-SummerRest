@@ -13,8 +13,8 @@ namespace SummerRest.Editor.Manager
         private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
         public static void GenerateAdditionalFile()
         {
-            var path = SummerRestConfigurations.Instance.GetAssetFolder() + "/" + FileName;
-            var domains = SummerRestConfigurations.Instance.Domains;
+            var path = SummerRestConfiguration.Instance.GetAssetFolder() + "/" + FileName;
+            var domains = SummerRestConfiguration.Instance.Domains;
             var configureJson = JsonConvert.SerializeObject(domains);
             var jsonAsset = EditorAssetUtilities.LoadOrCreate(path, () => new TextAsset());
             if (jsonAsset is null)

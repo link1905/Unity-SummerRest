@@ -1,10 +1,9 @@
-﻿using SummerRest.Runtime.Parsers;
-using SummerRest.Runtime.RequestAdaptor;
+﻿using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Utilities.DataStructures;
 
 namespace SummerRest.Runtime.Authenticate.Appenders
 {
-    public interface IAuthAppender : IDefaultSupport<IAuthAppender, BearerTokenAuthAppender>
+    public interface IAuthAppender
     {
         void Append<TResponse>(string authDataKey, IWebRequestAdaptor<TResponse> requestAdaptor);
     }

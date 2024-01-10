@@ -15,7 +15,6 @@ namespace SummerRest.Editor.Utilities
             var assetPath = Path.Combine(path, $"{name}.asset");
             AssetDatabase.CreateAsset(obj, assetPath);
             AssetDatabase.SaveAssets();
-            AssetDatabase.ForceReserializeAssets(new[] { assetPath});
             return obj;
         }
 

@@ -1,13 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="auth-configures-element" src="project://database/Assets/SummerRest/Editors/Templates/Elements/auth-configures-element.uxml?fileID=9197481963319205126&amp;guid=e6b5296397d3c3e4188fe1a56a8751b7&amp;type=3#auth-configures-element" />
     <ui:Template name="domain-list" src="project://database/Assets/SummerRest/Editors/Templates/Elements/domain-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#domain-list" />
     <ui:Template name="endpoint_UXML" src="project://database/Assets/SummerRest/Editors/Templates/Elements/endpoint_element.uxml?fileID=9197481963319205126&amp;guid=58449a5f23d6d324ba75a61f0255e158&amp;type=3#endpoint_element" />
-    <ui:VisualElement name="main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: column; align-items: stretch; justify-content: center;">
+    <SummerRest.Editor.Window.Elements.SummerRestConfigurationElement style="flex-grow: 1;">
         <uie:Toolbar name="toolbar" style="align-self: auto; justify-content: space-between; height: auto; max-height: none;">
-            <uie:ToolbarButton text="Auth" display-tooltip-when-elided="true" name="auth" />
+            <uie:ToolbarToggle focusable="false" label="Auth settings" name="auth" />
             <uie:ToolbarButton text="Generate source" display-tooltip-when-elided="true" name="gen-btn" style="justify-content: flex-start; align-self: auto; flex-grow: 0; align-items: auto;" />
         </uie:Toolbar>
-        <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 3px; max-height: 30px;" />
-        <ui:TwoPaneSplitView fixed-pane-initial-dimension="300" name="endpoint-container" style="flex-direction: row; visibility: visible;">
+        <ui:Instance template="auth-configures-element" name="auth" style="flex-shrink: 0; display: flex;" />
+        <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 0; max-height: 30px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); padding-left: 0; padding-right: 0; padding-top: 0;" />
+        <ui:TwoPaneSplitView fixed-pane-initial-dimension="150" name="endpoint-container" style="flex-direction: row; visibility: visible;">
             <ui:VisualElement name="domain" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-shrink: 1; min-width: 15%; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: auto;">
                 <uie:Toolbar style="align-self: stretch; align-items: auto; justify-content: flex-start; flex-direction: row; flex-grow: 1; flex-shrink: 1;">
                     <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Add" name="add-menu" style="margin-left: 0; margin-right: 0; padding-left: 10px; padding-right: 10px;" />
@@ -17,5 +19,5 @@
             </ui:VisualElement>
             <ui:Instance template="endpoint_UXML" name="endpoint-prop" style="flex-basis: auto; flex-grow: 0; align-self: stretch; align-items: stretch; flex-shrink: 1;" />
         </ui:TwoPaneSplitView>
-    </ui:VisualElement>
+    </SummerRest.Editor.Window.Elements.SummerRestConfigurationElement>
 </ui:UXML>
