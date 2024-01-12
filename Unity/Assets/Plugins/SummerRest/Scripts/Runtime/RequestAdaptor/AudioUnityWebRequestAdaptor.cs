@@ -5,11 +5,10 @@ namespace SummerRest.Runtime.RequestAdaptor
 {
     internal class AudioUnityWebRequestAdaptor : UnityWebRequestAdaptor<AudioUnityWebRequestAdaptor, AudioClip>
     {
-        public override string RawResponse => null;
 
-        protected override void DoneRequest()
+        internal override AudioClip BuildResponse()
         {
-            ResponseData = DownloadHandlerAudioClip.GetContent(WebRequest);
+            return DownloadHandlerAudioClip.GetContent(WebRequest);
         }
     }
 }

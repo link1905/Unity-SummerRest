@@ -3,21 +3,14 @@ using SummerRest.Utilities.DataStructures;
 using SummerRest.Utilities.Extensions;
 using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
+using ContentType = SummerRest.Utilities.RequestComponents.ContentType;
 
 namespace SummerRest.Runtime.Parsers
 {
     public class DefaultContentTypeParser : IContentTypeParser
     {
-        public const string Json = "application/json";
-        public const string Xml = "application/xml";
-        public const string Plain = "text/plain";
-        public const string Octet = "application/octet-stream";
-        public const string WwwForm = "application/x-www-form-urlencoded";
-        public const string CharSet = "charset";
-        public const string MediaType = "media-type";
-        public const string Boundary = "boundary";
         public const string UnityWebRequestContentTypeHeader = "Content-Type";
-        public ContentType DefaultContentType { get; } = new(WwwForm);
+        public ContentType DefaultContentType { get; } = new(ContentType.MediaTypeNames.Application.WwwForm);
         public string ContentTypeHeaderKey => UnityWebRequestContentTypeHeader;
 
         public DataFormat ParseDataFormatFromResponse(string contentTypeHeader)
@@ -25,13 +18,13 @@ namespace SummerRest.Runtime.Parsers
             var mediaType = ParseMediaTypeFromContentType(contentTypeHeader);
             switch (mediaType)
             {
-                case Json:
+                case ContentType.MediaTypeNames.Application.Json:
                     return DataFormat.Json;
-                case Xml:
+                case ContentType.MediaTypeNames.Application.Xml or ContentType.MediaTypeNames.Application.Soap:
                     return DataFormat.Xml;
-                case Octet:
+                case ContentType.MediaTypeNames.Application.Octet:
                     return DataFormat.Bson;
-                case Plain:
+                case ContentType.MediaTypeNames.Text.Plain or ContentType.MediaTypeNames.Text.RichText:
                     return DataFormat.PlainText;
                 default:
                     Debug.LogWarningFormat(
@@ -41,12 +34,34 @@ namespace SummerRest.Runtime.Parsers
             }
         }
 
+        public static string ExtractFileName(string contentDisposition)
+        {
+            if (!string.IsNullOrEmpty(contentDisposition))
+            {
+                int startIndex = contentDisposition.IndexOf("filename=", StringComparison.InvariantCultureIgnoreCase);
+                if (startIndex != -1)
+                {
+                    startIndex += 9; // "filename=".Length
+                    int endIndex = contentDisposition.IndexOf(";", startIndex, StringComparison.InvariantCultureIgnoreCase);
+                    if (endIndex == -1)
+                    {
+                        endIndex = contentDisposition.Length;
+                    }
+                    string fileName = contentDisposition.Substring(startIndex, endIndex - startIndex);
+                    return fileName.Trim('\"');
+                }
+            }
+
+            // If no filename found, return a default name or handle it accordingly
+            return "UnknownFileName";
+        }
+        
         public ContentType ParseContentTypeFromHeader(string contentTypeHeader)
         {
             if (string.IsNullOrEmpty(contentTypeHeader))
             {
                 Debug.LogWarningFormat(
-                    @"The header ""Content-Type"" is absent from the response -> automatically use {0}", Plain);
+                    @"The header ""Content-Type"" is absent from the response -> automatically use {0}", ContentType.MediaTypeNames.Text.Plain);
                 return new ContentType();
             }
 
@@ -54,8 +69,8 @@ namespace SummerRest.Runtime.Parsers
             string charSet = null;
             string boundary = null;
             var segment = new StringSegment(contentTypeHeader, ';');
-            var charSetSpan = CharSet.AsSpan();
-            var boundarySpan = Boundary.AsSpan();
+            var charSetSpan = ContentType.Headers.CharSet.AsSpan();
+            var boundarySpan = ContentType.Headers.Boundary.AsSpan();
             foreach (var entry in segment)
             {
                 if (entry.Line.IsEmpty)
@@ -80,8 +95,8 @@ namespace SummerRest.Runtime.Parsers
             if (string.IsNullOrEmpty(mediaType))
             {
                 Debug.LogWarningFormat("Media type is absent from the content type {0} -> automatically use {1}",
-                    contentTypeHeader, Plain);
-                mediaType = Plain;
+                    contentTypeHeader, ContentType.MediaTypeNames.Text.Plain);
+                mediaType = ContentType.MediaTypeNames.Text.Plain;
             }
 
             return new ContentType(mediaType, charSet, boundary);
@@ -93,8 +108,8 @@ namespace SummerRest.Runtime.Parsers
             if (string.IsNullOrEmpty(contentTypeHeader))
             {
                 Debug.LogWarningFormat(
-                    @"The header ""Content-Type"" is absent from the response -> automatically use {0}", Plain);
-                return Plain;
+                    @"The header ""Content-Type"" is absent from the response -> automatically use {0}", ContentType.MediaTypeNames.Text.Plain);
+                return ContentType.MediaTypeNames.Text.Plain;
             }
 
             // Get part before ";"

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c20861b636bc4735ab70e078a61211be, type: 3}
-  m_Name: DomainConfigurationsManager
+  m_Name: SummerRestConfiguration
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
-  - {fileID: 11400000, guid: 96c0454b68512c540aea99ba0bc55e6f, type: 2}
-  <AuthenticateConfiguration>k__BackingField: {fileID: 11400000, guid: 9da7520c00f08f944b74f92c37762a19, type: 2}
-  targetAssembly: {fileID: 5897886265953266890, guid: b36a31b590d7e4f4582d0d483c9fda32, type: 3}
+  - {fileID: 11400000, guid: 90cb6237756cb0b4db1c2bbaf24b726b, type: 2}
+  <AuthenticateConfiguration>k__BackingField: {fileID: 11400000, guid: 9ef2dd9eeb50eae499701972d83a297d, type: 2}
+  targetAssembly: {fileID: 0}

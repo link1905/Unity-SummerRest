@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: ed75c1ebdbd25c44eaf9812a973e4c71
+  m_Name: fde021aeb564a22419174f86b259db91
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: Domain 1
-  url: (No origin)
+  endpointName: Example
+  url: http://example.com/
   path: 
   dataFormat:
     inherit: 8
@@ -24,13 +24,13 @@ MonoBehaviour:
       value: 0
     value: 0
   auth:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value:
-        authKey: my key
+        authKey: 
     value:
-      authKey: my key
+      authKey: 
   headers:
     inherit: 1
     cache:
@@ -62,10 +62,10 @@ MonoBehaviour:
       value: 0
     value: 0
   services: []
-  requests: []
+  requests:
+  - {fileID: 11400000, guid: 4a2d3cb5cee81b046837d7dbdeac8b17, type: 2}
   versions:
     values:
-    - 
-    - 
+    - http://example.com
     selectedIndex: 0
-  activeVersion: (No origin)
+  activeVersion: http://example.com

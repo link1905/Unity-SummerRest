@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
@@ -9,26 +10,25 @@ namespace SummerRest.Editor.Window.Elements
 {
     public class InitializeGuideElement : VisualElement
     {
-        private Button _openFolderBtn;
+        private ObjectField _folder;
         private Button _initializeBtn;
-        private TextField _pathField;
         public new class UxmlFactory : UxmlFactory<InitializeGuideElement, UxmlTraits>
         {
         }
         public void Init()
         {
-            _openFolderBtn = this.Q<Button>("open-folder");
-            _initializeBtn = this.Q<Button>("initialize");
-            _pathField = this.Q<TextField>("path");
+            _folder = this.Q<ObjectField>("folder");
+            _initializeBtn = this.Q<Button>("init");
             _initializeBtn.SetEnabled(false);
             _initializeBtn.clicked += InitAssets;
-            _openFolderBtn.clicked += () =>
+            _folder.RegisterValueChangedCallback(change =>
             {
-                var folderPath = EditorUtility.OpenFolderPanel("Select Folder", "Assets", "SummerRestConfiguration");
-                var valid = !string.IsNullOrEmpty(folderPath) && AssetDatabase.IsValidFolder(folderPath); 
-                _pathField.value = folderPath;
-                _initializeBtn.SetEnabled(valid);
-            };
+                var obj = change.newValue;
+                var notValid = obj is null || !AssetDatabase.IsValidFolder(AssetDatabase.GetAssetPath(obj));
+                _initializeBtn.SetEnabled(!notValid);
+                if (notValid)
+                    _folder.SetValueWithoutNotify(null);
+            });
         }
 
         private void InitAssets()
@@ -39,14 +39,15 @@ namespace SummerRest.Editor.Window.Elements
             }
             catch (SingletonException e)
             {
-                if (e.Count != 0)
+                if (e.Count != 0 || _folder.value is null)
                     return;
-                var path = _pathField.value;
-                if (!AssetDatabase.IsValidFolder(path))
+                var folder = AssetDatabase.GetAssetPath(_folder.value);
+                if (!AssetDatabase.IsValidFolder(folder))
                     return;
-                var conf = EditorAssetUtilities.CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), path);
-                conf.AuthenticateConfiguration = EditorAssetUtilities.CreateAndSaveObject<AuthenticateConfiguration>(nameof(AuthenticateConfiguration), path);
+                var conf = EditorAssetUtilities.CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
+                conf.AuthenticateConfiguration = EditorAssetUtilities.CreateAndSaveObject<AuthenticateConfiguration>(nameof(AuthenticateConfiguration), folder);
                 conf.MakeDirty();
+                EditorUtility.RequestScriptReload();
             }
         }
     }

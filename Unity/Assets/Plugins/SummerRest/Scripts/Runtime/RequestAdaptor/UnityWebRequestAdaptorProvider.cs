@@ -17,9 +17,9 @@ namespace SummerRest.Runtime.RequestAdaptor
             var request = UnityWebRequestMultimedia.GetAudioClip(url, audioType);
             return AudioUnityWebRequestAdaptor.Create(request);
         }
-        public IWebRequestAdaptor<TResponse> GetFromUnityWebRequest<TResponse>(UnityWebRequest webRequest)
+        public IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest)
         {
-            return RawUnityWebRequestAdaptor<TResponse>.Create(webRequest);
+            return DumpUnityWebRequestAdaptor.Create(webRequest);
         }
         public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
             string url, HttpMethod method, string bodyData)

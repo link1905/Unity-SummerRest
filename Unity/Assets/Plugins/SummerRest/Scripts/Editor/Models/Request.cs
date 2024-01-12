@@ -37,8 +37,8 @@ namespace SummerRest.Editor.Models
         private IEnumerable<KeyValuePair<string, string>> Params => requestParams?.Select(e => (KeyValuePair<string, string>)e);
         public override void CacheValues()
         {
-            urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
             base.CacheValues();
+            urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
             requestBody.CacheValue(DataFormat);
         }
         public override void Delete(bool fromParent)

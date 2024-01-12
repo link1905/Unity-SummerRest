@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
+using SummerRest.Utilities.Extensions;
 using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.Request
 {
@@ -103,25 +105,35 @@ namespace SummerRest.Runtime.Request
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.ResponseData);
         }
-        protected IEnumerator TextureRequestCoroutine(Action<Texture2D> doneCallback,
-            bool readable, Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-            yield return RequestCoroutine(request, doneCallback, errorCallback);
-        }
-        protected IEnumerator AudioRequestCoroutine(Action<AudioClip> doneCallback,
-            AudioType audioType, Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-            yield return RequestCoroutine(request, doneCallback, errorCallback);
-        }
-        protected IEnumerator RequestCoroutine<TResponse>(Action<TResponse> doneCallback,
+        public IEnumerator RequestCoroutine<TResponse>(Action<TResponse> doneCallback,
             Action<string> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
         }
+        public IEnumerator RequestCoroutineFromUnityWebRequest(UnityWebRequest webRequest, Action<UnityWebRequest> doneCallback,
+            Action<string> errorCallback = null)
+        {
+            using var request =
+                IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
+            webRequest.url = AbsoluteUrl;
+            webRequest.method = Method.ToUnityHttpMethod();
+            yield return RequestCoroutine(request, doneCallback, errorCallback);
+        }
+        public IEnumerator TextureRequestCoroutine(Action<Texture2D> doneCallback,
+            bool readable, Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
+            yield return RequestCoroutine(request, doneCallback, errorCallback);
+        }
+        public IEnumerator AudioRequestCoroutine(Action<AudioClip> doneCallback,
+            AudioType audioType, Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            yield return RequestCoroutine(request, doneCallback, errorCallback);
+        }
+
         protected IEnumerator DetailedRequestCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request,
             Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback)
         {
@@ -129,83 +141,36 @@ namespace SummerRest.Runtime.Request
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.WebResponse);
         }
-        protected IEnumerator DetailedTextureRequestCoroutine(Action<WebResponse<Texture2D>> doneCallback,
-            bool readable, Action<string> errorCallback = null)
+        public IEnumerator DetailedRequestCoroutineFromUnityWebRequest(UnityWebRequest webRequest, Action<WebResponse<UnityWebRequest>> doneCallback,
+            Action<string> errorCallback = null)
         {
-            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
+            using var request =
+                IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
+            webRequest.url = AbsoluteUrl;
+            webRequest.method = Method.ToUnityHttpMethod();
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
-
-        protected IEnumerator DetailedAudioRequestCoroutine(Action<WebResponse<AudioClip>> doneCallback,
-            AudioType audioType, Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
-        }
-
-        protected IEnumerator DetailedRequestCoroutine<TBody>(Action<WebResponse<TBody>> doneCallback,
+        public IEnumerator DetailedRequestCoroutine<TBody>(Action<WebResponse<TBody>> doneCallback,
             Action<string> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TBody>(AbsoluteUrl, Method, SerializedBody);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
+        public IEnumerator DetailedTextureRequestCoroutine(Action<WebResponse<Texture2D>> doneCallback,
+            bool readable, Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
+        }
 
-        // protected IEnumerator AuthRequestCoroutine<TResponse, TAuthAppender>(
-        //     IWebRequestAdaptor<TResponse> request,
-        //     Action<TResponse> doneCallback, Action<string> errorCallback) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     yield return SetAuthRequestDataAndWait<TResponse, TAuthAppender>(request);
-        //     if (!HandleError(request, errorCallback))
-        //         doneCallback?.Invoke(request.ResponseData);
-        // }
-        // protected IEnumerator AuthRequestCoroutine<TResponse, TAuthAppender>(Action<TResponse> doneCallback,
-        //     Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request =
-        //         IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-        //     yield return AuthRequestCoroutine<TResponse, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
-        // protected IEnumerator TextureAuthRequestCoroutine<TAuthAppender>(Action<Texture2D> doneCallback,
-        //     bool readable, Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-        //     yield return AuthRequestCoroutine<Texture2D, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
-        // protected IEnumerator AudioAuthRequestCoroutine<TAuthAppender>(Action<AudioClip> doneCallback,
-        //     AudioType audioType, Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-        //     yield return AuthRequestCoroutine<AudioClip, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
-        //
-        
-        // protected IEnumerator DetailedAuthRequestCoroutine<TResponse, TAuthAppender>(IWebRequestAdaptor<TResponse> request,
-        //     Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     yield return SetAuthRequestDataAndWait<TResponse, TAuthAppender>(request);
-        //     if (!HandleError(request, errorCallback))
-        //         doneCallback?.Invoke(request.WebResponse);
-        // }
-        // protected IEnumerator DetailedTextureAuthRequestCoroutine<TAuthAppender>(Action<WebResponse<Texture2D>> doneCallback,
-        //     bool readable, Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-        //     yield return DetailedAuthRequestCoroutine<Texture2D, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
-        // protected IEnumerator DetailedAudioRequestCoroutine<TAuthAppender>(Action<WebResponse<AudioClip>> doneCallback,
-        //     AudioType audioType, Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-        //     yield return DetailedAuthRequestCoroutine<AudioClip, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
-        // protected IEnumerator DetailedAuthRequestCoroutine<TResponse, TAuthAppender>(Action<WebResponse<TResponse>> doneCallback,
-        //     Action<string> errorCallback = null) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request =
-        //         IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-        //     yield return DetailedAuthRequestCoroutine<TResponse, TAuthAppender>(request, doneCallback, errorCallback);
-        // }
+        public IEnumerator DetailedAudioRequestCoroutine(Action<WebResponse<AudioClip>> doneCallback,
+            AudioType audioType, Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
+        }
+
 
         #endregion
 
@@ -218,45 +183,27 @@ namespace SummerRest.Runtime.Request
                 throw new Exception(msg);
             return request.ResponseData;
         }
-        protected UniTask<TResponse> RequestAsync<TResponse>()
+        public UniTask<TResponse> RequestAsync<TResponse>()
         {
             using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
             return RequestAsync(request);
         }        
-        protected UniTask<Texture2D> TextureRequestAsync(bool readable)
+        public UniTask<UnityWebRequest> RequestFromUnityWebRequestAsync(UnityWebRequest webRequest)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
+            return RequestAsync(request);
+        }     
+        public UniTask<Texture2D> TextureRequestAsync(bool readable)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
             return RequestAsync(request);
         }        
-        protected UniTask<AudioClip> AudioRequestAsync(AudioType audioType)
+        public UniTask<AudioClip> AudioRequestAsync(AudioType audioType)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
             return RequestAsync(request);
         }        
         
-        // protected async UniTask<TResponse> AuthRequestAsync<TResponse, TAuthAppender>(
-        //     IWebRequestAdaptor<TResponse> request) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     await SetAuthRequestDataAndWait<TResponse, TAuthAppender>(request);
-        //     if (request.IsError(out var msg))
-        //         throw new Exception(msg);
-        //     return request.ResponseData;
-        // }
-        // protected UniTask<TResponse> AuthRequestAsync<TResponse, TAuthAppender>() where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-        //     return AuthRequestAsync<TResponse, TAuthAppender>(request);
-        // }        
-        // protected UniTask<Texture2D> TextureAuthRequestAsync<TAuthAppender>(bool readable) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-        //     return AuthRequestAsync<Texture2D, TAuthAppender>(request);
-        // }        
-        // protected UniTask<AudioClip> AudioAuthRequestAsync<TAuthAppender>(AudioType audioType) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-        //     return AuthRequestAsync<AudioClip, TAuthAppender>(request);
-        // }       
         
         protected async UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>(
             IWebRequestAdaptor<TResponse> request)
@@ -264,47 +211,26 @@ namespace SummerRest.Runtime.Request
             await SetRequestDataAndWait(request);
             return request.WebResponse;
         }
-        protected UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>()
+        public UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>()
         {
             using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
             return DetailedRequestAsync(request);
         }        
-        protected UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(bool readable)
+        public UniTask<WebResponse<UnityWebRequest>> DetailedRequestFromUnityWebRequestAsync(UnityWebRequest webRequest)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
+            return DetailedRequestAsync(request);
+        }     
+        public UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(bool readable)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
             return DetailedRequestAsync(request);
         }        
-        protected UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(AudioType audioType)
+        public UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(AudioType audioType)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
             return DetailedRequestAsync(request);
         }        
-        
-        
-        // protected async UniTask<WebResponse<TResponse>> DetailedAuthRequestAsync<TResponse, TAuthAppender>(
-        //     IWebRequestAdaptor<TResponse> request) where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     await SetAuthRequestDataAndWait<TResponse, TAuthAppender>(request);
-        //     return request.WebResponse;
-        // }
-        // protected UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse, TAuthAppender>() 
-        //     where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-        //     return DetailedAuthRequestAsync<TResponse, TAuthAppender>(request);
-        // }        
-        // protected UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync<TAuthAppender>(bool readable)
-        //     where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
-        //     return DetailedAuthRequestAsync<Texture2D, TAuthAppender>(request);
-        // }        
-        // protected UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync<TAuthAppender>(AudioType audioType)
-        //     where TAuthAppender : class, IAuthAppender<TAuthAppender>, new()
-        // {
-        //     using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
-        //     return DetailedAuthRequestAsync<AudioClip, TAuthAppender>(request);
-        // }
         #endif
     }
 }

@@ -1,12 +1,27 @@
 ﻿using System;
+using Unity.Collections;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Utilities
 {
     public static class UIToolkitExtensions
     {
+        public static void ReplaceBackgroundColor(this IStyle style, Color color)
+        {
+            var oldStyle = style.backgroundColor;
+            oldStyle.value = color;
+            style.backgroundColor = oldStyle;
+        }
+        public static NativeArray<byte> GetArrayValue(this SerializedProperty serializedProperty)
+        {
+            var nativeBytes = new NativeArray<byte>(serializedProperty.arraySize, Allocator.Temp);
+            for (var i = 0; i < serializedProperty.arraySize; i++)
+                nativeBytes[i] = (byte)serializedProperty.GetArrayElementAtIndex(i).intValue;
+            return nativeBytes;
+        }
         public static void BindChildrenToProperties(this VisualElement visualElement, SerializedObject serializedObject)
         {
             foreach (var child in visualElement.Children())
@@ -39,7 +54,17 @@ namespace SummerRest.Editor.Utilities
                 bindableElement.Unbind();
             }
         }
-
+        public static void BindPropertyNoLabel(this PropertyField field, SerializedObject property)
+        {
+            field.BindProperty(property);
+            field.RegisterCallback<GeometryChangedEvent>(_ =>
+            {
+                var label = field.Q<Label>();
+                if (label is null)
+                    return;
+                label.style.display = DisplayStyle.None;
+            });
+        }
         public static void FitLabel<T>(this BaseField<T> baseField)
         {
             baseField.labelElement.style.minWidth = StyleKeyword.Auto;

@@ -11,7 +11,10 @@ namespace SummerRest.Editor.Models
         {
             activeVersion = versions.Value;
             if (string.IsNullOrEmpty(activeVersion))
-                activeVersion = "(No origin)";
+            {
+                activeVersion = "http://localhost:8080";
+                versions.Values = new[] { activeVersion };
+            }
             base.CacheValues();
         }
         [SerializeField, JsonIgnore] private string activeVersion;

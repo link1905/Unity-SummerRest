@@ -57,7 +57,7 @@ namespace SummerRest.Editor.Window.Elements
         private void SetupGenerateSourceButton()
         {
             var targetAssembly = this.Q<PropertyField>("target-assembly");
-            targetAssembly.BindProperty(new SerializedObject(_configuration));
+            targetAssembly.BindPropertyNoLabel(new SerializedObject(_configuration));
             var genBtn = this.Q<ToolbarButton>("gen-btn");
             genBtn.clicked += SourceGenerator.GenerateAdditionalFile;
         }
@@ -90,11 +90,12 @@ namespace SummerRest.Editor.Window.Elements
 
         private Domain OnAddDomain()
         {
-            var path = _configuration.GetAssetFolder(nameof(Domain));
+            EditorAssetUtilities.CreateFolderIfNotExists(_configuration.GetAssetFolder(), "Domains");
+            var path = _configuration.GetAssetFolder("Domains");
             var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(path);
             _configuration.Domains.Add(domain);
             domain.Domain = domain;
-            domain.EndpointName = $"Domain {_configuration.Domains.Count}";
+            domain.EndpointName = $"Domain{_configuration.Domains.Count}";
             _configuration.MakeDirty();
             return domain;
         }
@@ -120,11 +121,14 @@ namespace SummerRest.Editor.Window.Elements
             });
             addMenu.menu.AppendAction(
                 ElementAddAction.Service.ToString(),
-                _ => { OnEndpointElementOnOnAddChild(ElementAddAction.Service, _currentSelectedDomain); }
+                _ => {
+                {
+                    AddEndpointToCurrentDomain(ElementAddAction.Service);
+                } }
             );
             addMenu.menu.AppendAction(
                 ElementAddAction.Request.ToString(),
-                _ => { OnEndpointElementOnOnAddChild(ElementAddAction.Request, _currentSelectedDomain); }
+                _ => { AddEndpointToCurrentDomain(ElementAddAction.Request); }
             );
             var searchField = _domainElement.Q<ToolbarSearchField>();
             searchField.RegisterValueChangedCallback(e =>
@@ -133,6 +137,17 @@ namespace SummerRest.Editor.Window.Elements
                     return;
                 FindEndpoint(e.newValue);
             });
+        }
+
+        private void AddEndpointToCurrentDomain(ElementAddAction elementAddAction)
+        {
+            if (_currentSelectedDomain is null)
+            {
+                EditorUtility.DisplayDialog("No domain detected!", "You must select or create a domain first",
+                    "Ok");
+                return;
+            }
+            OnEndpointElementOnOnAddChild(elementAddAction, _currentSelectedDomain);
         }
         private void SetupEndpointsTree()
         {
@@ -196,7 +211,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             if (endpoint is not EndpointContainer endpointContainer) 
                 return;
-            var path = _configuration.GetAssetFolder(nameof(Domain));
+            var path = _configuration.GetAssetFolder("Domains");
             switch (elementAddAction)
             {
                 case ElementAddAction.Service:

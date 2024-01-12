@@ -15,8 +15,8 @@ namespace SummerRest.Runtime.RequestAdaptor
         IPoolable<TSelf, UnityWebRequest> where TSelf : UnityWebRequestAdaptor<TSelf, TResponse>, new()
     {
         protected UnityWebRequest WebRequest { get; private set; }
-        public abstract string RawResponse { get; }
-        public TResponse ResponseData { get; protected set; }
+        public virtual string RawResponse => null;
+        public TResponse ResponseData { get; private set; }
         public IObjectPool<TSelf> Pool { get; set; }
 
         public static TSelf Create(UnityWebRequest webRequest)
@@ -92,7 +92,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             }
         }
 
-        protected abstract void DoneRequest();
+        internal abstract TResponse BuildResponse();
 
         public WebResponse<TResponse> WebResponse
             => new(WebRequest,
@@ -118,8 +118,8 @@ namespace SummerRest.Runtime.RequestAdaptor
 #else
                 yield return WebRequest.SendWebRequest();
 #endif
-                if (WebRequest.result != UnityWebRequest.Result.Success)
-                    DoneRequest();
+                if (WebRequest.result == UnityWebRequest.Result.Success)
+                    ResponseData = BuildResponse();
             }
         }
 

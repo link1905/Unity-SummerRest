@@ -62,7 +62,6 @@ namespace SummerRest.Editor.Utilities
                 Ok = "Yes, please remove it!",
             };
 
-
             public bool ShowDialog()
             {
                 return EditorUtility.DisplayDialog(Title, Message, Ok, Cancel);

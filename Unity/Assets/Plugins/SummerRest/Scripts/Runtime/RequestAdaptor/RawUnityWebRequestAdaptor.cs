@@ -9,13 +9,12 @@ namespace SummerRest.Runtime.RequestAdaptor
     {
         private string _rawResponse;
         public override string RawResponse => _rawResponse;
-
-        protected override void DoneRequest()
+        internal override TResponse BuildResponse()
         {
             _rawResponse = WebRequest.downloadHandler.text;
-            ResponseData = BuildResponse(WebRequest, _rawResponse);
+            return BuildResponse(WebRequest, _rawResponse);
         }
-        public TResponse BuildResponse(string header, string response)
+        internal TResponse BuildResponse(string header, string response)
         {
             var parser = IContentTypeParser.Current;
             var dataFormatFromResponse =

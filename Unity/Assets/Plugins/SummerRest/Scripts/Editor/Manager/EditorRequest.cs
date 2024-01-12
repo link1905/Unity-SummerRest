@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Net.Mime;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate.Appenders;
+using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Request;
 using SummerRest.Runtime.RequestAdaptor;
 using Unity.EditorCoroutines.Editor;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SummerRest.Editor.Manager
 {
@@ -21,6 +25,8 @@ namespace SummerRest.Editor.Manager
             if (_request.AuthContainer is null) 
                 return;
             AuthKey = _request.AuthContainer.AuthKey;
+            if (string.IsNullOrEmpty(AuthKey))
+                return;
             var appender = IGenericSingleton.GetSingleton<IAuthAppender, BearerTokenAuthAppender>(_request.AuthContainer.Appender);
             appender.Append(AuthKey, requestAdaptor);
         }
@@ -33,8 +39,9 @@ namespace SummerRest.Editor.Manager
             TimeoutSeconds = request.TimeoutSeconds;
             Method = request.Method;
             ContentType = request.ContentType;
-            foreach (var header in request.Headers)
-                Headers.Add(header);
+            if (request.Headers is not null)
+                foreach (var header in request.Headers)
+                    Headers.Add(header);
             SerializedBody = request.SerializedBody;
         }
 
@@ -50,9 +57,21 @@ namespace SummerRest.Editor.Manager
             response.Clear();
             yield return DetailedRequestCoroutine<string>(r =>
             {
+                if (r.WrappedRequest is not UnityWebRequest handler)
+                    return;
                 response.StatusCode = r.StatusCode;
-                response.Body = r.Data;
                 response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
+
+                var body = response.Body;
+                var mediaType = response.Body.MediaType = r.ContentType.MediaType;
+                body.MediaType = mediaType;
+                body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
+                body.RawBody = r.RawData;
+                if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||
+                    mediaType == MediaTypeNames.Application.Octet)
+                {
+                    body.RawBytes.SetData(mediaType.StartsWith("image/"), handler.downloadHandler.data);
+                }
             }, r =>
             {
                 response.Error = r;

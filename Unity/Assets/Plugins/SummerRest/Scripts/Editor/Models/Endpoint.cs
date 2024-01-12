@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Newtonsoft.Json;
 using SummerRest.Editor.Attributes;
@@ -112,9 +113,17 @@ namespace SummerRest.Editor.Models
             
             var authCache = auth.Cache(Parent, whenInherit: p => new Present<AuthPointer>(p.AuthContainer != null, p.AuthContainer));
             AuthContainer = authCache.HasValue ? authCache.Value : null;
-            
-            url = $"{Domain.ActiveVersion}{FullPath}";
-            
+
+            if (Domain is null)
+                return;
+            try
+            {
+                url = new Uri($"{Domain.ActiveVersion}{FullPath}").AbsoluteUri;
+            }
+            catch (Exception)
+            {
+                Debug.LogWarningFormat("{0} is not a valid URL", url);
+            }
         }
         
         private void OnValidate()

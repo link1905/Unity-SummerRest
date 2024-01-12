@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
-using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -34,19 +33,16 @@ namespace SummerRest.Editor.Models
             set => headers = value;
         }
         
-        [SerializeField, TextMultiline] private string body;
-        public string Body
-        {
-            get => body;
-            set => body = value;
-        }
+        [SerializeField] private ResponseBody body;
+        public ResponseBody Body => body;
+
         public void Clear()
         {
             lastCall = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             error = string.Empty;
             statusCode = HttpStatusCode.OK;
             headers = Array.Empty<KeyValue>();
-            body = string.Empty;
+            body.Clear();
         }
     }
 }

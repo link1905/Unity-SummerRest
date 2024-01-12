@@ -17,9 +17,12 @@ namespace SummerRest.Editor.Drawers
         private void DrawOptionElement(SerializedProperty indexProp, SerializedProperty valuesProp, Rect rect, int idx)
         {
             var element = valuesProp.GetArrayElementAtIndex(idx);
+            var fullWidth = rect.width;
+            rect.width = 20f;
             var enable = EditorGUI.Toggle(rect, indexProp.intValue == idx);
             if (enable)
                 indexProp.intValue = idx;
+            rect.width = fullWidth - rect.width;
             rect.x += 20f;
             EditorGUI.PropertyField(rect, element, GUIContent.none);
             element.serializedObject.ApplyModifiedProperties();

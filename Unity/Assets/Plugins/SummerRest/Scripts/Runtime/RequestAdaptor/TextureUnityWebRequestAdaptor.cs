@@ -5,11 +5,9 @@ namespace SummerRest.Runtime.RequestAdaptor
 {
     internal class TextureUnityWebRequestAdaptor : UnityWebRequestAdaptor<TextureUnityWebRequestAdaptor, Texture2D>
     {
-        public override string RawResponse => null;
-
-        protected override void DoneRequest()
+        internal override Texture2D BuildResponse()
         {
-            ResponseData = DownloadHandlerTexture.GetContent(WebRequest);
+            return DownloadHandlerTexture.GetContent(WebRequest);
         }
     }
 }
