@@ -39,8 +39,8 @@ namespace RestSourceGenerator.Generators.Models
         private string BuildBaseClass()
         {
             if (!AuthContainer.HasValue)
-                return $"BaseRequest<{EndpointName.ToClassName()}>";
-            return $"BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}>";
+                return $"SummerRest.Runtime.Request.BaseRequest<{EndpointName.ToClassName()}>";
+            return $"SummerRest.Runtime.Request.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}>";
         }
         private string BuildAuth()
         {
@@ -88,7 +88,7 @@ public class {className}<TRequestBody> : {className}, IWebRequest<TRequestBody>
     public TRequestBody BodyData {{ get; set; }}
     public DataFormat BodyFormat {{ get; set; }}
     public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-    public {className}() : base(""{Url}"", ""{UrlWithParams}"") 
+    public {className}() : base() 
     {{
         {dataFormat}
         {body}
@@ -104,7 +104,7 @@ public class {className}<TRequestBody> : {className}, IWebRequest<TRequestBody>
             }
             else
             {
-                builder.Append($"public class {EndpointName.ToClassName()} {{");
+                builder.Append($"public static class {EndpointName.ToClassName()} {{");
                 if (Requests is not null)
                 {
                     foreach (var request in Requests)

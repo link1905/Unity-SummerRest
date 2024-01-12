@@ -73,13 +73,15 @@ namespace SummerRest.Utilities.RequestComponents
         
         [field: SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
         public string Charset { get; private set; }
+
         [field: SerializeField, Defaults(
-                    MediaTypeNames.Application.Json, MediaTypeNames.Application.WwwForm, MediaTypeNames.Application.Soap,  MediaTypeNames.Application.Xml, MediaTypeNames.Application.Octet,
+                    MediaTypeNames.Application.Json, MediaTypeNames.Application.WwwForm,
+                    MediaTypeNames.Application.Soap, MediaTypeNames.Application.Xml, MediaTypeNames.Application.Octet,
                     MediaTypeNames.Text.Plain, MediaTypeNames.Text.RichText,
                     MediaTypeNames.Multipart.FormData, MediaTypeNames.Multipart.Mixed,
                     MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png,
                     MediaTypeNames.Audio.Wav, MediaTypeNames.Audio.Mpeg
-                    )]
+                )]
         public string MediaType { get; private set; }
         [field: SerializeField] public string Boundary { get; private set; }
 

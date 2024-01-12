@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Utilities;
+using SummerRest.Utilities.DataStructures;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,11 +11,12 @@ namespace SummerRest.Editor.Manager
 
     public static class SourceGenerator
     {
-        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
+        private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
         public static void GenerateAdditionalFile()
         {
             var path = SummerRestConfiguration.Instance.GetAssetFolder() + "/" + FileName;
-            var configureJson = JsonConvert.SerializeObject(SummerRestConfiguration.Instance);
+            var configureJson = JsonConvert.SerializeObject(SummerRestConfiguration.Instance,
+                Formatting.Indented, ISingleton<EndpointContainerJsonConverter>.GetSingleton());
             var jsonAsset = EditorAssetUtilities.LoadOrCreate(path, () => new TextAsset());
             if (jsonAsset is null)
             {

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - {fileID: 11400000, guid: 90cb6237756cb0b4db1c2bbaf24b726b, type: 2}
+  - {fileID: 11400000, guid: 8148cdadda411c944825711e2a2cff3b, type: 2}
   <AuthenticateConfiguration>k__BackingField: {fileID: 11400000, guid: 9ef2dd9eeb50eae499701972d83a297d, type: 2}
   targetAssembly: {fileID: 0}
