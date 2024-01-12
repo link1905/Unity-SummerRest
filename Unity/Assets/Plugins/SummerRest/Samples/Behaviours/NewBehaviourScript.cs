@@ -1,9 +1,16 @@
 using UnityEngine;
 
-namespace Plugins.SummerRest.Samples.Behaviours
+public class NewBehaviourScript : MonoBehaviour
 {
-    public class NewBehaviourScript : MonoBehaviour
+    
+    // Start is called before the first frame update
+    void Start()
     {
-        [SerializeField] private AudioClip audioSource;
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
     }
 }

@@ -1,12 +1,13 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
-  &lt;Assembly Path="D:\Application\Unity\UnityStrorage\2022.3.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\Src\SummerRest\Unity\Assets\Plugins\SummerRest\Scripts\Runtime\RestSourceGenerator.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\Src\SummerRest\Unity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.0\Runtime\Newtonsoft.Json.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=673f4d4a_002D2aa1_002D4fde_002D8917_002Dcca566285f57/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ParserTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=673f4d4a_002D2aa1_002D4fde_002D8917_002Dcca566285f57/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ParserTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::BB2C71EB-D4E5-701E-28AE-D1BC0F5773E3::.NETFramework,Version=v4.7.1::SummerRest.Scripts.Tests.ParserTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1897868D-2C58-5C0C-0942-0738A51B5C40::.NETFramework,Version=v4.7.1::SummerRest.Tests.InternalRequestsTest.Test_Internal_Request_From_Unity_Web_Request_Set_Correct_Information&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3c8a3c1_002De8f2_002D43a7_002D868d_002D91aa136188d2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3c8a3c1_002De8f2_002D43a7_002D868d_002D91aa136188d2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

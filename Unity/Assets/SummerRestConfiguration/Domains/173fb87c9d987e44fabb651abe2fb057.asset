@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
+  m_Name: 173fb87c9d987e44fabb651abe2fb057
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 8148cdadda411c944825711e2a2cff3b, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 8148cdadda411c944825711e2a2cff3b, type: 2}
+  endpointName: GetRequest
+  url: http://localhost:8080/
+  path: 
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 3
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        authKey: my-soap-key
+    value:
+      authKey: my-json-key
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  contentType:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: application/soap+xml
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  method: 0
+  requestParams:
+  - key: soap-param-1
+    value: soap-value-1
+  - key: soap-param-1
+    value: soap-value-2
+  requestBody:
+    type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+      typeReference:
+        GuidAssignmentFailed: 0
+        GUID: 
+        _typeNameAndAssembly: 
+        _suppressLogs: 0
+    serializedData: 
+  urlWithParam: http://localhost:8080/?soap-param-1=soap-value-1&soap-param-1=soap-value-2
+  latestResponse:
+    lastCall: 
+    error: 
+    statusCode: 200
+    headers: []
+    body:
+      mediaType: 
+      fileName: 
+      rawBytes:
+        isImage: 0
+        data: 
+      rawBody: 
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

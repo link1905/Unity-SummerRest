@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
+  m_Name: 22ed4ac379091f9469987cc21a0f859e
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 90cb6237756cb0b4db1c2bbaf24b726b, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 87c554cb11dc905449d661e0595684b4, type: 2}
+  endpointName: GetRequest
+  url: http://my-domain.com/data
+  path: 
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        authKey: 
+    value:
+      authKey: my-json-key
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+      - key: header-1
+        value: header-value-1
+      - key: header-2
+        value: header-value-2
+    value: []
+  contentType:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  method: 0
+  requestParams:
+  - key: param-1
+    value: param-value-1
+  - key: param-2
+    value: param-value-2
+  requestBody:
+    type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+      typeReference:
+        GuidAssignmentFailed: 0
+        GUID: 
+        _typeNameAndAssembly: 
+        _suppressLogs: 0
+    serializedData: 
+  urlWithParam: http://my-domain.com/data?param-1=param-value-1&param-2=param-value-2
+  latestResponse:
+    lastCall: 
+    error: 
+    statusCode: 200
+    headers: []
+    body:
+      mediaType: 
+      fileName: 
+      rawBytes:
+        isImage: 0
+        data: 
+      rawBody: 
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

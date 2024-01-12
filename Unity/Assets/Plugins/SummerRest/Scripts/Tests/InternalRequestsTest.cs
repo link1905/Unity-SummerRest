@@ -17,8 +17,8 @@ namespace SummerRest.Tests
 {
     public class InternalRequestsTest
     {
-        private const string TestUrl = "example.com/";
-        private const string TestAbsoluteUrl = "example.com/200";
+        private const string TestUrl = "http://example.com/";
+        private const string TestAbsoluteUrl = "http://example.com/200";
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_200_And_Json_Data()
         {
@@ -102,7 +102,7 @@ namespace SummerRest.Tests
             yield return TestRequest.Create().RequestCoroutine<string>(null);
             var msg = string.Format(
                 @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
-                error, string.Empty);
+                error, TestAbsoluteUrl);
             LogAssert.Expect(LogType.Error, msg);
         }
         
@@ -132,7 +132,7 @@ namespace SummerRest.Tests
             {
                 Assert.AreSame(webRequest, e);
                 Assert.AreEqual(TestAbsoluteUrl, e.url);
-                Assert.AreEqual("Connect", e.method);
+                Assert.AreEqual(HttpMethod.Connect.ToUnityHttpMethod(), e.method);
             });
             
             request.Method = HttpMethod.Get;

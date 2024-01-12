@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using SummerRest.Editor.Models;
-using UnityEditor.Compilation;
+using SummerRest.Editor.Utilities;
+using SummerRest.Utilities.DataStructures;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace SummerRest.Editor.Configurations
         [field: SerializeReference] public List<Domain> Domains { get; private set; } = new();
         [field: SerializeReference][JsonIgnore]
         public AuthenticateConfiguration AuthenticateConfiguration { get; set; }
-        [SerializeField] private AssemblyDefinitionAsset targetAssembly;
+        [SerializeReference] private AssemblyDefinitionAsset targetAssembly;
         private class AssemblyName
         {
             [JsonProperty("name")] public string Name { get; private set; }
@@ -25,8 +26,15 @@ namespace SummerRest.Editor.Configurations
             {
                 if (targetAssembly is null)
                     return "Assembly-CSharp"; //Default project
-                var assembly = JsonConvert.DeserializeObject<AssemblyName>(targetAssembly.text);
-                return assembly.Name;
+                try
+                {
+                    var assembly = JsonConvert.DeserializeObject<AssemblyName>(targetAssembly.text);
+                    return assembly.Name;
+                }
+                catch (Exception)
+                {
+                    return "Assembly-CSharp"; //Default project
+                }
             }
         }
     }

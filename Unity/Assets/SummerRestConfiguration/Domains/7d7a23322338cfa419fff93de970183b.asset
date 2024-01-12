@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
+  m_Name: 7d7a23322338cfa419fff93de970183b
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 90cb6237756cb0b4db1c2bbaf24b726b, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 90cb6237756cb0b4db1c2bbaf24b726b, type: 2}
+  endpointName: Image service
+  url: http://my-domain.com/image
+  path: image
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        authKey: 
+    value:
+      authKey: my-auth-key
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  contentType:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value:
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: image/png
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: UTF-8
+      <MediaType>k__BackingField: image/png
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value: 3
+    value: 3
+  redirectsLimit:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value: 3
+    value: 3
+  services: []
+  requests:
+  - {fileID: 11400000, guid: bbdae9798bd6e384f8812e576933fe1a, type: 2}

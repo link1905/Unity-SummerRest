@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: fde021aeb564a22419174f86b259db91
+  m_Name: 71a42e18521ff75469fd84b4aaa61f5a
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: MyJsonDomain
-  url: http://my-domain.com/
+  endpointName: MySoapDomain
+  url: http://localhost:8080/
   path: 
   dataFormat:
     inherit: 8
     cache:
       hasValue: 1
-      value: 0
-    value: 0
+      value: 3
+    value: 3
   auth:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value:
-        authKey: my-json-key
+        authKey: my-soap-key
     value:
-      authKey: my-json-key
+      authKey: my-soap-key
   headers:
     inherit: 1
     cache:
@@ -38,16 +38,16 @@ MonoBehaviour:
       value: []
     value: []
   contentType:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: application/soap+xml
         <Boundary>k__BackingField: 
     value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
+      <Charset>k__BackingField: UTF-8
+      <MediaType>k__BackingField: application/soap+xml
       <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 1
@@ -61,12 +61,11 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  services:
-  - {fileID: 11400000, guid: 87c554cb11dc905449d661e0595684b4, type: 2}
-  - {fileID: 11400000, guid: f7d14f2a3540e9f4eba8136c6bcbb2a6, type: 2}
-  requests: []
+  services: []
+  requests:
+  - {fileID: 11400000, guid: 866f7f8d020494544b6f6533d057a99f, type: 2}
   versions:
     values:
-    - http://my-domain.com
+    - http://localhost:8080
     selectedIndex: 0
-  activeVersion: http://my-domain.com
+  activeVersion: http://localhost:8080
