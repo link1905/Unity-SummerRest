@@ -56,7 +56,7 @@ namespace SummerRest.Editor.Window.Elements
         }
         private void SetPath(string value)
         {
-            _path.SetTextValueWithoutNotify($"({value})");
+            _path.SetTextValueWithoutNotify($"(/{value})");
         }
         private void OnContextClick(bool container, DropdownMenu menu)
         {

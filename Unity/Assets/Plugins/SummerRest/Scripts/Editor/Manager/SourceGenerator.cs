@@ -26,6 +26,7 @@ namespace SummerRest.Editor.Manager
             File.WriteAllText(path, string.Empty);
             File.WriteAllText(path, configureJson);
             AssetDatabase.ImportAsset(path);
+            EditorUtility.RequestScriptReload();
         }
     }
 }

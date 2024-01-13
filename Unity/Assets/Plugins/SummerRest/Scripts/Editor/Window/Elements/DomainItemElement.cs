@@ -14,9 +14,11 @@ namespace SummerRest.Editor.Window.Elements
         private Color _originalColor;
         private Button _mainBtn;
         public IStyle Style => _mainBtn.style;
+        public Domain Data { get; private set; }
         public int Index { get; set; }
         public void Init(int index, Domain data)
         {
+            Data = data;
             var serializedObject = new SerializedObject(data);
             Index = index;
             _originalColor = style.backgroundColor.value;

@@ -8,6 +8,7 @@ namespace SummerRest.Editor.Window.Elements
     {
         event Action<TElement> OnClicked;
         event Action<TElement> OnDeleted;
+        TSetupData Data { get; }
         int Index { get; set; }
         void Init(int index, TSetupData data);
         void Enable(Color highlight);

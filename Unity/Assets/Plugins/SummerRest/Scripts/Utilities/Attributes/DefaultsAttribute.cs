@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[assembly: InternalsVisibleTo("SummerRest.Editors")]
+[assembly: InternalsVisibleTo("SummerRest.Editor")]
 namespace SummerRest.Utilities.Attributes
 {
     internal class DefaultsAttribute : PropertyAttribute

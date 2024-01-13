@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Newtonsoft.Json;
-using RestSourceGenerator.Generators.Models;
+using RestSourceGenerator.Metadata;
 using RestSourceGenerator.Utilities;
 
 namespace RestSourceGenerator.Generators
@@ -10,7 +9,7 @@ namespace RestSourceGenerator.Generators
     [Generator]
     public class RestSourceGenerator : ISourceGenerator
     {
-        private const string FileName = "summer-rest-generated.SummerRestRequestsGenerator.additionalfile";
+        private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
         // private const string AssemblyName = "SummerRest";
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -28,7 +27,7 @@ namespace RestSourceGenerator.Generators
                     FileName));
                 return;
             }
-            Configuration? conf = JsonConvert.DeserializeObject<Configuration>(text.ToString());
+            Configuration? conf = System.Text.Json.JsonSerializer.Deserialize<Configuration>(text.ToString());
             if (conf is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
@@ -49,7 +48,10 @@ namespace RestSourceGenerator.Generators
                 return;
             }
             var builder = new StringBuilder();
-            builder.Append("namespace SummerRest.Requests {");
+            builder.Append(@"
+using SummerRest.Utilities.RequestComponents;
+using SummerRest.Runtime.Parsers;
+namespace SummerRest.Runtime.Request {");
             foreach (var request in conf.Value.Domains)
                 request.BuildClass(builder);
             builder.Append("}");

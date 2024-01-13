@@ -32,7 +32,7 @@ namespace SummerRest.Runtime.Request
             new Dictionary<string, string>();
 
         public HttpMethod Method { get; set; }
-        public int? RedirectLimit { get; set; }
+        public int? RedirectsLimit { get; set; }
         public int? TimeoutSeconds { get; set; }
         public string AuthKey { get; set; }
         public ContentType? ContentType { get; set; }
@@ -63,8 +63,8 @@ namespace SummerRest.Runtime.Request
 
         protected virtual void SetRequestData<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor)
         {
-            if (RedirectLimit.HasValue)
-                requestAdaptor.RedirectLimit = RedirectLimit.Value;
+            if (RedirectsLimit.HasValue)
+                requestAdaptor.RedirectLimit = RedirectsLimit.Value;
             if (TimeoutSeconds.HasValue)
                 requestAdaptor.TimeoutSeconds = TimeoutSeconds.Value;
             if (ContentType is not null)
@@ -174,7 +174,7 @@ namespace SummerRest.Runtime.Request
 
         #endregion
 
-        #if !SUMMER_REST_TASK
+        #if SUMMER_REST_TASK
         protected async UniTask<TResponse> RequestAsync<TResponse>(
             IWebRequestAdaptor<TResponse> request)
         {

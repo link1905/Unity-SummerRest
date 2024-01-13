@@ -202,7 +202,7 @@
       "Services": []
     }
   ],
-  "Assembly": "Assembly-CSharp",
+  "Assembly": "Assembly-CSharp-firstpass",
   "name": "SummerRestConfiguration",
   "hideFlags": 0
 }

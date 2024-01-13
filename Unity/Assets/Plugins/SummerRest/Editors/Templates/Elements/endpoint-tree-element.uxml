@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:summer="SummerRest.Editor.Window.Elements" editor-extension-mode="True">
-    <summer:EndpointTreeElement name="endpoint-element" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0; align-self: stretch; align-items: stretch; justify-content: flex-start;">
-        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="name" binding-path="endpointName" style="flex-grow: 0;" />
-        <ui:Label tabindex="-1" text="GET" display-tooltip-when-elided="true" name="method" binding-path="method" />
-        <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="path" enable-rich-text="true" binding-path="path" style="flex-grow: 1; white-space: normal; text-overflow: ellipsis;" />
-        <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Add" name="action-menu" style="align-self: auto; justify-content: center; align-items: stretch; visibility: visible; display: flex; flex-grow: 0;" />
-    </summer:EndpointTreeElement>
-</ui:UXML>

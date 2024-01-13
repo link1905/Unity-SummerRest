@@ -10,7 +10,7 @@ namespace SummerRest.Runtime.Request
         IDictionary<string, string> Headers { get; }
         RequestParamContainer Params { get; }
         HttpMethod Method { get; set; }
-        int? RedirectLimit { get; set; }
+        int? RedirectsLimit { get; set; }
         int? TimeoutSeconds { get; set; }
         string AuthKey { get; set; }
         // IAuthData AuthData { get; set; }

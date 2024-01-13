@@ -35,7 +35,7 @@ namespace SummerRest.Editor.Manager
         {
             _request = request;
             AbsoluteUrl = request.UrlWithParams;
-            RedirectLimit = request.RedirectsLimit;
+            RedirectsLimit = request.RedirectsLimit;
             TimeoutSeconds = request.TimeoutSeconds;
             Method = request.Method;
             ContentType = request.ContentType;

@@ -37,8 +37,9 @@ namespace SummerRest.Editor.Models
             var children = BuildChildrenTree(id);
             if (children.Count > 0)
             {
-                id = children[^1].id; //Set new id if has at least 1 child
-                return new TreeViewItemData<Endpoint>(++id, this, children);
+                //Set new id if has at least 1 child
+                TreeId = children[^1].id + 1;
+                return new TreeViewItemData<Endpoint>(TreeId, this, children);
             }
 
             return base.BuildTree(id);

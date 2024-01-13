@@ -72,20 +72,26 @@ namespace SummerRest.Editor.Window.Elements
             _domainListElement.OnDeleteElement += (i, isSelected) =>
             {
                 var domain = domains[i];
-                if (!domain.AskToRemoveAsset(d =>
-                    {
-                        domains.Remove(d);
-                        d.Delete(false);
-                    }, EditorAssetUtilities.AskToRemoveMessage.RemoveDomain))
-                    return false;
-                if (isSelected)
-                    ClearWindows();
-                _configuration.MakeDirty();
-                return true;
+                return DeleteDomain(domain, isSelected);
             };
             _domainListElement.OnElementClicked += OnSelectDomain;
             foreach (var domain in domains)
                 _domainListElement.AddChild(domain, false);
+        }
+
+        private bool DeleteDomain(Domain domain, bool isSelected)
+        {
+            var domains = _configuration.Domains;
+            if (!domain.AskToRemoveAsset(d =>
+                {
+                    domains.Remove(d);
+                    d.Delete(false);
+                }, EditorAssetUtilities.AskToRemoveMessage.RemoveDomain))
+                return false;
+            if (isSelected)
+                ClearWindows();
+            _configuration.MakeDirty();
+            return true;
         }
 
         private Domain OnAddDomain()
@@ -147,7 +153,7 @@ namespace SummerRest.Editor.Window.Elements
                     "Ok");
                 return;
             }
-            OnEndpointElementOnOnAddChild(elementAddAction, _currentSelectedDomain);
+            OnEndpointElementAddChild(elementAddAction, _currentSelectedDomain);
         }
         private void SetupEndpointsTree()
         {
@@ -162,7 +168,7 @@ namespace SummerRest.Editor.Window.Elements
             _endpointTree.makeItem = () =>
             {
                 var endpointTreeElement = _endpointElementTemplate.Instantiate().Q<EndpointTreeElement>();
-                endpointTreeElement.OnAddChild += OnEndpointElementOnOnAddChild;
+                endpointTreeElement.OnAddChild += OnEndpointElementAddChild;
                 endpointTreeElement.OnDelete += OnEndpointElementOnOnRemoveChild;
                 return endpointTreeElement;
             };
@@ -187,7 +193,7 @@ namespace SummerRest.Editor.Window.Elements
                 var endpoint = _endpointTree.GetItemDataForId<Endpoint>(id);
                 if (endpoint.Url.Contains(search))
                 {
-                    _endpointTree.ScrollToItemById(id);
+                    _endpointTree.SetSelectionById(endpoint.TreeId);
                     return;
                 }
             }
@@ -195,6 +201,7 @@ namespace SummerRest.Editor.Window.Elements
         private void ShowDomainAction(Domain domain)
         {
             _currentSelectedDomain = domain;
+            _endpointTree.SetSelectionById(0);
         }
         private void ShowEndpointsTree(Domain domain)
         {
@@ -207,7 +214,7 @@ namespace SummerRest.Editor.Window.Elements
             _endpointTree.Rebuild();
         }
    
-        private void OnEndpointElementOnOnAddChild(ElementAddAction elementAddAction, Endpoint endpoint)
+        private void OnEndpointElementAddChild(ElementAddAction elementAddAction, Endpoint endpoint)
         {
             if (endpoint is not EndpointContainer endpointContainer) 
                 return;
@@ -227,11 +234,21 @@ namespace SummerRest.Editor.Window.Elements
             endpointContainer.MakeDirty();
             // Update the endpoint tree
             ShowEndpointsTree(_currentSelectedDomain);
+            _endpointTree.SetSelectionById(endpoint.TreeId);
         }
         private void OnEndpointElementOnOnRemoveChild(Endpoint endpoint)
         {
+            if (endpoint is Domain domain)
+            {
+                _domainListElement.DeleteChild(domain);
+                return;
+            }
             if (endpoint is null || endpoint.Parent is not EndpointContainer endpointContainer)
                 return;
+            var currentSelection = _endpointTree.selectedItem as Endpoint;
+            // If current selection is the deleted candidate 
+            if (currentSelection == endpoint)
+                currentSelection = null;
             switch (endpoint)
             {
                 case Service service:
@@ -245,9 +262,13 @@ namespace SummerRest.Editor.Window.Elements
                     return;
             }
             endpointContainer.MakeDirty();
-            // Update the endpoint tree
+            ClearWindows();
             ShowEndpointsTree(_currentSelectedDomain);
+            // Show the previous selection
+            if (currentSelection is not null)
+            {
+                _endpointTree.SetSelectionById(currentSelection.TreeId);
+            }
         }
-
     }
 }

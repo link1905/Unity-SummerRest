@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -64,6 +65,33 @@ namespace SummerRest.Editor.Window.Elements
             if (alsoSelect)
                 HandleClick(element);
             return element;
+        }
+
+        public void DeleteChild(TData data)
+        {
+            var idx = -1;
+            for (var i = 0; i < _container.childCount; i++)
+            {
+                var element = _container[i].Q<TElement>();
+                if (element is null)
+                    continue;
+                if (element.Data == data)
+                    idx = i;
+            }
+            if (idx == -1)
+                return;
+            DeleteChild(idx);
+        }
+        public void DeleteChild(int idx)
+        {
+            var del = OnDeleteElement?.Invoke(idx, _previousSelect == idx);
+            if (del is null || !del.Value)
+                return;
+            if (_previousSelect == idx)
+                _previousSelect = null;
+            _container.RemoveAt(idx);
+            for (var i = idx; i < _container.childCount; i++)
+                _container[i].Q<TElement>().Index = i;
         }
 
         public virtual TElement AddChild(TData data, bool alsoSelect)

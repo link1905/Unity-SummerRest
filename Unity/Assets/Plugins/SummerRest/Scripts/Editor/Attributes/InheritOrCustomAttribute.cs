@@ -7,10 +7,13 @@ namespace SummerRest.Editor.Attributes
     {
         public readonly InheritChoice Allow;
 
+        public readonly string ParentPropName;
         // = new []{InheritChoice.None, InheritChoice.Inherit, InheritChoice.Custom}
-        public InheritOrCustomAttribute(InheritChoice allow = InheritChoice.None | InheritChoice.Inherit | InheritChoice.Custom)
+        public InheritOrCustomAttribute(InheritChoice allow = InheritChoice.None | InheritChoice.Inherit | InheritChoice.Custom,
+            string parentProp = "Parent")
         {
             Allow = allow;
+            ParentPropName = parentProp;
         }
     }
 }

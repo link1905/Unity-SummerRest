@@ -20,7 +20,7 @@ public class RestSourceGeneratorTest :
       {
         TestState =
         {
-          AdditionalFiles = { ("summer-rest-generated.SummerRestRequestsGenerator.additionalfile", jsonContent) },
+          AdditionalFiles = { ("summer-rest-generated.RestSourceGenerator.additionalfile", jsonContent) },
           ExpectedDiagnostics =
           {
             new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Start generating", 
@@ -154,7 +154,9 @@ public class RestSourceGeneratorTest :
 
         var expected = """
 
-                       namespace SummerRest.Requests {
+                          using SummerRest.Utilities.RequestComponents;
+                          using SummerRest.Runtime.Parsers;
+                          namespace SummerRest.Runtime.Request {
                            public static class Domain1 {
                                public static class MyService {
                                    public class Request1 : SummerRest.Runtime.Request.BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
@@ -405,8 +407,9 @@ public class RestSourceGeneratorTest :
                    """;
 
         var expected = """
-
-                       namespace SummerRest.Requests {
+                          using SummerRest.Utilities.RequestComponents;
+                          using SummerRest.Runtime.Parsers;
+                          namespace SummerRest.Runtime.Request {
                            public static class MyJsonDomain {
                                public static class DataService {
                                    public class GetRequest : SummerRest.Runtime.Request.BaseRequest<GetRequest> {

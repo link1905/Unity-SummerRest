@@ -6,7 +6,7 @@ namespace SummerRest.Editor.Drawers
     internal abstract class UIToolkitDrawer : PropertyDrawer
     {
         public abstract string RelativeFromTemplateAssetPath { get;} 
-        public static string RootDir => "Assets/Plugins/SummerRest/Editors/Templates";
+        public static string RootDir => "Assets/Plugins/SummerRest/Templates";
         private VisualTreeAsset _treeAsset;
         protected VisualElement Tree
         {

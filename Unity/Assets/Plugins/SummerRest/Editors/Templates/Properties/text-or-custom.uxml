@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:EnumField label="Type" type="SummerRest.Editor.DataStructures.TextOrCustomDataType, SummerRest.Editors" name="type" binding-path="type" style="flex-shrink: 0; align-self: stretch;" />
-    <ui:TextField picking-mode="Ignore" value="ASD&#10;asd&#10;&#10;asd&#10;sa&#10;d&#10;sa&#10;d&#10;sad&#10;sa&#10;d&#10;sad&#10;" multiline="true" name="value" binding-path="text" style="min-height: 60px; flex-grow: 0; flex-shrink: 0; align-self: stretch;" />
-    <uie:PropertyField name="value" binding-path="body" style="flex-shrink: 0; align-self: stretch;" />
-</ui:UXML>

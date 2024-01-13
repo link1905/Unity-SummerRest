@@ -76,10 +76,11 @@ namespace SummerRest.Editor.Models
             }
         }
 
-        
+        [field: SerializeField] public int TreeId { get; protected set; }
         public virtual TreeViewItemData<Endpoint> BuildTree(int id)
         {
-            return new TreeViewItemData<Endpoint>(++id, this);
+            TreeId = ++id;
+            return new TreeViewItemData<Endpoint>(TreeId, this);
         }
         public virtual void Delete(bool fromParent)
         {

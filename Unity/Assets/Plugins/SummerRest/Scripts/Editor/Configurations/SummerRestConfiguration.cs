@@ -25,7 +25,7 @@ namespace SummerRest.Editor.Configurations
             get
             {
                 if (targetAssembly is null)
-                    return "Assembly-CSharp"; //Default project
+                    return "Assembly-CSharp-firstpass"; //Default assembly name
                 try
                 {
                     var assembly = JsonConvert.DeserializeObject<AssemblyName>(targetAssembly.text);
@@ -33,7 +33,7 @@ namespace SummerRest.Editor.Configurations
                 }
                 catch (Exception)
                 {
-                    return "Assembly-CSharp"; //Default project
+                    return "Assembly-CSharp-firstpass"; //Default project
                 }
             }
         }

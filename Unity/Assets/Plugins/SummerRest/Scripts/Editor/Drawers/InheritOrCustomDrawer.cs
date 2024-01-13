@@ -18,13 +18,17 @@ namespace SummerRest.Editor.Drawers
         public override string RelativeFromTemplateAssetPath => "Properties/inherit-or-custom.uxml";
         private InheritOrCustomAttribute _att;
         private List<string> _allows;
-        private List<string> GetAllows(InheritChoice allow)
+        private List<string> GetAllows(SerializedProperty serializedProperty, InheritChoice allow)
         {
             var result = new List<string>();
+            var parent = serializedProperty.serializedObject.FindProperty($"<{_att.ParentPropName}>k__BackingField");
+            var parentValue = parent?.objectReferenceValue;
             foreach (InheritChoice choice in Enum.GetValues(typeof(InheritChoice)))
             {
                 var overlap = choice & allow;
-                if (overlap != 0)
+                //Inherit => must have a parent
+                if (overlap != 0 && (parentValue is not null || 
+                                     (choice != InheritChoice.Inherit && choice != InheritChoice.AppendToParent)))
                     result.Add(choice.ToString());
             }
             return result;
@@ -38,7 +42,7 @@ namespace SummerRest.Editor.Drawers
                 return new Label(
                     $"Must use {nameof(InheritOrCustomContainer<object>)} with an attribute {nameof(InheritOrCustomAttribute)}");
             }
-            _allows ??= GetAllows(_att.Allow);
+            _allows ??= GetAllows(property, _att.Allow);
             
             var nameElement = tree.Q<Foldout>(name: "container");
             nameElement.text = property.displayName;
