@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 49c252d1449204e4cbe6dcf4d9215319
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - domainManagersTemplate: {fileID: 9197481963319205126, guid: fc8db62a75b1f2040b7510168736217d, type: 3}
+  - domainButtonTemplate: {fileID: 9197481963319205126, guid: 48814b89dc7d98d4f90c5af97f1b2e7d, type: 3}
+  - endpointElementTemplate: {fileID: 9197481963319205126, guid: 454d46f1400d6354d8c784506bdf3eb4, type: 3}
+  - initializeGuideTemplate: {fileID: 9197481963319205126, guid: a6ee588a392aff24492103b49537516e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

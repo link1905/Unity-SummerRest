@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <SummerRest.Editor.Window.Elements.InitializeGuideElement style="justify-content: flex-start; flex-shrink: 1; align-self: auto; align-items: stretch; flex-grow: 1;">
+        <ui:Label tabindex="-1" text="You have not initialized the plugin yet.&#10;Please select a folder for setting up SummerRest" display-tooltip-when-elided="true" name="guide-text" style="justify-content: flex-start; -unity-text-align: upper-center;" />
+        <uie:ObjectField label="Folder" name="folder" type="UnityEditor.DefaultAsset, UnityEditor" tooltip="Select the folder containing the plugin&apos;s assets " />
+        <ui:Button text="Initialize" display-tooltip-when-elided="true" name="init" />
+    </SummerRest.Editor.Window.Elements.InitializeGuideElement>
+</ui:UXML>

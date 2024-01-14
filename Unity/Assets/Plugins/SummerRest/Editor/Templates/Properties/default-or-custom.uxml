@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="DefaultElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-self: stretch; justify-content: flex-start; align-items: stretch; min-width: auto; min-height: auto; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="name" style="flex-shrink: 0; justify-content: center; align-self: center; align-items: auto; flex-direction: column;" />
+        <ui:DropdownField name="values" style="flex-shrink: 1; align-self: center; flex-direction: row; justify-content: flex-start; flex-grow: 0; align-items: flex-start;" />
+        <ui:TextField picking-mode="Ignore" value="filler text" name="custom" style="flex-grow: 1; visibility: visible; flex-shrink: 0; min-width: 50%; overflow: hidden; display: flex;" />
+    </ui:VisualElement>
+</ui:UXML>

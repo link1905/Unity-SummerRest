@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="text-or-custom" src="text-or-custom.uxml" />
+    <ui:Instance template="text-or-custom" name="text-or-custom" />
+    <ui:Foldout text="Serialized data" name="serialized-body">
+        <ui:TextField picking-mode="Ignore" value="asdsadsad&#10;asdsad" name="serialized-data" binding-path="serializedData" readonly="true" multiline="true" />
+    </ui:Foldout>
+</ui:UXML>
