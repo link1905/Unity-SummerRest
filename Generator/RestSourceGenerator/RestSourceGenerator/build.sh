@@ -20,7 +20,7 @@ dotnet build
 if [ $? -eq 0 ]; then
     echo "Build successful $(pwd)"
     # Step 2: Move all output DLL files to <MyFolder>
-    OutputDirectory="../../../Unity/Assets/Plugins/SummerRest/Scripts/Runtime"
+    OutputDirectory="../../../Unity/Assets/Plugins/SummerRest/Runtime"
     
     # Create the output directory if it doesn't exist
     mkdir -p "$OutputDirectory"

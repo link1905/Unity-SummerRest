@@ -2,203 +2,121 @@
   "Domains": [
     {
       "TypeName": "Domain",
-      "EndpointName": "MyJsonDomain",
+      "EndpointName": "Domain1",
       "Requests": [],
       "Services": [
         {
           "TypeName": "Service",
-          "EndpointName": "Data service",
+          "EndpointName": "Service 1",
           "Requests": [
             {
-              "UrlWithParams": "http://my-domain.com/data?param-1=param-value-1&param-2=param-value-2",
+              "UrlWithParams": "http://localhost:8080/",
               "Method": 0,
-              "RequestParams": [
-                {
-                  "Key": "param-1",
-                  "Value": "param-value-1"
-                },
-                {
-                  "Key": "param-2",
-                  "Value": "param-value-2"
-                }
-              ],
+              "RequestParams": [],
               "RequestBody": {},
               "SerializedBody": "",
               "TypeName": "Request",
-              "EndpointName": "GetRequest",
-              "Url": "http://my-domain.com/data",
-              "Path": "",
-              "DataFormat": 0,
-              "AuthContainer": null,
-              "Headers": [
-                {
-                  "Key": "header-1",
-                  "Value": "header-value-1"
-                },
-                {
-                  "Key": "header-2",
-                  "Value": "header-value-2"
-                }
-              ],
-              "ContentType": null,
-              "TimeoutSeconds": null,
-              "RedirectsLimit": null,
-              "name": "22ed4ac379091f9469987cc21a0f859e",
-              "hideFlags": 0
-            },
-            {
-              "UrlWithParams": "http://my-domain.com/data",
-              "Method": 1,
-              "RequestParams": [],
-              "RequestBody": {},
-              "SerializedBody": "i am a big cat",
-              "TypeName": "Request",
-              "EndpointName": "PostRequest",
-              "Url": "http://my-domain.com/data",
+              "EndpointName": "Request 1",
+              "Url": "http://localhost:8080/",
               "Path": "",
               "DataFormat": 0,
               "AuthContainer": {
                 "AuthKey": "my-json-key",
                 "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
               },
-              "Headers": [
-                {
-                  "Key": "header-1",
-                  "Value": "header-value-1"
-                },
-                {
-                  "Key": "header-2",
-                  "Value": "header-value-2"
-                }
-              ],
-              "ContentType": null,
-              "TimeoutSeconds": null,
-              "RedirectsLimit": null,
-              "name": "14dceaa44b9f26e46a0f1c999e67dc0b",
+              "Headers": [],
+              "ContentType": {
+                "Charset": "",
+                "MediaType": "",
+                "Boundary": "",
+                "FormedContentType": ""
+              },
+              "TimeoutSeconds": 0,
+              "RedirectsLimit": 0,
+              "TreeId": 1,
+              "name": "1803fecd755646d40b9f063487cc14a8",
               "hideFlags": 0
             }
           ],
           "Services": [
             {
               "TypeName": "Service",
-              "EndpointName": "AccountService",
-              "Requests": [
+              "EndpointName": "Service 1",
+              "Requests": [],
+              "Services": [
                 {
-                  "UrlWithParams": "http://my-domain.com/data/account",
-                  "Method": 2,
-                  "RequestParams": [],
-                  "RequestBody": {},
-                  "SerializedBody": "i need a cat now",
-                  "TypeName": "Request",
-                  "EndpointName": "PutRequest",
-                  "Url": "http://my-domain.com/data/account",
-                  "Path": "",
-                  "DataFormat": 0,
-                  "AuthContainer": null,
-                  "Headers": [
+                  "TypeName": "Service",
+                  "EndpointName": "Service 1",
+                  "Requests": [],
+                  "Services": [
                     {
-                      "Key": "header-3",
-                      "Value": "header-3-value"
-                    },
-                    {
-                      "Key": "header-1",
-                      "Value": "header-value-1"
-                    },
-                    {
-                      "Key": "header-2",
-                      "Value": "header-value-2"
+                      "TypeName": "Service",
+                      "EndpointName": "Service 1",
+                      "Requests": [],
+                      "Services": [
+                        {
+                          "TypeName": "Service",
+                          "EndpointName": "Service 1",
+                          "Requests": [],
+                          "Services": [
+                            {
+                              "TypeName": "Service",
+                              "EndpointName": "Service 1",
+                              "Requests": [],
+                              "Services": []
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  ],
-                  "ContentType": {
-                    "Charset": "UTF-8",
-                    "MediaType": "application/json",
-                    "Boundary": "",
-                    "FormedContentType": "application/json; charset=UTF-8"
-                  },
-                  "TimeoutSeconds": 3,
-                  "RedirectsLimit": null,
-                  "name": "2c74bfad2c736224a9d87d8f619e2ae9",
-                  "hideFlags": 0
+                  ]
                 }
-              ],
-              "Services": []
+              ]
             }
           ]
-        },
-        {
-          "TypeName": "Service",
-          "EndpointName": "Image service",
-          "Requests": [
-            {
-              "UrlWithParams": "http://my-domain.com/image",
-              "Method": 0,
-              "RequestParams": [],
-              "RequestBody": {},
-              "SerializedBody": "",
-              "TypeName": "Request",
-              "EndpointName": "GetImage",
-              "Url": "http://my-domain.com/image",
-              "Path": "",
-              "DataFormat": 0,
-              "AuthContainer": null,
-              "Headers": null,
-              "ContentType": {
-                "Charset": "UTF-8",
-                "MediaType": "image/png",
-                "Boundary": "",
-                "FormedContentType": "image/png; charset=UTF-8"
-              },
-              "TimeoutSeconds": 3,
-              "RedirectsLimit": 3,
-              "name": "8a02c3390427d2747841b245678483ea",
-              "hideFlags": 0
-            }
-          ],
-          "Services": []
         }
       ]
     },
     {
       "TypeName": "Domain",
-      "EndpointName": "MySoapDomain",
-      "Requests": [
-        {
-          "UrlWithParams": "http://localhost:8080/?soap-param-1=soap-value-1&soap-param-1=soap-value-2",
-          "Method": 0,
-          "RequestParams": [
-            {
-              "Key": "soap-param-1",
-              "Value": "soap-value-1"
-            },
-            {
-              "Key": "soap-param-1",
-              "Value": "soap-value-2"
-            }
-          ],
-          "RequestBody": {},
-          "SerializedBody": "",
-          "TypeName": "Request",
-          "EndpointName": "GetRequest",
-          "Url": "http://localhost:8080/",
-          "Path": "",
-          "DataFormat": 3,
-          "AuthContainer": {
-            "AuthKey": "my-soap-key",
-            "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
-          },
-          "Headers": null,
-          "ContentType": {
-            "Charset": "UTF-8",
-            "MediaType": "application/soap+xml",
-            "Boundary": "",
-            "FormedContentType": "application/soap+xml; charset=UTF-8"
-          },
-          "TimeoutSeconds": null,
-          "RedirectsLimit": null,
-          "name": "173fb87c9d987e44fabb651abe2fb057",
-          "hideFlags": 0
-        }
-      ],
+      "EndpointName": "Domain2",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "which",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "Domain4",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "Domain5",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "hoho",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "Domain7",
+      "Requests": [],
+      "Services": []
+    },
+    {
+      "TypeName": "Domain",
+      "EndpointName": "Domain8",
+      "Requests": [],
       "Services": []
     }
   ],

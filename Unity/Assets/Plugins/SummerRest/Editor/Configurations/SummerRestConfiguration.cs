@@ -19,12 +19,14 @@ namespace SummerRest.Editor.Configurations
         {
             [JsonProperty("name")] public string Name { get; private set; }
         }
+
+        private const string UnityFirstPass = "Assembly-CSharp-firstpass";
         public string Assembly
         {
             get
             {
                 if (targetAssembly is null)
-                    return "Assembly-CSharp-firstpass"; //Default assembly name
+                    return UnityFirstPass; //Default assembly name
                 try
                 {
                     var assembly = JsonConvert.DeserializeObject<AssemblyName>(targetAssembly.text);
@@ -32,7 +34,7 @@ namespace SummerRest.Editor.Configurations
                 }
                 catch (Exception)
                 {
-                    return "Assembly-CSharp-firstpass"; //Default project
+                    return UnityFirstPass; //Default project
                 }
             }
         }

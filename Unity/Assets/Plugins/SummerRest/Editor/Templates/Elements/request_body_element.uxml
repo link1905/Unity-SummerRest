@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:EnumField label="Method" type="SummerRest.Utilities.RequestComponents.HttpMethod, SummerRest.Utilities" name="method" binding-path="method" />
+        <ui:EnumField label="Method" type="SummerRest.Utilities.RequestComponents.HttpMethod, SummerRest" name="method" binding-path="method" />
         <uie:PropertyField name="params" binding-path="requestParams" style="flex-shrink: 0; align-self: stretch;" />
         <ui:Foldout text="Request body" style="flex-shrink: 0;">
             <uie:PropertyField name="body" binding-path="requestBody" style="flex-shrink: 0; align-self: stretch;" />

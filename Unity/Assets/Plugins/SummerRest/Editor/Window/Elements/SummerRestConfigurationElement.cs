@@ -201,7 +201,7 @@ namespace SummerRest.Editor.Window.Elements
         private void ShowDomainAction(Domain domain)
         {
             _currentSelectedDomain = domain;
-            _endpointTree.SetSelectionById(0);
+            _endpointTree.SetSelectionById(domain.TreeId);
         }
         private void ShowEndpointsTree(Domain domain)
         {

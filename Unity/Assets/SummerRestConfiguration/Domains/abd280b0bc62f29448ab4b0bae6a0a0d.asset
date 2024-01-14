@@ -14,33 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 0}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: 
+  endpointName: which
   url: 
   path: 
   dataFormat:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value: 0
     value: 0
   auth:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        authKey: 
+        authKey: my-json-key
     value:
-      authKey: 
+      authKey: my-json-key
   headers:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value: []
     value: []
   contentType:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
         <Charset>k__BackingField: 
         <MediaType>k__BackingField: 
@@ -50,21 +50,22 @@ MonoBehaviour:
       <MediaType>k__BackingField: 
       <Boundary>k__BackingField: 
   timeoutSeconds:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value: 0
     value: 0
   redirectsLimit:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 0
+  <TreeId>k__BackingField: 1
   services: []
   requests: []
   versions:
-    values: []
+    values:
+    - http://localhost:8080
     selectedIndex: 0
-  activeVersion: 
+  activeVersion: http://localhost:8080
