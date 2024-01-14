@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="text-or-custom" src="text-or-custom.uxml" />
-    <ui:TextField picking-mode="Ignore" label="Auth data key" value="My authenticator" binding-path="key" name="key" tooltip="Points to the auth data stored in player ref" />
-    <uie:PropertyField name="appender" binding-path="appenderType" tooltip="Type of appender class for appending the value" />
-    <ui:Foldout text="Authenticate value">
-        <ui:Instance template="text-or-custom" name="text-or-custom" />
-    </ui:Foldout>
-</ui:UXML>

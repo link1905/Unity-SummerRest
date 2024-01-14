@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:summer="SummerRest.Editor.Window.Elements" editor-extension-mode="False">
-    <summer:DomainListElement style="flex-direction: row; justify-content: flex-start; align-items: flex-start; align-self: stretch; height: auto; flex-wrap: nowrap; flex-grow: 1;">
-        <ui:VisualElement name="container" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-self: stretch; flex-direction: row; flex-shrink: 0; flex-wrap: nowrap; align-items: flex-start;" />
-    </summer:DomainListElement>
-</ui:UXML>

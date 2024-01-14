@@ -1,5 +1,5 @@
 using SummerRest.Editor.TypeReference;
-using SummerRest.Utilities.RequestComponents;
+using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 
 namespace SummerRest.Samples.Behaviours

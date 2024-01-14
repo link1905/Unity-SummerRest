@@ -154,7 +154,7 @@ public class RestSourceGeneratorTest :
 
         var expected = """
 
-                          using SummerRest.Utilities.RequestComponents;
+                          using SummerRest.Runtime.RequestComponents;
                           using SummerRest.Runtime.Parsers;
                           namespace SummerRest.Runtime.Request {
                            public static class Domain1 {
@@ -407,7 +407,7 @@ public class RestSourceGeneratorTest :
                    """;
 
         var expected = """
-                          using SummerRest.Utilities.RequestComponents;
+                          using SummerRest.Runtime.RequestComponents;
                           using SummerRest.Runtime.Parsers;
                           namespace SummerRest.Runtime.Request {
                            public static class MyJsonDomain {

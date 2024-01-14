@@ -49,7 +49,7 @@ namespace RestSourceGenerator.Generators
             }
             var builder = new StringBuilder();
             builder.Append(@"
-using SummerRest.Utilities.RequestComponents;
+using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Parsers;
 namespace SummerRest.Runtime.Request {");
             foreach (var request in conf.Value.Domains)
