@@ -1,8 +1,8 @@
 ﻿using System;
 using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.TypeReference;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Utilities.RequestComponents;
-using TypeReferences;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
@@ -18,8 +18,9 @@ namespace SummerRest.Editor.Models
         [Serializable]
         public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
         {
-            [SerializeField, Inherits(typeof(IRequestBodyData), ShowAllTypes = true, AllowInternal = true, ShortName = true)] private TypeReference typeReference;
-            public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.TypeNameAndAssembly);
+            [SerializeField, ClassTypeConstraint(typeof(IRequestBodyData))] 
+            private ClassTypeReference typeReference;
+            public override Type Type => typeReference?.Type is null ? null : Type.GetType(typeReference.ClassRef);
         }
         public void CacheValue(DataFormat dataFormat)
         {

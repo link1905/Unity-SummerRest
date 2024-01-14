@@ -1,16 +1,15 @@
+using SummerRest.Editor.TypeReference;
+using SummerRest.Utilities.RequestComponents;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+namespace SummerRest.Samples.Behaviours
 {
-    // Start is called before the first frame update
-    void Start()
+    internal class MyRequestBody : IRequestBodyData {} 
+    public class MyRequestBody1 : IRequestBodyData {} 
+    public class NewBehaviourScript : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private class MyRequestBody2 : IRequestBodyData {} 
+        [SerializeField][ClassTypeConstraint(typeof(IRequestBodyData))] 
+        private ClassTypeReference classTypeReference;
     }
 }

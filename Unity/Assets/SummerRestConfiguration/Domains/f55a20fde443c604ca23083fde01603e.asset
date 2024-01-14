@@ -15,8 +15,8 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 0401e473f64cff64db85fa6f11e4aaf2, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: f1ffd064be51fb84f9bfc0fa42717012, type: 2}
   endpointName: Service 1
-  url: http://localhost:8080/(/)/(/)/(/)
-  path: (/)
+  url: http://localhost:8080/
+  path: 
   dataFormat:
     inherit: 2
     cache:
@@ -30,7 +30,7 @@ MonoBehaviour:
       value:
         authKey: my-json-key
     value:
-      authKey: 
+      authKey: my-json-key
   headers:
     inherit: 2
     cache:

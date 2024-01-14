@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="auth-configures-element" src="project://database/Assets/Plugins/SummerRest/Templates/Elements/auth-configures-element.uxml?fileID=9197481963319205126&amp;guid=e6b5296397d3c3e4188fe1a56a8751b7&amp;type=3#auth-configures-element" />
-    <ui:Template name="domain-list" src="project://database/Assets/Plugins/SummerRest/Templates/Elements/domain-list.uxml?fileID=9197481963319205126&amp;guid=04ec80bb3d0541f43b685f45402064e3&amp;type=3#domain-list" />
-    <ui:Template name="endpoint_UXML" src="project://database/Assets/Plugins/SummerRest/Templates/Elements/endpoint_element.uxml?fileID=9197481963319205126&amp;guid=58449a5f23d6d324ba75a61f0255e158&amp;type=3#endpoint_element" />
+    <ui:Template name="auth-configures-element" src="auth-configures-element.uxml" />
+    <ui:Template name="domain-list" src="domain-list.uxml" />
+    <ui:Template name="endpoint_UXML" src="endpoint_element.uxml" />
     <SummerRest.Editor.Window.Elements.SummerRestConfigurationElement style="flex-grow: 1;">
         <uie:Toolbar name="toolbar" style="align-self: auto; justify-content: space-between; height: auto; max-height: none;">
             <uie:ToolbarToggle focusable="false" label="Auth settings" name="auth" />

@@ -5,6 +5,7 @@ using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.Request;
 using SummerRest.Utilities.Extensions;
 using SummerRest.Utilities.RequestComponents;
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Pool;
 
@@ -109,15 +110,15 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             get
             {
-#if UNITY_EDITOR
-                WebRequest.SendWebRequest();
-                while (!WebRequest.isDone)
+                // EditorCoroutine only accepts yield return null
+                if (Application.isPlaying)
                 {
-                    yield return null;
+                    WebRequest.SendWebRequest();
+                    while (!WebRequest.isDone)
+                        yield return null;
                 }
-#else
-                yield return WebRequest.SendWebRequest();
-#endif
+                else
+                    yield return WebRequest.SendWebRequest();
                 if (WebRequest.result == UnityWebRequest.Result.Success)
                     ResponseData = BuildResponse();
             }

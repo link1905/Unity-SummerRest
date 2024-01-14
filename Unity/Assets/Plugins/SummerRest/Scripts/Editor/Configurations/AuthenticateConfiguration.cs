@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
+using SummerRest.Editor.TypeReference;
 using SummerRest.Runtime.Authenticate.TokenRepository;
-using SummerRest.Utilities.DataStructures;
-using TypeReferences;
 using UnityEngine;
 
 namespace SummerRest.Editor.Configurations
@@ -13,8 +12,8 @@ namespace SummerRest.Editor.Configurations
     {
         [SerializeField] private AuthContainer[] auths;
         public AuthContainer[] AuthContainers => auths;
-        [SerializeField, Inherits(typeof(IAuthDataRepository), ShowAllTypes = true, AllowInternal = true, ShortName = true)] 
-        private TypeReference defaultTokenRepositoryType = new(typeof(PlayerPrefsAuthDataRepository));
+        [SerializeField, ClassTypeConstraint(typeof(IAuthDataRepository))] 
+        private ClassTypeReference defaultTokenRepositoryType = new(typeof(PlayerPrefsAuthDataRepository));
         [SerializeField] private string[] previousKeys;
 
         private void OnValidate()
