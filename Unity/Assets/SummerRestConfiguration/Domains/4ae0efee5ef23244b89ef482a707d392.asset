@@ -61,9 +61,8 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 2
-  services:
-  - {fileID: 11400000, guid: 1e13c0676f6cb00439e877895f51312f, type: 2}
+  <TreeId>k__BackingField: 1
+  services: []
   requests: []
   versions:
     values:

@@ -15,9 +15,13 @@ namespace SummerRest.Editor.Drawers
             {
                 label = property.displayName,
                 multiline = true,
+                style =
+                {
+                    flexDirection = FlexDirection.Column
+                }
             };
-            label.style.flexDirection = FlexDirection.Column;
             var att = (TextMultilineAttribute)attribute;
+            // Mark the layout as high as the text grows
             label.style.flexGrow = label.style.flexShrink = 0f;
             label.style.minHeight = att.MinHeight * EditorGUIUtility.singleLineHeight;
             label.BindProperty(property);

@@ -3,12 +3,17 @@ using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.DataStructures;
+using SummerRest.Runtime.Requests;
 using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Editor.Manager
 {
 
+    /// <summary>
+    /// Generate a additional JSON file for automatically generating <see cref="BaseRequest{TRequest}"/> <br/>
+    /// The generating process happens inside Roslyn source generator<br/>
+    /// </summary>
     public static class SourceGenerator
     {
         private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
@@ -26,6 +31,7 @@ namespace SummerRest.Editor.Manager
             File.WriteAllText(path, string.Empty);
             File.WriteAllText(path, configureJson);
             AssetDatabase.ImportAsset(path);
+            // Ensure the Editor to reload to run Roslyn processes 
             EditorUtility.RequestScriptReload();
         }
     }

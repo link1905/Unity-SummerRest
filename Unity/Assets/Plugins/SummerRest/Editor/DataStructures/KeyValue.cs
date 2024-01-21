@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SummerRest.Editor.DataStructures
 {
+    /// <summary>
+    /// Alternate for non-serialized built-in <see cref="KeyValuePair"/>
+    /// </summary>
     [Serializable]
     public struct KeyValue
     {

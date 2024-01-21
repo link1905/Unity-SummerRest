@@ -12,7 +12,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(DefaultsAttribute))]
     internal class DefaultsDrawer : UIToolkitDrawer
     {
-        public override string RelativeFromTemplateAssetPath => "Properties/default-or-custom.uxml";
+        protected override string RelativeFromTemplateAssetPath => "Properties/default-or-custom.uxml";
 
         private List<string> _defaultValues;
         private void Init()
@@ -53,7 +53,7 @@ namespace SummerRest.Editor.Drawers
             property.serializedObject.Update();
             var currentIdx = GetIdx(property.stringValue);
             var newIdx = GetIdx(newVal);
-            if (currentIdx != newIdx) //Custom values always return 0
+            if (currentIdx != newIdx) //"Custom" always return 0 => no need to update because of overwriting the current value
                 customElement.value = newVal;
             customElement.Show(newIdx == 0);
         }

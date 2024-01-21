@@ -5,6 +5,10 @@ using SummerRest.Runtime.DataStructures;
 
 namespace SummerRest.Editor.Utilities
 {
+    
+    /// <summary>
+    /// Custom converter class for simplify the json representation of an <see cref="EndpointContainer"/> since only need some fields of it 
+    /// </summary>
     internal class EndpointContainerJsonConverter : JsonConverter<EndpointContainer>, ISingleton<EndpointContainerJsonConverter>
     {
         public override void WriteJson(JsonWriter writer, EndpointContainer value, JsonSerializer serializer)

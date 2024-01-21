@@ -3,10 +3,19 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
 {
+    /// <summary>
+    /// Based UI drawers that need to load UXML files
+    /// </summary>
     internal abstract class UIToolkitDrawer : PropertyDrawer
     {
-        public abstract string RelativeFromTemplateAssetPath { get;}
+        protected abstract string RelativeFromTemplateAssetPath { get;}
+        /// <summary>
+        /// When embed in Assets folder
+        /// </summary>
         private const string AssetDir = "Assets/Plugins/SummerRest/Editor/Templates";
+        /// <summary>
+        /// When used as a package
+        /// </summary>
         private const string PackageDir = "Packages/com.summer.summer-rest/Editor/Templates";
         
         public static string RootDir
@@ -14,15 +23,15 @@ namespace SummerRest.Editor.Drawers
             get
             {
                 // regular assets path
-                string rootDir = "Assets/Plugins/SummerRest/Editor/Templates";
-                // IMPORTANT: this is linked to the "name" property of the package manifest json file
-                const string packagesDir = "Packages/com.summer/";
-                if (AssetDatabase.IsValidFolder(packagesDir))
-                    rootDir = packagesDir;
-                return rootDir;
+                if (AssetDatabase.IsValidFolder(PackageDir))
+                    return PackageDir;
+                return AssetDir;
             }
         }
 
+        /// <summary>
+        /// Caches UXML loaded file
+        /// </summary>
         private VisualTreeAsset _treeAsset;
         protected VisualElement Tree
         {

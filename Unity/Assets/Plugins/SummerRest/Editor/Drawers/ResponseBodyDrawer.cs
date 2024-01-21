@@ -8,7 +8,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(ResponseBody))]
     internal class ResponseBodyDrawer : UIToolkitDrawer
     {
-        public override string RelativeFromTemplateAssetPath => "Properties/file-response-element.uxml";
+        protected override string RelativeFromTemplateAssetPath => "Properties/response-element.uxml";
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;

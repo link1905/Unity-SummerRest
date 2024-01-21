@@ -26,7 +26,7 @@
   "samples": [
     {
       "displayName": "Sample project",
-      "description": "A packaged project showing how to use SummerRest plugin, it is also used in the getting started section (README.md)",
+      "description": "A sample project showing how to use SummerRest plugin, it is also used in the getting started section (README.md)",
       "path": "Samples~/SummerRestSampleProject"
     }
   ]

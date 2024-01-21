@@ -1,4 +1,5 @@
 using SummerRest.Editor.Configurations;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Window.Elements;
 using UnityEditor;
 using UnityEngine;
@@ -32,12 +33,12 @@ namespace SummerRest.Editor.Window
             {
                 switch (e.Count)
                 {
-                    case 0:
+                    case 0: // No configure is detected => show initializing panel
                         var initializeGuideElement = initializeGuideTemplate.Instantiate().Q<InitializeGuideElement>();
                         initializeGuideElement.Init();
                         rootVisualElement.Add(initializeGuideElement);
                         break;
-                    case > 1:
+                    case > 1: // More than 1 => show error
                         rootVisualElement.Add(new HelpBox($"There is more than 1 {nameof(SummerRestConfiguration)} in the project, please always keep one single instance asset of this class", HelpBoxMessageType.Error));
                         break;
                 }

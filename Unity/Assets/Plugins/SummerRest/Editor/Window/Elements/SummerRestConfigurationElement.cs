@@ -3,6 +3,7 @@ using System.Linq;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Manager;
 using SummerRest.Editor.Models;
+using SummerRest.Editor.Requests;
 using SummerRest.Editor.Utilities;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -22,6 +23,7 @@ namespace SummerRest.Editor.Window.Elements
         private DomainListElement _domainListElement;
         private Domain _currentSelectedDomain;
         private SummerRestConfiguration _configuration;
+        private SerializedObject _serializedConfiguration;
         public new class UxmlFactory : UxmlFactory<SummerRestConfigurationElement, UxmlTraits>
         {
         }
@@ -37,32 +39,44 @@ namespace SummerRest.Editor.Window.Elements
             _domainButtonTemplate = domainButtonTemplate;
             _endpointElementTemplate = endpointElementTemplate;
             _configuration = configuration;
+            _serializedConfiguration = new SerializedObject(_configuration);
             SetupDomainListSection();
             SetupEndpointsTree();
-            SetupDomainSection();
+            SetupDomainActionsSection();
             SetupAuthSection();
             SetupGenerateSourceButton();
             ClearWindows();
         }
+        /// <summary>
+        /// Advanced settings on top of the window (only show when click on advanced settings button)
+        /// </summary>
         private void SetupAuthSection()
         {
-            var authToggle = this.Q<ToolbarToggle>("auth");
-            var authProp = this.Q<AuthConfiguresElement>();
-            authProp.Show(_configuration.AuthenticateConfiguration);
-            authProp.Show(authToggle.value);
-            authToggle.RegisterValueChangedCallback(e => {
-                authProp.Show(e.newValue);
+            var advancedToggle = this.Q<ToolbarToggle>("advanced");
+            var advancedSettings = this.Q<VisualElement>("advanced-settings");
+            advancedSettings.Q<PropertyField>("data-serializer").BindProperty(_serializedConfiguration);
+            advancedSettings.Q<PropertyField>("token-repository").BindProperty(_serializedConfiguration);
+            advancedSettings.Q<PropertyField>("auths").BindProperty(_serializedConfiguration);
+            advancedSettings.Show(advancedToggle.value);
+            advancedToggle.RegisterValueChangedCallback(e => {
+                advancedSettings.Show(e.newValue);
             });
         }
+        
+        /// <summary>
+        /// Generating source section since the automation of producing JSON file is much heavy, so I make a section to let user do it manually 
+        /// </summary>
         private void SetupGenerateSourceButton()
         {
             var targetAssembly = this.Q<PropertyField>("target-assembly");
-            targetAssembly.BindPropertyNoLabel(new SerializedObject(_configuration));
+            targetAssembly.BindPropertyNoLabel(_serializedConfiguration);
             var genBtn = this.Q<ToolbarButton>("gen-btn");
             genBtn.clicked += SourceGenerator.GenerateAdditionalFile;
         }
     
-        // Setup domain list on top of the window
+        /// <summary>
+        /// Show a list of all domains on top of the window (under the advanced section)
+        /// </summary>
         private void SetupDomainListSection()
         {
             var domains = _configuration.Domains;
@@ -113,8 +127,7 @@ namespace SummerRest.Editor.Window.Elements
             ShowEndpointsTree(domain);
             ShowDomainAction(domain);
         }
-        // Setup domain search section
-        private void SetupDomainSection()
+        private void SetupDomainActionsSection()
         {
             _domainElement = this
                 .Q<VisualElement>("endpoint-container")
@@ -169,7 +182,7 @@ namespace SummerRest.Editor.Window.Elements
             {
                 var endpointTreeElement = _endpointElementTemplate.Instantiate().Q<EndpointTreeElement>();
                 endpointTreeElement.OnAddChild += OnEndpointElementAddChild;
-                endpointTreeElement.OnDelete += OnEndpointElementOnOnRemoveChild;
+                endpointTreeElement.OnDelete += OnEndpointElementRemoveChild;
                 return endpointTreeElement;
             };
             _endpointTree.bindItem = (element, index) =>
@@ -236,7 +249,7 @@ namespace SummerRest.Editor.Window.Elements
             ShowEndpointsTree(_currentSelectedDomain);
             _endpointTree.SetSelectionById(endpoint.TreeId);
         }
-        private void OnEndpointElementOnOnRemoveChild(Endpoint endpoint)
+        private void OnEndpointElementRemoveChild(Endpoint endpoint)
         {
             if (endpoint is Domain domain)
             {

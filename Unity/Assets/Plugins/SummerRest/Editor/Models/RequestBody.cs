@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// Let users request with their custom classes inheriting from <see cref="IRequestBodyData"/> 
+    /// </summary>
     [Serializable]
     public class RequestBody : TextOrCustomData<IRequestBodyData, RequestBody.RequestBodyContainer>
     {

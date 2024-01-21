@@ -2,9 +2,27 @@ using System;
 
 namespace SummerRest.Runtime.RequestComponents
 {
+    /// <summary>
+    /// Data format for serializing requests and deserializing responses (only for raw text responses)
+    /// </summary>
     [Serializable]
     public enum DataFormat
     {
-        Json = 0, PlainText = 1, Bson = 2, Xml = 3, 
+        /// <summary>
+        /// Treat the data as JSON string https://www.json.org/json-en.html
+        /// </summary>
+        Json = 0, 
+        /// <summary>
+        /// Do nothing with the body
+        /// </summary>
+        PlainText = 1, 
+        /// <summary>
+        /// BSON
+        /// </summary>
+        Bson = 2, 
+        /// <summary>
+        /// XML format commonly used in SOAP servers
+        /// </summary>
+        Xml = 3, 
     }
 }

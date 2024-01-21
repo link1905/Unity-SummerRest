@@ -8,10 +8,20 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// A request is a terminal callable endpoint type <br/>
+    /// It represents a single request with independent values like method, params, body...
+    /// </summary>
     public class Request : Endpoint 
     {
         [SerializeField, JsonIgnore] private HttpMethod method;
+        /// <summary>
+        /// Will be automatically appended to <see cref="urlWithParam"/>
+        /// </summary>
         [SerializeField, JsonIgnore] private KeyValue[] requestParams;
+        /// <summary>
+        /// Will be deserialized into string in the generating source process <seealso cref="SummerRest.Editor.Models.RequestBody"/>
+        /// </summary>
         [SerializeField, JsonIgnore] private RequestBody requestBody;
         [SerializeField, JsonIgnore] private string urlWithParam;
         public string UrlWithParams => urlWithParam;
@@ -48,6 +58,9 @@ namespace SummerRest.Editor.Models
             base.Delete(fromParent);
         }
 
+        /// <summary>
+        /// Caches latest response of this request (editor-only)
+        /// </summary>
         [SerializeField, JsonIgnore] private Response latestResponse;
         [JsonIgnore] public Response LatestResponse
         {

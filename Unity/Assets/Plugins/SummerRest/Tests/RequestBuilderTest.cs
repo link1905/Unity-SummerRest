@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Runtime.Request;
 using SummerRest.Runtime.RequestComponents;
+using SummerRest.Runtime.Requests;
 
 namespace SummerRest.Tests
 {

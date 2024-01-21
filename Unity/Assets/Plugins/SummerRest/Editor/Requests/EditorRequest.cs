@@ -6,14 +6,15 @@ using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Runtime.Request;
 using SummerRest.Runtime.RequestAdaptor;
-using Unity.EditorCoroutines.Editor;
-using UnityEngine;
+using SummerRest.Runtime.Requests;
 using UnityEngine.Networking;
 
-namespace SummerRest.Editor.Manager
+namespace SummerRest.Editor.Requests
 {
+    /// <summary>
+    /// Editor-only requester that reflects on <see cref="Request"/>
+    /// </summary>
     public class EditorRequest : BaseRequest<EditorRequest>
     {
         private readonly Request _request;
@@ -24,11 +25,13 @@ namespace SummerRest.Editor.Manager
             base.SetRequestData(requestAdaptor);
             if (_request.AuthContainer is null) 
                 return;
-            AuthKey = _request.AuthContainer.AuthKey;
-            if (string.IsNullOrEmpty(AuthKey))
+            var authKey = _request.AuthContainer.AuthKey;
+            if (string.IsNullOrEmpty(authKey))
                 return;
-            var appender = IGenericSingleton.GetSingleton<IAuthAppender, BearerTokenAuthAppender>(_request.AuthContainer.Appender);
-            appender.Append(AuthKey, requestAdaptor);
+            using var _ = new EditorAuthDataRepository(_request.AuthContainer); 
+            var appender = IGenericSingleton.GetSingleton<IAuthAppender, BearerTokenAuthAppender>
+                (_request.AuthContainer.Appender);
+            appender.Append(authKey, requestAdaptor);
         }
         
         protected EditorRequest(Request request) : base(request.Url,request.UrlWithParams)
@@ -45,7 +48,7 @@ namespace SummerRest.Editor.Manager
             SerializedBody = request.SerializedBody;
         }
 
-        public static EditorRequest Create(Request request) => new EditorRequest(request);
+        public static EditorRequest Create(Request request) => new(request);
 
         public EditorRequest() : base(string.Empty, string.Empty)
         {
@@ -59,6 +62,7 @@ namespace SummerRest.Editor.Manager
             {
                 if (r.WrappedRequest is not UnityWebRequest handler)
                     return;
+                // Set response data
                 response.StatusCode = r.StatusCode;
                 response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
 

@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
-using RestSourceGenerator.Metadata;
 using RestSourceGenerator.Utilities;
 
 namespace RestSourceGenerator.Generators
@@ -9,36 +7,15 @@ namespace RestSourceGenerator.Generators
     [Generator]
     public class RestSourceGenerator : ISourceGenerator
     {
-        private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
         // private const string AssemblyName = "SummerRest";
         public void Initialize(GeneratorInitializationContext context)
         {
         }
         public void Execute(GeneratorExecutionContext context)
         {
-            var files = context.AdditionalFiles;
-            var file = files.FirstOrDefault(e => e.Path.Contains(FileName));
-            var text = file?.GetText();
-            if (file is null || text is null)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(nameof(RestSourceGenerator), "No file", 
-                        "Generated file named '{0}' does not exist", "Debug", DiagnosticSeverity.Warning, true), Location.None, 
-                    FileName));
-                return;
-            }
-            Configuration? conf = System.Text.Json.JsonSerializer.Deserialize<Configuration>(text.ToString());
+            var conf = ConfigLoader.Load(context);
             if (conf is null)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(nameof(RestSourceGenerator), "Wrong format", 
-                        "The format of the generated file can not be deserialized as JSON object", "Debug", DiagnosticSeverity.Warning, true), Location.None));
                 return;
-            }
-            
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(nameof(RestSourceGenerator), "Start generating", 
-                    "Start generating source", "Debug", DiagnosticSeverity.Info, true), Location.None));
             if (context.Compilation.AssemblyName != conf.Value.Assembly)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
@@ -47,11 +24,14 @@ namespace RestSourceGenerator.Generators
                     Location.None, context.Compilation.AssemblyName));
                 return;
             }
+            context.ReportDiagnostic(Diagnostic.Create(
+                new DiagnosticDescriptor(nameof(RestSourceGenerator), "Start generating", 
+                    "Start generating source", "Debug", DiagnosticSeverity.Info, true), Location.None));
             var builder = new StringBuilder();
             builder.Append(@"
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Parsers;
-namespace SummerRest.Runtime.Request {");
+namespace SummerRest.Runtime.Requests {");
             foreach (var request in conf.Value.Domains)
                 request.BuildClass(builder);
             builder.Append("}");

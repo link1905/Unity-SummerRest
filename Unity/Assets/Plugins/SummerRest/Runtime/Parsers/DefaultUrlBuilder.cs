@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SummerRest.Runtime.Request;
+using SummerRest.Runtime.Requests;
 
 namespace SummerRest.Runtime.Parsers
 {

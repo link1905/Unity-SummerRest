@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace SummerRest.Editor.Configurations
+namespace SummerRest.Editor.DataStructures
 {
     public class SingletonException : Exception
     {

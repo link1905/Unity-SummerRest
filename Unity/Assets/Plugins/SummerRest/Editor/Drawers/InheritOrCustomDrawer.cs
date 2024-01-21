@@ -15,7 +15,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(InheritOrCustomContainer<>))]
     internal class InheritOrCustomDrawer : UIToolkitDrawer
     {
-        public override string RelativeFromTemplateAssetPath => "Properties/inherit-or-custom.uxml";
+        protected override string RelativeFromTemplateAssetPath => "Properties/inherit-or-custom.uxml";
         private InheritOrCustomAttribute _att;
         private List<string> _allows;
         private List<string> GetAllows(SerializedProperty serializedProperty, InheritChoice allow)
@@ -23,10 +23,11 @@ namespace SummerRest.Editor.Drawers
             var result = new List<string>();
             var parent = serializedProperty.serializedObject.FindProperty($"<{_att.ParentPropName}>k__BackingField");
             var parentValue = parent?.objectReferenceValue;
+            // Select values overlapping with Allow in the InheritOrCustomAttribute
             foreach (InheritChoice choice in Enum.GetValues(typeof(InheritChoice)))
             {
                 var overlap = choice & allow;
-                //Inherit => must have a parent
+                //Inherit or AppendToParent => must have a parent
                 if (overlap != 0 && (parentValue is not null || 
                                      (choice != InheritChoice.Inherit && choice != InheritChoice.AppendToParent)))
                     result.Add(choice.ToString());
@@ -64,9 +65,7 @@ namespace SummerRest.Editor.Drawers
             choiceElement.RegisterValueChangedCallback(c =>
             {
                 if (!Enum.TryParse<InheritChoice>(c.newValue, out var val))
-                {
                     return;
-                }
                 choiceProp.enumValueFlag = (int)val;
                 choiceProp.serializedObject.ApplyModifiedProperties();
                 ShowProp(valueElement, cacheElement, val);

@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.RequestAdaptor
 {
+
+    /// <summary>
+    /// Wrapping <see cref="UnityWebRequest"/> static factory methods to create <see cref="UnityWebRequestAdaptor{TSelf,TResponse}"/>
+    /// </summary>
     public class UnityWebRequestAdaptorProvider : IWebRequestAdaptorProvider
     {
         public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable)

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// Point to a <see cref="AuthContainer"/> inside <see cref="AuthConfiguration"/> <br/>
+    /// </summary>
     [Serializable]
     public struct AuthPointer
     {
@@ -13,10 +16,10 @@ namespace SummerRest.Editor.Models
         public string AuthKey => authKey;
         public static implicit operator AuthContainer(AuthPointer p)
         {
-            var authConfigure= SummerRestConfiguration.Instance.AuthenticateConfiguration;
-            return authConfigure.AuthContainers.FirstOrDefault(e => e.AuthKey == p.authKey);
+            var authConfigure= SummerRestConfiguration.Instance.AuthContainers;
+            return authConfigure.FirstOrDefault(e => e.AuthKey == p.authKey);
         }
-        public static implicit operator AuthPointer(AuthContainer key) => key is not null ? new AuthPointer()
+        public static implicit operator AuthPointer(AuthContainer key) => key is not null ? new AuthPointer
         {
             authKey = key.AuthKey
         } : default;

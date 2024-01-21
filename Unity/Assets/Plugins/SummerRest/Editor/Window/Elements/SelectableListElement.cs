@@ -1,10 +1,16 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
 {
+    /// <summary>
+    /// A custom listview showing the elements horizontally <bt/>
+    /// It also highlight current selected element
+    /// </summary>
+    /// <typeparam name="TSelf"></typeparam>
+    /// <typeparam name="TElement"></typeparam>
+    /// <typeparam name="TData"></typeparam>
     public class SelectableListElement<TSelf, TElement, TData> : VisualElement 
         where TElement : VisualElement, IIndexedElement<TElement, TData> 
         where TSelf : VisualElement, new()  
@@ -17,6 +23,7 @@ namespace SummerRest.Editor.Window.Elements
         private VisualTreeAsset _elementTreeAsset;
         private string m_Test;
         private Color _selectColor;
+        // Current selected element's index
         private int? _previousSelect;
         private VisualElement _container;
         private Button _addBtn;
@@ -45,6 +52,13 @@ namespace SummerRest.Editor.Window.Elements
             }
         }
 
+        /// <summary>
+        /// Add a child to the list
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="data">The data to setup the child</param>
+        /// <param name="alsoSelect">Also selected the child after finishing</param>
+        /// <returns></returns>
         public virtual TElement AddChild(TElement element, TData data, bool alsoSelect)
         {
             element.Init(_container.childCount, data);
@@ -106,7 +120,9 @@ namespace SummerRest.Editor.Window.Elements
             var idx = element.Index;
             if (idx == _previousSelect)
                 return;
+            // Highlight new selection
             element.Enable(_selectColor);
+            // Disable the existing one
             if (_previousSelect is not null)
                 _container.ElementAt(_previousSelect.Value).Q<TElement>().Disable();
             _previousSelect = idx;

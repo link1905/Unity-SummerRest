@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepository;
+using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
 using UnityEngine.Networking;

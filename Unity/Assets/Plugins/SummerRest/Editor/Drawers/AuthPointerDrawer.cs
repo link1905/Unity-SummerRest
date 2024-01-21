@@ -20,14 +20,13 @@ namespace SummerRest.Editor.Drawers
             var idx = options.IndexOf(current);
             return Mathf.Max(idx, 0);
         }
-        public override string RelativeFromTemplateAssetPath => "Properties/auth-pointer.uxml";
+
+        protected override string RelativeFromTemplateAssetPath => "Properties/auth-pointer.uxml";
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
-            var authConfigure= SummerRestConfiguration.Instance.AuthenticateConfiguration;
-            if (authConfigure is null)
-                throw new Exception($"There is no {nameof(AuthenticateConfiguration)} in the project");
-            var allIds = authConfigure.AuthContainers.Select(e => e.AuthKey).ToList();
+            var authConfigure= SummerRestConfiguration.Instance.AuthContainers;
+            var allIds = authConfigure.Select(e => e.AuthKey).ToList();
             var noOption = allIds.Count == 0;
             
             var noOptionHelpBox = tree.Q<HelpBox>("no-option");
@@ -37,10 +36,10 @@ namespace SummerRest.Editor.Drawers
 
             var keyProp = property.FindPropertyRelative("authKey");
             var previewField = tree.Q<PropertyField>("preview");
-            // previewField.SetEnabled(false);
-            // If no key ids are matched => get the first one 
+            // Only modify dropdown and preview section when having at least 1 auth container configured
             if (!noOption)
             {
+                //Make sure the the property pointing to an auth container (default is 0)
                 keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
                 selectionsDropdown.choices = allIds;
                 selectionsDropdown.BindWithCallback<DropdownField, string>(keyProp, s =>
@@ -52,7 +51,7 @@ namespace SummerRest.Editor.Drawers
         }
         private void ShowPreview(PropertyField previewField, string val)
         {
-            var authConfigure= SummerRestConfiguration.Instance.AuthenticateConfiguration;
+            var authConfigure= SummerRestConfiguration.Instance;
             var idx = Array.FindIndex(authConfigure.AuthContainers, s => s.AuthKey == val);
             if (idx < 0)
             {
@@ -62,7 +61,7 @@ namespace SummerRest.Editor.Drawers
             previewField.Show(true);
             var authSerObj = new SerializedObject(authConfigure);
             var authsArr = authSerObj.FindProperty("auths");
-            // authConfigure.AuthContainers.FirstOrDefault(e => e.Key == val)
+            // Bind the auth container to preview it inside an AuthPointer
             previewField.BindProperty(authsArr.GetArrayElementAtIndex(idx));
         }
     }

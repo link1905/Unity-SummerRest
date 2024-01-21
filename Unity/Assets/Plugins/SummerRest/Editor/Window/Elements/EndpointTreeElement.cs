@@ -12,6 +12,9 @@ namespace SummerRest.Editor.Window.Elements
         Service, Request
     }
 
+    /// <summary>
+    /// Represents an endpoint on a <see cref="TreeView"/>
+    /// </summary>
     public class EndpointTreeElement : VisualElement
     {
         private ToolbarMenu _actionMenu;
@@ -40,14 +43,8 @@ namespace SummerRest.Editor.Window.Elements
             this.AddManipulator(new ContextualMenuManipulator(e => OnContextClick(isContainer, e.menu)));
             _actionMenu.Show(isContainer);
             _method.Show(!isContainer);
-            if (isContainer)
-            {
-                OnContextClick(true, _actionMenu.menu);
-            }
-            else //Single action => request
-            {
+            if (!isContainer)
                 _method.BindWithCallback<Label, string>(serializedObj, SetMethod);
-            }
         }
 
         private void SetMethod(string val)
@@ -58,10 +55,15 @@ namespace SummerRest.Editor.Window.Elements
         {
             _path.SetTextValueWithoutNotify($"(/{value})");
         }
+        /// <summary>
+        /// Show actions for adding children to this element
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="menu"></param>
         private void OnContextClick(bool container, DropdownMenu menu)
         {
             menu.ClearItems();
-            if (container)
+            if (container) //Single action => requests have no child, no need to show adding actions 
             {
                 menu.AppendAction(ElementAddAction.Service.ToString(), ClickCreate);
                 menu.AppendAction(ElementAddAction.Request.ToString(), ClickCreate); 

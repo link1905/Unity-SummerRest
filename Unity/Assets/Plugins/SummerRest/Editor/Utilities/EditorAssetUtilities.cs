@@ -35,7 +35,6 @@ namespace SummerRest.Editor.Utilities
                 AssetDatabase.CreateFolder(parent, name);
         }
 
-        //public static bool NotStableObject(this Object self) => self is null || self.GetInstanceID() <= 0;
         public static T CreateAndSaveObject<T>(string path) where T : ScriptableObject
         {
             var randName = GUID.Generate().ToString();

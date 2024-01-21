@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// Represents a generic response body based on content-type
+    /// </summary>
     [Serializable]
     public class ResponseBody
     {

@@ -5,14 +5,10 @@ using UnityEngine;
 
 namespace SummerRest.Runtime.RequestComponents
 {
-    // [Serializable]
-    // public struct ContentDisposition
-    // {
-    //     [field: SerializeField] public bool Inline { get; private set; }
-    //     [field: SerializeField] public string Name { get; private set; }
-    //     [field: SerializeField] public string FileName { get; private set; }
-    // }
-    
+    /// <summary>
+    /// Http content type including 3 fields {charset, media type, boundary} based on https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type <br/>
+    /// This class also contains helpful components of a content type via <see cref="Headers"/> <see cref="Encodings"/> <see cref="MediaTypeNames"/>
+    /// </summary>
     [Serializable]
     public struct ContentType
     {
@@ -85,6 +81,9 @@ namespace SummerRest.Runtime.RequestComponents
         public string MediaType { get; private set; }
         [field: SerializeField] public string Boundary { get; private set; }
 
+        /// <summary>
+        /// Content-type string formed from the 3 components
+        /// </summary>
         public string FormedContentType
         {
             get
@@ -105,6 +104,14 @@ namespace SummerRest.Runtime.RequestComponents
             MediaType = mediaType;
             Boundary = boundary;
         }
+        /// <summary>
+        /// Create a new content type based on an existing one <br/>
+        /// A null parameter means using the old value for the associated field
+        /// </summary>
+        /// <param name="mediaType"></param>
+        /// <param name="charset"></param>
+        /// <param name="boundary"></param>
+        /// <returns></returns>
         public ContentType With(string mediaType = null, string charset = null, string boundary = null)
         {
             mediaType ??= MediaType;

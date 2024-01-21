@@ -1,13 +1,14 @@
 ﻿using System;
-using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
 {
+    /// <summary>
+    /// Generic endpoint's view section of <see cref="SummerRestConfigurationElement"/> behaves differently depended on the type of end point (<see cref="Service"/>,<see cref="Domain"/>,<see cref="Request"/>)
+    /// </summary>
     public class EndpointElement : VisualElement
     {
         public event Action<Request, Action> OnRequest;
@@ -45,6 +46,10 @@ namespace SummerRest.Editor.Window.Elements
             _urlElement = this.Q<TextField>("url");
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
+        /// <summary>
+        /// Try to show only beneficial fields (the others will be moved to the advanced section)
+        /// </summary>
+        /// <param name="shouldBeMovedToAdvancedPart"></param>
         private void ShowAdvancedSettings(bool shouldBeMovedToAdvancedPart)
         {
             _advancedSettingsFoldout.Show(shouldBeMovedToAdvancedPart);
@@ -69,7 +74,7 @@ namespace SummerRest.Editor.Window.Elements
             _requestBodyElement.Show(isRequest);
             // If domain => use activeVersion instead of path
             _pathElement.bindingPath = endpoint is Domain ? "activeVersion" : "path";
-            // If request => rather than urlWithParams
+            // If request => urlWithParams
             _urlElement.bindingPath = endpoint is Request ? "urlWithParam" : "url";
             ShowAdvancedSettings(isRequest);
             this.BindChildrenToProperties(serializedObj);

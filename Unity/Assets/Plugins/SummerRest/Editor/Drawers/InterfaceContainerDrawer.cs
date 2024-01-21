@@ -8,7 +8,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(InterfaceContainer<>), true)]
     internal class InterfaceContainerDrawer : UIToolkitDrawer
     {
-        public override string RelativeFromTemplateAssetPath => "Properties/interface-container.uxml";
+        protected override string RelativeFromTemplateAssetPath => "Properties/interface-container.uxml";
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
@@ -26,6 +26,11 @@ namespace SummerRest.Editor.Drawers
             return tree;
         }
 
+        /// <summary>
+        /// Bind to the correct serializedObject because <see cref="InterfaceContainer{T}.Value"/> can be changed based on current <see cref="InterfaceContainer{T}.Type"/>
+        /// </summary>
+        /// <param name="valuePropField"></param>
+        /// <param name="property"></param>
         private void RebindValuePropField(PropertyField valuePropField, SerializedProperty property)
         {
             valuePropField.Unbind();

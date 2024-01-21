@@ -7,6 +7,9 @@ using UnityEngine.Serialization;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// Storing values of a HTTP response (editor-only)
+    /// </summary>
     [Serializable]
     public class Response
     {

@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
-using RestSourceGenerator.Generators;
 using RestSourceGenerator.Utilities;
 using Xunit;
 
@@ -156,7 +155,7 @@ public class RestSourceGeneratorTest :
 
                           using SummerRest.Runtime.RequestComponents;
                           using SummerRest.Runtime.Parsers;
-                          namespace SummerRest.Runtime.Request {
+                          namespace SummerRest.Runtime.Requests {
                            public static class Domain1 {
                                public static class MyService {
                                    public class Request1 : SummerRest.Runtime.Request.BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
@@ -409,7 +408,7 @@ public class RestSourceGeneratorTest :
         var expected = """
                           using SummerRest.Runtime.RequestComponents;
                           using SummerRest.Runtime.Parsers;
-                          namespace SummerRest.Runtime.Request {
+                          namespace SummerRest.Runtime.Requests {
                            public static class MyJsonDomain {
                                public static class DataService {
                                    public class GetRequest : SummerRest.Runtime.Request.BaseRequest<GetRequest> {

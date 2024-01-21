@@ -1,10 +1,14 @@
 ﻿using System.Runtime.CompilerServices;
 using SummerRest.Runtime.Parsers;
+using SummerRest.Runtime.RequestComponents;
 using UnityEngine.Networking;
 
 [assembly: InternalsVisibleTo("SummerRest.Tests")]
 namespace SummerRest.Runtime.RequestAdaptor
 {
+    /// <summary>
+    /// Request adaptor deserializing the response body to C# class objects based on the content-type <seealso cref="DataFormat"/> 
+    /// </summary>
     internal class RawUnityWebRequestAdaptor<TResponse> : UnityWebRequestAdaptor<RawUnityWebRequestAdaptor<TResponse>, TResponse>
     {
         private string _rawResponse;

@@ -10,60 +10,43 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Models
 {
-    public interface ITreeBuilder
-    {
-        TreeViewItemData<Endpoint> BuildTree(int id);
-    }
+    /// <summary>
+    /// Base class containing an HTTP endpoint information
+    /// </summary>
     public abstract class Endpoint : ScriptableObject
     {
         [field: SerializeReference][JsonIgnore]
         public Domain Domain { get; set; }
         [field: SerializeReference][JsonIgnore] 
         public Endpoint Parent { get; protected internal set; }
-
-        [SerializeField][JsonIgnore] private string endpointName;
         
+        /// <summary>
+        /// This is the name of the generated class associated with this endpoint 
+        /// </summary>
+        [SerializeField][JsonIgnore] private string endpointName;
         public string EndpointName
         {
             get => endpointName;
             set => endpointName = value;
         }
+        /// <summary>
+        /// Url of the end point sequentially formed its ancestors and active origin of <see cref="Domain"/>
+        /// <seealso cref="CacheValues"/> 
+        /// </summary>
         [SerializeField, JsonIgnore] private string url;
         public string Url => url;
-        
+        /// <summary>
+        /// Path of this endpoint, contributes to the process of creating <see cref="url"/> of this endpoint and its descendants <seealso cref="CacheValues"/>
+        /// </summary>
         [SerializeField][JsonIgnore] private string path;
         public string Path
         {
             get => path;
             set => path = value;
         }
-
-        [SerializeField, JsonIgnore, InheritOrCustom]
-        private InheritOrCustomContainer<DataFormat> dataFormat;
-        public DataFormat DataFormat { get; private set; }
-        
-        [SerializeField, InheritOrCustom] 
-        private InheritOrCustomContainer<AuthPointer> auth;
-        //[field: SerializeField] public AuthPointer AuthPointer { get; private set; }
-        public AuthContainer AuthContainer { get; private set; }
-
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
-        private InheritOrCustomContainer<KeyValue[]> headers;
-        public KeyValue[] Headers { get; private set; }
-
-        [SerializeField, JsonIgnore, InheritOrCustom]
-        private InheritOrCustomContainer<ContentType> contentType;
-        public ContentType? ContentType { get; private set; }
-        
-        [SerializeField, JsonIgnore, InheritOrCustom]
-        private InheritOrCustomContainer<int> timeoutSeconds;
-        public int? TimeoutSeconds { get; private set; }
-
-        [SerializeField, JsonIgnore, InheritOrCustom]
-        private InheritOrCustomContainer<int> redirectsLimit;
-        public int? RedirectsLimit { get; private set; }
-
-        //[field: SerializeField] public AuthInjectorPointer AuthInjectorPointer { get; private set; }
+        /// <summary>
+        /// Form the full path of an endpoint based on its parent excluding active origin of <see cref="Domain"/> 
+        /// </summary>
         private string FullPath
         {
             get
@@ -76,12 +59,63 @@ namespace SummerRest.Editor.Models
             }
         }
 
+
+        /// <summary>
+        /// Response and request data format arisen by this endpoint <see cref="SummerRest.Runtime.RequestComponents.DataFormat"/>
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom]
+        private InheritOrCustomContainer<DataFormat> dataFormat;
+        public DataFormat DataFormat { get; private set; }
+        
+        /// <summary>
+        /// Points to an <see cref="SummerRest.Editor.Models.AuthContainer"/>
+        /// </summary>
+        [SerializeField, InheritOrCustom] 
+        private InheritOrCustomContainer<AuthPointer> auth;
+        public AuthContainer AuthContainer { get; private set; }
+
+        /// <summary>
+        /// Values will be appended to associated requests
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
+        private InheritOrCustomContainer<KeyValue[]> headers;
+        public KeyValue[] Headers { get; private set; }
+
+        /// <summary>
+        /// Content type of associated requests
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom]
+        private InheritOrCustomContainer<ContentType> contentType;
+        public ContentType? ContentType { get; private set; }
+        
+        /// <summary>
+        /// Timeout in seconds of associated requests
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom]
+        private InheritOrCustomContainer<int> timeoutSeconds;
+        public int? TimeoutSeconds { get; private set; }
+
+        /// <summary>
+        /// Redirects limit of associated requests
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom]
+        private InheritOrCustomContainer<int> redirectsLimit;
+        public int? RedirectsLimit { get; private set; }
+
+
         [field: SerializeField] public int TreeId { get; protected set; }
+        /// <summary>
+        /// For building tree used in <see cref="TreeView"/>
+        /// </summary>
         public virtual TreeViewItemData<Endpoint> BuildTree(int id)
         {
             TreeId = ++id;
             return new TreeViewItemData<Endpoint>(TreeId, this);
         }
+        /// <summary>
+        /// Delete this endpoint (and its children) and associated assets
+        /// </summary>
+        /// <param name="fromParent">Whether actively remove this endpoint from its parent</param>
         public virtual void Delete(bool fromParent)
         {
             this.RemoveAsset();
@@ -89,6 +123,9 @@ namespace SummerRest.Editor.Models
         [JsonIgnore] public virtual bool IsContainer => false;
         public abstract string TypeName { get; }
 
+        /// <summary>
+        /// Cache the <see cref="InheritOrCustomContainer{T}"/> fields based on the <see cref="Parent"/>
+        /// </summary>
         public virtual void CacheValues()
         {
             var headersCache = headers.Cache(Parent, whenInherit: p => new Present<KeyValue[]>(p.Headers != null, p.Headers),

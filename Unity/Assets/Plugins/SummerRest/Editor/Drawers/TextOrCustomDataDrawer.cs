@@ -10,7 +10,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(TextOrCustomData<,>))]
     internal class TextOrCustomDataDrawer : UIToolkitDrawer
     {
-        public override string RelativeFromTemplateAssetPath => "Properties/text-or-custom.uxml";
+        protected override string RelativeFromTemplateAssetPath => "Properties/text-or-custom.uxml";
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;

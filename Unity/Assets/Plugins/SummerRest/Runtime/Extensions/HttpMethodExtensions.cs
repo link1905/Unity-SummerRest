@@ -15,7 +15,7 @@ namespace SummerRest.Runtime.Extensions
         public const string Connect = "CONNECT";
 
 
-        // Better performance than Enum.Parse
+        // Better performance than Enum.Parse()
         public static HttpMethod UnityHttpMethod(string val)
         {
             return val switch
@@ -33,6 +33,7 @@ namespace SummerRest.Runtime.Extensions
             };
         }
 
+        // Better performance than Enum.ToString()
         public static string ToUnityHttpMethod(this HttpMethod val)
         {
             return val switch

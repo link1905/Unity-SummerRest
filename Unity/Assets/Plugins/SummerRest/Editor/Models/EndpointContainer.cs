@@ -6,15 +6,24 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Models
 {
+    /// <summary>
+    /// Endpoint class that be able to contain other endpoints and do stuff recursively <br/>
+    /// Separate services and requests to easily build editor views and generate source 
+    /// </summary>
     public abstract  class EndpointContainer : Endpoint
     {
         [SerializeReference, JsonIgnore] private List<Service> services = new();
         [SerializeReference, JsonIgnore] private List<Request> requests = new();
         public List<Service> Services => services;
         public List<Request> Requests => requests;
-              public override bool IsContainer => true;
+        public override bool IsContainer => true;
 
-        public List<TreeViewItemData<Endpoint>> BuildChildrenTree(int id)
+        /// <summary>
+        /// Build tree for children
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Children tree</returns>
+        private List<TreeViewItemData<Endpoint>> BuildChildrenTree(int id)
         {
             var children = new List<TreeViewItemData<Endpoint>>();
             foreach (var tree in requests.Select(r => r.BuildTree(id)))
@@ -77,6 +86,7 @@ namespace SummerRest.Editor.Models
         public override void CacheValues()
         {
             base.CacheValues();
+            // Recursively call children's caching
             foreach (var r in requests)
                 r.CacheValues();
             foreach (var s in services)

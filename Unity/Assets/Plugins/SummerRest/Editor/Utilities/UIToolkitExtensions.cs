@@ -22,6 +22,11 @@ namespace SummerRest.Editor.Utilities
                 nativeBytes[i] = (byte)serializedProperty.GetArrayElementAtIndex(i).intValue;
             return nativeBytes;
         }
+        /// <summary>
+        /// Find all bindable children of <see cref="visualElement"/> and bind them to <see cref="serializedObject"/>
+        /// </summary>
+        /// <param name="visualElement"></param>
+        /// <param name="serializedObject"></param>
         public static void BindChildrenToProperties(this VisualElement visualElement, SerializedObject serializedObject)
         {
             foreach (var child in visualElement.Children())
@@ -54,6 +59,12 @@ namespace SummerRest.Editor.Utilities
                 bindableElement.Unbind();
             }
         }
+        /// <summary>
+        /// A <see cref="PropertyField"/> often comes with a label displaying propertyDisplayName <br/>
+        /// This method remove that label
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="property"></param>
         public static void BindPropertyNoLabel(this PropertyField field, SerializedObject property)
         {
             field.BindProperty(property);
@@ -64,15 +75,6 @@ namespace SummerRest.Editor.Utilities
                     return;
                 label.style.display = DisplayStyle.None;
             });
-        }
-        public static void FitLabel<T>(this BaseField<T> baseField)
-        {
-            baseField.labelElement.style.minWidth = StyleKeyword.Auto;
-        }
-        public static void FitLabel<T>(params BaseField<T>[] baseField)
-        {
-            foreach (var b in baseField)
-                b.FitLabel();
         }
         public static void Show(this IStyle style, bool show)
         {
@@ -87,16 +89,19 @@ namespace SummerRest.Editor.Utilities
         {
             field.SetValueWithoutNotify(val);
         }
-
-        public static void InsertAll(this VisualElement visualElement, int startIndex, params VisualElement[] elements)
-        {
-            foreach (var element in elements)
-                visualElement.Insert(startIndex++, element);
-        }
+        /// <summary>
+        /// Binds an element to a <see cref="SerializedObject"/> and invokes <see cref="callback"/> whenever the property is changed
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="obj"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TField"></typeparam>
+        /// <typeparam name="TCallbackValue"></typeparam>
         public static void BindWithCallback<TField, TCallbackValue>(this TField field, SerializedObject obj, Action<TCallbackValue> callback) 
             where TField : IBindable, INotifyValueChanged<TCallbackValue>
         {
             field.BindProperty(obj);
+            // Use this instead of TrackPropertyValue because the method does not working properly (it's currently a known issue)
             field.RegisterValueChangedCallback(e =>
             {
                 var changed = e.newValue;
@@ -105,6 +110,15 @@ namespace SummerRest.Editor.Utilities
                 callback?.Invoke(changed);
             });
         }
+        
+        /// <summary>
+        /// Binds an element to a <see cref="SerializedProperty"/> and invokes <see cref="callback"/> whenever the property is changed
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="obj"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TField"></typeparam>
+        /// <typeparam name="TCallbackValue"></typeparam>
         public static void BindWithCallback<TField, TCallbackValue>(this TField field, SerializedProperty property, Action<TCallbackValue> callback) 
             where TField : IBindable, INotifyValueChanged<TCallbackValue>
         {

@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
 {
+    /// <summary>
+    /// A domain element shown inside <see cref="DomainListElement"/>
+    /// </summary>
     public class DomainItemElement : VisualElement, IIndexedElement<DomainItemElement, Domain>
     {
         public event Action<DomainItemElement> OnClicked;

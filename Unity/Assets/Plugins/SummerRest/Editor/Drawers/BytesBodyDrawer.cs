@@ -30,6 +30,8 @@ namespace SummerRest.Editor.Drawers
         {
             var bytesProp = property.FindPropertyRelative("data");
             var isImageProp = property.FindPropertyRelative("isImage");
+            // Not an image => show nothing
+            // This method is planned to show more types of bytes values like sound,video,...
             if (bytesProp.arraySize == 0 || !isImageProp.boolValue)
             {
                 image.image = null;

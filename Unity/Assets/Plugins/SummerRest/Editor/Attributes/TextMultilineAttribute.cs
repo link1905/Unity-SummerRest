@@ -2,6 +2,9 @@
 
 namespace SummerRest.Editor.Attributes
 {
+    /// <summary>
+    /// Show a <see cref="string"/> field on multiline
+    /// </summary>
     public class TextMultilineAttribute : PropertyAttribute
     {
         public int MinHeight { get; }

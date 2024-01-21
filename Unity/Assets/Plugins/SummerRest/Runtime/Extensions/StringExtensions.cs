@@ -34,14 +34,5 @@ namespace SummerRest.Runtime.Extensions
             value = str[(index + 1)..];
             return true;
         }
-        public static string ReplaceFromIndexWith(this string value, int index, string replace)
-        {
-            //index + 1 => ignore index
-            var needLength = index + replace.Length;
-            Span<char> result = stackalloc char[needLength];
-            value.AsSpan()[..result.Length].CopyTo(result);
-            replace.AsSpan().CopyTo(result[index..]);
-            return new string(result);
-        }
     }
 }

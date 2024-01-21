@@ -3,21 +3,30 @@ using System.Net;
 using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Pool;
-using SummerRest.Runtime.Request;
 using SummerRest.Runtime.RequestComponents;
+using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Pool;
 
 namespace SummerRest.Runtime.RequestAdaptor
 {
+    /// <summary>
+    /// Default request adaptor wrapping a <see cref="UnityWebRequest"/>
+    /// </summary>
+    /// <typeparam name="TSelf"></typeparam>
+    /// <typeparam name="TResponse"></typeparam>
     internal abstract class UnityWebRequestAdaptor<TSelf, TResponse> :
         IWebRequestAdaptor<TResponse>,
         IPoolable<TSelf, UnityWebRequest> where TSelf : UnityWebRequestAdaptor<TSelf, TResponse>, new()
     {
         protected UnityWebRequest WebRequest { get; private set; }
+        /// <summary>
+        /// For audio and texture requests, we do not provide raw response for better performance
+        /// </summary>
         public virtual string RawResponse => null;
         public TResponse ResponseData { get; private set; }
+
         public IObjectPool<TSelf> Pool { get; set; }
 
         public static TSelf Create(UnityWebRequest webRequest)
@@ -88,11 +97,16 @@ namespace SummerRest.Runtime.RequestAdaptor
                 if (WebRequest.uploadHandler is null)
                     return;
                 _contentType = value;
+                // Try to set null content-type => redirect back to default content-type of Unity instead 
                 _contentType ??= IContentTypeParser.Current.DefaultContentType;
                 WebRequest.uploadHandler.contentType = _contentType.Value.FormedContentType;
             }
         }
 
+        /// <summary>
+        /// Build response based on the type of current adaptor <br/>
+        /// </summary>
+        /// <returns></returns>
         internal abstract TResponse BuildResponse();
 
         public WebResponse<TResponse> WebResponse

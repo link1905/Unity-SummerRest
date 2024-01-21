@@ -2,8 +2,12 @@
 using System.Net;
 using SummerRest.Runtime.RequestComponents;
 
-namespace SummerRest.Runtime.Request
+namespace SummerRest.Runtime.Requests
 {
+    /// <summary>
+    /// Contains response data of a web request
+    /// </summary>
+    /// <typeparam name="TBody"></typeparam>
     public struct WebResponse<TBody>
     {
         public object WrappedRequest { get;  }

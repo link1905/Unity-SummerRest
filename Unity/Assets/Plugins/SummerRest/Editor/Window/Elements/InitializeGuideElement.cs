@@ -1,4 +1,5 @@
 ﻿using SummerRest.Editor.Configurations;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -6,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
 {
+    /// <summary>
+    /// The element will be shown when no <see cref="SummerRestConfiguration"/> is detected in the project
+    /// </summary>
     public class InitializeGuideElement : VisualElement
     {
         private ObjectField _folder;
@@ -43,7 +47,6 @@ namespace SummerRest.Editor.Window.Elements
                 if (!AssetDatabase.IsValidFolder(folder))
                     return;
                 var conf = EditorAssetUtilities.CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
-                conf.AuthenticateConfiguration = EditorAssetUtilities.CreateAndSaveObject<AuthenticateConfiguration>(nameof(AuthenticateConfiguration), folder);
                 conf.MakeDirty();
                 EditorUtility.RequestScriptReload();
             }
