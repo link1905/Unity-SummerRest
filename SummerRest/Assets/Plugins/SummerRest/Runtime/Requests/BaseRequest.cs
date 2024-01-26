@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
-using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.Requests
 {
@@ -39,6 +38,7 @@ namespace SummerRest.Runtime.Requests
         /// Please note that, this property originally contains your inputs in the plugin window
         /// </summary>
         public RequestParamContainer Params { get; } = new();
+        protected abstract IRequestModifier RequestModifier { get; }
 
         /// <summary>
         /// Access this to modify your headers in runtime<br/>
@@ -65,34 +65,7 @@ namespace SummerRest.Runtime.Requests
         /// </summary>
         public ContentType? ContentType { get; set; }
 
-        private object _bodyData;
-        /// <summary>
-        /// The body data of arisen requests <br/>
-        /// Originally, this property is null since we can not refer to your custom class for deserializing <br/>
-        /// This property is only useful if <see cref="Method"/> is {<see cref="HttpMethod.Post"/>, <see cref="HttpMethod.Put"/>, <see cref="HttpMethod.Patch"/>}
-        /// </summary>
-        public object BodyData { get => _bodyData;
-            set
-            {
-                // Do not leverage the initialized json string anymore after users set something new
-                InitializedSerializedBody = null;
-                _bodyData = value;
-            }
-        }
-        /// <summary>
-        /// The body format of arisen requests
-        /// </summary>
-        public DataFormat BodyFormat { get; set; }
-        protected string InitializedSerializedBody { get; set; }
-        /// <summary>
-        /// It may be better if we cache this value when <see cref="BodyData"/> or <see cref="BodyFormat"/> are changed <br/>
-        /// But the problem comes up if users change the <see cref="BodyData"/> properties outside this class, then the cache is wrong
-        /// </summary>
-        internal virtual string SerializedBody => 
-            //InitializedSerializedBody is null => use the body instead
-            !string.IsNullOrEmpty(InitializedSerializedBody) ? 
-            InitializedSerializedBody : BodyData is null ? 
-                null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
+
 
         protected BaseRequest(string url, string absoluteUrl)
         {
@@ -129,6 +102,7 @@ namespace SummerRest.Runtime.Requests
             requestAdaptor.Method = Method;
             foreach (var (k, v) in Headers)
                 requestAdaptor.SetHeader(k, v);
+            RequestModifier?.ModifyRequestData(requestAdaptor);
         }
         private IEnumerator SetRequestDataAndWait<TResponse>(
             IWebRequestAdaptor<TResponse> requestAdaptor)

@@ -20,6 +20,11 @@ namespace SummerRest.Editor.DataStructures
             this.hasValue = hasValue;
             this.value = value;
         }
-
+        public Present(T value)
+        {
+            this.hasValue = true;
+            this.value = value;
+        }
+        public static Present<T> Absent => new();
     }
 }

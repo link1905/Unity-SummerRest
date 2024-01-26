@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
@@ -15,6 +16,13 @@ namespace SummerRest.Editor.Models
     /// </summary>
     public class Request : Endpoint 
     {
+        /// <summary>
+        /// Content type of associated requests
+        /// </summary>
+        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Auto | InheritChoice.Custom)]
+        private InheritOrCustomContainer<ContentType> contentType;
+        public ContentType? ContentType { get; private set; }
+        
         [SerializeField, JsonIgnore] private HttpMethod method;
         /// <summary>
         /// Will be automatically appended to <see cref="urlWithParam"/>
@@ -44,14 +52,25 @@ namespace SummerRest.Editor.Models
         }
 
         public string SerializedBody => RequestBody.SerializedData(DataFormat, false);
+        public KeyValue[] SerializedForm => RequestBody.SerializedForm;
+        public bool IsMultipart => requestBody.IsMultipart;
 
         private IEnumerable<KeyValuePair<string, string>> Params => requestParams?.Select(e => (KeyValuePair<string, string>)e);
         public override void CacheValues()
         {
             base.CacheValues();
             urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
-            requestBody.CacheValue(DataFormat);
+            var contentTypeCache = contentType.Cache(Parent,
+                allow: InheritChoice.Auto | InheritChoice.Custom,
+                defaultWhenInvalid: InheritChoice.Auto,
+                whenInherit: null, whenAuto: () =>
+                {
+                    var builtContentType = requestBody.CacheValue(DataFormat);
+                    return builtContentType.HasValue ? new Present<ContentType>(builtContentType.Value) : Present<ContentType>.Absent;
+                });
+            ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;
         }
+
         public override void Delete(bool fromParent)
         {
             if (fromParent && Parent is EndpointContainer parent)

@@ -15,7 +15,7 @@ namespace SummerRest.Editor.Models
     /// In editor: used for generating <see cref="BaseAuthRequest{TRequest,TAuthAppender,TAuthData}"/>. It also contains the default value (string or <see cref="IAuthData"/>) for calling editor requests <seealso cref="AuthContainer.text"/>  <seealso cref="AuthContainer.body"/>
     /// </summary>
     [Serializable]
-    public class AuthContainer : TextOrCustomData<IAuthData, AuthContainer.BodyContainer>, ISerializationCallbackReceiver
+    public class AuthContainer : TextOrCustomData<AuthContainer.Type, IAuthData, AuthContainer.BodyContainer>, ISerializationCallbackReceiver
     {
         /// <summary>
         /// Key for resolving the auth value in runtime by using a <see cref="IAuthDataRepository"/> <seealso cref="IAuthAppender{TAuthAppender, TAuthData}"/> <seealso cref="IAuthAppender{TAuthAppender,TAuth}"/>
@@ -29,7 +29,7 @@ namespace SummerRest.Editor.Models
         private ClassTypeReference appenderType = new(typeof(BearerTokenAuthAppender));
         public string AppenderType => appenderType?.Type?.FullName;
         public string AuthDataType => AuthData?.FullName;
-        [JsonIgnore] public Type AuthData
+        [JsonIgnore] public System.Type AuthData
         {
             get
             {
@@ -37,19 +37,22 @@ namespace SummerRest.Editor.Models
                 return selectedAppender?.GetInterface(typeof(IAuthAppender<,>).FullName).GenericTypeArguments[1];
             }
         }
-        
-        [JsonIgnore] public Type Appender => appenderType.Type;
+        public enum Type
+        {
+            PlainText, Data
+        }
+        [JsonIgnore] public System.Type Appender => appenderType.Type;
         public object GetData()
         {
-            if (type == TextOrCustomDataType.PlainText)
+            if (type == Type.PlainText)
                 return text;
             return body;
         }
         [Serializable]
         public class BodyContainer : InterfaceContainer<IAuthData>
         {
-            public Type TypeBasedOnAppender { get; set; }
-            public override Type Type => TypeBasedOnAppender;
+            public System.Type TypeBasedOnAppender { get; set; }
+            public override System.Type Type => TypeBasedOnAppender;
         }
         public void OnBeforeSerialize()
         {
@@ -66,10 +69,10 @@ namespace SummerRest.Editor.Models
             var typeOfAuthData = AuthData;
             // String => shift to text
             if (typeOfAuthData == typeof(string))
-                type = TextOrCustomDataType.PlainText;
+                type = Type.PlainText;
             else
             {
-                type = TextOrCustomDataType.Data;
+                type = Type.Data;
                 body.TypeBasedOnAppender = typeOfAuthData;
             }
         }

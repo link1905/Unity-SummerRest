@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="text-or-custom" src="project://database/Assets/Plugins/SummerRest/Editor/Templates/Properties/text-or-custom.uxml?fileID=9197481963319205126&amp;guid=b0c7610fa47212d4f85f91ef7acc56a1&amp;type=3#text-or-custom" />
+    <ui:VisualElement name="container" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-shrink: 0; align-self: flex-start; align-items: flex-start; justify-content: flex-start;">
+        <ui:TextField picking-mode="Ignore" value="asdsa" name="key" binding-path="key" label="Key" style="min-width: 50px; align-self: flex-start; align-items: flex-start; flex-shrink: 0; flex-direction: row;" />
+        <ui:Instance template="text-or-custom" name="text-or-custom" style="flex-shrink: 0; flex-grow: 1;">
+            <AttributeOverrides element-name="text" value="asdasd" />
+            <uie:PropertyField name="file" binding-path="file" style="flex-shrink: 0;" />
+        </ui:Instance>
+    </ui:VisualElement>
+</ui:UXML>

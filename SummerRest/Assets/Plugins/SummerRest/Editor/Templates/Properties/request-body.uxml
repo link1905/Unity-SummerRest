@@ -1,7 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="text-or-custom" src="text-or-custom.uxml" />
-    <ui:Instance template="text-or-custom" name="text-or-custom" />
-    <ui:Foldout text="Serialized data" name="serialized-body">
-        <ui:TextField picking-mode="Ignore" value="asdsadsad&#10;asdsad" name="serialized-data" binding-path="serializedData" readonly="true" multiline="true" />
-    </ui:Foldout>
+    <ui:Template name="text-or-custom" src="project://database/Assets/Plugins/SummerRest/Editor/Templates/Properties/text-or-custom.uxml?fileID=9197481963319205126&amp;guid=b0c7610fa47212d4f85f91ef7acc56a1&amp;type=3#text-or-custom" />
+    <ui:Instance template="text-or-custom" name="text-or-custom">
+        <ui:Foldout text="Serialized data" name="serialized-body">
+            <ui:TextField picking-mode="Ignore" value="asdsadsad&#10;asdsad" name="serialized-data" binding-path="serializedData" readonly="true" multiline="true" />
+        </ui:Foldout>
+        <uie:PropertyField name="file" binding-path="file" style="flex-shrink: 0;" />
+        <uie:PropertyField name="form" binding-path="form" style="flex-shrink: 0;" />
+    </ui:Instance>
 </ui:UXML>

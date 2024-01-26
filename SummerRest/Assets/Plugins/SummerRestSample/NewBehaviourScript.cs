@@ -1,30 +1,27 @@
 using System.Collections.Generic;
 using System.IO;
-using SummerRest.Editor.TypeReference;
-using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.RequestComponents;
+using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.Models;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace SummerRestSample
 {
     public class NewBehaviourScript : MonoBehaviour
     {
-        [SerializeField, ClassTypeConstraint(typeof(IAuthAppender<,>))] 
-        private ClassTypeReference appenderType = new(typeof(BearerTokenAuthAppender));
-
-        [SerializeReference] private IRequestBodyData bodyData = new PostData();
-
-        public void A()
-        {
-            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            // var bytes = File.ReadAllBytes(datapath);
-            // string filename = Path.GetFileName(datapath);
-            // formData.Add(new MultipartFormFileSection(filename, bytes));
-            byte[] boundary = UnityWebRequest.GenerateBoundary();
-            UnityWebRequest content = UnityWebRequest.Post("", formData, boundary);
-            content.method = "PATCH";
-        }
+        [SerializeField] private RequestBody requestBody;
+        //
+        // [SerializeReference] private IRequestBodyData bodyData = new PostData();
+        //
+        // public void A()
+        // {
+        //     List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        //     // var bytes = File.ReadAllBytes(datapath);
+        //     // string filename = Path.GetFileName(datapath);
+        //     // formData.Add(new MultipartFormFileSection(filename, bytes));
+        //     byte[] boundary = UnityWebRequest.GenerateBoundary();
+        //     UnityWebRequest content = UnityWebRequest.Post("", formData, boundary);
+        //     content.method = "PATCH";
+        // }
     }
 }
 //

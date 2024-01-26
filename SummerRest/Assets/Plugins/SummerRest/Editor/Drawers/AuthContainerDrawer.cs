@@ -1,4 +1,5 @@
-﻿using SummerRest.Editor.Models;
+﻿using System;
+using SummerRest.Editor.Models;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -9,6 +10,8 @@ namespace SummerRest.Editor.Drawers
     internal class AuthContainerDrawer : TextOrCustomDataDrawer
     {
         protected override string RelativeFromTemplateAssetPath => "Properties/auth-container.uxml";
+        public override Enum DefaultEnum => AuthContainer.Type.PlainText;
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var foldout = new Foldout

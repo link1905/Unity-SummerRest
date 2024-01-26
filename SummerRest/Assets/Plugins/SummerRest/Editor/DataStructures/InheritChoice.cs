@@ -20,6 +20,10 @@ namespace SummerRest.Editor.DataStructures
         /// <summary>
         /// Use its own value
         /// </summary>
-        Custom = 8
+        Custom = 8,
+        /// <summary>
+        /// Only used for content type
+        /// </summary>
+        Auto = 16,
     }
 }

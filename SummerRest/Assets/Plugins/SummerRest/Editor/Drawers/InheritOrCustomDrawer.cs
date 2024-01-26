@@ -79,6 +79,7 @@ namespace SummerRest.Editor.Drawers
             { InheritChoice.Inherit, (false, true)},
             { InheritChoice.AppendToParent, (true, true)},
             { InheritChoice.Custom, (true, false)},
+            { InheritChoice.Auto, (false, true)},
         };
         private void ShowProp(VisualElement valueElement, VisualElement cacheElement, InheritChoice selection)
         {

@@ -230,6 +230,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e442ad95ff594ba439333c1e45bbdecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appenderType:
-    classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
-      SummerRest
+  requestBody:
+    type: 1
+    text: 
+    body:
+      value:
+        rid: 6516271650047000577
+      typeReference:
+        classRef: SummerRestSample.PostData, Assembly-CSharp-firstpass
+    serializedData: 
+    file:
+      filePath: 
+    form:
+    - type: 0
+      text: 
+      key: 
+      file:
+        filePath: 
+    - type: 0
+      text: 
+      key: 
+      file:
+        filePath: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 6516271650047000577
+      type: {class: PostData, ns: SummerRestSample, asm: Assembly-CSharp-firstpass}
+      data:
+        id: 0
+        title: 
+        body: 
+        userId: 0

@@ -40,12 +40,14 @@ namespace SummerRest.Editor.DataStructures
                 return defaultWhenNoParent;
             return null;
         }
+
         /// <summary>
         /// Validate the container and get its value based on <see cref="inherit"/>  
         /// </summary>
         /// <param name="parent">The parent used with {<see cref="whenAppend"/>,<see cref="whenAppend"/>} to remove closures</param>
         /// <param name="whenInherit">Used when <see cref="inherit"/> is <see cref="InheritChoice.Inherit"/></param>
         /// <param name="whenAppend">Used when <see cref="inherit"/> is <see cref="InheritChoice.AppendToParent"/></param>
+        /// <param name="whenAuto">Used when <see cref="inherit"/> is <see cref="InheritChoice.Auto"/> </param>
         /// <param name="allow">Move back to <see cref="defaultWhenInvalid"/> when <see cref="inherit"/> are not overlapped with this param</param>
         /// <param name="defaultWhenInvalid"></param>
         /// <typeparam name="TParent">Type of <see cref="parent"/></typeparam>
@@ -53,6 +55,7 @@ namespace SummerRest.Editor.DataStructures
         public Present<T> Cache<TParent>(TParent parent, 
             Func<TParent, Present<T>> whenInherit, 
             Func<TParent, T, Present<T>> whenAppend = null,
+            Func<Present<T>> whenAuto = null,
             InheritChoice allow = InheritChoice.None | InheritChoice.Inherit | InheritChoice.Custom, 
             InheritChoice defaultWhenInvalid = InheritChoice.Custom)
         {
@@ -69,6 +72,11 @@ namespace SummerRest.Editor.DataStructures
                     break;
                 case InheritChoice.Custom:
                     return cache = new Present<T>(true, value);
+                case InheritChoice.Auto:
+                    if (whenAuto != null) 
+                        return cache = whenAuto.Invoke();
+                    break;
+                    
             }
             return new Present<T>(false, value);
         }

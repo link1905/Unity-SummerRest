@@ -2,6 +2,7 @@
     <ui:VisualElement style="flex-grow: 1;">
         <ui:EnumField label="Method" type="SummerRest.Runtime.RequestComponents.HttpMethod, SummerRest" name="method" binding-path="method" />
         <uie:PropertyField name="params" binding-path="requestParams" style="flex-shrink: 0; align-self: stretch;" />
+        <uie:PropertyField name="content-type" binding-path="contentType" style="flex-shrink: 0;" />
         <ui:Foldout text="Request body" style="flex-shrink: 0;">
             <uie:PropertyField name="body" binding-path="requestBody" style="flex-shrink: 0; align-self: stretch;" />
         </ui:Foldout>

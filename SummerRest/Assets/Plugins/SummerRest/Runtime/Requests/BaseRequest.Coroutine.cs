@@ -35,20 +35,7 @@ namespace SummerRest.Runtime.Requests
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.ResponseData);
         }
-        /// <summary>
-        /// Simple data request using Unity coroutine with callbacks
-        /// </summary>
-        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
-        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
-        /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns></returns>
-        public IEnumerator RequestCoroutine<TResponse>(Action<TResponse> doneCallback,
-            Action<string> errorCallback = null)
-        {
-            using var request =
-                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-            yield return RequestCoroutine(request, doneCallback, errorCallback);
-        }
+
         
         /// <summary>
         /// Simple request based on an existing <see cref="UnityWebRequest"/> <br/>
@@ -93,20 +80,7 @@ namespace SummerRest.Runtime.Requests
             yield return RequestCoroutine(request, doneCallback, errorCallback);
         }
 
-        /// <summary>
-        /// Simple data request that uploads multipart file sections (the boundary leverages <see cref="ContentType"/>)
-        /// </summary>
-        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
-        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
-        /// <param name="multipartFormSections">Multipart file sections <see cref="MultipartFormFileSection"/></param>
-        /// <returns></returns>
-        public IEnumerator MultipartFileRequestCoroutine<TResponse>(Action<TResponse> doneCallback,
-            List<IMultipartFormSection> multipartFormSections,
-            Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, multipartFormSections);
-            yield return RequestCoroutine(request, doneCallback, errorCallback);
-        }
+
 
         protected IEnumerator DetailedRequestCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request,
             Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback)
@@ -115,19 +89,7 @@ namespace SummerRest.Runtime.Requests
             if (!HandleError(request, errorCallback))
                 doneCallback?.Invoke(request.WebResponse);
         }
-        /// <summary>
-        /// Detailed data request using Unity coroutine with callbacks
-        /// </summary>
-        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
-        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
-        /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        public IEnumerator DetailedRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
-            Action<string> errorCallback = null)
-        {
-            using var request =
-                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
-        }
+
         /// <summary>
         /// Detailed request based on an existing <see cref="UnityWebRequest"/> <br/>
         /// </summary>
@@ -171,19 +133,6 @@ namespace SummerRest.Runtime.Requests
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
         
-        /// <summary>
-        /// Detailed data request that uploads multipart file sections (the boundary leverages <see cref="ContentType"/>)
-        /// </summary>
-        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
-        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
-        /// <param name="multipartFormSections">Multipart file sections <see cref="MultipartFormFileSection"/></param>
-        /// <returns></returns>
-        public IEnumerator DetailedMultipartFileRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
-            List<IMultipartFormSection> multipartFormSections,
-            Action<string> errorCallback = null)
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, multipartFormSections);
-            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
-        }
+
     }
 }

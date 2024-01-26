@@ -1,40 +1,49 @@
-﻿using SummerRest.Editor.DataStructures;
+﻿using System;
+using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
 {
-    [CustomPropertyDrawer(typeof(TextOrCustomData<,>))]
-    internal class TextOrCustomDataDrawer : UIToolkitDrawer
+    internal abstract class TextOrCustomDataDrawer : UIToolkitDrawer
     {
         protected override string RelativeFromTemplateAssetPath => "Properties/text-or-custom.uxml";
+        public abstract Enum DefaultEnum { get; }
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
             var typeElement = tree.Q<EnumField>("type");
             var typeProp = property.FindPropertyRelative("type");
-            var textValueElement = tree.Q<TextField>("value");
-            var genericValueElement = tree.Q<PropertyField>("value");
+            typeElement.Init(DefaultEnum);
             typeElement.RegisterValueChangedCallback(e =>
             {
                 var newVal = e.newValue;
                 if (newVal is null)
                     return;
-                BindValueElement((TextOrCustomDataType)newVal, textValueElement, genericValueElement);
+                BindValueElement((int)Convert.ChangeType(newVal, newVal.GetTypeCode()), tree);
             });
-            BindValueElement((TextOrCustomDataType)typeProp.enumValueIndex, textValueElement, genericValueElement);
+            BindValueElement(typeProp.enumValueIndex, tree);
             return tree;
         }
 
-        private void BindValueElement(TextOrCustomDataType value, TextField textValueElement, PropertyField genericValueElement)
+        protected virtual VisualElement[] GetShownElements(VisualElement tree)
         {
-            var showPlain = value == TextOrCustomDataType.PlainText;
-            textValueElement.Show(showPlain);
-            genericValueElement.Show(!showPlain);
+            return new VisualElement[]
+            {
+                tree.Q<TextField>("text"),
+                tree.Q<PropertyField>("data")
+            };
         }
 
+        protected virtual void BindValueElement(int value, VisualElement tree)
+        {
+            var elements = GetShownElements(tree);
+            foreach (var element in elements)
+                element.Show(false);
+            elements[value].Show(true);
+        }
     }
 }

@@ -1,5 +1,4 @@
 using SummerRest.Editor.Attributes;
-using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;

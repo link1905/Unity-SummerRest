@@ -66,6 +66,15 @@ namespace SummerRest.Runtime.RequestComponents
                 public const string Xml = "text/xml";
             }
         }
+
+        public static class Commons
+        {
+            public static ContentType ApplicationJson => new(MediaTypeNames.Application.Json, Encodings.Utf8);
+            public static ContentType ApplicationXml => new(MediaTypeNames.Application.Xml, Encodings.Utf8);
+            public static ContentType TextPlain => new(MediaTypeNames.Text.Plain, Encodings.Utf8);
+            public static ContentType Binary => new(MediaTypeNames.Application.Octet, Encodings.Utf8);
+            public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8);
+        }
         
         [field: SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
         public string Charset { get; private set; }

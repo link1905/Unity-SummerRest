@@ -20,16 +20,7 @@ namespace SummerRest.Runtime.Requests
                 throw new Exception(msg);
             return request.ResponseData;
         }
-        /// <summary>
-        /// Make an async data request. Please note that this method throws an exception when encountering issues
-        /// </summary>
-        /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns></returns>
-        public UniTask<TResponse> RequestAsync<TResponse>()
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-            return RequestAsync(request);
-        }        
+    
         /// <summary>
         /// Make an async request based on an existing <see cref="UnityWebRequest"/>. Please note that this method throws an exception when encountering issues
         /// </summary>
@@ -67,16 +58,7 @@ namespace SummerRest.Runtime.Requests
             await SetRequestDataAndWait(request);
             return request.WebResponse;
         }
-        /// <summary>
-        /// Make a detailed async data request
-        /// </summary>
-        /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns>A response object contains HTTP response's essential fields</returns>
-        public UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>()
-        {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
-            return DetailedRequestAsync(request);
-        }        
+ 
         /// <summary>
         /// Make a detailed async request based on an existing <see cref="UnityWebRequest"/>
         /// </summary>

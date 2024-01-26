@@ -153,5 +153,14 @@ namespace SummerRest.Editor.Utilities
                 callback?.Invoke(changed);
             });
         }
+        
+        public static void CallThenTrackPropertyValue(
+            this VisualElement element,
+            SerializedProperty property,
+            Action<SerializedProperty> callback = null)
+        {
+            callback?.Invoke(property);
+            element.TrackPropertyValue(property, callback);
+        }
     }
 }

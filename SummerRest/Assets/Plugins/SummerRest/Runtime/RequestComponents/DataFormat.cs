@@ -19,6 +19,6 @@ namespace SummerRest.Runtime.RequestComponents
         /// <summary>
         /// XML format commonly used in SOAP servers
         /// </summary>
-        Xml = 3, 
+        Xml = 2, 
     }
 }

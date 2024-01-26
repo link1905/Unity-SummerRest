@@ -94,7 +94,7 @@ namespace SummerRest.Editor.Requests
                 }
                 default:
                 {
-                    request = DetailedMultipartFileRequestCoroutine<string>(SetResponseCallback, r => response.Error = r);
+                    request = DetailedMultipartFileRequestCoroutine<string>(SetResponseCallback, null,r => response.Error = r);
                     break;
                 }
             }

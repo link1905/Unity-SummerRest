@@ -63,7 +63,7 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Response and request data format arisen by this endpoint <see cref="SummerRest.Runtime.RequestComponents.DataFormat"/>
         /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom]
+        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit | InheritChoice.Custom)]
         private InheritOrCustomContainer<DataFormat> dataFormat;
         public DataFormat DataFormat { get; private set; }
         
@@ -81,13 +81,6 @@ namespace SummerRest.Editor.Models
         private InheritOrCustomContainer<KeyValue[]> headers;
         public KeyValue[] Headers { get; private set; }
 
-        /// <summary>
-        /// Content type of associated requests
-        /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom]
-        private InheritOrCustomContainer<ContentType> contentType;
-        public ContentType? ContentType { get; private set; }
-        
         /// <summary>
         /// Timeout in seconds of associated requests
         /// </summary>
@@ -138,11 +131,8 @@ namespace SummerRest.Editor.Models
             Headers = headersCache.HasValue ? headersCache.Value : null;
             
             DataFormat = dataFormat.Cache(Parent, whenInherit: p => new Present<DataFormat>(true, p.DataFormat), 
-                allow: InheritChoice.Inherit | InheritChoice.Custom | InheritChoice.AppendToParent).Value;
-            
-            var contentTypeCache = contentType.Cache(Parent, whenInherit: p => new Present<ContentType>(p.ContentType != null, p.ContentType ?? default));
-            ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;
-            
+                allow: InheritChoice.Inherit | InheritChoice.Custom).Value;
+
             var timeoutCache = timeoutSeconds.Cache(Parent, whenInherit: p => new Present<int>(p.TimeoutSeconds != null, p.TimeoutSeconds ?? default));
             TimeoutSeconds = timeoutCache.HasValue ? timeoutCache.Value : null;
 

@@ -19,8 +19,10 @@ namespace RestSourceGenerator.Metadata
         public AuthContainer? AuthContainer { get; set; }
         public DataFormat? DataFormat { get; set; }
         public string? SerializedBody { get; set; }
+        public KeyValue[]? SerializedForm { get; set; }
         public IEnumerable<Request>? Services { get; set; }
         public IEnumerable<Request>? Requests { get; set; }
+        public bool IsMultipart { get; set; }
 
         private string BuildHeaders()
         {
@@ -38,22 +40,37 @@ namespace RestSourceGenerator.Metadata
 
         private string BuildBaseClass()
         {
-            if (!AuthContainer.HasValue)
-                return $"SummerRest.Runtime.Requests.BaseRequest<{EndpointName.ToClassName()}>";
-            return $"SummerRest.Runtime.Requests.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>";
+            if (!IsMultipart)
+                return $"SummerRest.Runtime.Requests.BaseDataRequest<{EndpointName.ToClassName()}>";
+            return $"SummerRest.Runtime.Requests.BaseMultipartRequest<{EndpointName.ToClassName()}>";
+            //return $"SummerRest.Runtime.Requests.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>";
         }
         private string BuildAuth()
         {
             if (!AuthContainer.HasValue)
                 return string.Empty;
-            return $@"AuthKey = ""{AuthContainer.Value.AuthKey}"";";
+            return $@"
+private readonly AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}> _authRequestModifier = new();
+protected override IRequestModifier RequestModifier => _authRequestModifier;
+public string AuthKey
+{{
+    get => _authRequestModifier.AuthKey;
+    set => _authRequestModifier.AuthKey = value;
+}}
+";
         }
 
         private string BuildBody()
         {
-            if (string.IsNullOrEmpty(SerializedBody))
+            if (!IsMultipart)
+            {
+                if (string.IsNullOrEmpty(SerializedBody))
+                    return string.Empty;
+                return $@"InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
+            }
+            if (SerializedForm is not {Length: >0})
                 return string.Empty;
-            return $@"InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
+            return SerializedForm.BuildSequentialValues(e => $@"MultipartFormSections.Add(new MultipartFormDataSection(""{e.Key}"", ""{e.Value}""))", ";") + ";";
         }
         public void BuildRequest(StringBuilder builder)
         {
