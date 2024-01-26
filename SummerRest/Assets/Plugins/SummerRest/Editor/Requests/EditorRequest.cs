@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using System.Net.Mime;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
+using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine.Networking;
 
@@ -59,32 +59,46 @@ namespace SummerRest.Editor.Requests
         {
         }
 
+        private void SetResponseCallback(WebResponse<string> r)
+        {
+            var response = _request.LatestResponse;
+            if (r.WrappedRequest is not UnityWebRequest handler)
+                return;
+            // Set response data
+            response.StatusCode = r.StatusCode;
+            response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
+            var body = response.Body;
+            var mediaType = response.Body.MediaType = r.ContentType.MediaType;
+            body.MediaType = mediaType;
+            body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
+            body.RawBody = r.RawData;
+            if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||
+                mediaType == Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Octet)
+            {
+                body.RawBytes.SetData(mediaType.StartsWith("image/"), handler.downloadHandler.data);
+            }
+        }
+
         public IEnumerator MakeRequest(Action callback)
         {
             var response = _request.LatestResponse;
             response.Clear();
-            yield return DetailedRequestCoroutine<string>(r =>
+            var contentType = _request.ContentType ?? new ContentType();
+            IEnumerator request;
+            switch (contentType.MediaType)
             {
-                if (r.WrappedRequest is not UnityWebRequest handler)
-                    return;
-                // Set response data
-                response.StatusCode = r.StatusCode;
-                response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
-
-                var body = response.Body;
-                var mediaType = response.Body.MediaType = r.ContentType.MediaType;
-                body.MediaType = mediaType;
-                body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
-                body.RawBody = r.RawData;
-                if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||
-                    mediaType == MediaTypeNames.Application.Octet)
+                case var multipartType when multipartType.StartsWith("multipart/"):
                 {
-                    body.RawBytes.SetData(mediaType.StartsWith("image/"), handler.downloadHandler.data);
+                    request = DetailedRequestCoroutine<string>(SetResponseCallback, r => response.Error = r);
+                    break;
                 }
-            }, r =>
-            {
-                response.Error = r;
-            });
+                default:
+                {
+                    request = DetailedMultipartFileRequestCoroutine<string>(SetResponseCallback, r => response.Error = r);
+                    break;
+                }
+            }
+            yield return request;
             callback?.Invoke();
         }
     }

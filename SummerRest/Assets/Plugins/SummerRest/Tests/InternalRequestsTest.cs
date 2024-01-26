@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
@@ -136,7 +137,7 @@ namespace SummerRest.Tests
             });
             
             request.Method = HttpMethod.Get;
-            request.Params.AddParam("my-param", "my-param-value");
+            request.Params.AddParamToList("my-param", "my-param-value");
             request.Headers.Add("my-header", "my-header-value");
             yield return request.DetailedRequestCoroutineFromUnityWebRequest(webRequest, e =>
             {
@@ -207,6 +208,10 @@ namespace SummerRest.Tests
             {
                 return _wrapped.GetAudioRequest(url, audioType);
             }
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data)
+            {
+                return _wrapped.GetMultipartFileRequest<TBody>(url, data);
+            }
 
             public IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest)
             {
@@ -219,6 +224,8 @@ namespace SummerRest.Tests
                 var r = _wrapped.GetDataRequest<TBody>(url, method, bodyData) as RawUnityWebRequestAdaptor<TBody>;
                 return new RawTestWebRequestAdaptor<TBody>(r, _fixedContentType, _fixedRawResponse, _code, _fixedError);
             }
+
+
         }
 
         private class DumpTestWebRequestAdaptor : TestWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>

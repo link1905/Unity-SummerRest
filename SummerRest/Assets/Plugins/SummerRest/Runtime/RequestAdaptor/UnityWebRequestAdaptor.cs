@@ -99,8 +99,13 @@ namespace SummerRest.Runtime.RequestAdaptor
                 _contentType = value;
                 // Try to set null content-type => redirect back to default content-type of Unity instead 
                 _contentType ??= IContentTypeParser.Current.DefaultContentType;
-                WebRequest.uploadHandler.contentType = _contentType.Value.FormedContentType;
+                SetAdaptedContentType(_contentType.Value);
             }
+        }
+
+        protected virtual void SetAdaptedContentType(in ContentType contentType)
+        {
+            WebRequest.uploadHandler.contentType = contentType.FormedContentType;
         }
 
         /// <summary>

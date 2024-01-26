@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
@@ -63,7 +64,6 @@ namespace SummerRest.Runtime.Requests
                 IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
             // Make sure the request is alighted with current properties
             webRequest.url = AbsoluteUrl;
-            webRequest.method = Method.ToUnityHttpMethod();
             yield return RequestCoroutine(request, doneCallback, errorCallback);
         }
         /// <summary>
@@ -90,6 +90,21 @@ namespace SummerRest.Runtime.Requests
             AudioType audioType, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            yield return RequestCoroutine(request, doneCallback, errorCallback);
+        }
+
+        /// <summary>
+        /// Simple data request that uploads multipart file sections (the boundary leverages <see cref="ContentType"/>)
+        /// </summary>
+        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
+        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
+        /// <param name="multipartFormSections">Multipart file sections <see cref="MultipartFormFileSection"/></param>
+        /// <returns></returns>
+        public IEnumerator MultipartFileRequestCoroutine<TResponse>(Action<TResponse> doneCallback,
+            List<IMultipartFormSection> multipartFormSections,
+            Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, multipartFormSections);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
         }
 
@@ -153,6 +168,21 @@ namespace SummerRest.Runtime.Requests
             AudioType audioType, Action<string> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
+        }
+        
+        /// <summary>
+        /// Detailed data request that uploads multipart file sections (the boundary leverages <see cref="ContentType"/>)
+        /// </summary>
+        /// <param name="doneCallback">Invoked when the request is finished without an error</param>
+        /// <param name="errorCallback">Invoked when the request is finished with an error</param>
+        /// <param name="multipartFormSections">Multipart file sections <see cref="MultipartFormFileSection"/></param>
+        /// <returns></returns>
+        public IEnumerator DetailedMultipartFileRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
+            List<IMultipartFormSection> multipartFormSections,
+            Action<string> errorCallback = null)
+        {
+            using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, multipartFormSections);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
     }

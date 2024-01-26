@@ -110,6 +110,16 @@ namespace SummerRest.Tests
             Assert.That(adaptor.ContentType.Equals(IContentTypeParser.Current.DefaultContentType));
         }
         [Test]
+        public void Test_Not_Empty_Boundary_With_Multipart_File_Request()
+        {
+            using var adaptor = MultipartFileUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
+            adaptor.ContentType = null;
+            Assert.NotNull(adaptor.ContentType);
+            Assert.IsNotEmpty(adaptor.ContentType.Value.Boundary);
+            adaptor.ContentType = new ContentType();
+            Assert.IsNotEmpty(adaptor.ContentType.Value.Boundary);
+        }
+        [Test]
         public void Test_Build_Json_Response()
         {
             using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);

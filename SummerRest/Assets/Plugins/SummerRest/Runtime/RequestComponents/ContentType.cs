@@ -97,6 +97,18 @@ namespace SummerRest.Runtime.RequestComponents
                 return builder.ToString();
             }
         }
+        
+        public string FormedContentTypeWithBoundary(Func<string> whenEmptyBoundary)
+        {
+            var builder = new StringBuilder();
+            builder.Append(MediaType);
+            if (!string.IsNullOrEmpty(Charset))
+                builder.Append($"; {Headers.CharSet}=").Append(Charset);
+            var boundary = Boundary ?? whenEmptyBoundary?.Invoke();
+            if (!string.IsNullOrEmpty(boundary))
+                builder.Append($"; {Headers.Boundary}=").Append(boundary);
+            return builder.ToString();
+        }
 
         public ContentType(string mediaType = MediaTypeNames.Text.Plain, string charset = null, string boundary = null)
         {
@@ -112,7 +124,7 @@ namespace SummerRest.Runtime.RequestComponents
         /// <param name="charset"></param>
         /// <param name="boundary"></param>
         /// <returns></returns>
-        public ContentType With(string mediaType = null, string charset = null, string boundary = null)
+        public readonly ContentType With(string mediaType = null, string charset = null, string boundary = null)
         {
             mediaType ??= MediaType;
             charset ??= Charset;

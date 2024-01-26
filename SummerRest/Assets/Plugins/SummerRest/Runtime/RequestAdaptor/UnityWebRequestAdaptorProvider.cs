@@ -1,4 +1,6 @@
-﻿using SummerRest.Runtime.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -31,10 +33,10 @@ namespace SummerRest.Runtime.RequestAdaptor
             UnityWebRequest request;
             switch (method)
             {
-                case HttpMethod.Get:
+                case HttpMethod.Get or HttpMethod.Trace or HttpMethod.Connect or HttpMethod.Options:
                     request = UnityWebRequest.Get(url);
                     break;
-                case HttpMethod.Post:
+                case HttpMethod.Post or HttpMethod.Patch:
                     request = UnityWebRequest.PostWwwForm(url, bodyData);
                     break;
                 case HttpMethod.Put:
@@ -43,14 +45,17 @@ namespace SummerRest.Runtime.RequestAdaptor
                 case HttpMethod.Delete:
                     request = UnityWebRequest.Delete(url);
                     break;
-                case HttpMethod.Head:
-                    request = UnityWebRequest.Head(url);
-                    break;
                 default:
                     request = new UnityWebRequest(url, method.ToUnityHttpMethod());
                     break;
             }
             return RawUnityWebRequestAdaptor<TResponse>.Create(request);
+        }
+
+        public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url, List<IMultipartFormSection> data)
+        {
+            var request = UnityWebRequest.Post(url, data, Array.Empty<byte>());
+            return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);
         }
     }
 }

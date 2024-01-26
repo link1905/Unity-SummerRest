@@ -80,7 +80,7 @@ namespace SummerRest.Tests
         public void Test_Url_Should_Be_Rebuilt_When_Change_Param()
         {
             var request = new TestRequest();
-            request.Params.AddParam("id", "1");
+            request.Params.AddParamToList("id", "1");
             Assert.AreEqual(request.AbsoluteUrl, $"{ExampleUrl}?id=1");
             request.Params.RemoveParam("id");
             Assert.AreEqual(request.AbsoluteUrl, ExampleUrl);
@@ -89,11 +89,11 @@ namespace SummerRest.Tests
         public void Test_Url_Should_Be_Rebuilt_When_Change_Param_List()
         {
             var request = new TestRequest();
-            request.Params.AddParams("id", new []{"1", "2"});
+            request.Params.AddParamsToList("id", new []{"1", "2"});
             Assert.AreEqual(request.AbsoluteUrl, $"{ExampleUrl}?id=1&id=2");
-            request.Params.RemoveValueFromParam("id", "2");
+            request.Params.RemoveValueFromList("id", "2");
             Assert.AreEqual(request.AbsoluteUrl, $"{ExampleUrl}?id=1");
-            request.Params.RemoveValueFromParam("id", "1");
+            request.Params.RemoveValueFromList("id", "1");
             Assert.AreEqual(request.AbsoluteUrl, ExampleUrl);
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
+using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.Requests
 {
@@ -68,7 +69,7 @@ namespace SummerRest.Runtime.Requests
         /// <summary>
         /// The body data of arisen requests <br/>
         /// Originally, this property is null since we can not refer to your custom class for deserializing <br/>
-        /// This property is only useful if <see cref="Method"/> is <see cref="HttpMethod.Post"/> or <see cref="HttpMethod.Put"/>
+        /// This property is only useful if <see cref="Method"/> is {<see cref="HttpMethod.Post"/>, <see cref="HttpMethod.Put"/>, <see cref="HttpMethod.Patch"/>}
         /// </summary>
         public object BodyData { get => _bodyData;
             set
@@ -125,6 +126,7 @@ namespace SummerRest.Runtime.Requests
                 requestAdaptor.TimeoutSeconds = TimeoutSeconds.Value;
             if (ContentType is not null)
                 requestAdaptor.ContentType = ContentType;
+            requestAdaptor.Method = Method;
             foreach (var (k, v) in Headers)
                 requestAdaptor.SetHeader(k, v);
         }

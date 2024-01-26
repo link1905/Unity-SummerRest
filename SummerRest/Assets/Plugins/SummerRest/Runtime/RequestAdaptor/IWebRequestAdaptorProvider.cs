@@ -1,4 +1,5 @@
-﻿using SummerRest.Runtime.DataStructures;
+﻿using System.Collections.Generic;
+using SummerRest.Runtime.DataStructures;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,5 +17,6 @@ namespace SummerRest.Runtime.RequestAdaptor
         IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType);
         IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest);
         IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData);
+        IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data);
     }
 }

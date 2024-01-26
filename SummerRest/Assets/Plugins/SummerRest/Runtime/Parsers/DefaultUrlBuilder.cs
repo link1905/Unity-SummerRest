@@ -38,7 +38,7 @@ namespace SummerRest.Runtime.Parsers
                 return url;
             var paramContainer = new RequestParamContainer();
             foreach (var pair in parameters)
-                paramContainer.AddParam(pair.Key, pair.Value);
+                paramContainer.AddParamToList(pair.Key, pair.Value);
             return StaticBuildUrl(url, paramContainer.ParamMapper);
         }
         public static string StaticBuildUrl(string url, IEnumerable<KeyValuePair<string, ICollection<string>>> parameters)
