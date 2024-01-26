@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
+  m_Name: 48873b2bb0a620049b70f98c662bdacb
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 182d85da13e22b14cbeb7a63781e970a, type: 2}
+  endpointName: Post
+  url: https://jsonplaceholder.typicode.com/posts
+  path: 
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        authKey: my-token-to-master-service
+    value:
+      authKey: my-token-to-master-service
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  contentType:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  <TreeId>k__BackingField: 2
+  method: 1
+  requestParams: []
+  requestBody:
+    type: 1
+    text: 
+    body:
+      value:
+        rid: 6516271629519290379
+      typeReference:
+        classRef: SummerRestSample.PostData, Assembly-CSharp-firstpass
+    serializedData: "{\r\n  \"id\": 0,\r\n  \"title\": null,\r\n  \"body\": null,\r\n 
+      \"userId\": 0\r\n}"
+  urlWithParam: https://jsonplaceholder.typicode.com/posts
+  latestResponse:
+    lastCall: 01/25/2024 16:03:29
+    error: 
+    statusCode: 201
+    headers:
+    - key: Date
+      value: Thu, 25 Jan 2024 09:03:32 GMT
+    - key: Content-Type
+      value: application/json; charset=utf-8
+    - key: Content-Length
+      value: 15
+    - key: Connection
+      value: keep-alive
+    - key: Report-To
+      value: '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1706173412&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=MYNypfYBTwT%2FgWzDCKD03M7ptWfG%2Ff37FV6CLy2Befo%3D"}]}'
+    - key: Reporting-Endpoints
+      value: heroku-nel=https://nel.heroku.com/reports?ts=1706173412&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=MYNypfYBTwT%2FgWzDCKD03M7ptWfG%2Ff37FV6CLy2Befo%3D
+    - key: Nel
+      value: '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}'
+    - key: X-Powered-By
+      value: Express
+    - key: X-Ratelimit-Limit
+      value: 1000
+    - key: X-Ratelimit-Remaining
+      value: 999
+    - key: X-Ratelimit-Reset
+      value: 1706173437
+    - key: Vary
+      value: Origin, X-HTTP-Method-Override, Accept-Encoding
+    - key: Access-Control-Allow-Credentials
+      value: true
+    - key: Cache-Control
+      value: no-cache
+    - key: Pragma
+      value: no-cache
+    - key: Expires
+      value: -1
+    - key: Access-Control-Expose-Headers
+      value: Location
+    - key: Location
+      value: https://jsonplaceholder.typicode.com/posts/101
+    - key: X-Content-Type-Options
+      value: nosniff
+    - key: Etag
+      value: W/"f-4jjw4Y8q22Yv1PV9m28FczJgjzk"
+    - key: Via
+      value: 1.1 vegur
+    - key: CF-Cache-Status
+      value: DYNAMIC
+    - key: Server
+      value: cloudflare
+    - key: CF-RAY
+      value: 84af57f1ad744d81-SIN
+    - key: alt-svc
+      value: h3=":443"; ma=86400
+    body:
+      mediaType: application/json
+      fileName: UnknownFileName
+      rawBytes:
+        isImage: 0
+        data: 
+      rawBody: "{\n  \"id\": 101\n}"
+  references:
+    version: 2
+    RefIds:
+    - rid: 6516271629519290379
+      type: {class: PostData, ns: SummerRestSample, asm: Assembly-CSharp-firstpass}
+      data:
+        id: 0
+        title: 
+        body: 
+        userId: 0

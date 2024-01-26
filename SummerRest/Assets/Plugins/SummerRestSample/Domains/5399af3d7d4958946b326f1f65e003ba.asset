@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
+  m_Name: 5399af3d7d4958946b326f1f65e003ba
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  endpointName: Posts
+  url: https://jsonplaceholder.typicode.com/posts
+  path: posts
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        authKey: my-token-to-master-service
+    value:
+      authKey: my-token-to-master-service
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  contentType:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  <TreeId>k__BackingField: 3
+  services: []
+  requests:
+  - {fileID: 11400000, guid: b93b492f2ff8138429a31d21046db5ec, type: 2}
+  - {fileID: 11400000, guid: aef7c6db206f3764fada9e2782f6f953, type: 2}

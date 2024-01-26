@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
+  m_Name: 0185cddb25c929344b37d7aa51424894
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 2ee3619be5b875246b0f59d9374e3a89, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 2ee3619be5b875246b0f59d9374e3a89, type: 2}
+  endpointName: GetRandomWord
+  url: https://api.api-ninjas.com/v1/randomword
+  path: randomword
+  dataFormat:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        authKey: ninja-api-token
+    value:
+      authKey: my-token-to-master-service
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  contentType:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  <TreeId>k__BackingField: 1
+  method: 0
+  requestParams: []
+  requestBody:
+    type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+      typeReference:
+        classRef: 
+    serializedData: 
+  urlWithParam: https://api.api-ninjas.com/v1/randomword
+  latestResponse:
+    lastCall: 01/25/2024 15:25:44
+    error: 
+    statusCode: 200
+    headers:
+    - key: Content-Type
+      value: application/json
+    - key: Content-Length
+      value: 23
+    - key: Connection
+      value: keep-alive
+    - key: Date
+      value: Thu, 25 Jan 2024 08:25:59 GMT
+    - key: x-amzn-RequestId
+      value: 541568b6-2475-4324-979f-331ff21df39d
+    - key: Access-Control-Allow-Origin
+      value: '*'
+    - key: Allow
+      value: GET, OPTIONS, POST
+    - key: Access-Control-Allow-Headers
+      value: '*'
+    - key: x-amz-apigw-id
+      value: SFkrvGsFvHcED0A=
+    - key: Access-Control-Allow-Methods
+      value: GET, OPTIONS, POST
+    - key: X-Amzn-Trace-Id
+      value: Root=1-65b21b17-026fea913c3073d065b09982;Sampled=0;lineage=855a7a35:0
+    - key: X-Cache
+      value: Miss from cloudfront
+    - key: Via
+      value: 1.1 1208a36fc3799178ec2b731bb1b41b06.cloudfront.net (CloudFront)
+    - key: X-Amz-Cf-Pop
+      value: SGN50-P2
+    - key: X-Amz-Cf-Id
+      value: p6anc0TIaNryc8IPX2bjVrtGpfSrmZZzjch8f7CTHiF79vkflrNrIQ==
+    body:
+      mediaType: application/json
+      fileName: UnknownFileName
+      rawBytes:
+        isImage: 0
+        data: 
+      rawBody: '{"word": "protohippus"}'
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

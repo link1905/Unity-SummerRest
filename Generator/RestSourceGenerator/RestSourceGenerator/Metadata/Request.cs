@@ -39,8 +39,8 @@ namespace RestSourceGenerator.Metadata
         private string BuildBaseClass()
         {
             if (!AuthContainer.HasValue)
-                return $"SummerRest.Runtime.Request.BaseRequest<{EndpointName.ToClassName()}>";
-            return $"SummerRest.Runtime.Request.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}>";
+                return $"SummerRest.Runtime.Requests.BaseRequest<{EndpointName.ToClassName()}>";
+            return $"SummerRest.Runtime.Requests.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>";
         }
         private string BuildAuth()
         {
@@ -53,7 +53,7 @@ namespace RestSourceGenerator.Metadata
         {
             if (string.IsNullOrEmpty(SerializedBody))
                 return string.Empty;
-            return $@"BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@""{SerializedBody.Replace("\"", "\"\"")}"", DataFormat.{DataFormat});";
+            return $@"InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
         }
         public void BuildRequest(StringBuilder builder)
         {
@@ -80,18 +80,9 @@ public class {className} : {BuildBaseClass()}
         {headers}
         {@params}
         {auth}
-        Init();
-    }}
-}}
-public class {className}<TRequestBody> : {className}, IWebRequest<TRequestBody>
-{{
-    public TRequestBody BodyData {{ get; set; }}
-    public DataFormat BodyFormat {{ get; set; }}
-    public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-    public {className}() : base() 
-    {{
         {dataFormat}
         {body}
+        Init();
     }}
 }}
 ");

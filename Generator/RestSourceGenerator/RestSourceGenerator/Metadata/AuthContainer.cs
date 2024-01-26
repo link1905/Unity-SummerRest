@@ -4,5 +4,6 @@ namespace RestSourceGenerator.Metadata
     {
         public string AuthKey { get; set; }
         public string AppenderType { get; set; }
+        public string AuthDataType { get; set; }
     }
 }

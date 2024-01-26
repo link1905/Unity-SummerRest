@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:HelpBox name="no-option" text="There is no authenticate container configured. Please select Authenticate tab to create a new one!" style="flex-shrink: 0; align-self: stretch;" />
+    <ui:DropdownField name="value" binding-path="authKey" style="flex-shrink: 0; align-self: stretch;" />
+    <uie:PropertyField name="preview" label="Preview" binding-path="preview" style="flex-shrink: 0;" />
+</ui:UXML>

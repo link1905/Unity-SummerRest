@@ -15,7 +15,22 @@ namespace RestSourceGenerator.Utilities
             context.AddSource($"{name}.{RoslynDefaultValues.PostFixScriptName}", 
                 SourceText.From(source.FormatCode(), RoslynDefaultValues.DefaultEncoding));
         }
-
+        public static INamedTypeSymbol? GetNamedTypeSymbol(this SyntaxNode typeDeclarationSyntax,
+            Compilation compilation)
+        {
+            var semanticModel = compilation.GetSemanticModel(typeDeclarationSyntax.SyntaxTree);
+            var typeSymbol = semanticModel.GetDeclaredSymbol(typeDeclarationSyntax);
+            return typeSymbol as INamedTypeSymbol;
+        }
+        public static AttributeData? GetAttributeWithName(this INamedTypeSymbol namedTypeSymbol, string name)
+        {
+            foreach (var attributeData in namedTypeSymbol.GetAttributes())
+            {
+                if (attributeData.AttributeClass?.ToDisplayString() == name)
+                    return attributeData;
+            }
+            return null;
+        }
         public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, string> builder, string separator = ", ")
         {
             return BuildSequentialValues(@params.Select(builder), separator);

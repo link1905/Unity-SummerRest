@@ -69,7 +69,8 @@ public class RestSourceGeneratorTest :
                                "DataFormat": 0,
                                "AuthContainer": {
                                  "AuthKey": "my token",
-                                 "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
+                                 "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
+                                 "AuthDataType": "System.String"
                                },
                                "Headers": [
                                  {
@@ -98,7 +99,8 @@ public class RestSourceGeneratorTest :
                            "DataFormat": 0,
                            "AuthContainer": {
                              "AuthKey": "my token",
-                             "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
+                             "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
+                             "AuthDataType": "System.String"
                            },
                            "Headers": [
                              {
@@ -128,7 +130,8 @@ public class RestSourceGeneratorTest :
                        "DataFormat": 0,
                        "AuthContainer": {
                          "AuthKey": "my token",
-                         "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
+                         "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
+                         "AuthDataType": "System.String"
                        },
                        "Headers": [
                          {
@@ -158,7 +161,7 @@ public class RestSourceGeneratorTest :
                           namespace SummerRest.Runtime.Requests {
                            public static class Domain1 {
                                public static class MyService {
-                                   public class Request1 : SummerRest.Runtime.Request.BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
+                                   public class Request1 : SummerRest.Runtime.Requests.BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
                                        public Request1() : base("example2.com/service1/asdasdas", "example2.com/service1/asdasdas?123123=aaaaaa")
                                        {
                                            Method = HttpMethod.Get;
@@ -168,18 +171,10 @@ public class RestSourceGeneratorTest :
                                            Headers.Add("header1", "value1");
                                            Params.AddParam("123123", "aaaaaa");
                                            AuthKey = "my token";
+                                           BodyFormat = DataFormat.Json;
+                                           InitializedSerializedBody = @"I need to call the ""cat"" request";
                                            Init();
                                        }
-                                   }
-                                   public class Request1<TRequestBody> : Request1, IWebRequest<TRequestBody> {
-                                       public TRequestBody BodyData { get; set; }
-                                       public DataFormat BodyFormat { get; set; }
-                                       public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                       public Request1() : base()
-                                       {
-                                           BodyFormat = DataFormat.Json;
-                                           BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@"I need to call the ""cat"" request", DataFormat.Json);
-                                        }
                                    }
                                }
                            }
@@ -256,7 +251,8 @@ public class RestSourceGeneratorTest :
                                  "DataFormat": 0,
                                  "AuthContainer": {
                                    "AuthKey": "my-json-key",
-                                   "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
+                                   "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
+                                   "AuthDataType": "System.String"
                                  },
                                  "Headers": [
                                    {
@@ -381,7 +377,8 @@ public class RestSourceGeneratorTest :
                              "DataFormat": 3,
                              "AuthContainer": {
                                "AuthKey": "my-soap-key",
-                               "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender"
+                               "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
+                               "AuthDataType": "System.String"
                              },
                              "Headers": null,
                              "ContentType": {
@@ -411,7 +408,7 @@ public class RestSourceGeneratorTest :
                           namespace SummerRest.Runtime.Requests {
                            public static class MyJsonDomain {
                                public static class DataService {
-                                   public class GetRequest : SummerRest.Runtime.Request.BaseRequest<GetRequest> {
+                                   public class GetRequest : SummerRest.Runtime.Requests.BaseRequest<GetRequest> {
                                        public GetRequest() : base("http://my-domain.com/data", "http://my-domain.com/data?param-1=param-value-1&param-2=param-value-2")
                                        {
                                            Method = HttpMethod.Get;
@@ -419,41 +416,24 @@ public class RestSourceGeneratorTest :
                                            Headers.Add("header-2", "header-value-2");
                                            Params.AddParam("param-1", "param-value-1");
                                            Params.AddParam("param-2", "param-value-2");
+                                           BodyFormat = DataFormat.Json;
                                            Init();
                                        }
                                    }
-                                   public class GetRequest<TRequestBody> : GetRequest, IWebRequest<TRequestBody> {
-                                       public TRequestBody BodyData { get; set; }
-                                       public DataFormat BodyFormat { get; set; }
-                                       public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                       public GetRequest() : base()
-                                       {
-                                           BodyFormat = DataFormat.Json;
-                                        }
-                                   }
-                                   
-                                   public class PostRequest : SummerRest.Runtime.Request.BaseAuthRequest<PostRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
+                                   public class PostRequest : SummerRest.Runtime.Requests.BaseAuthRequest<PostRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
                                        public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data")
                                        {
                                            Method = HttpMethod.Post;
                                            Headers.Add("header-1", "header-value-1");
                                            Headers.Add("header-2", "header-value-2");
                                            AuthKey = "my-json-key";
+                                           BodyFormat = DataFormat.Json;
+                                           InitializedSerializedBody = @"i am a big cat";
                                            Init();
                                        }
                                    }
-                                   public class PostRequest<TRequestBody> : PostRequest, IWebRequest<TRequestBody> {
-                                       public TRequestBody BodyData { get; set; }
-                                       public DataFormat BodyFormat { get; set; }
-                                       public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                       public PostRequest() : base()
-                                       {
-                                           BodyFormat = DataFormat.Json;
-                                           BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@"i am a big cat", DataFormat.Json);
-                                        }
-                                   }
                                    public static class AccountService {
-                                      public class PutRequest : SummerRest.Runtime.Request.BaseRequest<PutRequest> {
+                                      public class PutRequest : SummerRest.Runtime.Requests.BaseRequest<PutRequest> {
                                           public PutRequest() : base("http://my-domain.com/data/account", "http://my-domain.com/data/account") 
                                           {
                                               Method = HttpMethod.Put;
@@ -462,45 +442,29 @@ public class RestSourceGeneratorTest :
                                               Headers.Add("header-3", "header-3-value");
                                               Headers.Add("header-1", "header-value-1");
                                               Headers.Add("header-2", "header-value-2");
+                                              BodyFormat = DataFormat.Json;
+                                              InitializedSerializedBody = @"i need a cat now";
                                               Init();
                                           }
                                       }
-                                     public class PutRequest<TRequestBody> : PutRequest, IWebRequest<TRequestBody> {
-                                         public TRequestBody BodyData { get; set; }
-                                         public DataFormat BodyFormat { get; set; }
-                                         public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                         public PutRequest() : base()
-                                         {
-                                             BodyFormat = DataFormat.Json;
-                                             BodyData = DefaultDataSerializer.StaticDeserialize<TRequestBody>(@"i need a cat now", DataFormat.Json);
-                                          }
-                                     }
                                    }
                                }
                                public static class ImageService {
-                                  public class GetImage : SummerRest.Runtime.Request.BaseRequest<GetImage> {
+                                  public class GetImage : SummerRest.Runtime.Requests.BaseRequest<GetImage> {
                                      public GetImage() : base("http://my-domain.com/image", "http://my-domain.com/image")
                                      {
                                          Method = HttpMethod.Get;
                                          TimeoutSeconds = 3; 
                                          RedirectsLimit = 3; 
                                          ContentType = new ContentType("image/png", "UTF-8", "");
+                                         BodyFormat = DataFormat.Json;
                                          Init();
                                      }
                                   }
-                                 public class GetImage<TRequestBody> : GetImage, IWebRequest<TRequestBody> {
-                                     public TRequestBody BodyData { get; set; }
-                                     public DataFormat BodyFormat { get; set; }
-                                     public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                     public GetImage() : base()
-                                     {
-                                         BodyFormat = DataFormat.Json;
-                                     }
-                                 }
                                }
                            }
                            public static class MySoapDomain {
-                              public class GetRequest : SummerRest.Runtime.Request.BaseAuthRequest<GetRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender> {
+                              public class GetRequest : SummerRest.Runtime.Requests.BaseAuthRequest<GetRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
                               
                                   public GetRequest() : base("http://localhost:8080/", "http://localhost:8080/?soap-param-1=soap-value-1&soap-param-1=soap-value-2")
                                   {
@@ -509,19 +473,10 @@ public class RestSourceGeneratorTest :
                                        Params.AddParam("soap-param-1", "soap-value-1");
                                        Params.AddParam("soap-param-1", "soap-value-2");
                                        AuthKey = "my-soap-key";
+                                       BodyFormat = DataFormat.Xml;
                                        Init();
                                   }
-            
                               }
-                              public class GetRequest<TRequestBody> : GetRequest, IWebRequest<TRequestBody> {
-                                   public TRequestBody BodyData { get; set; }
-                                   public DataFormat BodyFormat { get; set; }
-                                   public override string SerializedBody => BodyData is null ? null : IDataSerializer.Current.Serialize(BodyData, BodyFormat);
-                                   public GetRequest() : base()
-                                   {
-                                       BodyFormat = DataFormat.Xml;
-                                   }
-                               }
                            }
                        }
 
