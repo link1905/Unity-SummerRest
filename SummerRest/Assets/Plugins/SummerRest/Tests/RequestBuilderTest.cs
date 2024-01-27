@@ -56,13 +56,13 @@ namespace SummerRest.Tests
                 Assert.AreEqual(expect, result);
             }
         }
-        public class TestRequest : BaseRequest<TestRequest>
+        public class TestRequest : BaseDataRequest<TestRequest>
         {
             public class TestRequestBody
             {
                 public int A { get; set; }
             }
-            public TestRequest() : base(ExampleUrl, ExampleUrl)
+            public TestRequest() : base(ExampleUrl, ExampleUrl, null)
             {
                 Init();
             }

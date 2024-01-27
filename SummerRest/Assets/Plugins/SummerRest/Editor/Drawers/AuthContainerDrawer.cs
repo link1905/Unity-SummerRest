@@ -10,7 +10,7 @@ namespace SummerRest.Editor.Drawers
     internal class AuthContainerDrawer : TextOrCustomDataDrawer
     {
         protected override string RelativeFromTemplateAssetPath => "Properties/auth-container.uxml";
-        public override Enum DefaultEnum => AuthContainer.Type.PlainText;
+        public override Enum DefaultEnum => AuthContainer.AuthType.PlainText;
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

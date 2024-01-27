@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine.Networking;
@@ -11,20 +10,13 @@ namespace SummerRest.Runtime.Requests
 {
     public abstract class BaseMultipartRequest<TRequest> : BaseRequest<TRequest> where TRequest : BaseRequest<TRequest>, new()
     {
-        private readonly AuthRequestModifier<BearerTokenAuthAppender, string> _authRequestModifier = new();
-        protected override IRequestModifier RequestModifier => _authRequestModifier;
-        public string AuthKey
-        {
-            get => _authRequestModifier.AuthKey;
-            set => _authRequestModifier.AuthKey = value;
-        }
-
         /// <summary>
         /// The form data of arisen requests <br/>
         /// Originally, this property only reflects on text fields (you must insert file sections manually) <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/> <br/>
         /// </summary>
         public readonly List<IMultipartFormSection> MultipartFormSections = new();
-        public BaseMultipartRequest(string url, string absoluteUrl) : base(url, absoluteUrl)
+        public BaseMultipartRequest(string url, string absoluteUrl, IRequestModifier requestModifier) : 
+            base(url, absoluteUrl, requestModifier)
         {
         }
         /// <summary>

@@ -5,7 +5,6 @@ using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
-using SummerRest.Runtime.Requests;
 
 namespace SummerRest.Runtime.Requests
 {

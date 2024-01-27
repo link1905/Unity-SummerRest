@@ -10,7 +10,7 @@ namespace SummerRest.Runtime.Requests
     
     public abstract class BaseDataRequest<TRequest> : BaseRequest<TRequest> where TRequest : BaseRequest<TRequest>, new() 
     {
-        public BaseDataRequest(string url, string absoluteUrl) : base(url, absoluteUrl)
+        public BaseDataRequest(string url, string absoluteUrl, IRequestModifier requestModifier) : base(url, absoluteUrl, requestModifier)
         {
             
         }

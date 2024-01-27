@@ -42,7 +42,6 @@ public class RestSourceGeneratorTest :
                       "Assembly": "SummerRest",
                       "Domains": [
                      {
-                       "ActiveVersion": "example2.com",
                        "TypeName": "Domain",
                        "Services": [
                          {
@@ -72,6 +71,7 @@ public class RestSourceGeneratorTest :
                                  "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
                                  "AuthDataType": "System.String"
                                },
+                               "IsMultipart": false,
                                "Headers": [
                                  {
                                    "Key": "header2",
@@ -88,67 +88,14 @@ public class RestSourceGeneratorTest :
                                  "Boundary": "",
                                  "FormedContentType": "application/json; charset=UTF-8"
                                },
-                               "TimeoutSeconds": 0,
-                               "name": "cfce0808c22598840beaffe37a8896db",
-                               "hideFlags": 0
+                               "TimeoutSeconds": 0
                              }
                            ],
-                           "EndpointName": "My service",
-                           "Url": "example2.com/service1",
-                           "Path": "service1",
-                           "DataFormat": 0,
-                           "AuthContainer": {
-                             "AuthKey": "my token",
-                             "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-                             "AuthDataType": "System.String"
-                           },
-                           "Headers": [
-                             {
-                               "Key": "header2",
-                               "Value": "value2"
-                             },
-                             {
-                               "Key": "header1",
-                               "Value": "value1"
-                             }
-                           ],
-                           "ContentType": {
-                             "Charset": "UTF-8",
-                             "MediaType": "application/json",
-                             "Boundary": "",
-                             "FormedContentType": "application/json; charset=UTF-8"
-                           },
-                           "TimeoutSeconds": 0,
-                           "name": "c46eab657db607443a354f3f32779a09",
-                           "hideFlags": 0
+                           "EndpointName": "My service"
                          }
                        ],
                        "Requests": [],
-                       "EndpointName": "Domain 1",
-                       "Url": "example2.com",
-                       "Path": "",
-                       "DataFormat": 0,
-                       "AuthContainer": {
-                         "AuthKey": "my token",
-                         "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-                         "AuthDataType": "System.String"
-                       },
-                       "Headers": [
-                         {
-                           "Key": "header1",
-                           "Value": "value1"
-                         }
-                       ],
-                       "ContentType": {
-                         "Charset": "UTF-8",
-                         "MediaType": "application/json",
-                         "Boundary": "",
-                         "FormedContentType": "application/json; charset=UTF-8"
-                       },
-                       "TimeoutSeconds": 0,
-                       "RedirectsLimit": 0,
-                       "name": "1458e1cf6d8a7514cafe29bea538da78",
-                       "hideFlags": 0
+                       "EndpointName": "Domain 1"
                      }
                    ]
                    }
@@ -161,9 +108,9 @@ public class RestSourceGeneratorTest :
                           namespace SummerRest.Runtime.Requests {
                            public static class Domain1 {
                                public static class MyService {
-                                   public class Request1 : SummerRest.Runtime.Requests.BaseAuthRequest<Request1, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
-                                       public Request1() : base("example2.com/service1/asdasdas", "example2.com/service1/asdasdas?123123=aaaaaa")
-                                       {
+                                   public class Request1 : SummerRest.Runtime.Requests.BaseDataRequest<Request1> {
+                                        public Request1() : base("example2.com/service1/asdasdas", "example2.com/service1/asdasdas?123123=aaaaaa", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
+                                        {
                                            Method = HttpMethod.Get;
                                            TimeoutSeconds = 0;
                                            ContentType = new ContentType("application/json", "UTF-8", "");
@@ -215,7 +162,17 @@ public class RestSourceGeneratorTest :
                                    }
                                  ],
                                  "RequestBody": {},
-                                 "SerializedBody": "",
+                                 "IsMultipart": true,
+                                 "SerializedForm": [
+                                   {
+                                     "Key": "form-key-1",
+                                     "Value": "form-value-1"
+                                   },
+                                   {
+                                     "Key": "form-key-2",
+                                     "Value": "form-value-2"
+                                   }
+                                 ],
                                  "TypeName": "Request",
                                  "EndpointName": "GetRequest",
                                  "Url": "http://my-domain.com/data",
@@ -374,7 +331,7 @@ public class RestSourceGeneratorTest :
                              "EndpointName": "GetRequest",
                              "Url": "http://localhost:8080/",
                              "Path": "",
-                             "DataFormat": 3,
+                             "DataFormat": 2,
                              "AuthContainer": {
                                "AuthKey": "my-soap-key",
                                "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
@@ -408,20 +365,22 @@ public class RestSourceGeneratorTest :
                           namespace SummerRest.Runtime.Requests {
                            public static class MyJsonDomain {
                                public static class DataService {
-                                   public class GetRequest : SummerRest.Runtime.Requests.BaseRequest<GetRequest> {
-                                       public GetRequest() : base("http://my-domain.com/data", "http://my-domain.com/data?param-1=param-value-1&param-2=param-value-2")
+                                   public class GetRequest : SummerRest.Runtime.Requests.BaseMultipartRequest<GetRequest> {
+
+                                       public GetRequest() : base("http://my-domain.com/data", "http://my-domain.com/data?param-1=param-value-1&param-2=param-value-2", null)
                                        {
                                            Method = HttpMethod.Get;
                                            Headers.Add("header-1", "header-value-1");
                                            Headers.Add("header-2", "header-value-2");
                                            Params.AddParam("param-1", "param-value-1");
                                            Params.AddParam("param-2", "param-value-2");
-                                           BodyFormat = DataFormat.Json;
+                                           MultipartFormSections.Add(new MultipartFormDataSection("form-key-1", "form-value-1"));
+                                           MultipartFormSections.Add(new MultipartFormDataSection("form-key-2", "form-value-2"));
                                            Init();
                                        }
                                    }
-                                   public class PostRequest : SummerRest.Runtime.Requests.BaseAuthRequest<PostRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
-                                       public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data")
+                                   public class PostRequest : SummerRest.Runtime.Requests.BaseDataRequest<PostRequest> {
+                                       public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
                                        {
                                            Method = HttpMethod.Post;
                                            Headers.Add("header-1", "header-value-1");
@@ -433,8 +392,9 @@ public class RestSourceGeneratorTest :
                                        }
                                    }
                                    public static class AccountService {
-                                      public class PutRequest : SummerRest.Runtime.Requests.BaseRequest<PutRequest> {
-                                          public PutRequest() : base("http://my-domain.com/data/account", "http://my-domain.com/data/account") 
+                                      public class PutRequest : SummerRest.Runtime.Requests.BaseDataRequest<PutRequest> {
+
+                                          public PutRequest() : base("http://my-domain.com/data/account", "http://my-domain.com/data/account", null) 
                                           {
                                               Method = HttpMethod.Put;
                                               TimeoutSeconds = 3;
@@ -450,8 +410,9 @@ public class RestSourceGeneratorTest :
                                    }
                                }
                                public static class ImageService {
-                                  public class GetImage : SummerRest.Runtime.Requests.BaseRequest<GetImage> {
-                                     public GetImage() : base("http://my-domain.com/image", "http://my-domain.com/image")
+                                  public class GetImage : SummerRest.Runtime.Requests.BaseDataRequest<GetImage> {
+                                     
+                                     public GetImage() : base("http://my-domain.com/image", "http://my-domain.com/image", null)
                                      {
                                          Method = HttpMethod.Get;
                                          TimeoutSeconds = 3; 
@@ -464,9 +425,8 @@ public class RestSourceGeneratorTest :
                                }
                            }
                            public static class MySoapDomain {
-                              public class GetRequest : SummerRest.Runtime.Requests.BaseAuthRequest<GetRequest, SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String> {
-                              
-                                  public GetRequest() : base("http://localhost:8080/", "http://localhost:8080/?soap-param-1=soap-value-1&soap-param-1=soap-value-2")
+                              public class GetRequest : SummerRest.Runtime.Requests.BaseDataRequest<GetRequest> {
+                                  public GetRequest() : base("http://localhost:8080/", "http://localhost:8080/?soap-param-1=soap-value-1&soap-param-1=soap-value-2", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
                                   {
                                        Method = HttpMethod.Get;
                                        ContentType = new ContentType("application/soap+xml", "UTF-8", "");

@@ -17,12 +17,6 @@ MonoBehaviour:
   endpointName: Get1
   url: https://jsonplaceholder.typicode.com/posts/1
   path: 1
-  dataFormat:
-    inherit: 2
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 2
     cache:
@@ -32,23 +26,15 @@ MonoBehaviour:
     value:
       authKey: my-token-to-master-service
   headers:
-    inherit: 2
+    inherit: 4
     cache:
-      hasValue: 0
-      value: []
-    value: []
-  contentType:
-    inherit: 2
-    cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
+      - key: asd
+        value: sdas
     value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
+    - key: asd
+      value: sdas
   timeoutSeconds:
     inherit: 2
     cache:
@@ -62,17 +48,31 @@ MonoBehaviour:
       value: 0
     value: 0
   <TreeId>k__BackingField: 1
+  contentType:
+    inherit: 16
+    cache:
+      hasValue: 1
+      value:
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: text/plain
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: UTF-16
+      <MediaType>k__BackingField: application/json
+      <Boundary>k__BackingField: 
   method: 0
   requestParams: []
   requestBody:
     type: 0
-    text: 
+    text: asdasd
     body:
       value:
         rid: -2
       typeReference:
         classRef: 
-    serializedData: 
+    serializedData: asdasd
+    textFormat: 1
+    form: []
   urlWithParam: https://jsonplaceholder.typicode.com/posts/1
   latestResponse:
     lastCall: 01/25/2024 15:30:47

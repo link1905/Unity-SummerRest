@@ -45,19 +45,15 @@ namespace RestSourceGenerator.Metadata
             return $"SummerRest.Runtime.Requests.BaseMultipartRequest<{EndpointName.ToClassName()}>";
             //return $"SummerRest.Runtime.Requests.BaseAuthRequest<{EndpointName.ToClassName()}, {AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>";
         }
-        private string BuildAuth()
+        private (string authClass, string authKey) BuildAuth()
         {
             if (!AuthContainer.HasValue)
-                return string.Empty;
-            return $@"
-private readonly AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}> _authRequestModifier = new();
-protected override IRequestModifier RequestModifier => _authRequestModifier;
-public string AuthKey
-{{
-    get => _authRequestModifier.AuthKey;
-    set => _authRequestModifier.AuthKey = value;
-}}
-";
+                return ("null", string.Empty);
+            return ($@"
+IRequestModifier<AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>>.GetSingleton()", 
+                $@"
+AuthKey = ""{AuthContainer.Value.AuthKey}"";
+");
         }
 
         private string BuildBody()
@@ -65,8 +61,10 @@ public string AuthKey
             if (!IsMultipart)
             {
                 if (string.IsNullOrEmpty(SerializedBody))
-                    return string.Empty;
-                return $@"InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
+                    return $"BodyFormat = DataFormat.{DataFormat};";
+                return $@"
+BodyFormat = DataFormat.{DataFormat};
+InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
             }
             if (SerializedForm is not {Length: >0})
                 return string.Empty;
@@ -82,13 +80,12 @@ public string AuthKey
                 $@"{nameof(ContentType)} = new ContentType(""{ContentType.Value.MediaType}"", ""{ContentType.Value.Charset}"", ""{ContentType.Value.Boundary}"");" : string.Empty;
             var headers = BuildHeaders();
             var @params = BuildParams();
-            var auth = BuildAuth();
-            var dataFormat = $"BodyFormat = DataFormat.{DataFormat};";
+            var (authProp, authKey) = BuildAuth();
             var body = BuildBody();
             builder.Append($@"
 public class {className} : {BuildBaseClass()}
 {{
-    public {className}() : base(""{Url}"", ""{UrlWithParams}"") 
+    public {className}() : base(""{Url}"", ""{UrlWithParams}"", {authProp}) 
     {{
         Method = {method};
         {timeout}
@@ -96,8 +93,7 @@ public class {className} : {BuildBaseClass()}
         {contentType}
         {headers}
         {@params}
-        {auth}
-        {dataFormat}
+        {authKey}
         {body}
         Init();
     }}

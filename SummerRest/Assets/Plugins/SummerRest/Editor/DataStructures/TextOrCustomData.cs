@@ -8,10 +8,13 @@ namespace SummerRest.Editor.DataStructures
     public class TextOrCustomData<TType> where TType : Enum
     {
         [SerializeField] protected TType type;
+        public TType Type => type;
         /// <summary>
         /// Raw text value
         /// </summary>
         [SerializeField] protected string text;
+
+        public string Text => text;
     }
 
     /// <summary>

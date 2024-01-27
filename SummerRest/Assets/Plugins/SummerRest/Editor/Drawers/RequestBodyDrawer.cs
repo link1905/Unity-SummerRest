@@ -13,20 +13,26 @@ namespace SummerRest.Editor.Drawers
     internal class RequestBodyDrawer : TextOrCustomDataDrawer
     {
         protected override string RelativeFromTemplateAssetPath => "Properties/request-body.uxml";
-        public override Enum DefaultEnum => RequestBodyType.PlainText;
+        public override Enum DefaultEnum => RequestBodyType.Text;
         protected override VisualElement[] GetShownElements(VisualElement tree)
         {
             return base.GetShownElements(tree).Concat(new VisualElement[]
             {
                 tree.Q<PropertyField>("form"),
-                tree.Q<Foldout>("serialized-body")
+                tree.Q<Foldout>("serialized-body"),
+                tree.Q<EnumField>("text-format"),
+                
             }).ToArray();
         }
         protected override void BindValueElement(int value, VisualElement tree)
         {
             base.BindValueElement(value, tree);
-            if ((RequestBodyType)value is RequestBodyType.Data or RequestBodyType.PlainText)
+            var requestType = (RequestBodyType)value;
+            if (requestType is RequestBodyType.Data)
+            {
                 tree.Q<Foldout>("serialized-body").Show(true);
+                tree.Q<EnumField>("text-format").Show(true);
+            }
         }
     }
 }

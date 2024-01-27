@@ -38,7 +38,10 @@ namespace SummerRest.Editor.Drawers
             
             var valuesElement = tree.Q<DropdownField>(name: "values");
             valuesElement.choices = _defaultValues;
-            valuesElement.index = GetIdx(property.stringValue);
+            valuesElement.CallThenTrackPropertyValue(property, e =>
+            {
+                valuesElement.index = GetIdx(e.stringValue);
+            });
             valuesElement.RegisterValueChangedCallback(e =>
             {
                 var val = e.newValue;

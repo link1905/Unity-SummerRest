@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using SummerRest.Runtime.Attributes;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.RequestComponents
 {
@@ -73,7 +74,7 @@ namespace SummerRest.Runtime.RequestComponents
             public static ContentType ApplicationXml => new(MediaTypeNames.Application.Xml, Encodings.Utf8);
             public static ContentType TextPlain => new(MediaTypeNames.Text.Plain, Encodings.Utf8);
             public static ContentType Binary => new(MediaTypeNames.Application.Octet, Encodings.Utf8);
-            public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8);
+            public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8, Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary()));
         }
         
         [field: SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
@@ -89,7 +90,6 @@ namespace SummerRest.Runtime.RequestComponents
                 )]
         public string MediaType { get; private set; }
         [field: SerializeField] public string Boundary { get; private set; }
-
         /// <summary>
         /// Content-type string formed from the 3 components
         /// </summary>
@@ -119,10 +119,10 @@ namespace SummerRest.Runtime.RequestComponents
             return builder.ToString();
         }
 
-        public ContentType(string mediaType = MediaTypeNames.Text.Plain, string charset = null, string boundary = null)
+        public ContentType(string mediaType = null, string charset = null, string boundary = null)
         {
-            Charset = charset;
             MediaType = mediaType;
+            Charset = charset;
             Boundary = boundary;
         }
         /// <summary>

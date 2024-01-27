@@ -9,12 +9,15 @@ namespace SummerRest.Editor.DataStructures
     {
         [SerializeField] private string filePath;
         public string FilePath => filePath;
+        public string FileName => Path.GetFileName(filePath);
+        public byte[] Data => Valid ? File.ReadAllBytes(filePath) : null;
+        public bool Valid => File.Exists(filePath);
         public void OnBeforeSerialize()
         {
         }
         public void OnAfterDeserialize()
         {
-            if (File.Exists(filePath))
+            if (Valid)
                 return;
             filePath = string.Empty;
         }

@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using SummerRest.Runtime.Authenticate.Appenders;
+using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
@@ -12,7 +14,8 @@ namespace SummerRest.Runtime.Requests
     /// The properties are stable with the request's lifetime; That means whenever you modify a property, it will affect every sequent requests <br/>
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
-    public abstract partial class BaseRequest<TRequest> where TRequest : BaseRequest<TRequest>, new() 
+    public abstract partial class BaseRequest<TRequest> 
+        where TRequest : BaseRequest<TRequest>, new()
     {
         /// <summary>
         /// Absolute URL built from <see cref="Url"/> and <see cref="Params"/> 
@@ -38,7 +41,8 @@ namespace SummerRest.Runtime.Requests
         /// Please note that, this property originally contains your inputs in the plugin window
         /// </summary>
         public RequestParamContainer Params { get; } = new();
-        protected abstract IRequestModifier RequestModifier { get; }
+
+        private readonly IRequestModifier _requestModifier;
 
         /// <summary>
         /// Access this to modify your headers in runtime<br/>
@@ -64,13 +68,17 @@ namespace SummerRest.Runtime.Requests
         /// The content type of arisen requests
         /// </summary>
         public ContentType? ContentType { get; set; }
+        /// <summary>
+        /// Used to resolve auth values in <see cref="IAuthDataRepository"/> <seealso cref="IAuthData"/> <seealso cref="IAuthAppender{TAuthAppender,TAuthData}"/> <br/>
+        /// </summary>
+        public string AuthKey { get; set; }
 
 
-
-        protected BaseRequest(string url, string absoluteUrl)
+        protected BaseRequest(string url, string absoluteUrl, IRequestModifier requestModifier)
         {
             _url = url;
             AbsoluteUrl = absoluteUrl;
+            _requestModifier = requestModifier;
         }
 
         public static TRequest Create()
@@ -102,7 +110,7 @@ namespace SummerRest.Runtime.Requests
             requestAdaptor.Method = Method;
             foreach (var (k, v) in Headers)
                 requestAdaptor.SetHeader(k, v);
-            RequestModifier?.ModifyRequestData(requestAdaptor);
+            _requestModifier?.ModifyRequestData(this, requestAdaptor);
         }
         private IEnumerator SetRequestDataAndWait<TResponse>(
             IWebRequestAdaptor<TResponse> requestAdaptor)

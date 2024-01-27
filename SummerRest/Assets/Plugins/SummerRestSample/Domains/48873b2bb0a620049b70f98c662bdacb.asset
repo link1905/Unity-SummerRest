@@ -17,12 +17,6 @@ MonoBehaviour:
   endpointName: Post
   url: https://jsonplaceholder.typicode.com/posts
   path: 
-  dataFormat:
-    inherit: 8
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 2
     cache:
@@ -56,7 +50,7 @@ MonoBehaviour:
       hasValue: 1
       value:
         <Charset>k__BackingField: UTF-8
-        <MediaType>k__BackingField: text/plain
+        <MediaType>k__BackingField: application/json
         <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
@@ -65,16 +59,16 @@ MonoBehaviour:
   method: 1
   requestParams: []
   requestBody:
-    type: 0
+    type: 1
     text: 
     body:
       value:
         rid: 6516271629519290379
       typeReference:
         classRef: SummerRestSample.PostData, Assembly-CSharp-firstpass
-    serializedData: 
-    file:
-      filePath: C:/Users/ADMIN/Pictures/Screenshots/Screenshot 2024-01-23 145138.png
+    serializedData: "{\r\n  \"id\": 0,\r\n  \"title\": \"\",\r\n  \"body\": \"\",\r\n 
+      \"userId\": 0\r\n}"
+    textFormat: 0
     form: []
   urlWithParam: https://jsonplaceholder.typicode.com/posts
   latestResponse:

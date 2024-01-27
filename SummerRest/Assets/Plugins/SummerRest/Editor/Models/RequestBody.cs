@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SummerRest.Editor.Models
 {
@@ -15,24 +17,29 @@ namespace SummerRest.Editor.Models
     public class RequestBody : TextOrCustomData<RequestBodyType, IRequestBodyData, RequestBody.RequestBodyContainer>
     {
         [SerializeField] private string serializedData;
-        [SerializeField] private FileReference file;
+        [SerializeField] private DataFormat textFormat;
         [SerializeField] private MultipartFormRow[] form;
 
-        public string SerializedData(DataFormat dataFormat, bool beauty)
+        public string SerializedData(bool beauty)
         {
             switch (type)
             {
-                case RequestBodyType.PlainText:
+                case RequestBodyType.Text:
                     return text;
                 case RequestBodyType.Data: 
-                    return DefaultDataSerializer.StaticSerialize(body.Value, dataFormat, beauty);
+                    return IDataSerializer.Current.Serialize(body.Value, textFormat, beauty);
                 case RequestBodyType.MultipartForm:
-                    return string.Empty;
+                    return null;
             }
-            return string.Empty;
+            return null;
         }
-        public KeyValue[] SerializedForm => form.Select(e => e.SerializedPair).Where(e => e.HasValue).Select(e => e.Value).ToArray();
-
+        /// <summary>
+        /// Only get texts
+        /// </summary>
+        public KeyValue[] TextSections => form.Where(e => e.Type == MultipartFormRowType.PlainText)
+            .Select(e => e.Pair).ToArray();
+        public IEnumerable<IMultipartFormSection> FormSections 
+            => form.Select(e => e.FormSection).Where(e => e is not null);
         [Serializable]
         public class RequestBodyContainer : InterfaceContainer<IRequestBodyData>
         {
@@ -42,15 +49,17 @@ namespace SummerRest.Editor.Models
         }
 
         public bool IsMultipart => type == RequestBodyType.MultipartForm;
-        public ContentType? CacheValue(DataFormat dataFormat)
+        public DataFormat DataFormat => textFormat;
+
+        public ContentType? CacheValue()
         {
-            serializedData = SerializedData(dataFormat, true);
+            serializedData = SerializedData(true);
             switch (type)
             {
-                case RequestBodyType.PlainText:
+                case RequestBodyType.Text:
                     return ContentType.Commons.TextPlain;
                 case RequestBodyType.Data:
-                    switch (dataFormat)
+                    switch (textFormat)
                     {
                         case DataFormat.Json:
                             return ContentType.Commons.ApplicationJson;;

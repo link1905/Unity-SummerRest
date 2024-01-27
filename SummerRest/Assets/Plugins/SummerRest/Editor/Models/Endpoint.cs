@@ -60,12 +60,6 @@ namespace SummerRest.Editor.Models
         }
 
 
-        /// <summary>
-        /// Response and request data format arisen by this endpoint <see cref="SummerRest.Runtime.RequestComponents.DataFormat"/>
-        /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit | InheritChoice.Custom)]
-        private InheritOrCustomContainer<DataFormat> dataFormat;
-        public DataFormat DataFormat { get; private set; }
         
         /// <summary>
         /// Points to an <see cref="SummerRest.Editor.Models.AuthContainer"/>
@@ -130,9 +124,6 @@ namespace SummerRest.Editor.Models
                 allow: InheritChoice.Inherit | InheritChoice.None | InheritChoice.Custom | InheritChoice.AppendToParent);
             Headers = headersCache.HasValue ? headersCache.Value : null;
             
-            DataFormat = dataFormat.Cache(Parent, whenInherit: p => new Present<DataFormat>(true, p.DataFormat), 
-                allow: InheritChoice.Inherit | InheritChoice.Custom).Value;
-
             var timeoutCache = timeoutSeconds.Cache(Parent, whenInherit: p => new Present<int>(p.TimeoutSeconds != null, p.TimeoutSeconds ?? default));
             TimeoutSeconds = timeoutCache.HasValue ? timeoutCache.Value : null;
 

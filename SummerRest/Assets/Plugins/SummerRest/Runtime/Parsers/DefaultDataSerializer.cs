@@ -40,7 +40,8 @@ namespace SummerRest.Runtime.Parsers
 
         public T Deserialize<T>(string data, DataFormat dataFormat)
             => StaticDeserialize<T>(data, dataFormat);
-        public static string StaticSerialize<T>(T data, DataFormat dataFormat, bool beauty = false)
+
+        public string Serialize<T>(T data, DataFormat dataFormat, bool beauty = false)
         {
             if (data is null)
                 return default;
@@ -78,7 +79,5 @@ namespace SummerRest.Runtime.Parsers
             return stringWriter.ToString();
         }
         private const string RootName = "root";
-        public string Serialize<T>(T data, DataFormat dataFormat)
-            => StaticSerialize(data, dataFormat);
     }
 }

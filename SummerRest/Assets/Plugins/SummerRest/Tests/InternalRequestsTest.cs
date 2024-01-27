@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Authenticate.TokenRepositories;
@@ -25,16 +26,16 @@ namespace SummerRest.Tests
         {
             var provider = new TestWebRequestAdaptorProvider("application/json", @"{""A"":5}", HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestRequest.Create();
-            var expected = new TestRequest.TestResponseData
+            var request = TestDataRequest.Create();
+            var expected = new TestResponseData
             {
                 A = 5
             };
-            yield return request.RequestCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.RequestCoroutine<TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.DetailedRequestCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.DetailedRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
                 Assert.IsNull(e.Error);
@@ -46,16 +47,16 @@ namespace SummerRest.Tests
         {
             var provider = new TestWebRequestAdaptorProvider("application/xml", "<root><A>3</A></root>", HttpStatusCode.Created, null);
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestRequest.Create();
-            var expected = new TestRequest.TestResponseData
+            var request = TestDataRequest.Create();
+            var expected = new TestResponseData
             {
                 A = 3
             };
-            yield return request.RequestCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.RequestCoroutine<TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.DetailedRequestCoroutine<TestRequest.TestResponseData>(e =>
+            yield return request.DetailedRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.AreEqual(HttpStatusCode.Created, e.StatusCode);
                 Assert.IsNull(e.Error);
@@ -69,7 +70,7 @@ namespace SummerRest.Tests
             const string result = "internal server error response";
             var provider = new TestWebRequestAdaptorProvider("text/plain", result, HttpStatusCode.InternalServerError, null);
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestRequest.Create();
+            var request = TestDataRequest.Create();
             yield return request.RequestCoroutine<string>(e =>
             {
                 Assert.AreEqual(result, e);
@@ -88,7 +89,7 @@ namespace SummerRest.Tests
             const string error = "connection error";
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestRequest.Create().RequestCoroutine<string>(null, e =>
+            yield return TestDataRequest.Create().RequestCoroutine<string>(null, e =>
             {
                 Assert.AreEqual(error, e);
             });
@@ -100,7 +101,7 @@ namespace SummerRest.Tests
             const string error = "connection error";
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestRequest.Create().RequestCoroutine<string>(null);
+            yield return TestDataRequest.Create().RequestCoroutine<string>(null);
             var msg = string.Format(
                 @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
                 error, TestAbsoluteUrl);
@@ -113,20 +114,35 @@ namespace SummerRest.Tests
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
             IAuthDataRepository.Current.Save("test-key", "my-token");
-            var request = TestRequest.Create();
+            var request = TestDataRequest.Create();
             request.AuthKey = "test-key";
             yield return request.TestAuthRequestCoroutine<string, BearerTokenAuthAppender, string>(null);
             var header = ((RawTestWebRequestAdaptor<string>)request.PreviousRequest).GetHeader("Authorization");
             Assert.AreEqual("Bearer my-token", header);
         }
         
+        [UnityTest]
+        public IEnumerator Test_Internal_Request_Append_Correct_Multipart_Form()
+        {
+            var contentType = ContentType.Commons.MultipartForm;
+            var form = new List<IMultipartFormSection>();
+            form.Add(new MultipartFormDataSection("form-key-1", "form-value-1"));
+            form.Add(new MultipartFormDataSection("form-key-2", "form-value-2"));
+            
+            var provider = new TestWebRequestAdaptorProvider(contentType.FormedContentType, string.Empty, HttpStatusCode.OK, null);
+            IWebRequestAdaptorProvider.Current = provider;
+            var request = TestMultipartRequest.Create();
+            yield return request.TestRequestCoroutine<string>(null);
+            CollectionAssert.AreEqual(UnityWebRequest.SerializeFormSections(form, Encoding.UTF8.GetBytes(contentType.Boundary)),
+                ((MultipartTestWebRequestAdaptor<string>)request.PreviousRequest).Data);
+        }
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_From_Unity_Web_Request_Set_Correct_Information()
         {
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestRequest.Create();
+            var request = TestDataRequest.Create();
             request.Method = HttpMethod.Connect;
             var webRequest = UnityWebRequest.Get(string.Empty);
             yield return request.RequestCoroutineFromUnityWebRequest(webRequest, e =>
@@ -149,28 +165,29 @@ namespace SummerRest.Tests
             });
         }
         
-        //Proxying classes for testing only
-        public class TestRequest : BaseAuthRequest<TestRequest, BearerTokenAuthAppender, string>
+        public class TestResponseData
         {
-            public TestRequest() : base(InternalRequestsTest.TestUrl, InternalRequestsTest.TestAbsoluteUrl)
+            public int A { get; set; }
+
+            public bool Equals(TestResponseData other)
+            {
+                return A == other.A;
+            }
+
+            public override int GetHashCode()
+            {
+                return A;
+            }
+        }
+        
+        //Proxying classes for testing only
+        public class TestDataRequest : BaseDataRequest<TestDataRequest>
+        {
+            public TestDataRequest() : base(TestUrl, TestAbsoluteUrl, 
+                new AuthRequestModifier<BearerTokenAuthAppender, string>())
             {
                 Init();
             }
-            public class TestResponseData
-            {
-                public int A { get; set; }
-
-                public bool Equals(TestResponseData other)
-                {
-                    return A == other.A;
-                }
-
-                public override int GetHashCode()
-                {
-                    return A;
-                }
-            }
-
             public object PreviousRequest { get; private set; } 
             public IEnumerator TestAuthRequestCoroutine<TResponse, TAuthAppender, TAuthData>(Action<TResponse> doneCallback, Action<string> errorCallback = null) 
                 where TAuthAppender : class, IAuthAppender<TAuthAppender, TAuthData>, new()
@@ -179,6 +196,21 @@ namespace SummerRest.Tests
                     IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
                 PreviousRequest = request;
                 yield return RequestCoroutine(request, doneCallback, errorCallback);
+            }
+        }
+        
+        public class TestMultipartRequest : BaseMultipartRequest<TestMultipartRequest>
+        {
+            public TestMultipartRequest() : base(TestUrl, TestAbsoluteUrl, null)
+            {
+                Init();
+            }
+            public object PreviousRequest { get; private set; } 
+            public IEnumerator TestRequestCoroutine<TResponse>(Action<TResponse> doneCallback, Action<string> errorCallback = null)
+            {
+                var request = RequestCoroutine(doneCallback, errorCallback);
+                PreviousRequest = request;
+                yield return request;
             }
         }
 
@@ -210,7 +242,8 @@ namespace SummerRest.Tests
             }
             public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data)
             {
-                return _wrapped.GetMultipartFileRequest<TBody>(url, data);
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, data) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                return new MultipartTestWebRequestAdaptor<TBody>(wrapped, _fixedContentType, _fixedRawResponse, _code, _fixedError);
             }
 
             public IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest)
@@ -228,7 +261,15 @@ namespace SummerRest.Tests
 
         }
 
-        private class DumpTestWebRequestAdaptor : TestWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>
+        private class MultipartTestWebRequestAdaptor<TResponse> : RawTestWebRequestAdaptor<TResponse>
+        {
+            public byte[] Data => (Wrapped as MultipartFileUnityWebRequestAdaptor<TResponse>)?.Data;
+            public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> wrapped, string fixedContentType, 
+                string fixedRawResponse, HttpStatusCode code, string fixedError) : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
+            {
+            }
+        }
+        private class DumpTestWebRequestAdaptor : BaseTestWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>
         {
             public DumpTestWebRequestAdaptor(DumpUnityWebRequestAdaptor wrapped, string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) 
                 : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
@@ -245,7 +286,7 @@ namespace SummerRest.Tests
             }
         }
 
-        private class RawTestWebRequestAdaptor<TResponse> : TestWebRequestAdaptor<
+        private class RawTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
             RawUnityWebRequestAdaptor<TResponse>, TResponse>
         {
             public RawTestWebRequestAdaptor(RawUnityWebRequestAdaptor<TResponse> webRequest,
@@ -263,7 +304,7 @@ namespace SummerRest.Tests
             }
         }
 
-        private abstract class TestWebRequestAdaptor<TWrappedAdaptor, TResponse> : IWebRequestAdaptor<TResponse>
+        private abstract class BaseTestWebRequestAdaptor<TWrappedAdaptor, TResponse> : IWebRequestAdaptor<TResponse>
             where TWrappedAdaptor : UnityWebRequestAdaptor<TWrappedAdaptor, TResponse>, new()
         {
             public abstract IEnumerator RequestInstruction { get; }
@@ -321,7 +362,7 @@ namespace SummerRest.Tests
             protected readonly string FixedRawResponse;
             protected readonly string FixedError;
 
-            public TestWebRequestAdaptor(TWrappedAdaptor wrapped, string fixedContentType, string fixedRawResponse,
+            public BaseTestWebRequestAdaptor(TWrappedAdaptor wrapped, string fixedContentType, string fixedRawResponse,
                 HttpStatusCode code, string fixedError)
             {
                 Wrapped = wrapped;

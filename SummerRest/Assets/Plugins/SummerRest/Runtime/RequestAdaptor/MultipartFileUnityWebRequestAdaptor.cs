@@ -9,6 +9,7 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// </summary>
     internal class MultipartFileUnityWebRequestAdaptor<TResponse> : RawUnityWebRequestAdaptor<TResponse>
     {
+        public byte[] Data => WebRequest.uploadHandler.data;
         protected override void SetAdaptedContentType(in ContentType contentType)
         {
             if (string.IsNullOrEmpty(contentType.Boundary))

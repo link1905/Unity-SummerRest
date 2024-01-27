@@ -13,8 +13,18 @@ namespace SummerRest.Editor.DataStructures
     {
         [SerializeField] private bool hasValue;
         [SerializeField] private T value;
-        public bool HasValue => hasValue;
-        public T Value => value;
+        public bool HasValue
+        {
+            get => hasValue;
+            set => hasValue = value;
+        }
+
+        public T Value
+        {
+            get => value;
+            set => this.value = value;
+        }
+
         public Present(bool hasValue, T value)
         {
             this.hasValue = hasValue;

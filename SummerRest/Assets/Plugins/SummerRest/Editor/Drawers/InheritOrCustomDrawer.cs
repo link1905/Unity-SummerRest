@@ -49,14 +49,9 @@ namespace SummerRest.Editor.Drawers
             nameElement.text = property.displayName;
                         
             var valueElement = tree.Q<PropertyField>(name: "prop");
-            valueElement.BindProperty(property.FindPropertyRelative("value"));
-     
             
             var cacheElement = tree.Q<PropertyField>(name: "cache");
             cacheElement.SetEnabled(false);
-            var cacheProp = property.FindPropertyRelative("cache");
-            if (cacheProp is not null)
-                cacheElement.BindProperty(cacheProp);
             
             var choiceElement = tree.Q<DropdownField>(name: "prop-choice");
             var choiceProp = property.FindPropertyRelative("inherit");

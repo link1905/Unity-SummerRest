@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -45,27 +44,29 @@ namespace SummerRest.Editor.Models
             private set => requestParams = value;
         }
 
-        public RequestBody RequestBody
+        [JsonIgnore] public RequestBody RequestBody
         {
             get => requestBody;
             private set => requestBody = value;
         }
 
-        public string SerializedBody => RequestBody.SerializedData(DataFormat, false);
-        public KeyValue[] SerializedForm => RequestBody.SerializedForm;
+        
+        //Properties for JSON used in source generator
+        public DataFormat DataFormat => RequestBody.DataFormat;
+        public string SerializedBody => RequestBody.SerializedData(false);
+        public KeyValue[] SerializedForm => RequestBody.TextSections;
         public bool IsMultipart => requestBody.IsMultipart;
 
-        private IEnumerable<KeyValuePair<string, string>> Params => requestParams?.Select(e => (KeyValuePair<string, string>)e);
         public override void CacheValues()
         {
             base.CacheValues();
-            urlWithParam = DefaultUrlBuilder.BuildUrl(Url, Params);
+            urlWithParam = DefaultUrlBuilder.BuildUrl(Url, requestParams?.Select(e => (KeyValuePair<string, string>)e));
             var contentTypeCache = contentType.Cache(Parent,
                 allow: InheritChoice.Auto | InheritChoice.Custom,
                 defaultWhenInvalid: InheritChoice.Auto,
                 whenInherit: null, whenAuto: () =>
                 {
-                    var builtContentType = requestBody.CacheValue(DataFormat);
+                    var builtContentType = requestBody.CacheValue();
                     return builtContentType.HasValue ? new Present<ContentType>(builtContentType.Value) : Present<ContentType>.Absent;
                 });
             ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;

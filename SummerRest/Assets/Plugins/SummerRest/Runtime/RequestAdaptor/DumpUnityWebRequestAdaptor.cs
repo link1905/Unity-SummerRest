@@ -7,7 +7,6 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// </summary>
     internal class DumpUnityWebRequestAdaptor : UnityWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>
     {
-        //private string _rawResponse;
         internal override UnityWebRequest BuildResponse()
         {
             return WebRequest;

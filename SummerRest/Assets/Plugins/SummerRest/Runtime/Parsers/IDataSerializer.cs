@@ -10,7 +10,22 @@ namespace SummerRest.Runtime.Parsers
     [GeneratedDefault("DataSerializer", typeof(DefaultDataSerializer))]
     public partial interface IDataSerializer
     {
+        /// <summary>
+        /// Deserialize a text to a custom data
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="dataFormat"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         T Deserialize<T>(string data, DataFormat dataFormat);
-        string Serialize<T>(T data, DataFormat dataFormat);
+        /// <summary>
+        /// Serialize a custom data to a text
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="dataFormat"></param>
+        /// <param name="beauty">Should the text look pretty. You can ignore this parameter because it is intentionally used to show the apparent text in the editor</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        string Serialize<T>(T data, DataFormat dataFormat, bool beauty = false);
     }
 }

@@ -7,7 +7,6 @@ using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
-using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine.Networking;
 
@@ -19,7 +18,6 @@ namespace SummerRest.Editor.Requests
     public class EditorRequest : BaseRequest<EditorRequest>
     {
         private readonly Request _request;
-        internal override string SerializedBody { get; }
 
         protected override void SetRequestData<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor)
         {
@@ -39,8 +37,9 @@ namespace SummerRest.Editor.Requests
             }, _request.AuthContainer.GetData(), requestAdaptor);
         }
         
-        protected EditorRequest(Request request) : base(request.Url,request.UrlWithParams)
+        protected EditorRequest(Request request) : base(request.Url,request.UrlWithParams, null)
         {
+            
             _request = request;
             AbsoluteUrl = request.UrlWithParams;
             RedirectsLimit = request.RedirectsLimit;
@@ -50,12 +49,11 @@ namespace SummerRest.Editor.Requests
             if (request.Headers is not null)
                 foreach (var header in request.Headers)
                     Headers.Add(header);
-            SerializedBody = request.SerializedBody;
         }
 
         public static EditorRequest Create(Request request) => new(request);
 
-        public EditorRequest() : base(string.Empty, string.Empty)
+        public EditorRequest() : base(string.Empty, string.Empty, null)
         {
         }
 
@@ -83,22 +81,18 @@ namespace SummerRest.Editor.Requests
         {
             var response = _request.LatestResponse;
             response.Clear();
-            var contentType = _request.ContentType ?? new ContentType();
-            IEnumerator request;
-            switch (contentType.MediaType)
+            if (_request.IsMultipart)
             {
-                case var multipartType when multipartType.StartsWith("multipart/"):
-                {
-                    request = DetailedRequestCoroutine<string>(SetResponseCallback, r => response.Error = r);
-                    break;
-                }
-                default:
-                {
-                    request = DetailedMultipartFileRequestCoroutine<string>(SetResponseCallback, null,r => response.Error = r);
-                    break;
-                }
+                var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<string>(AbsoluteUrl, 
+                    _request.RequestBody.FormSections.ToList());
+                yield return DetailedRequestCoroutine(request, SetResponseCallback, r => response.Error = r);
             }
-            yield return request;
+            else
+            {
+                var request = IWebRequestAdaptorProvider.Current.GetDataRequest<string>(AbsoluteUrl, Method,
+                    _request.SerializedBody);
+                yield return DetailedRequestCoroutine(request, SetResponseCallback, r => response.Error = r);
+            }
             callback?.Invoke();
         }
     }

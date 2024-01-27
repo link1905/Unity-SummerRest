@@ -12,10 +12,10 @@ namespace SummerRest.Editor.Models
 {
     /// <summary>
     /// Points to an auth data (userId, token...) resolved by an <see cref="IAuthDataRepository"/> <br/> 
-    /// In editor: used for generating <see cref="BaseAuthRequest{TRequest,TAuthAppender,TAuthData}"/>. It also contains the default value (string or <see cref="IAuthData"/>) for calling editor requests <seealso cref="AuthContainer.text"/>  <seealso cref="AuthContainer.body"/>
+    /// It contains the default value (string or <see cref="IAuthData"/>) for calling editor requests <seealso cref="AuthContainer.text"/>  <seealso cref="AuthContainer.body"/>
     /// </summary>
     [Serializable]
-    public class AuthContainer : TextOrCustomData<AuthContainer.Type, IAuthData, AuthContainer.BodyContainer>, ISerializationCallbackReceiver
+    public class AuthContainer : TextOrCustomData<AuthContainer.AuthType, IAuthData, AuthContainer.BodyContainer>, ISerializationCallbackReceiver
     {
         /// <summary>
         /// Key for resolving the auth value in runtime by using a <see cref="IAuthDataRepository"/> <seealso cref="IAuthAppender{TAuthAppender, TAuthData}"/> <seealso cref="IAuthAppender{TAuthAppender,TAuth}"/>
@@ -37,14 +37,14 @@ namespace SummerRest.Editor.Models
                 return selectedAppender?.GetInterface(typeof(IAuthAppender<,>).FullName).GenericTypeArguments[1];
             }
         }
-        public enum Type
+        public enum AuthType
         {
             PlainText, Data
         }
         [JsonIgnore] public System.Type Appender => appenderType.Type;
         public object GetData()
         {
-            if (type == Type.PlainText)
+            if (type == AuthType.PlainText)
                 return text;
             return body;
         }
@@ -69,10 +69,10 @@ namespace SummerRest.Editor.Models
             var typeOfAuthData = AuthData;
             // String => shift to text
             if (typeOfAuthData == typeof(string))
-                type = Type.PlainText;
+                type = AuthType.PlainText;
             else
             {
-                type = Type.Data;
+                type = AuthType.Data;
                 body.TypeBasedOnAppender = typeOfAuthData;
             }
         }
