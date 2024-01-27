@@ -73,10 +73,12 @@ namespace SummerRest.Editor.Window.Elements
             _nameElement.label = endpoint.TypeName;
             _requestBodyElement.Show(isRequest);
             // If domain => use activeVersion instead of path
-            
-            _pathElement.label = endpoint is Domain ? "Active version" : "Relative path";
-            _pathElement.bindingPath = endpoint is Domain ? "activeVersion" : "path";
+            var isDomain = endpoint is Domain;
+            _pathElement.label = isDomain ? "Active version" : "Relative path";
+            _pathElement.bindingPath = isDomain ? "activeVersion" : "path";
+            _pathElement.SetEnabled(!isDomain);
             // If request => urlWithParams
+            _urlElement.SetEnabled(false);
             _urlElement.bindingPath = endpoint is Request ? "urlWithParam" : "url";
             ShowAdvancedSettings(isRequest);
             this.BindChildrenToProperties(serializedObj);
