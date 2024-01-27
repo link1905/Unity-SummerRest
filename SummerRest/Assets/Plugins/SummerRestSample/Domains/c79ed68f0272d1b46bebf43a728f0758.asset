@@ -32,8 +32,12 @@ MonoBehaviour:
       value:
       - key: asd
         value: sdas
+      - key: asd123123
+        value: sdas
     value:
     - key: asd
+      value: sdas
+    - key: asd123123
       value: sdas
   timeoutSeconds:
     inherit: 2

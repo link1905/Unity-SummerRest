@@ -26,7 +26,7 @@ namespace SummerRest.Editor.Window.Elements
             Index = index;
             _originalColor = style.backgroundColor.value;
             _mainBtn = this.Q<Button>(name: "main-btn");
-            _mainBtn.BindWithCallback<Button, string>(serializedObject, SetEndpointName);
+            _mainBtn.CallThenTrackPropertyValue(serializedObject, s => SetEndpointName(s.stringValue));
             _mainBtn.clicked += () =>
             {
                 OnClicked?.Invoke(this);

@@ -15,7 +15,7 @@
             <uie:PropertyField binding-path="authContainers" name="auths" style="flex-shrink: 0;" />
         </ui:VisualElement>
         <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 0; max-height: 30px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); padding-left: 0; padding-right: 0; padding-top: 0;" />
-        <ui:TwoPaneSplitView fixed-pane-initial-dimension="150" name="endpoint-container" style="flex-direction: row; visibility: visible;">
+        <ui:TwoPaneSplitView fixed-pane-initial-dimension="200" name="endpoint-container" style="flex-direction: row; visibility: visible;">
             <ui:VisualElement name="domain" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; align-self: stretch; justify-content: flex-start; align-items: flex-start; flex-shrink: 0; min-width: 15%; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: auto;">
                 <uie:Toolbar style="align-self: stretch; align-items: auto; justify-content: flex-start; flex-direction: row; flex-grow: 1; flex-shrink: 1;">
                     <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Add" name="add-menu" style="margin-left: 0; margin-right: 0; padding-left: 10px; padding-right: 10px;" />

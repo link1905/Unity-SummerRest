@@ -42,9 +42,9 @@ namespace SummerRest.Editor.Drawers
                 //Make sure the the property pointing to an auth container (default is 0)
                 keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
                 selectionsDropdown.choices = allIds;
-                selectionsDropdown.BindWithCallback<DropdownField, string>(keyProp, s =>
+                selectionsDropdown.CallThenTrackPropertyValue(keyProp, s =>
                 {
-                    ShowPreview(previewField, s);
+                    ShowPreview(previewField, s.stringValue);
                 });
             }
             return tree;

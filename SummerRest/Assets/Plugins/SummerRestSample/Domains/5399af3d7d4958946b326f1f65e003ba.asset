@@ -17,12 +17,6 @@ MonoBehaviour:
   endpointName: Posts
   url: https://jsonplaceholder.typicode.com/posts
   path: posts
-  dataFormat:
-    inherit: 2
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 2
     cache:
@@ -37,18 +31,6 @@ MonoBehaviour:
       hasValue: 0
       value: []
     value: []
-  contentType:
-    inherit: 2
-    cache:
-      hasValue: 0
-      value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
     cache:

@@ -16,7 +16,13 @@ namespace SummerRest.Editor.Utilities
             style.backgroundColor = oldStyle;
         }
         
-        
+        public static string EnumName(this SerializedProperty property)
+        {
+            if (property.propertyType == SerializedPropertyType.Enum)
+                return property.enumNames[property.enumValueIndex];
+            return string.Empty;
+        }
+
         
         public static SerializedProperty FindBackingPropertyRelative(this SerializedObject serializedObject, string name)
         {
@@ -111,48 +117,7 @@ namespace SummerRest.Editor.Utilities
         {
             field.SetValueWithoutNotify(val);
         }
-        /// <summary>
-        /// Binds an element to a <see cref="SerializedObject"/> and invokes <see cref="callback"/> whenever the property is changed
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="obj"></param>
-        /// <param name="callback"></param>
-        /// <typeparam name="TField"></typeparam>
-        /// <typeparam name="TCallbackValue"></typeparam>
-        public static void BindWithCallback<TField, TCallbackValue>(this TField field, SerializedObject obj, Action<TCallbackValue> callback) 
-            where TField : IBindable, INotifyValueChanged<TCallbackValue>
-        {
-            field.BindProperty(obj);
-            // Use this instead of TrackPropertyValue because the method does not working properly (it's currently a known issue)
-            field.RegisterValueChangedCallback(e =>
-            {
-                var changed = e.newValue;
-                if (changed is null)
-                    return;
-                callback?.Invoke(changed);
-            });
-        }
-        
-        /// <summary>
-        /// Binds an element to a <see cref="SerializedProperty"/> and invokes <see cref="callback"/> whenever the property is changed
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="obj"></param>
-        /// <param name="callback"></param>
-        /// <typeparam name="TField"></typeparam>
-        /// <typeparam name="TCallbackValue"></typeparam>
-        public static void BindWithCallback<TField, TCallbackValue>(this TField field, SerializedProperty property, Action<TCallbackValue> callback) 
-            where TField : IBindable, INotifyValueChanged<TCallbackValue>
-        {
-            field.BindProperty(property);
-            field.RegisterValueChangedCallback(e =>
-            {
-                var changed = e.newValue;
-                if (changed is null)
-                    return;
-                callback?.Invoke(changed);
-            });
-        }
+ 
         
         public static void CallThenTrackPropertyValue(
             this VisualElement element,
@@ -160,6 +125,17 @@ namespace SummerRest.Editor.Utilities
             Action<SerializedProperty> callback = null)
         {
             callback?.Invoke(property);
+            element.Unbind();
+            element.TrackPropertyValue(property, callback);
+        }
+        public static void CallThenTrackPropertyValue(
+            this BindableElement element,
+            SerializedObject obj,
+            Action<SerializedProperty> callback = null)
+        {
+            var property = obj.FindProperty(element.bindingPath);
+            callback?.Invoke(property);
+            element.Unbind();
             element.TrackPropertyValue(property, callback);
         }
     }

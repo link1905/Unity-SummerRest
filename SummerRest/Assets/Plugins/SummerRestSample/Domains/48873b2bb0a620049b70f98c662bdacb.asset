@@ -26,11 +26,15 @@ MonoBehaviour:
     value:
       authKey: my-token-to-master-service
   headers:
-    inherit: 2
+    inherit: 4
     cache:
-      hasValue: 0
-      value: []
-    value: []
+      hasValue: 1
+      value:
+      - key: asds
+        value: 
+    value:
+    - key: asds
+      value: 
   timeoutSeconds:
     inherit: 2
     cache:
@@ -50,7 +54,7 @@ MonoBehaviour:
       hasValue: 1
       value:
         <Charset>k__BackingField: UTF-8
-        <MediaType>k__BackingField: application/json
+        <MediaType>k__BackingField: text/plain
         <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
@@ -59,15 +63,14 @@ MonoBehaviour:
   method: 1
   requestParams: []
   requestBody:
-    type: 1
+    type: 0
     text: 
     body:
       value:
         rid: 6516271629519290379
       typeReference:
         classRef: SummerRestSample.PostData, Assembly-CSharp-firstpass
-    serializedData: "{\r\n  \"id\": 0,\r\n  \"title\": \"\",\r\n  \"body\": \"\",\r\n 
-      \"userId\": 0\r\n}"
+    serializedData: 
     textFormat: 0
     form: []
   urlWithParam: https://jsonplaceholder.typicode.com/posts
