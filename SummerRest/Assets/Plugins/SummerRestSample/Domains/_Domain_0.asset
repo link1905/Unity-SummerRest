@@ -10,45 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: 55ec540d7c4f68a4d9fb74d119e607b1
+  m_Name: _Domain_0
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: NinjaApiWithAuth
-  url: https://api.api-ninjas.com/v1
+  endpointName: JsonPlaceHolder
+  url: https://jsonplaceholder.typicode.com/
   path: 
-  dataFormat:
-    inherit: 8
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 8
     cache:
       hasValue: 1
       value:
-        authKey: ninja-api-token
+        authKey: my-token-to-master-service
     value:
-      authKey: ninja-api-token
+      authKey: my-token-to-master-service
   headers:
     inherit: 1
     cache:
       hasValue: 1
       value: []
     value: []
-  contentType:
-    inherit: 1
-    cache:
-      hasValue: 1
-      value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 1
     cache:
@@ -61,12 +43,13 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 2
-  services: []
-  requests:
-  - {fileID: 11400000, guid: 679ba35e04b159f4cb9b37150bb0e2c2, type: 2}
+  <TreeId>k__BackingField: 10
+  services:
+  - {fileID: 11400000, guid: ad60bbbb2a3b230428989bc2cd271527, type: 2}
+  - {fileID: 11400000, guid: 182d85da13e22b14cbeb7a63781e970a, type: 2}
+  requests: []
   versions:
     values:
-    - https://api.api-ninjas.com/v1
+    - https://jsonplaceholder.typicode.com
     selectedIndex: 0
-  activeVersion: https://api.api-ninjas.com/v1
+  activeVersion: https://jsonplaceholder.typicode.com

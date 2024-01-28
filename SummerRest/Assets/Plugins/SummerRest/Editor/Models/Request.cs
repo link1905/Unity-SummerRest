@@ -74,9 +74,16 @@ namespace SummerRest.Editor.Models
 
         public override void Delete(bool fromParent)
         {
-            if (fromParent && Parent is EndpointContainer parent)
-                parent.Requests.Remove(this);
+            if (fromParent)
+                Parent.Requests.Remove(this);
             base.Delete(fromParent);
+        }
+
+        public override void RemoveFormParent()
+        {
+            if (Parent is null)
+                return;
+            Parent.Requests.Remove(this);
         }
 
         /// <summary>

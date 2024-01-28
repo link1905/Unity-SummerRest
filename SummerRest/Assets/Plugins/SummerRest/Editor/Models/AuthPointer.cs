@@ -23,12 +23,5 @@ namespace SummerRest.Editor.Models
         {
             authKey = key.AuthKey
         } : default;
-        public void OnBeforeSerialize()
-        {
-        }
-        public void OnAfterDeserialize()
-        {
-
-        }
     }
 }

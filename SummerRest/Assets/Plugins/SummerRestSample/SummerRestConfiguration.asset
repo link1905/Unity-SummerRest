@@ -39,7 +39,7 @@ MonoBehaviour:
       SummerRest
   dataSerializer:
     classRef: SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest
-  targetAssembly: {fileID: 0}
+  targetAssembly: {fileID: 5897886265953266890, guid: 02f41f6caf82a0a43952cb6179925d9b, type: 3}
   references:
     version: 2
     RefIds:

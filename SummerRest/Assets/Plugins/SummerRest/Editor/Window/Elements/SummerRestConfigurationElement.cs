@@ -104,7 +104,7 @@ namespace SummerRest.Editor.Window.Elements
                 return false;
             if (isSelected)
                 ClearWindows();
-            _configuration.MakeDirty();
+            _configuration.RenameAssets();
             return true;
         }
 
@@ -116,9 +116,11 @@ namespace SummerRest.Editor.Window.Elements
             _configuration.Domains.Add(domain);
             domain.Domain = domain;
             domain.EndpointName = $"Domain{_configuration.Domains.Count}";
-            _configuration.MakeDirty();
+            domain.MakeDirty();
+            _configuration.RenameAssets();
             return domain;
         }
+
         private void OnSelectDomain(int domainIndex)
         {
             var domain = _configuration.Domains[domainIndex];
@@ -195,9 +197,29 @@ namespace SummerRest.Editor.Window.Elements
             {
                 if (items.First() is not Endpoint selectedEndpoint)
                     return;
-                _endpointElement.Show(true);
-                _endpointElement.ShowEndpoint(selectedEndpoint);
+                ShowEndpoint(selectedEndpoint);
             };
+            _endpointTree.itemIndexChanged += (drag, drop) =>
+            {
+                var dragEndpoint = _endpointTree.GetItemDataForId<Endpoint>(drag);
+                if (_endpointTree.GetItemDataForId<Endpoint>(drop) is EndpointContainer dropEndpoint)
+                {
+                    // Dropped element can not be child of the dragged element
+                    if (!dropEndpoint.IsChildOf(dragEndpoint))
+                    {
+                        dropEndpoint.AddEndpoint(dragEndpoint);
+                        _configuration.RenameAssets();
+                    }
+                }
+                ShowEndpointsTree(_currentSelectedDomain);
+                _endpointTree.SetSelectionById(dragEndpoint.TreeId);
+            };
+        }
+
+        private void ShowEndpoint(Endpoint endpoint)
+        {
+            _endpointElement.Show(true);
+            _endpointElement.ShowEndpoint(endpoint);
         }
         private void FindEndpoint(string search)
         {
@@ -244,10 +266,13 @@ namespace SummerRest.Editor.Window.Elements
                     return;
             }
             endpointContainer.AddEndpoint(endpoint);
-            endpointContainer.MakeDirty();
+            _configuration.RenameAssets();
+
             // Update the endpoint tree
             ShowEndpointsTree(_currentSelectedDomain);
             _endpointTree.SetSelectionById(endpoint.TreeId);
+            //Unity UIToolkit bug that not fire onSelectionChange event
+            ShowEndpoint(endpoint);
         }
         private void OnEndpointElementRemoveChild(Endpoint endpoint)
         {
@@ -256,7 +281,7 @@ namespace SummerRest.Editor.Window.Elements
                 _domainListElement.DeleteChild(domain);
                 return;
             }
-            if (endpoint is null || endpoint.Parent is not EndpointContainer endpointContainer)
+            if (endpoint is null || endpoint.Parent is null)
                 return;
             var currentSelection = _endpointTree.selectedItem as Endpoint;
             // If current selection is the deleted candidate 
@@ -274,7 +299,9 @@ namespace SummerRest.Editor.Window.Elements
                 default:
                     return;
             }
-            endpointContainer.MakeDirty();
+            endpoint.Parent.MakeDirty();
+            _configuration.RenameAssets();
+
             ClearWindows();
             ShowEndpointsTree(_currentSelectedDomain);
             // Show the previous selection

@@ -40,12 +40,13 @@ namespace SummerRest.Editor.Drawers
             if (!noOption)
             {
                 //Make sure the the property pointing to an auth container (default is 0)
-                keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
                 selectionsDropdown.choices = allIds;
-                selectionsDropdown.CallThenTrackPropertyValue(keyProp, s =>
+                selectionsDropdown.RegisterValueChangedCallback(s =>
                 {
-                    ShowPreview(previewField, s.stringValue);
+                    ShowPreview(previewField, s.newValue);
                 });
+                keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
+                keyProp.serializedObject.ApplyModifiedProperties();
             }
             return tree;
         }

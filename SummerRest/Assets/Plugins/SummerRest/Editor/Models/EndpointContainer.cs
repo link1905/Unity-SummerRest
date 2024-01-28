@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SummerRest.Editor.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -64,6 +65,7 @@ namespace SummerRest.Editor.Models
         public virtual void AddEndpoint<T>(T endpoint) where T : Endpoint
         {
             int count;
+            endpoint.RemoveFormParent();
             switch (endpoint)
             {
                 case Service service:
@@ -78,19 +80,50 @@ namespace SummerRest.Editor.Models
                     return;
             }
             endpoint.Parent = this;
+            endpoint.Domain = Domain;
             if (string.IsNullOrEmpty(endpoint.EndpointName))
                 endpoint.EndpointName = $"{endpoint.TypeName} {count}";
-            endpoint.Domain = Domain;
+            endpoint.MakeDirty();
+            this.MakeDirty();
         }
 
+        public override string Rename(string parent, int index)
+        {
+            var newName = base.Rename(parent, index);
+            for (int i = 0; i < requests.Count; i++)
+                requests[i].Rename(newName, i);
+            for (int i = 0; i < services.Count; i++)
+                services[i].Rename(newName, i);
+            return newName;
+        }
+   
+        private void ForceChildCache(IEnumerable<Endpoint> endpoints)
+        {
+            foreach (var endpoint in endpoints)
+            {
+                endpoint.Parent = this;
+                endpoint.Domain = Domain;
+                endpoint.CacheValues();
+            }
+        }
         public override void CacheValues()
         {
             base.CacheValues();
             // Recursively call children's caching
-            foreach (var r in requests)
-                r.CacheValues();
-            foreach (var s in services)
-                s.CacheValues();
+            ForceChildCache(requests);
+            ForceChildCache(services);
+        }
+
+        public bool IsChildOf(Endpoint dragEndpoint)
+        {
+            var parent = Parent;
+            while (parent is not null)
+            {
+                if (parent == dragEndpoint)
+                    return true;
+                parent = parent.Parent;
+            }
+            return false;
         }
     }
 }

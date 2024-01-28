@@ -8,10 +8,18 @@ namespace SummerRest.Editor.Models
     {
         public override void Delete(bool fromParent)
         {
-            if (fromParent && Parent is EndpointContainer parent)
-                parent.Services.Remove(this);
+            if (fromParent)
+                Parent.Services.Remove(this);
             base.Delete(fromParent);
         }
+
+        public override void RemoveFormParent()
+        {
+            if (Parent is null)
+                return;
+            Parent.Services.Remove(this);
+        }
+
         public override string TypeName => nameof(Service);
     }
 }

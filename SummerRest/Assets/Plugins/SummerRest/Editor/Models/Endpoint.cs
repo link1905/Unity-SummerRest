@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using Newtonsoft.Json;
 using SummerRest.Editor.Attributes;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
-using SummerRest.Runtime.RequestComponents;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,7 +19,7 @@ namespace SummerRest.Editor.Models
         [field: SerializeReference][JsonIgnore]
         public Domain Domain { get; set; }
         [field: SerializeReference][JsonIgnore] 
-        public Endpoint Parent { get; protected internal set; }
+        public EndpointContainer Parent { get; protected internal set; }
         
         /// <summary>
         /// This is the name of the generated class associated with this endpoint 
@@ -99,6 +100,8 @@ namespace SummerRest.Editor.Models
             TreeId = ++id;
             return new TreeViewItemData<Endpoint>(TreeId, this);
         }
+
+
         /// <summary>
         /// Delete this endpoint (and its children) and associated assets
         /// </summary>
@@ -107,6 +110,14 @@ namespace SummerRest.Editor.Models
         {
             this.RemoveAsset();
         }
+
+        public virtual string Rename(string parent, int index)
+        {
+            var newName = $"{parent}_{TypeName}_{index}";
+            AssetDatabase.RenameAsset(this.GetAssetPath(), newName);
+            return newName;
+        }
+        public abstract void RemoveFormParent(); 
         [JsonIgnore] public virtual bool IsContainer => false;
         public abstract string TypeName { get; }
 

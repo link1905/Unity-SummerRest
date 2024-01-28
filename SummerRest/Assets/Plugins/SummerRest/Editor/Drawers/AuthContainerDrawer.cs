@@ -1,5 +1,6 @@
 ﻿using System;
 using SummerRest.Editor.Models;
+using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -19,8 +20,7 @@ namespace SummerRest.Editor.Drawers
                 value = property.isExpanded
             };
             var key = property.FindPropertyRelative("key");
-            foldout.text = key.stringValue;
-            foldout.TrackPropertyValue(key, s => foldout.text = s.stringValue);
+            foldout.CallThenTrackPropertyValue(key, s => foldout.text = s.stringValue);
             var baseTree = base.CreatePropertyGUI(property);
             baseTree.Q<EnumField>("type").SetEnabled(false);
             foldout.contentContainer.Add(baseTree);

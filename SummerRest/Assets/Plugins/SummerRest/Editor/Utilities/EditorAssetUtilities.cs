@@ -86,6 +86,8 @@ namespace SummerRest.Editor.Utilities
             return AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(obj));
         }
 
+        public static string GetAssetPath(this Object obj) => 
+            AssetDatabase.GetAssetPath(obj);
         public static string GetAssetFolder(this Object obj) => 
             Path.GetDirectoryName(AssetDatabase.GetAssetPath(obj));
 

@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.Utilities;
+using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
@@ -17,6 +19,7 @@ namespace SummerRest.Editor.Models
         [SerializeField] private OptionsArray<string> versions;
         public override void CacheValues()
         {
+            Domain = this;
             activeVersion = versions.Value;
             if (activeVersion is null)
             {
@@ -27,6 +30,9 @@ namespace SummerRest.Editor.Models
         }
         [SerializeField, JsonIgnore] private string activeVersion;
         public string ActiveVersion => activeVersion;
+        public override void RemoveFormParent()
+        {
+        }
         public override string TypeName => nameof(Models.Domain);
     }
 }

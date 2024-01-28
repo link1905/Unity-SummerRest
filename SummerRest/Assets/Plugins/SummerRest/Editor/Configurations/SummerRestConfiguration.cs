@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.TypeReference;
+using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Requests;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace SummerRest.Editor.Configurations
     /// <summary>
     /// Singleton class storing the configuration of the plugin <br />
     /// </summary>
-    public class SummerRestConfiguration : ScriptableSingleton<SummerRestConfiguration>
+    public class SummerRestConfiguration : DataStructures.ScriptableSingleton<SummerRestConfiguration>
     {
         /// <summary>
         /// Domains
@@ -73,6 +74,12 @@ namespace SummerRest.Editor.Configurations
                     return UnityFirstPass;
                 }
             }
+        }
+        public void RenameAssets()
+        {
+            for (int i = 0; i < Domains.Count; i++)
+                Domains[i].Rename(string.Empty, i);
+            AssetDatabase.SaveAssets();
         }
     }
 }

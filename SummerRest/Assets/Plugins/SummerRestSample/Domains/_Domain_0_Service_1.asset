@@ -10,19 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
-  m_Name: bf914e54d2405504ab21aed93df6660d
+  m_Name: _Domain_0_Service_1
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  endpointName: Comments
-  url: https://jsonplaceholder.typicode.com/comments
-  path: comments
-  dataFormat:
-    inherit: 2
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
+  endpointName: Posts
+  url: https://jsonplaceholder.typicode.com/posts
+  path: posts
   auth:
     inherit: 2
     cache:
@@ -37,18 +31,6 @@ MonoBehaviour:
       hasValue: 0
       value: []
     value: []
-  contentType:
-    inherit: 2
-    cache:
-      hasValue: 0
-      value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
     cache:
@@ -64,4 +46,6 @@ MonoBehaviour:
   <TreeId>k__BackingField: 5
   services: []
   requests:
-  - {fileID: 11400000, guid: a2a92f6bc7b8478438a7cc1adf143c7f, type: 2}
+  - {fileID: 11400000, guid: b93b492f2ff8138429a31d21046db5ec, type: 2}
+  - {fileID: 11400000, guid: aef7c6db206f3764fada9e2782f6f953, type: 2}
+  - {fileID: 11400000, guid: 0981e73997b999f47956de3222780ed8, type: 2}
