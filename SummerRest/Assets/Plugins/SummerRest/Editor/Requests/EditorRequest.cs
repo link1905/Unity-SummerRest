@@ -66,8 +66,8 @@ namespace SummerRest.Editor.Requests
             response.StatusCode = r.StatusCode;
             response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
             var body = response.Body;
-            var mediaType = response.Body.MediaType = r.ContentType.MediaType;
-            body.MediaType = mediaType;
+            body.Clear();
+            var mediaType = body.MediaType = r.ContentType.MediaType;
             body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
             body.RawBody = r.RawData;
             if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||

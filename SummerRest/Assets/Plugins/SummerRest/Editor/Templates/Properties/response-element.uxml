@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <SummerRest.Editor.Window.Elements.ResponseElement style="flex-shrink: 0;">
-        <uie:PropertyField name="data" binding-path="data" />
         <ui:Button text="Save" display-tooltip-when-elided="true" name="save-btn" />
+        <uie:PropertyField name="data" binding-path="data" style="flex-shrink: 0;" />
     </SummerRest.Editor.Window.Elements.ResponseElement>
 </ui:UXML>

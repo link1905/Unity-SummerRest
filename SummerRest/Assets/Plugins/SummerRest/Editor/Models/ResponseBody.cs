@@ -13,7 +13,7 @@ namespace SummerRest.Editor.Models
         [SerializeField] private string mediaType;
         [SerializeField] private string fileName;
         [SerializeField] private BytesBody rawBytes;
-        [SerializeField, TextMultiline] private string rawBody;
+        [SerializeField, ResponseRawBody] private string rawBody;
         public string RawBody
         {
             get => rawBody;

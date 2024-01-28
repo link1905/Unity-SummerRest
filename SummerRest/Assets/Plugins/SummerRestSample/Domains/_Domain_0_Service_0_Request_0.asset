@@ -17,12 +17,6 @@ MonoBehaviour:
   endpointName: GetPost1Comments
   url: https://jsonplaceholder.typicode.com/comments
   path: 
-  dataFormat:
-    inherit: 2
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 2
     cache:
@@ -37,18 +31,6 @@ MonoBehaviour:
       hasValue: 0
       value: []
     value: []
-  contentType:
-    inherit: 2
-    cache:
-      hasValue: 0
-      value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
     cache:
@@ -61,20 +43,35 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 4
+  <TreeId>k__BackingField: 1
+  contentType:
+    inherit: 16
+    cache:
+      hasValue: 1
+      value:
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: application/json
+        <Boundary>k__BackingField: 
+    value:
+      <Charset>k__BackingField: 
+      <MediaType>k__BackingField: 
+      <Boundary>k__BackingField: 
   method: 0
   requestParams:
   - key: postId
     value: 1
   requestBody:
-    type: 0
+    type: 1
     text: 
     body:
       value:
-        rid: -2
+        rid: 8309015510767894528
       typeReference:
-        classRef: 
-    serializedData: 
+        classRef: MyRequestBody, Assembly-CSharp-firstpass
+    serializedData: "{\n    \"privateFieldMustBeAnnotatedWithSerializeField\": 3,\n   
+      \"<WrongName>k__BackingField\": 4\n}"
+    textFormat: 0
+    form: []
   urlWithParam: https://jsonplaceholder.typicode.com/comments?postId=1
   latestResponse:
     lastCall: 01/25/2024 16:06:09
@@ -161,5 +158,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 8309015510767894528
+      type: {class: MyRequestBody, ns: , asm: Assembly-CSharp-firstpass}
+      data:
+        privateFieldMustBeAnnotatedWithSerializeField: 3
+        <WrongName>k__BackingField: 4

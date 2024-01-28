@@ -17,12 +17,11 @@ namespace SummerRest.Editor.Drawers
             {
                 scaleMode = ScaleMode.ScaleToFit
             };
-            image.TrackPropertyValue(property, p =>
+            image.CallThenTrackPropertyValue(property, p =>
             {
                 p.serializedObject.Update();
                 SetImage(p, image);
             });
-            SetImage(property, image);
             return image;
         }
         
@@ -34,7 +33,7 @@ namespace SummerRest.Editor.Drawers
             // This method is planned to show more types of bytes values like sound,video,...
             if (bytesProp.arraySize == 0 || !isImageProp.boolValue)
             {
-                image.image = null;
+                image.Show(false);
                 return;
             }
             using var nativeBytes = bytesProp.GetArrayValue();
@@ -42,6 +41,7 @@ namespace SummerRest.Editor.Drawers
             text.LoadImage(nativeBytes.ToArray());
             text.Apply(true);
             image.image = text;
+            image.Show(true);
         }
     }
 }

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
+  m_Name: de4ae3cfcdeefda44b2b91c54ac6ab12
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000}
+  <Parent>k__BackingField: {fileID: 0}
+  endpointName: JsonPlaceHolder
+  url: https://jsonplaceholder.typicode.com/
+  path: 
+  auth:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value:
+        authKey: my-token-to-master-service
+    value:
+      authKey: my-token-to-master-service
+  headers:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value: []
+    value: []
+  timeoutSeconds:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  <TreeId>k__BackingField: 1
+  services:
+  - {fileID: 11400000, guid: 2cb0847fbab4ee446ac090bb1f56acaa, type: 2}
+  requests: []
+  versions:
+    values:
+    - https://jsonplaceholder.typicode.com
+    selectedIndex: 0
+  activeVersion: https://jsonplaceholder.typicode.com

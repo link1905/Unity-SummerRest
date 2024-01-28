@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20861b636bc4735ab70e078a61211be, type: 3}
   m_Name: SummerRestConfiguration
   m_EditorClassIdentifier: 
-  <Domains>k__BackingField:
-  - {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  - {fileID: 11400000, guid: 2ee3619be5b875246b0f59d9374e3a89, type: 2}
+  <Domains>k__BackingField: []
   authContainers:
   - type: 0
     text: this value is only used for Editor requests, I actually need to hide it

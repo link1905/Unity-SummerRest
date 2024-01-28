@@ -64,7 +64,7 @@ Additionally, you may see these things everywhere in the plugin
     You may observe that "notSerializedFieldBecausePrivate" has the wrong name, and "NotExposedBecauseUnityDoesNotRecognizeProperty" is missing from the Inspector
     ![](Screenshots/0_definition_8_text_or_custom_class.png)
       
-    **Please note that, we encounter the constraints because we are using Newtonsoft and Unity Serialization concurrently. Ignore them if you plan to use your own data serializer (and needn't show custom classes on the Inspector)**
+    **Please note that, we encounter the constraints because we are using Unity Serialization. Ignore them if you plan to use your own data serializer eg. NewtonSoft, System.Text.Json...**
 ## Getting started
 
 - After installing the plugin, click on the `Tools/SummerRest` to open the plugin window
@@ -74,14 +74,14 @@ Additionally, you may see these things everywhere in the plugin
 - Initially, you need to define at least 1 domain, click on `Add` to create a new domain <br>
   ![](Screenshots/1_guide_2_add.png)
   ![](Screenshots/1_guide_3_domain.png)
-- A domain must have at least 1 origin, please note that origins must an absolute URL eg. https://www.boredapi.com/api (this is a public service for testing only, please do not compromise it)
+- A domain must have at least 1 origin, please note that origins must an absolute URL eg. https://jsonplaceholder.typicode.com (this is a public service for testing only, please do not compromise it)
   ![](Screenshots/1_guide_4_bored_api.png)
 - Right click (or `Add` button) on an item of the domain tree view to create/delete its children
 - Domain and Service are not callable, only Request offers that feature
   - Name: name of generated class associated with this endpoint [Source Generation]()
   - Path: relative path from its parent
   - Url: absolute url formed from the parents' path and its path
-- We will create a Service named Activity (relative path is activity)
+- We will create a Service named Posts (relative path is activity)
   ![](Screenshots/1_guide_5_service.png)
 - Then, create a GET Request (or you may directly create this Request without the previous Service, but remember to fill out the relative path correctly!)
   ![](Screenshots/1_guide_6_request.png)

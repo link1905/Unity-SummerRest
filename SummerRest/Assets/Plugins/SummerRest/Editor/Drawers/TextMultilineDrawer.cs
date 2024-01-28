@@ -8,7 +8,7 @@ namespace SummerRest.Editor.Drawers
     [CustomPropertyDrawer(typeof(TextMultilineAttribute))]
     internal class TextMultilineDrawer : PropertyDrawer
     {
-        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        protected TextField TextField(SerializedProperty property)
         {
             var label = new TextField
             {
@@ -23,6 +23,11 @@ namespace SummerRest.Editor.Drawers
             // Mark the layout as high as the text grows
             label.style.flexGrow = label.style.flexShrink = 0f;
             label.style.minHeight = att.MinHeight * EditorGUIUtility.singleLineHeight;
+            return label;
+        }
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+            var label = TextField(property);
             label.BindProperty(property);
             return label;
         }

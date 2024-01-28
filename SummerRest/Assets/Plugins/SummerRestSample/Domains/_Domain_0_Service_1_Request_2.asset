@@ -15,16 +15,16 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 182d85da13e22b14cbeb7a63781e970a, type: 2}
   endpointName: Request 3
-  url: 
+  url: https://jsonplaceholder.typicode.com/posts
   path: 
   auth:
     inherit: 2
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        authKey: 
+        authKey: my-token-to-master-service
     value:
-      authKey: 
+      authKey: my-token-to-master-service
   headers:
     inherit: 2
     cache:
@@ -43,14 +43,14 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 0
+  <TreeId>k__BackingField: 5
   contentType:
-    inherit: 2
+    inherit: 16
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
+        <Charset>k__BackingField: UTF-8
+        <MediaType>k__BackingField: text/plain
         <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
@@ -69,7 +69,7 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: 
+  urlWithParam: https://jsonplaceholder.typicode.com/posts
   latestResponse:
     lastCall: 
     error: 
