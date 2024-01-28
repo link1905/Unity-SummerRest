@@ -115,7 +115,7 @@ namespace SummerRest.Editor.Window.Elements
             var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(path);
             _configuration.Domains.Add(domain);
             domain.Domain = domain;
-            domain.EndpointName = $"Domain{_configuration.Domains.Count}";
+            domain.EndpointName = $"Domain {_configuration.Domains.Count}";
             domain.MakeDirty();
             _configuration.RenameAssets();
             return domain;
