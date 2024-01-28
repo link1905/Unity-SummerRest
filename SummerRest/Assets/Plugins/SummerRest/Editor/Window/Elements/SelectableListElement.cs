@@ -21,7 +21,6 @@ namespace SummerRest.Editor.Window.Elements
         public event Func<int, bool, bool> OnDeleteElement;
         
         private VisualTreeAsset _elementTreeAsset;
-        private string m_Test;
         private Color _selectColor;
         // Current selected element's index
         private int? _previousSelect;
