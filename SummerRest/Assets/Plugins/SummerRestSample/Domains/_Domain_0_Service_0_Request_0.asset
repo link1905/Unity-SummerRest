@@ -65,9 +65,9 @@ MonoBehaviour:
     text: 
     body:
       value:
-        rid: 8309015510767894528
+        rid: -2
       typeReference:
-        classRef: MyRequestBody, Assembly-CSharp-firstpass
+        classRef: 
     serializedData: 
     textFormat: 0
     form: []
@@ -157,8 +157,5 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 8309015510767894528
-      type: {class: MyRequestBody, ns: , asm: Assembly-CSharp-firstpass}
-      data:
-        privateFieldMustBeAnnotatedWithSerializeField: 3
-        <WrongName>k__BackingField: 4
+    - rid: -2
+      type: {class: , ns: , asm: }
