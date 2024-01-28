@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
+using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
 namespace SummerRest.Tests
 {
@@ -24,8 +24,8 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Delete_From_Auth_Repository_Then_Can_Not_Get()
         {
-            IAuthDataRepository.Current.Delete(AccountKey);
-            IAuthDataRepository.Current.TryGet<string>(AccountKey, out var data);
+            ISecretRepository.Current.Delete(AccountKey);
+            ISecretRepository.Current.TryGet<string>(AccountKey, out var data);
             Assert.That(string.IsNullOrEmpty(data));
         }
 
@@ -36,9 +36,9 @@ namespace SummerRest.Tests
             {
                 Username = "username",
             };
-            IAuthDataRepository.Current.Delete(AccountKey);
-            IAuthDataRepository.Current.Save(AccountKey, expected);
-            IAuthDataRepository.Current.TryGet<Account>(AccountKey, out var data);
+            ISecretRepository.Current.Delete(AccountKey);
+            ISecretRepository.Current.Save(AccountKey, expected);
+            ISecretRepository.Current.TryGet<Account>(AccountKey, out var data);
             Assert.That(data.Equals(expected));
         }
 
@@ -56,8 +56,8 @@ namespace SummerRest.Tests
         public void Test_Log_Warning_When_Auth_Key_Is_Absent()
         {
             using var adaptor = RawUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
-            IAuthDataRepository.Current.Delete(AccountKey);
-            IAuthDataRepository.Current.TryGet<string>(AccountKey, out var data);
+            ISecretRepository.Current.Delete(AccountKey);
+            ISecretRepository.Current.TryGet<string>(AccountKey, out var data);
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(data, adaptor);
             LogAssert.Expect(LogType.Warning, $@"Bearer token is null or empty");
         }

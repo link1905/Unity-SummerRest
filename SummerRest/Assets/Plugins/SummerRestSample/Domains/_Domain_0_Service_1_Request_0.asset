@@ -26,14 +26,10 @@ MonoBehaviour:
     value:
       authKey: my-token-to-master-service
   headers:
-    inherit: 4
+    inherit: 2
     cache:
-      hasValue: 1
-      value:
-      - key: asd
-        value: sdas
-      - key: asd123123
-        value: sdas
+      hasValue: 0
+      value: []
     value:
     - key: asd
       value: sdas
@@ -51,14 +47,14 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 1
+  <TreeId>k__BackingField: 3
   contentType:
     inherit: 16
     cache:
-      hasValue: 1
+      hasValue: 0
       value:
-        <Charset>k__BackingField: UTF-8
-        <MediaType>k__BackingField: text/plain
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
         <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: UTF-16
@@ -68,13 +64,13 @@ MonoBehaviour:
   requestParams: []
   requestBody:
     type: 0
-    text: asdasd
+    text: 
     body:
       value:
         rid: -2
       typeReference:
         classRef: 
-    serializedData: asdasd
+    serializedData: 
     textFormat: 1
     form: []
   urlWithParam: https://jsonplaceholder.typicode.com/posts/1

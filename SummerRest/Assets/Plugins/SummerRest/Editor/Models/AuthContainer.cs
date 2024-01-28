@@ -3,22 +3,20 @@ using Newtonsoft.Json;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.RequestComponents;
-using SummerRest.Runtime.Requests;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
     /// <summary>
-    /// Points to an auth data (userId, token...) resolved by an <see cref="IAuthDataRepository"/> <br/> 
+    /// Points to an auth data (userId, token...) resolved by an <see cref="Runtime.Authenticate.Repositories.ISecretRepository"/> <br/> 
     /// It contains the default value (string or <see cref="IAuthData"/>) for calling editor requests <seealso cref="AuthContainer.text"/>  <seealso cref="AuthContainer.body"/>
     /// </summary>
     [Serializable]
     public class AuthContainer : TextOrCustomData<AuthContainer.AuthType, IAuthData, AuthContainer.BodyContainer>, ISerializationCallbackReceiver
     {
         /// <summary>
-        /// Key for resolving the auth value in runtime by using a <see cref="IAuthDataRepository"/> <seealso cref="IAuthAppender{TAuthAppender, TAuthData}"/> <seealso cref="IAuthAppender{TAuthAppender,TAuth}"/>
+        /// Key for resolving the auth value in runtime by using a <see cref="Runtime.Authenticate.Repositories.ISecretRepository"/> <seealso cref="IAuthAppender{TAuthAppender, TAuthData}"/> <seealso cref="IAuthAppender{TAuthAppender,TAuth}"/>
         /// </summary>
         [SerializeField] private string key;
         public string AuthKey => key;

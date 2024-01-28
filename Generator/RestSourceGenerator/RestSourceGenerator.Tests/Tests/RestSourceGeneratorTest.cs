@@ -116,7 +116,7 @@ public class RestSourceGeneratorTest :
                                            ContentType = new ContentType("application/json", "UTF-8", "");
                                            Headers.Add("header2", "value2");
                                            Headers.Add("header1", "value1");
-                                           Params.AddParam("123123", "aaaaaa");
+                                           Params.AddParamToList("123123", "aaaaaa");
                                            AuthKey = "my token";
                                            BodyFormat = DataFormat.Json;
                                            InitializedSerializedBody = @"I need to call the ""cat"" request";
@@ -372,8 +372,8 @@ public class RestSourceGeneratorTest :
                                            Method = HttpMethod.Get;
                                            Headers.Add("header-1", "header-value-1");
                                            Headers.Add("header-2", "header-value-2");
-                                           Params.AddParam("param-1", "param-value-1");
-                                           Params.AddParam("param-2", "param-value-2");
+                                           Params.AddParamToList("param-1", "param-value-1");
+                                           Params.AddParamToList("param-2", "param-value-2");
                                            MultipartFormSections.Add(new MultipartFormDataSection("form-key-1", "form-value-1"));
                                            MultipartFormSections.Add(new MultipartFormDataSection("form-key-2", "form-value-2"));
                                            Init();
@@ -430,8 +430,8 @@ public class RestSourceGeneratorTest :
                                   {
                                        Method = HttpMethod.Get;
                                        ContentType = new ContentType("application/soap+xml", "UTF-8", "");
-                                       Params.AddParam("soap-param-1", "soap-value-1");
-                                       Params.AddParam("soap-param-1", "soap-value-2");
+                                       Params.AddParamToList("soap-param-1", "soap-value-1");
+                                       Params.AddParamToList("soap-param-1", "soap-value-2");
                                        AuthKey = "my-soap-key";
                                        BodyFormat = DataFormat.Xml;
                                        Init();

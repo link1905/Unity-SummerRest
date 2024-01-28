@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.TypeReference;
-using SummerRest.Editor.Utilities;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
+using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Requests;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Serialization;
+using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
 namespace SummerRest.Editor.Configurations
 {
@@ -29,12 +30,12 @@ namespace SummerRest.Editor.Configurations
         public List<AuthContainer> AuthContainers => authContainers;
         
         /// <summary>
-        /// Type ref of auth repository <see cref="IAuthDataRepository"/> <br />
-        /// Default is <see cref="PlayerPrefsAuthDataRepository"/>
+        /// Type ref of auth repository <see cref="ISecretRepository"/> <br />
+        /// Default is <see cref="PlayerPrefsSecretRepository"/>
         /// </summary>
-        [SerializeField, ClassTypeConstraint(typeof(IAuthDataRepository))] 
-        private ClassTypeReference authDataRepository = new(typeof(PlayerPrefsAuthDataRepository));
-        public string AuthDataRepository => authDataRepository.Type is null ? typeof(PlayerPrefsAuthDataRepository).FullName : authDataRepository.Type.FullName;
+        [FormerlySerializedAs("authDataRepository")] [SerializeField, ClassTypeConstraint(typeof(ISecretRepository))] 
+        private ClassTypeReference secretRepository = new(typeof(PlayerPrefsSecretRepository));
+        public string SecretRepository => secretRepository.Type is null ? typeof(PlayerPrefsSecretRepository).FullName : secretRepository.Type.FullName;
         /// <summary>
         /// Type ref of data serializer <see cref="IDataSerializer"/> <br />
         /// Default is <see cref="DefaultDataSerializer"/>

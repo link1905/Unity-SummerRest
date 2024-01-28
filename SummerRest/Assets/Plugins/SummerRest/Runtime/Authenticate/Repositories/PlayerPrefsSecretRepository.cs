@@ -2,12 +2,12 @@
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 
-namespace SummerRest.Runtime.Authenticate.TokenRepositories
+namespace SummerRest.Runtime.Authenticate.Repositories
 {
     /// <summary>
-    /// Default <see cref="IAuthDataRepository"/> that leverages <see cref="PlayerPrefs"/> to store and retrieve data
+    /// Default <see cref="ISecretRepository"/> that leverages <see cref="PlayerPrefs"/> to store and retrieve data
     /// </summary>
-    public class PlayerPrefsAuthDataRepository : IAuthDataRepository
+    public class PlayerPrefsSecretRepository : ISecretRepository
     {
         public void Save<TData>(string key, TData data)
         {

@@ -35,7 +35,7 @@ namespace RestSourceGenerator.Metadata
         {
             if (RequestParams is not { Length: > 0 })
                 return string.Empty;
-            return RequestParams.BuildSequentialValues(e => $@"Params.AddParam(""{e.Key}"", ""{e.Value}"")", ";") + ";";
+            return RequestParams.BuildSequentialValues(e => $@"Params.AddParamToList(""{e.Key}"", ""{e.Value}"")", ";") + ";";
         }
 
         private string BuildBaseClass()

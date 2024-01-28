@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
@@ -14,6 +13,7 @@ using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
+using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
 namespace SummerRest.Tests
 {
@@ -113,7 +113,7 @@ namespace SummerRest.Tests
         {
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
-            IAuthDataRepository.Current.Save("test-key", "my-token");
+            ISecretRepository.Current.Save("test-key", "my-token");
             var request = TestDataRequest.Create();
             request.AuthKey = "test-key";
             yield return request.TestAuthRequestCoroutine<string, BearerTokenAuthAppender, string>(null);

@@ -11,7 +11,7 @@
         </uie:Toolbar>
         <ui:VisualElement name="advanced-settings" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-shrink: 0;">
             <uie:PropertyField name="data-serializer" binding-path="dataSerializer" tooltip="Type of data serializer for serializing and deserializing transfered data" style="flex-shrink: 0;" />
-            <uie:PropertyField binding-path="authDataRepository" tooltip="Type of token repository for storing auth values" name="token-repository" focusable="false" style="flex-shrink: 0;" />
+            <uie:PropertyField binding-path="secretRepository" tooltip="Type of token repository for storing auth values" name="secret-repository" focusable="false" style="flex-shrink: 0;" />
             <uie:PropertyField binding-path="authContainers" name="auths" style="flex-shrink: 0;" />
         </ui:VisualElement>
         <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 0; max-height: 30px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); padding-left: 0; padding-right: 0; padding-top: 0;" />

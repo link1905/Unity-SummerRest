@@ -57,6 +57,8 @@ namespace SummerRest.Editor.Models
             switch (type)
             {
                 case RequestBodyType.Text:
+                    if (string.IsNullOrEmpty(text))
+                        return null;
                     return ContentType.Commons.TextPlain;
                 case RequestBodyType.Data:
                     switch (textFormat)

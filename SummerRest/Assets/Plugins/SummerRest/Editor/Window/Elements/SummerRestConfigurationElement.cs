@@ -54,9 +54,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             var advancedToggle = this.Q<ToolbarToggle>("advanced");
             var advancedSettings = this.Q<VisualElement>("advanced-settings");
-            advancedSettings.Q<PropertyField>("data-serializer").BindProperty(_serializedConfiguration);
-            advancedSettings.Q<PropertyField>("token-repository").BindProperty(_serializedConfiguration);
-            advancedSettings.Q<PropertyField>("auths").BindProperty(_serializedConfiguration);
+            advancedSettings.BindChildrenToProperties(_serializedConfiguration);
             advancedSettings.Show(advancedToggle.value);
             advancedToggle.RegisterValueChangedCallback(e => {
                 advancedSettings.Show(e.newValue);

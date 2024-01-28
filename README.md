@@ -49,7 +49,7 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/0_definition_6_text_or_custom_plain.png) <br>
   - Show all of types in the project is a performance killer (in spite of Editor time). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
    ![](Screenshots/0_definition_7_text_or_custom_type.png)
-  - Finally, the fields are exposed thank to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
+  - Finally, the fields are exposed and serialized thank to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
     ```csharp
     [Serializable] //Essential attribute to make this class work with Unity Serialization
     class MyRequestBody : IRequestBodyData
@@ -78,7 +78,7 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_4_bored_api.png)
 - Right click (or `Add` button) on an item of the domain tree view to create/delete its children
 - Domain and Service are not callable, only Request offers that feature
-  - Name: name of generated class associated with this endpoint [Source Generation]()
+  - Name: name of generated class associated with this endpoint [Source Generation](#source-generation)
   - Path: relative path from its parent
   - Url: absolute url formed from the parents' path and its path
 - We will create a Service named Posts (relative path is activity)
@@ -94,28 +94,28 @@ Additionally, you may see these things everywhere in the plugin
 - The plugin supports to append auth information to your request
 - Click on `Advanced settings` to open the auth settings section
   ![](Screenshots/2_auth_0_auth_container.png)
-- You will see a list of auth containers, each of them contains a record of key, appender type and auth data
+- You will see a list of auth containers, each of them contains a record of key, appender type and secret value
   - Key: used by endpoints to refer the auth container
-  - Auth data: the value will be only used for editor requests, this value will be resolved by an [IAuthDataRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/TokenRepositories/IAuthDataRepository.cs) in runtime
+  - Secret value: the value will be only used for editor requests, this value will be resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in runtime
   - Appender type: how the auth data will be appended into a request (typically modify the request's header), currently we support BearerToken, Basic(Username/password),... You can make your own appender by
     - Modify params or headers of an endpoint (not reusable)
     - Or implement [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs), then the class will be listed in the type dropdown
 - For example: if you use BearerToken with data "my-data", every requests refer to this container will be added a header "Authorization":"Bearer my-data"  
 
-### Auth data repository
+### Secrets repository
 - Storing your secrets on RAM maybe a bad idea for several reasons: 
   - Can not remember logged in sessions
   - Easy to be exploited by attackers
   - ... I don't know
-- The plugin provides a single place resolving your auth data; So a request only keeps auth key and appender type, it needs to query a repository about the auth data  
-- The default repository bases on PlayerPrefs. But you can implement your own
-  - Inherit [IAuthDataRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/TokenRepositories/IAuthDataRepository.cs)
+- The plugin provides a single place resolving your secrets; So a request only keeps auth key and appender type, it needs to query a repository about the secret  
+- The default repository is [PlayerPrefsSecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/PlayerPrefsSecretRepository.cs) based on PlayerPrefs. But you can implement your own
+  - Inherit [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs)
   - Select the default repository in the plugin window  ![](Screenshots/2_auth_1_repository.png)
-  - Or change it in runtime by modifying `IAuthDataRepository.Current`
+  - Or change it in runtime by modifying `ISecretRepository.Current`
 
 ### Example
 
-To illustrate what I speak on this session so far. I am using a short example by calling an RandomWordApi of https://api-ninjas.com, since this endpoint requires an Api key through a header named "X-Api-Key"
+To illustrate what I have discussed on this topic so far. I am using a short example by calling an RandomWordApi of https://api-ninjas.com, since this endpoint requires an Api key through a header named "X-Api-Key"
 
 Because this type of behaviour is not supported basically. I make my own appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
 ```
@@ -124,7 +124,7 @@ public class NinjaApiAuthAppender : IAuthAppender<NinjaApiAuthAppender>
     public void Append<TResponse>(string authDataKey, IWebRequestAdaptor<TResponse> requestAdaptor)
     {
         //Get auth token 
-        var token = IAuthDataRepository.Current.Get<string>(authDataKey);
+        var token = ISecretRepository.Current.Get<string>(authDataKey);
         //Append it into the request's header
         requestAdaptor.SetHeader("X-Api-Key", token);
     }
@@ -137,10 +137,10 @@ Then, create the respective auth container in the plugin window. Select the clas
 In any Endpoint, refer to this container if you're about to authenticate requests arisen from it
 ![](Screenshots/2_auth_3_refer.png)
 
-If you only call in Editor mode, it's fine because we are taking the auth value from the window. The window is useless in runtime; Before calling an endpoint, please make sure that current [IAuthDataRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/TokenRepositories/IAuthDataRepository.cs) can resolve its auth key
-```
+If you only call in Editor mode, you are able to make the request now, because we are taking the secret value from the window. The window is useless in runtime; Before calling an endpoint **in runtime**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
+```csharp
 // This method is easiser and works with every type of data 
-IAuthDataRepository.Current.Save("ninja-api-token", "my token is...");
+ISecretRepository.Current.Save("ninja-api-token", "my token is...");
 
 // If you are using the default one based on PlayerPrefs
 // You can directly access PlayerPrefs yourself because they query the same source
@@ -185,7 +185,21 @@ A class generated from `Request` comes up with some utility methods for calling 
    ```csharp
    var request = MyDomain.MyService.MyRequest2.Create();
    ```
-- Originally, the request's information (headers, params, url...) is alighted with what you assigned in Editor
+- Originally, the request's information (headers, params, url...) **is initially alighted with what you assigned in Editor**
+  - Technically, we copied your inputs to the generated classes
+  ```csharp
+   // This code illustrates a generated request
+   // The properties of this class initially copy your configures
+   public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
+   {
+       Method = HttpMethod.Post;
+       Headers.Add("header-1", "header-value-1");
+       BodyFormat = DataFormat.Json;
+       InitializedSerializedBody = @"i am a big cat";
+   }
+  ```
+  - With **text or data** request body: we keep the serialized text in the editor 
+  - With **multipart form** request: **only text rows** are copied, your file rows are only used in the editor
 - But you can modify them through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field in your classes
   ```csharp
   // Allias to the long name
@@ -196,7 +210,7 @@ A class generated from `Request` comes up with some utility methods for calling 
      private void CreateRequest() {
         _myRequest = Request2.Create();
         _myRequest.Headers.Add("run-time-header", "run-time-value");
-        _myRequest.Params.AddParam("search-keyword", "player has just typed something");
+        _myRequest.Params.SetSingleParam("search-keyword", "player has just typed something");
      }
   }
 
@@ -246,7 +260,6 @@ A class generated from `Request` comes up with some utility methods for calling 
       ...
   }
   ```
-
 ### Async
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
@@ -262,7 +275,7 @@ private TextureRequest _imageRequest;
 private async UniTask LoadUserData()
 {
     var userData = await _userRequest.RequestAsync<User>();
-    _imageRequest.Params.AddParam("user-id", userData.UserId);
+    _imageRequest.Params.SetSingleParam("user-id", userData.UserId);
     var userIcon = await _imageRequest.TextureRequestAsync();
 }
 ```
@@ -271,5 +284,5 @@ private async UniTask LoadUserData()
 The plugin provides a most common way to deal with HTTP requests. But, you are able to embed your customizations easily 
 
 - Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [NewtonSoft package](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.0/manual/index.html), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
-- IAuthDataRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `IAuthDataRespoitory.Current`
+- ISecretRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `ISecretRepository.Current`
 - There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... I do not offer default selections for them in the window because I think there is no need to change their logic

@@ -1,8 +1,8 @@
 ﻿using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.DataStructures;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
+using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
 namespace SummerRest.Runtime.Requests
 {
@@ -11,7 +11,7 @@ namespace SummerRest.Runtime.Requests
     /// </summary>
     /// <typeparam name="TAuthAppender">Type of the selected appender in the plugin window</typeparam>
     /// <typeparam name="TAuthData">Type of auth data</typeparam>
-    internal class AuthRequestModifier<TAuthAppender, TAuthData> : IRequestModifier<AuthRequestModifier<TAuthAppender, TAuthData>> 
+    public class AuthRequestModifier<TAuthAppender, TAuthData> : IRequestModifier<AuthRequestModifier<TAuthAppender, TAuthData>> 
         where TAuthAppender : class, IAuthAppender<TAuthAppender, TAuthData>, new()
     {
 
@@ -29,7 +29,7 @@ namespace SummerRest.Runtime.Requests
             if (string.IsNullOrEmpty(authKey))
                 return;
             var appender = ISingleton<TAuthAppender>.GetSingleton();
-            if (!IAuthDataRepository.Current.TryGet<TAuthData>(authKey, out var authData))
+            if (!ISecretRepository.Current.TryGet<TAuthData>(authKey, out var authData))
             {
                 Debug.LogWarningFormat(@"The auth key ""{0}"" does not exist in the program", authKey);
                 return;

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
@@ -69,7 +68,7 @@ namespace SummerRest.Runtime.Requests
         /// </summary>
         public ContentType? ContentType { get; set; }
         /// <summary>
-        /// Used to resolve auth values in <see cref="IAuthDataRepository"/> <seealso cref="IAuthData"/> <seealso cref="IAuthAppender{TAuthAppender,TAuthData}"/> <br/>
+        /// Used to resolve auth values in <see cref="Authenticate.Repositories.ISecretRepository"/> <seealso cref="IAuthData"/> <seealso cref="IAuthAppender{TAuthAppender,TAuthData}"/> <br/>
         /// </summary>
         public string AuthKey { get; set; }
 

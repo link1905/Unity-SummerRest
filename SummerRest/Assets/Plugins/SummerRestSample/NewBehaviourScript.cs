@@ -1,16 +1,33 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using SummerRest.Editor.DataStructures;
+using System.Collections;
 using SummerRest.Editor.Models;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SummerRestSample
 {
     public class NewBehaviourScript : MonoBehaviour
     {
-        [SerializeField] private RequestBody requestBody;
+        //[SerializeField] private RequestBody requestBody;
+
+        private void Start()
+        {
+            StartCoroutine(GetRouteBanner());
+        }
+
+        private IEnumerator GetRouteBanner()
+        {
+            var url = "https://http.cat/images/200.jpg";
+            using (var wr = UnityWebRequestTexture.GetTexture(url))
+            {
+                yield return wr.SendWebRequest();
+                var result = DownloadHandlerTexture.GetContent(wr);
+                var sprite = Sprite.Create(result, new Rect(0, 0, result.width, result.height),
+                    new Vector2(0.5f, 0.5f));
+                Debug.Log(sprite);
+            }
+        }
         //
         // [SerializeReference] private IRequestBodyData bodyData = new PostData();
         //

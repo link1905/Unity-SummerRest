@@ -47,10 +47,10 @@ MonoBehaviour:
   contentType:
     inherit: 16
     cache:
-      hasValue: 1
+      hasValue: 0
       value:
-        <Charset>k__BackingField: UTF-8
-        <MediaType>k__BackingField: application/json
+        <Charset>k__BackingField: 
+        <MediaType>k__BackingField: 
         <Boundary>k__BackingField: 
     value:
       <Charset>k__BackingField: 
@@ -61,15 +61,14 @@ MonoBehaviour:
   - key: postId
     value: 1
   requestBody:
-    type: 1
+    type: 0
     text: 
     body:
       value:
         rid: 8309015510767894528
       typeReference:
         classRef: MyRequestBody, Assembly-CSharp-firstpass
-    serializedData: "{\n    \"privateFieldMustBeAnnotatedWithSerializeField\": 3,\n   
-      \"<WrongName>k__BackingField\": 4\n}"
+    serializedData: 
     textFormat: 0
     form: []
   urlWithParam: https://jsonplaceholder.typicode.com/comments?postId=1

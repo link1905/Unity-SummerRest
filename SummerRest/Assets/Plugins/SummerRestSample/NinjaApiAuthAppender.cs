@@ -1,5 +1,4 @@
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Authenticate.TokenRepositories;
 using SummerRest.Runtime.RequestAdaptor;
 
 namespace SummerRestSample
