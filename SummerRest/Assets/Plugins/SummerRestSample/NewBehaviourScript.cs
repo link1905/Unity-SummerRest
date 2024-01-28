@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Models;
+using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 
 namespace SummerRestSample
@@ -104,17 +106,15 @@ namespace SummerRestSample
 //             requestAdaptor.SetHeader("X-Api-Key", token);
 //         }
 //     }
-// [Serializable]
-//     internal class MyRequestBody : IRequestBodyData
-//     {
-//         // is not serialized by NewtonSoft 
-//         [SerializeField] private int notSerializedFieldBecausePrivate; 
-//         // does not show up on the Inspector 
-//         public int NotExposedBecauseUnityDoesNotRecognizeProperty { get; set; }
-//         //public => will be serialized
-//         //[field: SerializeField] => make the backing field be shown 
-//         [field: SerializeField] public int ExposedAndSerializedBecausePublishAndUnityRecognizeTheBackingField { get; set; }
-//     }
+[Serializable]
+    internal class MyRequestBody : IRequestBodyData
+    {
+        [SerializeField] private int privateFieldMustBeAnnotatedWithSerializeField; 
+        // does not show up on the Inspector 
+        public int NotExposedBecauseUnityDoesNotRecognizeProperty { get; set; }
+        //[field: SerializeField] => the baking field is shown (but serialized name is <WrongName>K_BakingField)
+        [field: SerializeField] public int WrongName { get; set; }
+    }
 //     public class MyRequestBody1 : IRequestBodyData {} 
 //     public class NewBehaviourScript : MonoBehaviour
 //     {

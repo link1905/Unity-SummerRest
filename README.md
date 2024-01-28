@@ -49,21 +49,19 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/0_definition_6_text_or_custom_plain.png) <br>
   - Show all of types in the project is a performance killer (in spite of Editor time). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
    ![](Screenshots/0_definition_7_text_or_custom_type.png)
-  - Finally, the fields are exposed thank to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), but their text/serialized version bases on [IDataSerializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IDataSerializer.cs). Check the class below to make it clear.
+  - Finally, the fields are exposed thank to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
     ```csharp
     [Serializable] //Essential attribute to make this class work with Unity Serialization
     class MyRequestBody : IRequestBodyData
     {
-        // is not serialized by NewtonSoft 
-        [SerializeField] private int notSerializedFieldBecausePrivate; 
+        [SerializeField] private int privateFieldMustBeAnnotatedWithSerializeField; 
         // does not show up on the Inspector 
         public int NotExposedBecauseUnityDoesNotRecognizeProperty { get; set; }
-        //public => will be serialized
-        //[field: SerializeField] => make the backing field be shown 
-        [field: SerializeField] public int ExposedAndSerializedBecausePublishAndUnityRecognizeTheBackingField { get; set; }
+        //[field: SerializeField] => the baking field is shown (but serialized name is <WrongName>K_BakingField)
+        [field: SerializeField] public int WrongName { get; set; }
     }
     ```
-    You may observe that "notSerializedFieldBecausePrivate" is missing from the text, and "NotExposedBecauseUnityDoesNotRecognizeProperty" is missing from the Inspector
+    You may observe that "notSerializedFieldBecausePrivate" has the wrong name, and "NotExposedBecauseUnityDoesNotRecognizeProperty" is missing from the Inspector
     ![](Screenshots/0_definition_8_text_or_custom_class.png)
       
     **Please note that, we encounter the constraints because we are using Newtonsoft and Unity Serialization concurrently. Ignore them if you plan to use your own data serializer (and needn't show custom classes on the Inspector)**

@@ -11,18 +11,30 @@ namespace SummerRest.Tests
 
     public class SerializerTest
     {
+        [Serializable]
         public class TestModel
         {
-            public string A { get; set; }
-            public int B { get; set; }
-            public float C { get; set; }
+            public string a;
+            public int b;
+            public float c;
+
+            public TestModel()
+            {
+                
+            }
+            public TestModel(string a, int b, float c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+            }
             public bool Equals(TestModel other)
             {
-                return A == other.A && B == other.B && C.Equals(other.C);
+                return a == other.a && b == other.b && c.Equals(other.c);
             }
             public override int GetHashCode()
             {
-                return HashCode.Combine(A, B, C);
+                return HashCode.Combine(a, b, c);
             }
         }
         [Test]
@@ -30,17 +42,12 @@ namespace SummerRest.Tests
         {
             var json = @"
 {
-  ""A"": ""5"",
-  ""B"": 5,
-  ""C"": 5.5
+  ""a"": ""5"",
+  ""b"": 5,
+  ""c"": 5.5
 }
 ".RemoveEscapeChar();
-            var model = new TestModel
-            {
-                A = "5",
-                B = 5,
-                C = 5.5f
-            };
+            var model = new TestModel("5", 5, 5.5f);
             var result = IDataSerializer.Current.Serialize(model, DataFormat.Json);
             Assert.AreEqual(json, result);
         }
@@ -48,20 +55,15 @@ namespace SummerRest.Tests
         public void Test_Serialize_To_Xml()
         {
             var xml = @"
-<root>
-	<A>5</A>
-	<B>5</B>
-	<C>5.5</C>
-</root>
+<TestModel xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""> 
+	<a>5</a>
+	<b>5</b>
+	<c>5.5</c>
+</TestModel>
 ".RemoveEscapeChar(); 
-            var model = new TestModel
-            {
-                A = "5",
-                B = 5,
-                C = 5.5f
-            };
+            var model = new TestModel("5", 5, 5.5f);
             var result = IDataSerializer.Current.Serialize(model, DataFormat.Xml);
-            Assert.AreEqual(xml, result);
+            Assert.AreEqual(xml, result.RemoveEscapeChar());
         }
         [Test]
         public void Test_Serialize_To_Plain_Return_Null()
@@ -92,17 +94,12 @@ namespace SummerRest.Tests
         {
             const string json = @"
 {
-  ""A"": ""5"",
-  ""B"": 5,
-  ""C"": 5.5
+  ""a"": ""5"",
+  ""b"": 5,
+  ""c"": 5.5
 }
 ";
-            var model = new TestModel
-            {
-                A = "5",
-                B = 5,
-                C = 5.5f
-            };
+            var model = new TestModel("5", 5, 5.5f);
             var result = IDataSerializer.Current.Deserialize<TestModel>(json, DataFormat.Json);
             Assert.That(model.Equals(result));
         }
@@ -111,8 +108,8 @@ namespace SummerRest.Tests
         {
             const string json = @"
 {
-  ""A"": ""5""
-  ""B"": 5
+  ""a"": ""5""
+  ""b"": 5
 }
 ";
             var result = IDataSerializer.Current.Deserialize<TestModel>(json, DataFormat.Json);
@@ -124,18 +121,14 @@ namespace SummerRest.Tests
         public void Test_Deserialize_To_Xml()
         {
             const string xml = @"
-<root>
-	<A>5</A>
-	<B>5</B>
-	<C>5.5</C>
-</root>
+<TestModel>
+	<a>5</a>
+	<b>5</b>
+	<c>5.5</c>
+</TestModel>
 ";
-            var model = new TestModel
-            {
-                A = "5",
-                B = 5,
-                C = 5.5f
-            };
+            var model = new TestModel("5", 5, 5.5f);
+
             var result = IDataSerializer.Current.Deserialize<TestModel>(xml, DataFormat.Xml);
             Assert.That(model.Equals(result));
         }
