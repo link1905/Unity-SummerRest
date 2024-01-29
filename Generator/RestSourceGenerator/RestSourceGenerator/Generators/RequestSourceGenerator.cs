@@ -31,9 +31,14 @@ namespace RestSourceGenerator.Generators
             builder.Append(@"
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Parsers;
+using UnityEngine.Networking;
 namespace SummerRest.Runtime.Requests {");
-            foreach (var request in conf.Value.Domains)
-                request.BuildClass(builder);
+            if (conf.Value.Domains is not null)
+            {
+                foreach (var request in conf.Value.Domains)
+                    request.BuildClass(builder);
+            }
+
             builder.Append("}");
             context.GenerateFormattedCode("SummerRestRequests", builder.ToString());
             context.ReportDiagnostic(Diagnostic.Create(

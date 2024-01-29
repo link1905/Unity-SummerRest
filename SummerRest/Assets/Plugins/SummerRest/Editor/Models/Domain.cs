@@ -1,7 +1,4 @@
-using Newtonsoft.Json;
 using SummerRest.Editor.DataStructures;
-using SummerRest.Editor.Utilities;
-using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
@@ -28,7 +25,7 @@ namespace SummerRest.Editor.Models
             }
             base.CacheValues();
         }
-        [SerializeField, JsonIgnore] private string activeVersion;
+        [SerializeField] private string activeVersion;
         public string ActiveVersion => activeVersion;
         public override void RemoveFormParent()
         {

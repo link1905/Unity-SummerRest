@@ -57,7 +57,7 @@ public class DefaultsGeneratorTest : CSharpSourceGeneratorTest<DefaultsGenerator
                 ExpectedDiagnostics =
                 {
                     new DiagnosticResult(new DiagnosticDescriptor(nameof(RestSourceGenerator), "No file", 
-                        "Generated file named 'summer-rest-generated.RestSourceGenerator.additionalfile' does not exist", "Debug", DiagnosticSeverity.Warning, true))
+                        "Generated file named does not exist", "Debug", DiagnosticSeverity.Warning, true))
                 },
                 GeneratedSources =
                 {
@@ -88,7 +88,7 @@ public class DefaultsGeneratorTest : CSharpSourceGeneratorTest<DefaultsGenerator
                               namespace SummerRest.Runtime.Authenticate.TokenRepositories
                               { 
                                   using SummerRest.Runtime.Attributes;
-                                  [GeneratedDefault("AuthDataRepository", typeof(int))]
+                                  [GeneratedDefault("SecretRepository", typeof(int))]
                                   public partial interface IAuthDataRepository
                                   {
                                   }
@@ -103,10 +103,9 @@ public class DefaultsGeneratorTest : CSharpSourceGeneratorTest<DefaultsGenerator
                               }
                               """;
         const string jsonContent = """
-                                   {
-                                       "DataSerializer": "TestNamespace.TestDataSerializer",
-                                       "AuthDataRepository": "TestNamespace.TestAuthDataRepository"
-                                   }
+                                   <SummerRestConfiguration
+                                    SecretRepository="TestNamespace.TestAuthDataRepository" 
+                                    DataSerializer="TestNamespace.TestDataSerializer"/>
                                    """;
 
         const string dataSerializerExpect = """

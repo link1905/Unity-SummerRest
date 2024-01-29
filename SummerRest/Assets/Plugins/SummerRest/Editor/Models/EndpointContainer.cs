@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Xml;
 using SummerRest.Editor.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,10 +13,19 @@ namespace SummerRest.Editor.Models
     /// </summary>
     public abstract  class EndpointContainer : Endpoint
     {
-        [SerializeReference, JsonIgnore] private List<Service> services = new();
-        [SerializeReference, JsonIgnore] private List<Request> requests = new();
-        public List<Service> Services => services;
-        public List<Request> Requests => requests;
+        [SerializeReference] private List<Service> services = new();
+        [SerializeReference] private List<Request> requests = new();
+        public List<Service> Services
+        {
+            get => services;
+            set => services = value;
+        }
+        public List<Request> Requests
+        {
+            get => requests;
+            set => requests = value;
+        }
+
         public override bool IsContainer => true;
 
         /// <summary>
@@ -124,6 +133,13 @@ namespace SummerRest.Editor.Models
                 parent = parent.Parent;
             }
             return false;
+        }
+        
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+            writer.WriteArray(nameof(Services), nameof(Service), services);
+            writer.WriteArray(nameof(Requests), nameof(Request), requests);
         }
     }
 }

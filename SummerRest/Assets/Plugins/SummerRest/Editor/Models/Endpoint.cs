@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using SummerRest.Editor.Attributes;
-using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
@@ -14,17 +15,17 @@ namespace SummerRest.Editor.Models
     /// <summary>
     /// Base class containing an HTTP endpoint information
     /// </summary>
-    public abstract class Endpoint : ScriptableObject
+    public abstract class Endpoint : ScriptableObject, IXmlSerializable
     {
-        [field: SerializeReference][JsonIgnore]
+        [field: SerializeReference]
         public Domain Domain { get; set; }
-        [field: SerializeReference][JsonIgnore] 
+        [field: SerializeReference]
         public EndpointContainer Parent { get; protected internal set; }
         
         /// <summary>
         /// This is the name of the generated class associated with this endpoint 
         /// </summary>
-        [SerializeField][JsonIgnore] private string endpointName;
+        [SerializeField] private string endpointName;
         public string EndpointName
         {
             get => endpointName;
@@ -34,12 +35,17 @@ namespace SummerRest.Editor.Models
         /// Url of the end point sequentially formed its ancestors and active origin of <see cref="Domain"/>
         /// <seealso cref="CacheValues"/> 
         /// </summary>
-        [SerializeField, JsonIgnore] private string url;
-        public string Url => url;
+        [SerializeField] private string url;
+        public string Url
+        {
+            get => url;
+            set => url = value;
+        }
+
         /// <summary>
         /// Path of this endpoint, contributes to the process of creating <see cref="url"/> of this endpoint and its descendants <seealso cref="CacheValues"/>
         /// </summary>
-        [SerializeField][JsonIgnore] private string path;
+        [SerializeField] private string path;
         public string Path
         {
             get => path;
@@ -67,28 +73,28 @@ namespace SummerRest.Editor.Models
         /// </summary>
         [SerializeField, InheritOrCustom] 
         private InheritOrCustomContainer<AuthPointer> auth;
-        public AuthContainer AuthContainer { get; private set; }
+        public AuthContainer AuthContainer { get; set; }
 
         /// <summary>
         /// Values will be appended to associated requests
         /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
+        [SerializeField, InheritOrCustom(InheritChoice.Inherit | InheritChoice.None | InheritChoice.AppendToParent | InheritChoice.Custom)]
         private InheritOrCustomContainer<KeyValue[]> headers;
-        public KeyValue[] Headers { get; private set; }
+        public KeyValue[] Headers { get; set; }
 
         /// <summary>
         /// Timeout in seconds of associated requests
         /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom]
+        [SerializeField, InheritOrCustom]
         private InheritOrCustomContainer<int> timeoutSeconds;
-        public int? TimeoutSeconds { get; private set; }
+        public int? TimeoutSeconds { get; set; }
 
         /// <summary>
         /// Redirects limit of associated requests
         /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom]
+        [SerializeField, InheritOrCustom]
         private InheritOrCustomContainer<int> redirectsLimit;
-        public int? RedirectsLimit { get; private set; }
+        public int? RedirectsLimit { get; set; }
 
 
         [field: SerializeField] public int TreeId { get; protected set; }
@@ -118,8 +124,8 @@ namespace SummerRest.Editor.Models
             return newName;
         }
         public abstract void RemoveFormParent(); 
-        [JsonIgnore] public virtual bool IsContainer => false;
-        public abstract string TypeName { get; }
+        public virtual bool IsContainer => false;
+        public virtual string TypeName => nameof(Endpoint);
 
         /// <summary>
         /// Cache the <see cref="InheritOrCustomContainer{T}"/> fields based on the <see cref="Parent"/>
@@ -161,5 +167,14 @@ namespace SummerRest.Editor.Models
             CacheValues();
         }
 
+        public XmlSchema GetSchema() => null;
+        public void ReadXml(XmlReader reader)
+        {
+        }
+        public virtual void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString(nameof(TypeName), TypeName);
+            writer.WriteAttributeString(nameof(EndpointName), EndpointName);
+        }
     }
 }

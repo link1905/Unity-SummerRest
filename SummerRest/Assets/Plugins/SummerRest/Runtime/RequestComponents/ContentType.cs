@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Xml.Serialization;
 using SummerRest.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -74,11 +75,13 @@ namespace SummerRest.Runtime.RequestComponents
             public static ContentType ApplicationXml => new(MediaTypeNames.Application.Xml, Encodings.Utf8);
             public static ContentType TextPlain => new(MediaTypeNames.Text.Plain, Encodings.Utf8);
             public static ContentType Binary => new(MediaTypeNames.Application.Octet, Encodings.Utf8);
-            public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8, Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary()));
+            private static string RandomBoundary { get; } = Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary());
+            public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8, RandomBoundary);
         }
         
         [field: SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
-        public string Charset { get; private set; }
+        [XmlAttribute]
+        public string Charset { get; set; }
 
         [field: SerializeField, Defaults(
                     MediaTypeNames.Application.Json, MediaTypeNames.Application.WwwForm,
@@ -88,8 +91,10 @@ namespace SummerRest.Runtime.RequestComponents
                     MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png,
                     MediaTypeNames.Audio.Wav, MediaTypeNames.Audio.Mpeg
                 )]
-        public string MediaType { get; private set; }
-        [field: SerializeField] public string Boundary { get; private set; }
+        [XmlAttribute]
+        public string MediaType { get; set; }
+        [XmlAttribute]
+        [field: SerializeField] public string Boundary { get; set; }
         /// <summary>
         /// Content-type string formed from the 3 components
         /// </summary>

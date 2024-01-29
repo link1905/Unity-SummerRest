@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Utilities;
-using SummerRest.Runtime.DataStructures;
+using SummerRest.Runtime.Parsers;
+using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEditor;
 using UnityEngine;
@@ -20,8 +20,7 @@ namespace SummerRest.Editor.Manager
         public static void GenerateAdditionalFile()
         {
             var path = SummerRestConfiguration.Instance.GetAssetFolder() + "/" + FileName;
-            var configureJson = JsonConvert.SerializeObject(SummerRestConfiguration.Instance,
-                Formatting.Indented, ISingleton<EndpointContainerJsonConverter>.GetSingleton());
+            var configureXml = IDataSerializer.Current.Serialize(SummerRestConfiguration.Instance, DataFormat.Xml, true);
             var jsonAsset = EditorAssetUtilities.LoadOrCreate(path, () => new TextAsset());
             if (jsonAsset is null)
             {
@@ -29,7 +28,7 @@ namespace SummerRest.Editor.Manager
                 return;
             }
             File.WriteAllText(path, string.Empty);
-            File.WriteAllText(path, configureJson);
+            File.WriteAllText(path, configureXml);
             AssetDatabase.ImportAsset(path);
             // Ensure the Editor to reload to run Roslyn processes 
             EditorUtility.RequestScriptReload();

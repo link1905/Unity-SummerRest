@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
 using SummerRest.Editor.Configurations;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace SummerRest.Editor.Models
     [Serializable]
     public struct AuthPointer
     {
-        [SerializeField, JsonIgnore] private string authKey;
+        [SerializeField] private string authKey;
         public string AuthKey => authKey;
         public static implicit operator AuthContainer(AuthPointer p)
         {

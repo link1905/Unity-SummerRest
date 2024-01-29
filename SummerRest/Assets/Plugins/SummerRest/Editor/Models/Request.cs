@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Xml;
+using System.Xml.Serialization;
 using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
+using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
@@ -18,33 +20,37 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Content type of associated requests
         /// </summary>
-        [SerializeField, JsonIgnore, InheritOrCustom(InheritChoice.Auto | InheritChoice.Custom)]
+        [SerializeField, InheritOrCustom(InheritChoice.Auto | InheritChoice.Custom)]
         private InheritOrCustomContainer<ContentType> contentType;
-        public ContentType? ContentType { get; private set; }
+        public ContentType? ContentType { get; set; }
         
-        [SerializeField, JsonIgnore] private HttpMethod method;
+        [SerializeField] private HttpMethod method;
         /// <summary>
         /// Will be automatically appended to <see cref="urlWithParam"/>
         /// </summary>
-        [SerializeField, JsonIgnore] private KeyValue[] requestParams;
+        [SerializeField] private KeyValue[] requestParams;
         /// <summary>
         /// Will be deserialized into string in the generating source process <seealso cref="SummerRest.Editor.Models.RequestBody"/>
         /// </summary>
-        [SerializeField, JsonIgnore] private RequestBody requestBody;
-        [SerializeField, JsonIgnore] private string urlWithParam;
-        public string UrlWithParams => urlWithParam;
+        [SerializeField] private RequestBody requestBody;
+        [SerializeField] private string urlWithParam;
+        public string UrlWithParams
+        {
+            get => urlWithParam;
+            set => urlWithParam = value;
+        }
         public HttpMethod Method
         {
             get => method;
-            private set => method = value;
+            set => method = value;
         }
         public KeyValue[] RequestParams
         {
             get => requestParams;
-            private set => requestParams = value;
+            set => requestParams = value;
         }
 
-        [JsonIgnore] public RequestBody RequestBody
+        public RequestBody RequestBody
         {
             get => requestBody;
             private set => requestBody = value;
@@ -89,12 +95,34 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Caches latest response of this request (editor-only)
         /// </summary>
-        [SerializeField, JsonIgnore] private Response latestResponse;
-        [JsonIgnore] public Response LatestResponse
+        [SerializeField] private Response latestResponse;
+        public Response LatestResponse
         {
             get => latestResponse;
             set => latestResponse = value;
         }
         public override string TypeName => nameof(Request);
+        
+        public override void WriteXml(XmlWriter writer)
+        {
+            base.WriteXml(writer);
+            writer.WriteAttributeString(nameof(Url), Url);
+            writer.WriteAttributeString(nameof(UrlWithParams), UrlWithParams);
+            writer.WriteAttributeString(nameof(Method), Method.ToString());
+            if (TimeoutSeconds.HasValue)
+                writer.WriteAttributeString(nameof(TimeoutSeconds), TimeoutSeconds.Value.ToString());
+            if (RedirectsLimit.HasValue)
+                writer.WriteAttributeString(nameof(RedirectsLimit), RedirectsLimit.Value.ToString());
+            writer.WriteAttributeString(nameof(DataFormat), DataFormat.ToString());
+            writer.WriteAttributeString(nameof(SerializedBody), SerializedBody);
+            writer.WriteAttributeString(nameof(IsMultipart), IsMultipart.ToString().ToLower());
+            if (ContentType.HasValue)
+                writer.WriteObject(nameof(ContentType), ContentType);
+            writer.WriteArray(nameof(Headers), Headers);
+            writer.WriteArray(nameof(RequestParams), RequestParams);
+            if (AuthContainer is not null)
+                writer.WriteObject(nameof(AuthContainer), AuthContainer);
+            writer.WriteArray(nameof(SerializedForm), SerializedForm);
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
 using SummerRest.Runtime.Authenticate.Appenders;
@@ -19,15 +19,32 @@ namespace SummerRest.Editor.Models
         /// Key for resolving the auth value in runtime by using a <see cref="Runtime.Authenticate.Repositories.ISecretRepository"/> <seealso cref="IAuthAppender{TAuthAppender, TAuthData}"/> <seealso cref="IAuthAppender{TAuthAppender,TAuth}"/>
         /// </summary>
         [SerializeField] private string key;
-        public string AuthKey => key;
+        [XmlAttribute]
+        public string AuthKey
+        {
+            get => key;
+            set => key = value;
+        }
+
         /// <summary>
         /// Type of <see cref="IAuthAppender{TAuthAppender, TAuthData}"/> for appending auth values into the request
         /// </summary>
         [SerializeField, ClassTypeConstraint(typeof(IAuthAppender<,>))] 
         private ClassTypeReference appenderType = new(typeof(BearerTokenAuthAppender));
-        public string AppenderType => appenderType?.Type?.FullName;
-        public string AuthDataType => AuthData?.FullName;
-        [JsonIgnore] public System.Type AuthData
+        [XmlAttribute]
+        public string AppenderType
+        {
+            get => appenderType?.Type?.FullName;
+            set => throw new NotImplementedException();
+        }
+
+        [XmlAttribute]
+        public string AuthDataType
+        {
+            get => AuthData?.FullName;
+            set => throw new NotImplementedException();
+        }
+        private Type AuthData
         {
             get
             {
@@ -39,7 +56,7 @@ namespace SummerRest.Editor.Models
         {
             PlainText, Data
         }
-        [JsonIgnore] public System.Type Appender => appenderType.Type;
+        [XmlAttribute] public System.Type Appender => appenderType.Type;
         public object GetData()
         {
             if (type == AuthType.PlainText)

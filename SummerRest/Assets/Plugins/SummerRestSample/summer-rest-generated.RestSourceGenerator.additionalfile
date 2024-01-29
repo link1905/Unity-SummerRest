@@ -1,166 +1,48 @@
-{
-  "Domains": [
-    {
-      "TypeName": "Domain",
-      "EndpointName": "JsonPlaceHolder",
-      "Requests": [],
-      "Services": [
-        {
-          "TypeName": "Service",
-          "EndpointName": "Comments",
-          "Requests": [
-            {
-              "ContentType": null,
-              "UrlWithParams": "https://jsonplaceholder.typicode.com/comments?postId=1",
-              "Method": 0,
-              "RequestParams": [
-                {
-                  "Key": "postId",
-                  "Value": "1"
-                }
-              ],
-              "DataFormat": 0,
-              "SerializedBody": "",
-              "SerializedForm": [],
-              "IsMultipart": false,
-              "TypeName": "Request",
-              "EndpointName": "GetPost1Comments",
-              "Url": "https://jsonplaceholder.typicode.com/comments",
-              "Path": "",
-              "AuthContainer": {
-                "AuthKey": "my-token-to-master-service",
-                "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-                "AuthDataType": "System.String",
-                "Type": 0,
-                "Text": "this value is only used for Editor requests, I actually need to hide it inside a repository"
-              },
-              "Headers": null,
-              "TimeoutSeconds": null,
-              "RedirectsLimit": null,
-              "TreeId": 1,
-              "name": "_Domain_0_Service_0_Request_0",
-              "hideFlags": 0
-            }
-          ],
-          "Services": []
-        },
-        {
-          "TypeName": "Service",
-          "EndpointName": "Posts",
-          "Requests": [
-            {
-              "ContentType": null,
-              "UrlWithParams": "https://jsonplaceholder.typicode.com/posts/1",
-              "Method": 0,
-              "RequestParams": [],
-              "DataFormat": 1,
-              "SerializedBody": "",
-              "SerializedForm": [],
-              "IsMultipart": false,
-              "TypeName": "Request",
-              "EndpointName": "Get1",
-              "Url": "https://jsonplaceholder.typicode.com/posts/1",
-              "Path": "1",
-              "AuthContainer": {
-                "AuthKey": "my-token-to-master-service",
-                "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-                "AuthDataType": "System.String",
-                "Type": 0,
-                "Text": "this value is only used for Editor requests, I actually need to hide it inside a repository"
-              },
-              "Headers": null,
-              "TimeoutSeconds": null,
-              "RedirectsLimit": null,
-              "TreeId": 3,
-              "name": "_Domain_0_Service_1_Request_0",
-              "hideFlags": 0
-            },
-            {
-              "ContentType": null,
-              "UrlWithParams": "https://jsonplaceholder.typicode.com/posts",
-              "Method": 1,
-              "RequestParams": [],
-              "DataFormat": 0,
-              "SerializedBody": "",
-              "SerializedForm": [],
-              "IsMultipart": false,
-              "TypeName": "Request",
-              "EndpointName": "Post",
-              "Url": "https://jsonplaceholder.typicode.com/posts",
-              "Path": "",
-              "AuthContainer": {
-                "AuthKey": "my-token-to-master-service",
-                "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-                "AuthDataType": "System.String",
-                "Type": 0,
-                "Text": "this value is only used for Editor requests, I actually need to hide it inside a repository"
-              },
-              "Headers": null,
-              "TimeoutSeconds": null,
-              "RedirectsLimit": null,
-              "TreeId": 4,
-              "name": "_Domain_0_Service_1_Request_1",
-              "hideFlags": 0
-            }
-          ],
-          "Services": []
-        }
-      ]
-    },
-    {
-      "TypeName": "Domain",
-      "EndpointName": "NinjaApiWithAuth",
-      "Requests": [
-        {
-          "ContentType": null,
-          "UrlWithParams": "https://api.api-ninjas.com/v1/randomword",
-          "Method": 0,
-          "RequestParams": [],
-          "DataFormat": 0,
-          "SerializedBody": "",
-          "SerializedForm": [],
-          "IsMultipart": false,
-          "TypeName": "Request",
-          "EndpointName": "GetRandomWord",
-          "Url": "https://api.api-ninjas.com/v1/randomword",
-          "Path": "randomword",
-          "AuthContainer": {
-            "AuthKey": "ninja-api-token",
-            "AppenderType": "SummerRestSample.NinjaApiAuthAppender",
-            "AuthDataType": "System.String",
-            "Type": 0,
-            "Text": "2xbUjwP++TR1u5rnVXLuMw==RGHX12Vl8oJBvrAw"
-          },
-          "Headers": null,
-          "TimeoutSeconds": null,
-          "RedirectsLimit": null,
-          "TreeId": 1,
-          "name": "_Domain_1_Request_0",
-          "hideFlags": 0
-        }
-      ],
-      "Services": []
-    }
-  ],
-  "AuthContainers": [
-    {
-      "AuthKey": "my-token-to-master-service",
-      "AppenderType": "SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender",
-      "AuthDataType": "System.String",
-      "Type": 0,
-      "Text": "this value is only used for Editor requests, I actually need to hide it inside a repository"
-    },
-    {
-      "AuthKey": "ninja-api-token",
-      "AppenderType": "SummerRestSample.NinjaApiAuthAppender",
-      "AuthDataType": "System.String",
-      "Type": 0,
-      "Text": "2xbUjwP++TR1u5rnVXLuMw==RGHX12Vl8oJBvrAw"
-    }
-  ],
-  "SecretRepository": "SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository",
-  "DataSerializer": "SummerRest.Runtime.Parsers.DefaultDataSerializer",
-  "Assembly": "Assembly-CSharp-firstpass",
-  "name": "SummerRestConfiguration",
-  "hideFlags": 0
-}
+<SummerRestConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SecretRepository="SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository" DataSerializer="SummerRest.Runtime.Parsers.DefaultDataSerializer" Assembly="Assembly-CSharp-firstpass">
+    <name>SummerRestConfiguration</name>
+    <hideFlags>None</hideFlags>
+    <Domains>
+        <Domain TypeName="Domain" EndpointName="JsonPlaceHolder">
+            <Services>
+                <Service TypeName="Service" EndpointName="Comments">
+                    <Requests>
+                        <Request TypeName="Request" EndpointName="GetPost1Comments" Url="https://jsonplaceholder.typicode.com/comments" UrlWithParams="https://jsonplaceholder.typicode.com/comments?postId=1" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <RequestParams>
+                                <KeyValue Key="postId" Value="1" />
+                            </RequestParams>
+                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
+                        </Request>
+                    </Requests>
+                </Service>
+                <Service TypeName="Service" EndpointName="Posts">
+                    <Requests>
+                        <Request TypeName="Request" EndpointName="Get1" Url="https://jsonplaceholder.typicode.com/posts/1" UrlWithParams="https://jsonplaceholder.typicode.com/posts/1" Method="Get" DataFormat="PlainText" SerializedBody="" IsMultipart="false">
+                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
+                        </Request>
+                        <Request TypeName="Request" EndpointName="Post" Url="https://jsonplaceholder.typicode.com/posts" UrlWithParams="https://jsonplaceholder.typicode.com/posts" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
+                        </Request>
+                    </Requests>
+                </Service>
+            </Services>
+        </Domain>
+        <Domain TypeName="Domain" EndpointName="NinjaApiWithAuth">
+            <Requests>
+                <Request TypeName="Request" EndpointName="GetRandomWord" Url="https://api.api-ninjas.com/v1/randomword" UrlWithParams="https://api.api-ninjas.com/v1/randomword" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                    <AuthContainer AuthKey="ninja-api-token" AppenderType="SummerRestSample.NinjaApiAuthAppender" AuthDataType="System.String" />
+                </Request>
+            </Requests>
+        </Domain>
+        <Domain TypeName="Domain" EndpointName="Multipart domain">
+            <Requests>
+                <Request TypeName="Request" EndpointName="GetData" Url="http://localhost:8080/" UrlWithParams="http://localhost:8080/" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="true">
+                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="zkEPWAq0dHqxua8hgKDD063V0IYAZ89TLTaLi3ya" />
+                    <SerializedForm>
+                        <KeyValue Key="key-1" Value="value-1" />
+                        <KeyValue Key="key-2" Value="value-2" />
+                    </SerializedForm>
+                </Request>
+            </Requests>
+        </Domain>
+    </Domains>
+</SummerRestConfiguration>

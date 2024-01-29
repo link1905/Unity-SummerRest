@@ -1,5 +1,8 @@
-﻿using System.Linq;
-using System.Text.Json;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 using Microsoft.CodeAnalysis;
 using RestSourceGenerator.Metadata;
 
@@ -8,29 +11,43 @@ namespace RestSourceGenerator.Generators
     public static class ConfigLoader
     {
         private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
+        
+        private static readonly DiagnosticDescriptor WrongFormat = new(nameof(RestSourceGenerator), "Wrong format", 
+            "The format of the generated file can not be deserialized as XML object", "Debug", DiagnosticSeverity.Warning, true);
+
+        private static readonly DiagnosticDescriptor AbsentFile = new(
+            nameof(RestSourceGenerator), "No file",
+            "Generated file named does not exist", "Debug", DiagnosticSeverity.Warning, true);
         public static Configuration? Load(GeneratorExecutionContext context)
         {
             var text = LoadRaw(context);
             if (text is null)
                 return null;
-            Configuration? conf = System.Text.Json.JsonSerializer.Deserialize<Configuration>(text);
-            if (conf is null)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(nameof(RestSourceGenerator), "Wrong format", 
-                        "The format of the generated file can not be deserialized as JSON object", "Debug", DiagnosticSeverity.Warning, true), Location.None));
-                return null;
-            }
-            return conf;
+            var serializer = new XmlSerializer(typeof(Configuration));
+            using var reader = new StringReader(text);
+            var result = serializer.Deserialize(reader);
+            if (result is not null) 
+                return (Configuration)result;
+            context.ReportDiagnostic(Diagnostic.Create(WrongFormat, Location.None));
+            return null;
         } 
         
-        public static JsonDocument? LoadJsonDocument(GeneratorExecutionContext context)
+        public static XmlDocument? LoadJsonDocument(GeneratorExecutionContext context)
         {
             var text = LoadRaw(context);
             if (text is null)
                 return null;
-            var conf = JsonDocument.Parse(text);
-            return conf;
+            try
+            {
+                var xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(text);
+                return xmlDocument;
+            }
+            catch (Exception e)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(WrongFormat, Location.None));
+                return null;
+            }
         } 
         
         private static string? LoadRaw(GeneratorExecutionContext context)
@@ -40,10 +57,8 @@ namespace RestSourceGenerator.Generators
             var text = file?.GetText();
             if (file is null || text is null)
             {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(nameof(RestSourceGenerator), "No file", 
-                        "Generated file named '{0}' does not exist", "Debug", DiagnosticSeverity.Warning, true), Location.None, 
-                    FileName));
+                context.ReportDiagnostic(Diagnostic.Create(AbsentFile
+                    , Location.None));
                 return null;
             }
             return text.ToString();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 namespace SummerRest.Editor.DataStructures
@@ -11,9 +12,21 @@ namespace SummerRest.Editor.DataStructures
     public struct KeyValue
     {
         [SerializeField] private string key;
-        public string Key => key;
         [SerializeField] private string value;
-        public string Value => value;
+        
+        
+        [XmlAttribute]
+        public string Key
+        {
+            get => key;
+            set => key = value;
+        }
+        [XmlAttribute]
+        public string Value
+        {
+            get => value;
+            set => this.value = value;
+        }
         public KeyValue(string key, string value)
         {
             this.key = key;

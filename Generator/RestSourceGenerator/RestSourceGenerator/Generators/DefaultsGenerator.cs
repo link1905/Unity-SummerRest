@@ -46,7 +46,7 @@ namespace RestSourceGenerator.Generators
             if (context.SyntaxReceiver is not SyntaxReceiver receiver)
                 return;
             var interfaces = GetGeneratedInterfaces(context.Compilation, receiver);
-            var conf = ConfigLoader.LoadJsonDocument(context);
+            var conf = ConfigLoader.LoadJsonDocument(context)?.DocumentElement;
             foreach (var (typeSymbol, att) in interfaces)
             {
                 var typeName = typeSymbol.Name;
@@ -54,8 +54,8 @@ namespace RestSourceGenerator.Generators
                 var propName = att.ConstructorArguments[0].Value as string;
                 var @default = (att.ConstructorArguments[1].Value as INamedTypeSymbol)?.ToDisplayString();
                 string? genType;
-                if (conf is not null && conf.RootElement.TryGetProperty(propName, out var prop))
-                    genType = prop.GetString();
+                if (conf?.Attributes?[propName] is {} attribute )
+                    genType = attribute.Value;
                 else
                     genType = @default;
                 if (genType is null)

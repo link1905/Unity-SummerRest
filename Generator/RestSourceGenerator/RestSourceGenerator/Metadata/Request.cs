@@ -1,28 +1,47 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 using RestSourceGenerator.Utilities;
 
 namespace RestSourceGenerator.Metadata
 {
-    public struct Request
+    public class Request
     {
-        public string TypeName { get; set; }
-        public string EndpointName { get; set; }
+        [XmlAttribute]
+        public string? TypeName { get; set; }
+        [XmlAttribute]
+        public string? EndpointName { get; set; }
+        [XmlAttribute]
         public string? Url { get; set; }
+        [XmlAttribute]
         public string? UrlWithParams { get; set; }
-        public HttpMethod? Method { get; set; }
-        public int? TimeoutSeconds { get; set; }
-        public int? RedirectsLimit { get; set; }
-        public ContentType? ContentType { get; set; }
-        public KeyValue[]? Headers { get; set; }
-        public KeyValue[]? RequestParams { get; set; }
-        public AuthContainer? AuthContainer { get; set; }
-        public DataFormat? DataFormat { get; set; }
+        [XmlAttribute]
+        public HttpMethod Method { get; set; }
+        [XmlAttribute] public int TimeoutSeconds { get; set; } = -1;
+        [XmlAttribute] public int RedirectsLimit { get; set; } = -1;
+        [XmlAttribute]
+        public DataFormat DataFormat { get; set; }
+        [XmlAttribute]
         public string? SerializedBody { get; set; }
-        public KeyValue[]? SerializedForm { get; set; }
-        public IEnumerable<Request>? Services { get; set; }
-        public IEnumerable<Request>? Requests { get; set; }
+        [XmlAttribute]
         public bool IsMultipart { get; set; }
+        [XmlElement]
+        public ContentType? ContentType { get; set; }
+        [XmlArray]
+        public KeyValue[]? Headers { get; set; }
+        [XmlArray]
+        public KeyValue[]? RequestParams { get; set; }
+        [XmlElement]
+        public AuthContainer? AuthContainer { get; set; }
+
+        [XmlArray]
+        public KeyValue[]? SerializedForm { get; set; }
+        [XmlArray]
+        [XmlArrayItem("Service")]
+        public Request[]? Services { get; set; }
+        [XmlArray]
+        [XmlArrayItem("Request")]
+        public Request[]? Requests { get; set; }
 
         private string BuildHeaders()
         {
@@ -74,8 +93,8 @@ InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";";
         {
             var className = EndpointName.ToClassName();
             var method = $"HttpMethod.{Method}";
-            var timeout = TimeoutSeconds.HasValue ? $"{nameof(TimeoutSeconds)} = {TimeoutSeconds.Value};" : string.Empty;
-            var redirects = RedirectsLimit.HasValue ? $"{nameof(RedirectsLimit)} = {RedirectsLimit.Value};" : string.Empty;
+            var timeout = TimeoutSeconds >= 0 ? $"{nameof(TimeoutSeconds)} = {TimeoutSeconds};" : string.Empty;
+            var redirects = RedirectsLimit >= 0 ? $"{nameof(RedirectsLimit)} = {RedirectsLimit};" : string.Empty;
             var contentType = ContentType.HasValue ? 
                 $@"{nameof(ContentType)} = new ContentType(""{ContentType.Value.MediaType}"", ""{ContentType.Value.Charset}"", ""{ContentType.Value.Boundary}"");" : string.Empty;
             var headers = BuildHeaders();

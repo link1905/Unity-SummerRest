@@ -17,12 +17,6 @@ MonoBehaviour:
   endpointName: Comments
   url: https://jsonplaceholder.typicode.com/comments
   path: comments
-  dataFormat:
-    inherit: 2
-    cache:
-      hasValue: 1
-      value: 0
-    value: 0
   auth:
     inherit: 2
     cache:
@@ -37,18 +31,6 @@ MonoBehaviour:
       hasValue: 0
       value: []
     value: []
-  contentType:
-    inherit: 2
-    cache:
-      hasValue: 0
-      value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
-    value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
   timeoutSeconds:
     inherit: 2
     cache:
@@ -61,7 +43,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 5
+  <TreeId>k__BackingField: 3
   services: []
   requests:
   - {fileID: 11400000, guid: a2a92f6bc7b8478438a7cc1adf143c7f, type: 2}

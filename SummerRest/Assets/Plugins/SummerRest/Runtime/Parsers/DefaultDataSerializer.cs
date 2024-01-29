@@ -10,7 +10,7 @@ namespace SummerRest.Runtime.Parsers
 {
     public class DefaultDataSerializer : IDataSerializer
     {
-        public static T StaticDeserialize<T>(string data, DataFormat dataFormat)
+        public T Deserialize<T>(string data, DataFormat dataFormat)
         {
             try
             {
@@ -28,29 +28,26 @@ namespace SummerRest.Runtime.Parsers
                         }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // Debug.LogException(e);
+                Debug.LogErrorFormat("{3}\nCould not deserialize {0} of type {1} by format {2} => return default value of {1}", data, typeof(T), dataFormat, e.Message);
             }
-            Debug.LogWarningFormat("Can not deserialize {0} of type {1} by format {2} => return default value of {1}", data, typeof(T), dataFormat);
             return default;
         }
 
-        public T Deserialize<T>(string data, DataFormat dataFormat)
-            => StaticDeserialize<T>(data, dataFormat);
-
-        private readonly XmlWriterSettings _settings = new()
+        private static readonly XmlWriterSettings Settings = new()
         {
             OmitXmlDeclaration = true,
         }; 
-        private readonly XmlWriterSettings _beautySettings = new()
+        private static readonly XmlWriterSettings BeautySettings = new()
         {
             OmitXmlDeclaration = true, 
             Indent = true,
             IndentChars = "    ", // Use spaces for indentation, adjust as needed
             NewLineChars = "\n",   // Use newline character for line breaks, adjust as needed
             NewLineHandling = NewLineHandling.Replace,
-        }; 
+        };
+
         public string Serialize<T>(T data, DataFormat dataFormat, bool beauty = false)
         {
             if (data is null)
@@ -65,7 +62,7 @@ namespace SummerRest.Runtime.Parsers
                     XmlSerializer xsSubmit = new XmlSerializer(typeof(T));
                     using (var sww = new StringWriter())
                     {
-                        var settings = beauty ? _beautySettings : _settings;
+                        var settings = beauty ? BeautySettings : Settings;
                         using var xmlWriter = XmlWriter.Create(sww, settings);
                         xsSubmit.Serialize(xmlWriter, data);
                         return sww.ToString();

@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "SummerRest"
+        "SummerRest",
+        "SummerRest.Editor"
     ],
     "includePlatforms": [
         "Editor"

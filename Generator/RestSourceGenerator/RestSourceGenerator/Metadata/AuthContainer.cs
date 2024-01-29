@@ -1,9 +1,11 @@
+using System.Xml.Serialization;
+
 namespace RestSourceGenerator.Metadata
 {
     public struct AuthContainer
     {
-        public string AuthKey { get; set; }
-        public string AppenderType { get; set; }
-        public string AuthDataType { get; set; }
+        [XmlAttribute] public string AuthKey { get; set; }
+        [XmlAttribute] public string AppenderType { get; set; }
+        [XmlAttribute] public string AuthDataType { get; set; }
     }
 }
