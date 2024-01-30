@@ -10,18 +10,13 @@
                             <RequestParams>
                                 <KeyValue Key="postId" Value="1" />
                             </RequestParams>
-                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
                         </Request>
                     </Requests>
                 </Service>
                 <Service TypeName="Service" EndpointName="Posts">
                     <Requests>
-                        <Request TypeName="Request" EndpointName="Get1" Url="https://jsonplaceholder.typicode.com/posts/1" UrlWithParams="https://jsonplaceholder.typicode.com/posts/1" Method="Get" DataFormat="PlainText" SerializedBody="" IsMultipart="false">
-                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
-                        </Request>
-                        <Request TypeName="Request" EndpointName="Post" Url="https://jsonplaceholder.typicode.com/posts" UrlWithParams="https://jsonplaceholder.typicode.com/posts" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="false">
-                            <AuthContainer AuthKey="my-token-to-master-service" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
-                        </Request>
+                        <Request TypeName="Request" EndpointName="Get1" Url="https://jsonplaceholder.typicode.com/posts/1" UrlWithParams="https://jsonplaceholder.typicode.com/posts/1" Method="Get" DataFormat="PlainText" SerializedBody="" IsMultipart="false" />
+                        <Request TypeName="Request" EndpointName="Post" Url="https://jsonplaceholder.typicode.com/posts" UrlWithParams="https://jsonplaceholder.typicode.com/posts" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="false" />
                     </Requests>
                 </Service>
             </Services>
@@ -30,17 +25,6 @@
             <Requests>
                 <Request TypeName="Request" EndpointName="GetRandomWord" Url="https://api.api-ninjas.com/v1/randomword" UrlWithParams="https://api.api-ninjas.com/v1/randomword" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
                     <AuthContainer AuthKey="ninja-api-token" AppenderType="SummerRestSample.NinjaApiAuthAppender" AuthDataType="System.String" />
-                </Request>
-            </Requests>
-        </Domain>
-        <Domain TypeName="Domain" EndpointName="Multipart domain">
-            <Requests>
-                <Request TypeName="Request" EndpointName="GetData" Url="http://localhost:8080/" UrlWithParams="http://localhost:8080/" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="zkEPWAq0dHqxua8hgKDD063V0IYAZ89TLTaLi3ya" />
-                    <SerializedForm>
-                        <KeyValue Key="key-1" Value="value-1" />
-                        <KeyValue Key="key-2" Value="value-2" />
-                    </SerializedForm>
                 </Request>
             </Requests>
         </Domain>

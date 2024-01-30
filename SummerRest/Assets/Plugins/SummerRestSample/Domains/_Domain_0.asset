@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: JsonPlaceHolder
-  url: https://jsonplaceholder.typicode.com/
+  endpointName: DummyJson
+  url: https://dummyjson.com/
   path: 
   auth:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value:
@@ -43,13 +43,12 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 10
+  <TreeId>k__BackingField: 1
   services:
-  - {fileID: 11400000, guid: ad60bbbb2a3b230428989bc2cd271527, type: 2}
-  - {fileID: 11400000, guid: 182d85da13e22b14cbeb7a63781e970a, type: 2}
+  - {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   requests: []
   versions:
     values:
-    - https://jsonplaceholder.typicode.com
+    - https://dummyjson.com
     selectedIndex: 0
-  activeVersion: https://jsonplaceholder.typicode.com
+  activeVersion: https://dummyjson.com

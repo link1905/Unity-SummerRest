@@ -74,19 +74,22 @@ Additionally, you may see these things everywhere in the plugin
 - Initially, you need to define at least 1 domain, click on `Add` to create a new domain <br>
   ![](Screenshots/1_guide_2_add.png)
   ![](Screenshots/1_guide_3_domain.png)
-- A domain must have at least 1 origin, please note that origins must an absolute URL eg. https://jsonplaceholder.typicode.com (this is a public service for testing only, please do not compromise it)
-  ![](Screenshots/1_guide_4_bored_api.png)
+- A domain must have at least 1 origin, please note that origins must an absolute URL eg. https://dummyjson.com (this is a public service for testing only, please do not compromise it)
+  ![](Screenshots/1_guide_4_fake_service.png)
 - Right click (or `Add` button) on an item of the domain tree view to create/delete its children
 - Domain and Service are not callable, only Request offers that feature
   - Name: name of generated class associated with this endpoint [Source Generation](#source-generation)
   - Path: relative path from its parent
   - Url: absolute url formed from the parents' path and its path
-- We will create a Service named Posts (relative path is activity)
+- We will create a Service named Products (relative path is activity)
   ![](Screenshots/1_guide_5_service.png)
-- Then, create a GET Request (or you may directly create this Request without the previous Service, but remember to fill out the relative path correctly!)
+- Then, create a GET Request to get the information of product **1** (or you may directly create this Request without the previous Service (Products), but remember to fill out the relative path correctly eg. products/1)
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in the editor
   ![](Screenshots/1_guide_7_make_request.png)
+- You may create a searching request by using the parameters
+  ![](Screenshots/1_guide_8_get_with_param.png)
+- Another request which posts data, please observe the request body and method fields
 
 ## Auth
 

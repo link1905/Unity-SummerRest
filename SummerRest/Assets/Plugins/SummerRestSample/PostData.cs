@@ -10,5 +10,9 @@ namespace SummerRestSample
         public string title;
         public string body;
         public int userId;
+        public override string ToString()
+        {
+            return $"id: {id}, title: {title}, body: {body}, userId: {userId}";
+        }
     }
 }
