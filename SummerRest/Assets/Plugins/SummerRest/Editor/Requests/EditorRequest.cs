@@ -90,7 +90,7 @@ namespace SummerRest.Editor.Requests
             else
             {
                 var request = IWebRequestAdaptorProvider.Current.GetDataRequest<string>(AbsoluteUrl, Method,
-                    _request.SerializedBody);
+                    _request.SerializedBody, _request.ContentType?.FormedContentType);
                 yield return DetailedRequestCoroutine(request, SetResponseCallback, r => response.Error = r);
             }
             callback?.Invoke();

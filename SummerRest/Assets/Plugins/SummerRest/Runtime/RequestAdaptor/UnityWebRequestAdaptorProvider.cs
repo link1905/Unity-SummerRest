@@ -28,7 +28,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             return DumpUnityWebRequestAdaptor.Create(webRequest);
         }
         public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
-            string url, HttpMethod method, string bodyData)
+            string url, HttpMethod method, string bodyData, string contentType)
         {
             UnityWebRequest request;
             switch (method)
@@ -37,7 +37,7 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = UnityWebRequest.Get(url);
                     break;
                 case HttpMethod.Post or HttpMethod.Patch:
-                    request = UnityWebRequest.PostWwwForm(url, bodyData);
+                    request = UnityWebRequest.Post(url, bodyData, contentType);
                     break;
                 case HttpMethod.Put:
                     request = UnityWebRequest.Put(url, bodyData);

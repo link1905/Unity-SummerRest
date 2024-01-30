@@ -18,7 +18,7 @@ namespace SummerRest.Runtime.Requests
         /// <summary>
         /// The body data of arisen requests <br/>
         /// Originally, this property is null since we can not refer to your custom class for deserializing <br/>
-        /// This property is only useful if <see cref="Method"/> is {<see cref="HttpMethod.Post"/>, <see cref="HttpMethod.Put"/>, <see cref="HttpMethod.Patch"/>}
+        /// This property is only useful if <see cref="BaseRequest{TRequest}.Method"/> is {<see cref="HttpMethod.Post"/>, <see cref="HttpMethod.Put"/>, <see cref="HttpMethod.Patch"/>}
         /// </summary>
         public object BodyData { get => _bodyData;
             set
@@ -53,7 +53,7 @@ namespace SummerRest.Runtime.Requests
             Action<string> errorCallback = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
         }
         /// <summary>
@@ -66,7 +66,7 @@ namespace SummerRest.Runtime.Requests
             Action<string> errorCallback = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+                IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
         }
         
@@ -77,7 +77,7 @@ namespace SummerRest.Runtime.Requests
         /// <returns></returns>
         public UniTask<TResponse> RequestAsync<TResponse>()
         {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);
             return RequestAsync(request);
         }    
         /// <summary>
@@ -87,7 +87,7 @@ namespace SummerRest.Runtime.Requests
         /// <returns>A response object contains HTTP response's essential fields</returns>
         public UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>()
         {
-            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+            using var request = IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);
             return DetailedRequestAsync(request);
         }       
     }

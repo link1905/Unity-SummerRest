@@ -193,7 +193,7 @@ namespace SummerRest.Tests
                 where TAuthAppender : class, IAuthAppender<TAuthAppender, TAuthData>, new()
             {
                 var request =
-                    IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody);
+                    IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, string.Empty);
                 PreviousRequest = request;
                 yield return RequestCoroutine(request, doneCallback, errorCallback);
             }
@@ -252,9 +252,9 @@ namespace SummerRest.Tests
                 return new DumpTestWebRequestAdaptor(wrapped, _fixedContentType, _fixedRawResponse, _code, _fixedError);
             }
 
-            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData)
+            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType)
             {
-                var r = _wrapped.GetDataRequest<TBody>(url, method, bodyData) as RawUnityWebRequestAdaptor<TBody>;
+                var r = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as RawUnityWebRequestAdaptor<TBody>;
                 return new RawTestWebRequestAdaptor<TBody>(r, _fixedContentType, _fixedRawResponse, _code, _fixedError);
             }
 

@@ -10,15 +10,21 @@ namespace SummerRest.Runtime.RequestAdaptor
     internal class MultipartFileUnityWebRequestAdaptor<TResponse> : RawUnityWebRequestAdaptor<TResponse>
     {
         public byte[] Data => WebRequest.uploadHandler.data;
-        protected override void SetAdaptedContentType(in ContentType contentType)
+        protected override void SetAdaptedContentType(ContentType? contentType)
         {
-            if (string.IsNullOrEmpty(contentType.Boundary))
+            if (contentType is null)
             {
-                var nonEmptyBoundaryContentType = contentType.With(boundary: Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary()));
+                base.SetAdaptedContentType(null);
+                return;
+            }
+            // If empty boundary => set a new boundary
+            if (string.IsNullOrEmpty(contentType.Value.Boundary))
+            {
+                var nonEmptyBoundaryContentType = contentType.Value.With(boundary: RequestComponents.ContentType.Commons.RandomBoundary);
                 WebRequest.uploadHandler.contentType = nonEmptyBoundaryContentType.FormedContentType;
             }
             else
-                WebRequest.uploadHandler.contentType = contentType.FormedContentType;
+                WebRequest.uploadHandler.contentType = contentType.Value.FormedContentType;
         }
     }
 }

@@ -74,10 +74,11 @@ namespace SummerRest.Tests
             Assert.AreEqual(3330, adaptor.TimeoutSeconds);
         }
         [Test]
-        public void Test_Default_Content_Type_Is_Unity_Default_Content_Type()
+        public void Test_Content_Type_Boundary_Is_Always_Set()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
-            Assert.That(adaptor.ContentType.Equals(IContentTypeParser.Current.DefaultContentType));
+            using var adaptor = MultipartFileUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
+            adaptor.ContentType = ContentType.Commons.Binary;
+            Assert.IsNotEmpty(adaptor.ContentType.Value.FormedContentType);
         }
 
         [Test] public void Test_Default_Content_Type_Is_Null_When_Upload_Handler_Is_Null()
@@ -101,14 +102,7 @@ namespace SummerRest.Tests
             adaptor.ContentType = result; 
             Assert.That(adaptor.ContentType.Equals(result));
         }
-        [Test]
-        public void Test_Content_Type_Is_Unity_Default_Content_Type_When_Set_Null()
-        {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
-            adaptor.ContentType = null;
-            Assert.NotNull(adaptor.ContentType);
-            Assert.That(adaptor.ContentType.Equals(IContentTypeParser.Current.DefaultContentType));
-        }
+
         [Test]
         public void Test_Not_Empty_Boundary_With_Multipart_File_Request()
         {

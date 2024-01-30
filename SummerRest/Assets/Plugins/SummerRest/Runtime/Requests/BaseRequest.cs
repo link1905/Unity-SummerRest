@@ -23,6 +23,7 @@ namespace SummerRest.Runtime.Requests
         private string _url;
 
         /// <summary>
+        /// Url of this request excluding request params <br/>
         /// Original value is your input in the plugin window
         /// </summary>
         public string Url

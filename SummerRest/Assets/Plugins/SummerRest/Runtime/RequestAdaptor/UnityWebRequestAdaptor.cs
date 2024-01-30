@@ -82,8 +82,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             set => WebRequest.timeout = value;
         }
 
-        private ContentType? _contentType = IContentTypeParser.Current.DefaultContentType;
-
+        private ContentType? _contentType;
         public ContentType? ContentType
         {
             get
@@ -97,15 +96,18 @@ namespace SummerRest.Runtime.RequestAdaptor
                 if (WebRequest.uploadHandler is null)
                     return;
                 _contentType = value;
-                // Try to set null content-type => redirect back to default content-type of Unity instead 
-                _contentType ??= IContentTypeParser.Current.DefaultContentType;
-                SetAdaptedContentType(_contentType.Value);
+                SetAdaptedContentType(_contentType);
             }
         }
 
-        protected virtual void SetAdaptedContentType(in ContentType contentType)
+        protected virtual void SetAdaptedContentType(ContentType? contentType)
         {
-            WebRequest.uploadHandler.contentType = contentType.FormedContentType;
+            if (contentType is null)
+            {
+                WebRequest.uploadHandler.contentType = null;
+                return;
+            }
+            WebRequest.uploadHandler.contentType = contentType.Value.FormedContentType;
         }
 
         /// <summary>

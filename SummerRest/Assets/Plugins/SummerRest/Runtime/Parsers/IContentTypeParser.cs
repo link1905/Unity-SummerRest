@@ -12,10 +12,6 @@ namespace SummerRest.Runtime.Parsers
     public interface IContentTypeParser : IDefaultSupport<IContentTypeParser, DefaultContentTypeParser>
     {
         /// <summary>
-        /// Default content type of a request when set it to null 
-        /// </summary>
-        ContentType DefaultContentType { get; }
-        /// <summary>
         /// The name of the header used to retrieved content-type string 
         /// </summary>
         string ContentTypeHeaderKey { get; }
