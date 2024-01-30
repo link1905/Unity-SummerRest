@@ -1,40 +1,44 @@
+using System;
 using System.Linq;
 using SummerRest.Runtime.Authenticate.Repositories;
-using UnityEngine;
 using SummerRest.Runtime.Requests;
+using UnityEngine;
+using DummyJson = SummerRest.Runtime.Requests.DummyJson;
+using Random = UnityEngine.Random;
 
 namespace SummerRestSample
 {
-    using PostComment = JsonPlaceHolder.Comments.GetPost1Comments;
+    using GetProduct1 = DummyJson.Products.GetProduct1;
+    using SearchProduct = DummyJson.Products.SearchProduct;
     using Get1 = JsonPlaceHolder.Posts.Get1;
     using Post = JsonPlaceHolder.Posts.Post;
     using NinjaGet = NinjaApiWithAuth.GetRandomWord;
 
     internal class SampleManager : MonoBehaviour
     {
-        private readonly Get1 _getPost = Get1.Create();
+        private readonly GetProduct1 _getProduct1 = GetProduct1.Create();
+        private readonly SearchProduct _searchProduct = SearchProduct.Create();
+        
+        
         private readonly Post _postPost = Post.Create();
         private readonly PostComment _getPostCmt = PostComment.Create();
         private readonly NinjaGet _getNinja = NinjaGet.Create();
 
         #region Simple get data
-
-        private void GetPost1Data()
+        private void GetProduct1Data()
         {
-            Debug.LogFormat("Calling to {0} {1}", _getPost.AbsoluteUrl, _getPost.Method);
-            StartCoroutine(_getPost.RequestCoroutine<PostData>(HandleGetPost1Response));
-            StartCoroutine(_getPost.DetailedRequestCoroutine<PostData>(HandleGetPost1DetailedResponse));
+            Debug.LogFormat("Calling to {0} {1}", _getProduct1.AbsoluteUrl, _getProduct1.Method);
+            StartCoroutine(_getProduct1.RequestCoroutine<Product>(HandleGetProduct1Response));
+            StartCoroutine(_getProduct1.DetailedRequestCoroutine<Product>(HandleGetProduct1DetailedResponse));
         }
-
-        private void HandleGetPost1Response(PostData obj)
+        private void HandleGetProduct1Response(Product obj)
         {
-            Debug.LogFormat("Simple response from {0}: {1}", _getPost.AbsoluteUrl, obj);
+            Debug.LogFormat("Simple response from {0}: {1}", _getProduct1.AbsoluteUrl, obj);
         }
-
-        private void HandleGetPost1DetailedResponse(WebResponse<PostData> obj)
+        private void HandleGetProduct1DetailedResponse(WebResponse<Product> obj)
         {
-            Debug.LogFormat("Detailed response from {0}: {1} \n{2}\n{3}", _getPost.AbsoluteUrl, obj.Data,
-                obj.StatusCode, obj.ContentType.FormedContentType);
+            Debug.LogFormat("Detailed response from {0}: {{{1}, {2}, {3}}}", _getProduct1.AbsoluteUrl, 
+                obj.StatusCode, obj.ContentType.FormedContentType, obj.Data);
         }
 
         #endregion
@@ -77,7 +81,7 @@ namespace SummerRestSample
             // Set request param
             // Use SetSingleParam because this is a single param
             // Use AddParam(s)ToList if you plan to use list param
-            _getPostCmt.Params.SetSingleParam("postId", postId.ToString());
+            _searchProduct.Params.SetSingleParam("q", postId.ToString());
             // You can change more properties eg. Headers, Url, Timeout...
             Debug.LogFormat("Calling to {0} {1}", _getPostCmt.AbsoluteUrl, _getPostCmt.Method);
             StartCoroutine(_getPostCmt.RequestCoroutine<PostCommentData[]>(HandleGetCommentResponse));
@@ -105,7 +109,7 @@ namespace SummerRestSample
 
         private void HandleGetAuthResponse(string data)
         {
-            Debug.LogFormat("Simple response from {0}: {1}", _getPost.AbsoluteUrl, data);
+            Debug.LogFormat("Simple response from {0}: {1}", _getProduct1.AbsoluteUrl, data);
         }
         #endregion
 

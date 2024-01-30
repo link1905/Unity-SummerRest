@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: _Domain_0_Service_0_Request_2
+  m_Name: _Domain_0_Service_1_Request_0
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
-  endpointName: AddProductRawText
-  url: https://dummyjson.com/products/add
-  path: add
+  <Parent>k__BackingField: {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}
+  endpointName: Login
+  url: https://dummyjson.com/auth/login
+  path: login
   auth:
     inherit: 2
     cache:
@@ -24,7 +24,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: my-token-to-master-service
+      authKey: dummy-json-token
   headers:
     inherit: 2
     cache:
@@ -43,7 +43,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 3
+  <TreeId>k__BackingField: 5
   contentType:
     inherit: 16
     cache:
@@ -60,20 +60,19 @@ MonoBehaviour:
   requestParams: []
   requestBody:
     type: 0
-    text: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n    \"description\":
-      \"my description\"\r\n}"
+    text: "{    \r\n    \"username\": \"atuny0\",\r\n    \"password\": \"9uQFF1Lh\"\r\n}"
     body:
       value:
         rid: -2
       typeReference:
         classRef: 
-    serializedData: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n   
-      \"description\": \"my description\"\r\n}"
+    serializedData: "{    \r\n    \"username\": \"atuny0\",\r\n    \"password\":
+      \"9uQFF1Lh\"\r\n}"
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/products/add
+  urlWithParam: https://dummyjson.com/auth/login
   latestResponse:
-    lastCall: 01/30/2024 11:28:46
+    lastCall: 1/30/2024 2:15:54 PM
     error: 
     statusCode: 200
     headers:
@@ -96,15 +95,15 @@ MonoBehaviour:
     - key: x-ratelimit-remaining
       value: 99
     - key: date
-      value: Tue, 30 Jan 2024 04:28:46 GMT
+      value: Tue, 30 Jan 2024 07:15:53 GMT
     - key: x-ratelimit-reset
-      value: 1706588932
+      value: 1706598959
     - key: content-type
       value: application/json; charset=utf-8
     - key: content-length
-      value: 62
+      value: 516
     - key: etag
-      value: W/"3e-zynflsgAWM8xi+BIjxrM/p7hd60"
+      value: W/"204-KrcHPBptYIdeStX4imqBFFUEB/U"
     - key: vary
       value: Accept-Encoding
     - key: server
@@ -115,7 +114,7 @@ MonoBehaviour:
       rawBytes:
         isImage: 0
         data: 
-      rawBody: '{"id":101,"title":"my product","description":"my description"}'
+      rawBody: '{"id":1,"username":"atuny0","email":"atuny0@sohu.com","firstName":"Terry","lastName":"Medhurst","gender":"male","image":"https://robohash.org/Terry.png?set=set4","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhdHVueTAiLCJlbWFpbCI6ImF0dW55MEBzb2h1LmNvbSIsImZpcnN0TmFtZSI6IlRlcnJ5IiwibGFzdE5hbWUiOiJNZWRodXJzdCIsImdlbmRlciI6Im1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vcm9ib2hhc2gub3JnL1RlcnJ5LnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwNjU5ODk1MywiZXhwIjoxNzA2NjAyNTUzfQ.Kr5eaa3bSTFaB16K4xqaE0-H5i_uJEa3h_Yjltq0J5s"}'
   references:
     version: 2
     RefIds:

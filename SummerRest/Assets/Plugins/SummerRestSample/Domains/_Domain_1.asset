@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5066b96a087341f89201b83e79823572, type: 3}
-  m_Name: _Domain_0
+  m_Name: _Domain_1
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: DummyJson
-  url: https://dummyjson.com/
+  endpointName: DummyJsonCdn
+  url: https://cdn.dummyjson.com/product-images
   path: 
   auth:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value:
@@ -26,30 +26,29 @@ MonoBehaviour:
     value:
       authKey: dummy-json-token
   headers:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value: []
     value: []
   timeoutSeconds:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value: 0
     value: 0
   redirectsLimit:
-    inherit: 1
+    inherit: 8
     cache:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 5
-  services:
-  - {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
-  - {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}
-  requests: []
+  <TreeId>k__BackingField: 1
+  services: []
+  requests:
+  - {fileID: 11400000, guid: 48f2211dd8edb05428c3de5d5f2a5cd9, type: 2}
   versions:
     values:
-    - https://dummyjson.com
+    - https://cdn.dummyjson.com/product-images
     selectedIndex: 0
-  activeVersion: https://dummyjson.com
+  activeVersion: https://cdn.dummyjson.com/product-images

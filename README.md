@@ -67,6 +67,7 @@ Additionally, you may see these things everywhere in the plugin
     **Please note that, we encounter the constraints because we are using Unity Serialization. Ignore them if you plan to use your own data serializer eg. NewtonSoft, System.Text.Json...**
 ## Getting started
 
+### Simple usage
 - After installing the plugin, click on the `Tools/SummerRest` to open the plugin window
   ![](Screenshots/1_guide_0_open.png)
 - The plugin works on an asset named **"SummerRestConfiguration"** (please do not modify it manually!), an initializing panel will be shown if the plugin does not detect the asset. You have to select a folder which contains assets belonging to the plugin <br>
@@ -89,9 +90,15 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_7_make_request.png)
 - You may create a searching request by using the parameters
   ![](Screenshots/1_guide_8_get_with_param.png)
-- Another request which posts data, please observe the request body and method fields
+- Another request which posts data, please have a look at the request body and method fields
+  ![](Screenshots/1_guide_9_post_request.png)
+- Another one downloading an image (I have created a domain named DummyJsonCdn)
+  ![](Screenshots/1_guide_10_image_request.png)
+
 
 ## Auth
+
+The simple guide is only applied for public APIs. Most of the time, you work with secured APIs that need some factors (eg. JWT, api key, username/password pair...) to authenticate and authorize your operations
 
 ### Configure
 - The plugin supports to append auth information to your request
@@ -99,9 +106,9 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/2_auth_0_auth_container.png)
 - You will see a list of auth containers, each of them contains a record of key, appender type and secret value
   - Key: used by endpoints to refer the auth container
-  - Secret value: the value will be only used for editor requests, this value will be resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in runtime
+  - Secret value: the value will be only used for **editor requests**, and resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in runtime
   - Appender type: how the auth data will be appended into a request (typically modify the request's header), currently we support BearerToken, Basic(Username/password),... You can make your own appender by
-    - Modify params or headers of an endpoint (not reusable)
+    - Manually modify params or headers of an endpoint (not reusable)
     - Or implement [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs), then the class will be listed in the type dropdown
 - For example: if you use BearerToken with data "my-data", every requests refer to this container will be added a header "Authorization":"Bearer my-data"  
 
@@ -118,36 +125,41 @@ Additionally, you may see these things everywhere in the plugin
 
 ### Example
 
-To illustrate what I have discussed on this topic so far. I am using a short example by calling an RandomWordApi of https://api-ninjas.com, since this endpoint requires an Api key through a header named "X-Api-Key"
+To illustrate what I have discussed on this topic so far. I am using a short example by calling an GetCurrentAuthUser api, since this endpoint requires an bearer token through a header named "Authorization"
 
-Because this type of behaviour is not supported basically. I make my own appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
+Although this type of behaviour is supported basically [BearerTokenAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/BearerTokenAuthAppender.cs); To make it clear, we still make a new appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
 ```
-public class NinjaApiAuthAppender : IAuthAppender<NinjaApiAuthAppender>
+// This behaves the same as what BearerTokenAuthAppender does
+public class DummyJsonApiAuthAppender : IAuthAppender<DummyJsonApiAuthAppender, string>
 {
-    public void Append<TResponse>(string authDataKey, IWebRequestAdaptor<TResponse> requestAdaptor)
+    private const string AuthKeyword = "Bearer";
+    public void Append<TResponse>(string data, IWebRequestAdaptor<TResponse> requestAdaptor)
     {
-        //Get auth token 
-        var token = ISecretRepository.Current.Get<string>(authDataKey);
-        //Append it into the request's header
-        requestAdaptor.SetHeader("X-Api-Key", token);
+        // Append a header "Authorization: Bearer <my-token>"  
+        requestAdaptor.SetHeader("Authorization", $"{AuthKeyword} {data}");
     }
 }
 ```
 
-Then, create the respective auth container in the plugin window. Select the class you have just created as the appender
-![](Screenshots/2_auth_2_ninja.png)
+First, we need to create a request to login (and get access token)
+![](Screenshots/2_auth_2_auth_service.png)
+![](Screenshots/2_auth_3_login_request.png)
+
+Then, create the respective auth container in the plugin window. Select the class you have just created as the appender and input the received token
+![](Screenshots/2_auth_4_auth_container.png)
 
 In any Endpoint, refer to this container if you're about to authenticate requests arisen from it
-![](Screenshots/2_auth_3_refer.png)
+![](Screenshots/2_auth_5_auth_request.png)
 
-If you only call in Editor mode, you are able to make the request now, because we are taking the secret value from the window. The window is useless in runtime; Before calling an endpoint **in runtime**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
+
+If you only call in Editor mode, you are able to make the request, because we are taking the secret value from the window. The window is useless in runtime; Before calling an endpoint **in runtime**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
 ```csharp
 // This method is easiser and works with every type of data 
-ISecretRepository.Current.Save("ninja-api-token", "my token is...");
+ISecretRepository.Current.Save("dummy-json-token", "my long token...");
 
 // If you are using the default one based on PlayerPrefs
 // You can directly access PlayerPrefs yourself because they query the same source
-PlayerPrefs.SetString("ninja-api-token", "my token is...");
+PlayerPrefs.SetString("dummy-json-token", "my long token...");
 ```
 
 
@@ -158,7 +170,7 @@ If you find this way too complex, you can easily add a header to the domain, the
 
 ### Source generation
 
-The plugin helps to leverage your structure to automatically generate corresponding source code called in runtime. Click `Generate source to` to initiate the process
+The plugin helps to leverage your structure to automatically generate corresponding source code called in runtime. Click `Generate source to` to initiate the process (since this process is kind of heavy, it's wise to let you run it manually)
 ![](Screenshots/3_source_0_button.png)
 
 The generated source will be structured as what you have designed in Editor. The name of each class reflects on the name of the associated endpoint
@@ -183,6 +195,8 @@ public static class MyService {
 }  
 ```
 ### Use generated classes
+> The examples below are extracted from the [Sample project](SummerRest/Assets/Plugins/SummerRestSample)
+
 A class generated from `Request` comes up with some utility methods for calling the respective endpoint
 - First, create a request object by invoking static `Create()` method (after a very long road :))
    ```csharp
@@ -266,7 +280,7 @@ A class generated from `Request` comes up with some utility methods for calling 
 ### Async
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
-- Please note that the simple async methods will throw exceptions on error  
+- Please note that the async methods will throw exceptions on error instead of callbacks
 ```
 public class User
 {

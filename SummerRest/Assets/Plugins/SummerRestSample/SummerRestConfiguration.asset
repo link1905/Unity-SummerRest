@@ -14,26 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  - {fileID: 11400000, guid: 2ee3619be5b875246b0f59d9374e3a89, type: 2}
   authContainers:
   - type: 0
-    text: this value is only used for Editor requests, I actually need to hide it
-      inside a repository
+    text: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhdHVueTAiLCJlbWFpbCI6ImF0dW55MEBzb2h1LmNvbSIsImZpcnN0TmFtZSI6IlRlcnJ5IiwibGFzdE5hbWUiOiJNZWRodXJzdCIsImdlbmRlciI6Im1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vcm9ib2hhc2gub3JnL1RlcnJ5LnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwNjU5ODkyOSwiZXhwIjoxNzA2NjAyNTI5fQ.7ZZE_z-GPZjiVDUggvxstXFx80Nf9EMcF2QbRwVx-PQ
     body:
       value:
         rid: -2
-    key: my-token-to-master-service
+    key: dummy-json-token
     appenderType:
-      classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
-        SummerRest
-  - type: 0
-    text: 2xbUjwP++TR1u5rnVXLuMw==RGHX12Vl8oJBvrAw
-    body:
-      value:
-        rid: -2
-    key: ninja-api-token
-    appenderType:
-      classRef: SummerRestSample.NinjaApiAuthAppender, Assembly-CSharp-firstpass
+      classRef: SummerRestSample.DummyJsonApiAuthAppender, Assembly-CSharp-firstpass
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
       SummerRest

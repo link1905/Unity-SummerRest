@@ -49,13 +49,13 @@ MonoBehaviour:
     cache:
       hasValue: 0
       value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
+        charset: 
+        mediaType: 
+        boundary: 
     value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
+      charset: 
+      mediaType: 
+      boundary: 
   method: 0
   requestParams:
   - key: q
