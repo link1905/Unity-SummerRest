@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
+using SummerRest.Editor.Utilities.Validators;
+using SummerRest.Runtime.DataStructures;
+using SummerRest.Runtime.RequestComponents;
 
 namespace SummerRest.Editor.Utilities
 {
@@ -36,6 +39,17 @@ namespace SummerRest.Editor.Utilities
         {
             var xsSubmit = string.IsNullOrEmpty(name) ? new XmlSerializer(typeof(T)) : new XmlSerializer(typeof(T), new XmlRootAttribute(name));
             xsSubmit.Serialize(writer, data);
+        }
+
+
+        public static DataFormat DetectFormat(this string data)
+        {
+            // Try to detect json
+            if (ISingleton<JsonValidator>.GetSingleton().Validate(data))
+                return DataFormat.Json;
+            if (ISingleton<XmlValidator>.GetSingleton().Validate(data))
+                return DataFormat.Xml;
+            return DataFormat.PlainText;
         }
     }
 }

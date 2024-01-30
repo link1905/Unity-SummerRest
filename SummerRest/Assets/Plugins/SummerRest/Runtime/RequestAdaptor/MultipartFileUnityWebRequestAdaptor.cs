@@ -20,7 +20,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             // If empty boundary => set a new boundary
             if (string.IsNullOrEmpty(contentType.Value.Boundary))
             {
-                var nonEmptyBoundaryContentType = contentType.Value.With(boundary: RequestComponents.ContentType.Commons.RandomBoundary);
+                var nonEmptyBoundaryContentType = contentType.Value.With(newBoundary: RequestComponents.ContentType.Commons.RandomBoundary);
                 WebRequest.uploadHandler.contentType = nonEmptyBoundaryContentType.FormedContentType;
             }
             else

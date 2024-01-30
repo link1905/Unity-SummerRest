@@ -75,15 +75,18 @@ namespace SummerRest.Runtime.RequestComponents
             public static ContentType ApplicationXml => new(MediaTypeNames.Application.Xml, Encodings.Utf8);
             public static ContentType TextPlain => new(MediaTypeNames.Text.Plain, Encodings.Utf8);
             public static ContentType Binary => new(MediaTypeNames.Application.Octet, Encodings.Utf8);
-            private static string RandomBoundary { get; } = Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary());
+            public static string RandomBoundary { get; } = Encoding.UTF8.GetString(UnityWebRequest.GenerateBoundary());
             public static ContentType MultipartForm => new(MediaTypeNames.Multipart.FormData, Encodings.Utf8, RandomBoundary);
         }
-        
-        [field: SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
-        [XmlAttribute]
-        public string Charset { get; set; }
 
-        [field: SerializeField, Defaults(
+        private static readonly NotImplementedException ImmutableError = new NotImplementedException("Content fields are immutable. Please create a new one using With method");
+
+        [SerializeField, Defaults(Encodings.Utf8, Encodings.Utf16, Encodings.UsAscii)]
+        private string charset;
+        [XmlAttribute]
+        public readonly string Charset { get => charset; set => throw ImmutableError; }
+
+        [SerializeField, Defaults(
                     MediaTypeNames.Application.Json, MediaTypeNames.Application.WwwForm,
                     MediaTypeNames.Application.Soap, MediaTypeNames.Application.Xml, MediaTypeNames.Application.Octet,
                     MediaTypeNames.Text.Plain, MediaTypeNames.Text.RichText,
@@ -91,34 +94,26 @@ namespace SummerRest.Runtime.RequestComponents
                     MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png,
                     MediaTypeNames.Audio.Wav, MediaTypeNames.Audio.Mpeg
                 )]
+        private string mediaType;
         [XmlAttribute]
-        public string MediaType { get; set; }
+        public readonly string MediaType { get => mediaType; set => throw ImmutableError; }
+        [SerializeField]
+        private string boundary;
         [XmlAttribute]
-        [field: SerializeField] public string Boundary { get; set; }
+        public readonly string Boundary { get => boundary;
+            set => throw ImmutableError;
+        }
+        
         /// <summary>
         /// Content-type string formed from the 3 components
         /// </summary>
-        public string FormedContentType
-        {
-            get
-            {
-                var builder = new StringBuilder();
-                builder.Append(MediaType);
-                if (!string.IsNullOrEmpty(Charset))
-                    builder.Append($"; {Headers.CharSet}=").Append(Charset);
-                if (!string.IsNullOrEmpty(Boundary))
-                    builder.Append($"; {Headers.Boundary}=").Append(Boundary);
-                return builder.ToString();
-            }
-        }
-        
-        public string FormedContentTypeWithBoundary(Func<string> whenEmptyBoundary)
+        public string FormedContentType { get; private set; }
+        public static string FormedContentTypeTextFromComponents(string mediaType, string charset, string boundary)
         {
             var builder = new StringBuilder();
-            builder.Append(MediaType);
-            if (!string.IsNullOrEmpty(Charset))
-                builder.Append($"; {Headers.CharSet}=").Append(Charset);
-            var boundary = Boundary ?? whenEmptyBoundary?.Invoke();
+            builder.Append(mediaType);
+            if (!string.IsNullOrEmpty(charset))
+                builder.Append($"; {Headers.CharSet}=").Append(charset);
             if (!string.IsNullOrEmpty(boundary))
                 builder.Append($"; {Headers.Boundary}=").Append(boundary);
             return builder.ToString();
@@ -126,24 +121,26 @@ namespace SummerRest.Runtime.RequestComponents
 
         public ContentType(string mediaType = null, string charset = null, string boundary = null)
         {
-            MediaType = mediaType;
-            Charset = charset;
-            Boundary = boundary;
+            this.mediaType = mediaType;
+            this.charset = charset;
+            this.boundary = boundary;
+            //Create cached content-type text
+            FormedContentType = FormedContentTypeTextFromComponents(mediaType, charset, boundary);
         }
         /// <summary>
         /// Create a new content type based on an existing one <br/>
         /// A null parameter means using the old value for the associated field
         /// </summary>
-        /// <param name="mediaType"></param>
-        /// <param name="charset"></param>
-        /// <param name="boundary"></param>
+        /// <param name="newMediaType"></param>
+        /// <param name="newCharset"></param>
+        /// <param name="newBoundary"></param>
         /// <returns></returns>
-        public readonly ContentType With(string mediaType = null, string charset = null, string boundary = null)
+        public readonly ContentType With(string newMediaType = null, string newCharset = null, string newBoundary = null)
         {
-            mediaType ??= MediaType;
-            charset ??= Charset;
-            boundary ??= Boundary;
-            return new ContentType(mediaType, charset, boundary);
+            newMediaType ??= MediaType;
+            newCharset ??= Charset;
+            newBoundary ??= Boundary;
+            return new ContentType(newMediaType, newCharset, newBoundary);
         }
         public bool Equals(ContentType other)
         {

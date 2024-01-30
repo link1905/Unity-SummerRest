@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
+using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
@@ -28,10 +29,9 @@ namespace SummerRest.Editor.Models
                     return text;
                 case RequestBodyType.Data: 
                     return IDataSerializer.Current.Serialize(body.Value, textFormat, beauty);
-                case RequestBodyType.MultipartForm:
-                    return null;
+                default:
+                    return string.Empty;
             }
-            return null;
         }
         /// <summary>
         /// Only get texts
@@ -51,6 +51,24 @@ namespace SummerRest.Editor.Models
         public bool IsMultipart => type == RequestBodyType.MultipartForm;
         public DataFormat DataFormat => textFormat;
 
+        private ContentType ContentTypeByTextFormat
+        {
+            get
+            {
+                switch (textFormat)
+                {
+                    case DataFormat.Json:
+                        return ContentType.Commons.ApplicationJson;
+                    case DataFormat.PlainText:
+                        return ContentType.Commons.TextPlain;
+                    case DataFormat.Xml:
+                        return ContentType.Commons.ApplicationXml;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public ContentType? CacheValue()
         {
             serializedData = SerializedData(true);
@@ -59,18 +77,10 @@ namespace SummerRest.Editor.Models
                 case RequestBodyType.Text:
                     if (string.IsNullOrEmpty(text))
                         return null;
-                    return ContentType.Commons.TextPlain;
+                    textFormat = text.DetectFormat();
+                    return ContentTypeByTextFormat;
                 case RequestBodyType.Data:
-                    switch (textFormat)
-                    {
-                        case DataFormat.Json:
-                            return ContentType.Commons.ApplicationJson;;
-                        case DataFormat.PlainText:
-                            return ContentType.Commons.TextPlain;
-                        case DataFormat.Xml:
-                            return ContentType.Commons.ApplicationXml;;
-                    }
-                    break;
+                    return ContentTypeByTextFormat;
                 case RequestBodyType.MultipartForm:
                     return ContentType.Commons.MultipartForm;
             }
