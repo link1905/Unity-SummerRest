@@ -189,7 +189,7 @@ namespace SummerRest.Tests
                 Init();
             }
             public object PreviousRequest { get; private set; } 
-            public IEnumerator TestAuthRequestCoroutine<TResponse, TAuthAppender, TAuthData>(Action<TResponse> doneCallback, Action<string> errorCallback = null) 
+            public IEnumerator TestAuthRequestCoroutine<TResponse, TAuthAppender, TAuthData>(Action<TResponse> doneCallback, Action<ResponseError> errorCallback = null) 
                 where TAuthAppender : class, IAuthAppender<TAuthAppender, TAuthData>, new()
             {
                 var request =
@@ -206,7 +206,7 @@ namespace SummerRest.Tests
                 Init();
             }
             public object PreviousRequest { get; private set; } 
-            public IEnumerator TestRequestCoroutine<TResponse>(Action<TResponse> doneCallback, Action<string> errorCallback = null)
+            public IEnumerator TestRequestCoroutine<TResponse>(Action<TResponse> doneCallback, Action<ResponseError> errorCallback = null)
             {
                 var request = RequestCoroutine(doneCallback, errorCallback);
                 PreviousRequest = request;
@@ -319,14 +319,14 @@ namespace SummerRest.Tests
                 Wrapped.SetHeader(key, value);
             }
 
-            public bool IsError(out string error)
+            public bool IsError(out ResponseError error)
             {
                 if (string.IsNullOrEmpty(FixedError))
                 {
-                    error = null;
+                    error = default;
                     return false;
                 }
-                error = FixedError;
+                error = new ResponseError(FixedError, FixedRawResponse, StatusCode);
                 return true;
             }
 

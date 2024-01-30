@@ -48,7 +48,7 @@ namespace SummerRest.Editor.Models
         {
             get
             {
-                var selectedAppender = appenderType.Type;
+                var selectedAppender =  System.Type.GetType(appenderType.ClassRef);
                 return selectedAppender?.GetInterface(typeof(IAuthAppender<,>).FullName).GenericTypeArguments[1];
             }
         }

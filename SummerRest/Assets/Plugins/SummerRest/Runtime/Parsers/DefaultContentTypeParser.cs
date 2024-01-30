@@ -10,7 +10,6 @@ namespace SummerRest.Runtime.Parsers
     public class DefaultContentTypeParser : IContentTypeParser
     {
         public const string UnityWebRequestContentTypeHeader = "Content-Type";
-        public ContentType DefaultContentType { get; } = new(ContentType.MediaTypeNames.Application.WwwForm);
         public string ContentTypeHeaderKey => UnityWebRequestContentTypeHeader;
 
         public DataFormat ParseDataFormatFromResponse(string contentTypeHeader)

@@ -2,7 +2,6 @@
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
@@ -20,7 +19,19 @@ namespace SummerRest.Editor.Drawers
                 value = property.isExpanded
             };
             var key = property.FindPropertyRelative("key");
-            foldout.CallThenTrackPropertyValue(key, s => foldout.text = s.stringValue);
+            foldout.CallThenTrackPropertyValue(key, s =>
+            {
+                try
+                {
+                    foldout.text = s.stringValue;
+                }
+                catch (Exception)
+                {
+                    foldout.UnBindAllChildren();
+                    // After deleting an auth container => its serialized property is disposed
+                    // But we have no way to detect it
+                }
+            });
             var baseTree = base.CreatePropertyGUI(property);
             baseTree.Q<EnumField>("type").SetEnabled(false);
             foldout.contentContainer.Add(baseTree);

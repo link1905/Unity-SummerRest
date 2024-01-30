@@ -41,7 +41,7 @@ namespace SummerRest.Editor.Models
 
         public void Clear()
         {
-            lastCall = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            lastCall = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             error = string.Empty;
             statusCode = HttpStatusCode.OK;
             headers = Array.Empty<KeyValue>();

@@ -50,15 +50,14 @@ namespace SummerRest.Runtime.RequestAdaptor
             WebRequest.SetRequestHeader(key, value);
         }
 
-        public bool IsError(out string error)
+        public bool IsError(out ResponseError error)
         {
             if (WebRequest.result == UnityWebRequest.Result.Success)
             {
-                error = null;
+                error = default;
                 return false;
             }
-
-            error = $"Error {WebRequest.result}: {WebRequest.error}";
+            error = new ResponseError(WebRequest.error, WebRequest.downloadHandler.text, (HttpStatusCode)WebRequest.responseCode);
             return true;
         }
 

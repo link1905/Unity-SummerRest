@@ -16,6 +16,7 @@ namespace SummerRest.Editor.Drawers
                 multiline = true,
                 style =
                 {
+                    whiteSpace = WhiteSpace.Normal,
                     flexDirection = FlexDirection.Column
                 }
             };

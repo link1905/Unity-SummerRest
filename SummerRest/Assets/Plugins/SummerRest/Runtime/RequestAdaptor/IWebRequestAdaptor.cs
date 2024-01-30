@@ -15,7 +15,7 @@ namespace SummerRest.Runtime.RequestAdaptor
     {
         string Url { get; set; }
         void SetHeader(string key, string value);
-        bool IsError(out string error);
+        bool IsError(out ResponseError error);
         string GetHeader(string key);
         HttpMethod Method { get; set; }
         int RedirectLimit { get; set; }

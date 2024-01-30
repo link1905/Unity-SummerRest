@@ -25,12 +25,12 @@ namespace SummerRest.Editor.Window.Elements
                     string.Empty);
                 if (string.IsNullOrEmpty(filePath)) 
                     return;
+                var bytesProp = property.FindPropertyRelative("rawBytes").FindPropertyRelative("data");
                 Debug.Log("Save file into: " + filePath);
-                if (!string.IsNullOrEmpty(rawBodyProp.stringValue))
+                if (bytesProp.arraySize == 0)
                     File.WriteAllText(filePath, rawBodyProp.stringValue);
                 else
                 {
-                    var bytesProp = property.FindPropertyRelative("rawBytes");
                     using var nativeBytes = bytesProp.GetArrayValue();
                     File.WriteAllBytes(filePath, nativeBytes.ToArray());
                 }

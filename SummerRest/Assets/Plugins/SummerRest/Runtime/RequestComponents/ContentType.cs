@@ -107,7 +107,7 @@ namespace SummerRest.Runtime.RequestComponents
         /// <summary>
         /// Content-type string formed from the 3 components
         /// </summary>
-        public string FormedContentType { get; private set; }
+        public string FormedContentType { get; }
         public static string FormedContentTypeTextFromComponents(string mediaType, string charset, string boundary)
         {
             var builder = new StringBuilder();

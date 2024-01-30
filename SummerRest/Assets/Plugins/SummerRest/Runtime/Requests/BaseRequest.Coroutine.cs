@@ -11,7 +11,7 @@ namespace SummerRest.Runtime.Requests
     public partial class BaseRequest<TRequest>
     {
         private bool HandleError<TResponse>(
-            IWebRequestAdaptor<TResponse> request, Action<string> errorCallback)
+            IWebRequestAdaptor<TResponse> request, Action<ResponseError> errorCallback)
         {
             var error = request.IsError(out var msg);
             if (error)
@@ -29,7 +29,7 @@ namespace SummerRest.Runtime.Requests
 
         protected IEnumerator RequestCoroutine<TResponse>(
             IWebRequestAdaptor<TResponse> request,
-            Action<TResponse> doneCallback, Action<string> errorCallback)
+            Action<TResponse> doneCallback, Action<ResponseError> errorCallback)
         {
             yield return SetRequestDataAndWait(request);
             if (!HandleError(request, errorCallback))
@@ -45,7 +45,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator RequestCoroutineFromUnityWebRequest(UnityWebRequest webRequest, Action<UnityWebRequest> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
@@ -61,7 +61,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="readable">Texture response readable</param>
         /// <returns></returns>
         public IEnumerator TextureRequestCoroutine(Action<Texture2D> doneCallback,
-            bool readable, Action<string> errorCallback = null)
+            bool readable, Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
@@ -74,7 +74,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="audioType">Type of the audio response</param>
         /// <returns></returns>
         public IEnumerator AudioRequestCoroutine(Action<AudioClip> doneCallback,
-            AudioType audioType, Action<string> errorCallback = null)
+            AudioType audioType, Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
@@ -83,7 +83,7 @@ namespace SummerRest.Runtime.Requests
 
 
         protected IEnumerator DetailedRequestCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request,
-            Action<WebResponse<TResponse>> doneCallback, Action<string> errorCallback)
+            Action<WebResponse<TResponse>> doneCallback, Action<ResponseError> errorCallback)
         {
             yield return SetRequestDataAndWait(request);
             if (!HandleError(request, errorCallback))
@@ -98,7 +98,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator DetailedRequestCoroutineFromUnityWebRequest(UnityWebRequest webRequest, Action<WebResponse<UnityWebRequest>> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetFromUnityWebRequest(webRequest);
@@ -114,7 +114,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="readable">Texture response readable</param>
         /// <returns></returns>
         public IEnumerator DetailedTextureRequestCoroutine(Action<WebResponse<Texture2D>> doneCallback,
-            bool readable, Action<string> errorCallback = null)
+            bool readable, Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(AbsoluteUrl, readable);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
@@ -127,7 +127,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="audioType">Type of the audio response</param>
         /// <returns></returns>
         public IEnumerator DetailedAudioRequestCoroutine(Action<WebResponse<AudioClip>> doneCallback,
-            AudioType audioType, Action<string> errorCallback = null)
+            AudioType audioType, Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(AbsoluteUrl, audioType);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);

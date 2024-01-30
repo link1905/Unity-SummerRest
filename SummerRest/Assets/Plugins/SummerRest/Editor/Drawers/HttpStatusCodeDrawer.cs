@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -9,13 +10,16 @@ namespace SummerRest.Editor.Drawers
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var value = (HttpStatusCode)property.enumValueFlag;
             var label = new TextField
             {
                 isReadOnly = true,
                 label = property.displayName,
             };
-            label.SetValueWithoutNotify($"{property.enumValueFlag} ({value})");
+            label.CallThenTrackPropertyValue(property, s =>
+            {
+                var value = (HttpStatusCode)s.enumValueFlag;
+                label.SetValueWithoutNotify($"{s.enumValueFlag} ({value})");
+            });
             return label;
         }
     }

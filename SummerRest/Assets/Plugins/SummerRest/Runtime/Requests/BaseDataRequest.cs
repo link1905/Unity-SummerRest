@@ -50,7 +50,7 @@ namespace SummerRest.Runtime.Requests
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
         public IEnumerator RequestCoroutine<TResponse>(Action<TResponse> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);
@@ -63,7 +63,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         public IEnumerator DetailedRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, ContentType?.FormedContentType);

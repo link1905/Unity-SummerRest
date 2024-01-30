@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SummerRest.Runtime.Extensions;
+using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -36,10 +37,12 @@ namespace SummerRest.Runtime.RequestAdaptor
                 case HttpMethod.Get or HttpMethod.Trace or HttpMethod.Connect or HttpMethod.Options:
                     request = UnityWebRequest.Get(url);
                     break;
-                case HttpMethod.Post or HttpMethod.Patch:
+                case HttpMethod.Post:
+                    if (string.IsNullOrEmpty(contentType))
+                        contentType = ContentType.Commons.TextPlain.FormedContentType;
                     request = UnityWebRequest.Post(url, bodyData, contentType);
                     break;
-                case HttpMethod.Put:
+                case HttpMethod.Put  or HttpMethod.Patch:
                     request = UnityWebRequest.Put(url, bodyData);
                     break;
                 case HttpMethod.Delete:

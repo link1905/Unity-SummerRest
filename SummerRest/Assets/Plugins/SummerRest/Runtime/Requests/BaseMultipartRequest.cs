@@ -26,7 +26,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator RequestCoroutine<TResponse>(Action<TResponse> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, MultipartFormSections);
             yield return RequestCoroutine(request, doneCallback, errorCallback);
@@ -38,7 +38,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator DetailedRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
-            Action<string> errorCallback = null)
+            Action<ResponseError> errorCallback = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(AbsoluteUrl, MultipartFormSections);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback);
