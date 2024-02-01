@@ -15,13 +15,12 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   endpointName: GetProduct1
-  url: https://dummyjson.com/products/1
-  pathContainer:
-    text: 
-    values: []
-    formatText: 
-    finalText: 
-  path: 1
+  url: https://dummyjson.com/
+  path:
+    text: '{asd}'
+    values:
+    - value: 
+      key: asd
   auth:
     inherit: 2
     cache:
@@ -74,7 +73,7 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/products/1
+  urlWithParam: https://dummyjson.com/
   latestResponse:
     lastCall: 01/30/2024 09:58:24
     error: 

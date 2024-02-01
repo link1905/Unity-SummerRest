@@ -15,11 +15,10 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}
   endpointName: Login
-  url: https://dummyjson.com/auth/login
-  pathContainer:
+  url: https://dummyjson.com/
+  path:
     text: 
     values: []
-  path: login
   auth:
     inherit: 2
     cache:
@@ -73,7 +72,7 @@ MonoBehaviour:
       \"9uQFF1Lh\"\r\n}"
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/auth/login
+  urlWithParam: https://dummyjson.com/
   latestResponse:
     lastCall: 1/30/2024 2:15:54 PM
     error: 

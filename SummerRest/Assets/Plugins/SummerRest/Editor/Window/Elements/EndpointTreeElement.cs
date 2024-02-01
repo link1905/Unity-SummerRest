@@ -43,7 +43,7 @@ namespace SummerRest.Editor.Window.Elements
             _endpoint = endpoint;
             var serializedObj = new SerializedObject(endpoint);
             _nameElement.BindProperty(serializedObj);
-            _path.CallThenTrackPropertyValue(serializedObj, s => SetPath(s.stringValue));
+            _path.CallThenTrackPropertyValue(serializedObj, SetPath);
             this.AddManipulator(new ContextualMenuManipulator(e => OnContextClick(isContainer, e.menu)));
             OnContextClick(isContainer, _actionMenu.menu);
             _actionMenu.Show(isContainer);
@@ -58,9 +58,10 @@ namespace SummerRest.Editor.Window.Elements
             _method.SetTextValueWithoutNotify($"({val})");
         }
 
-        private void SetPath(string value)
+        private void SetPath(SerializedProperty pathContainerProp)
         {
-            _path.SetTextValueWithoutNotify($"(/{value})");
+            var pathContainer = (PathContainer)pathContainerProp.boxedValue;
+            _path.SetTextValueWithoutNotify($"(/{pathContainer.FinalText})");
         }
 
         /// <summary>

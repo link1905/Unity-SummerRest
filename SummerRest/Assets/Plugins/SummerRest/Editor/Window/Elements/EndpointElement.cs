@@ -2,6 +2,7 @@
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Window.Elements
@@ -17,7 +18,7 @@ namespace SummerRest.Editor.Window.Elements
         private int _sharedElementsOriginalIndex;
         private VisualElement _sharedElements;
         private TextField _nameElement;
-        private TextField _pathElement;
+        private PropertyField _pathElement;
         private TextField _urlElement;
         private VisualElement _requestBodyElement;
         private Button _requestBtn;
@@ -42,7 +43,7 @@ namespace SummerRest.Editor.Window.Elements
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");
             _sharedElements = this.Q<VisualElement>("shared-elements");
             _nameElement = this.Q<TextField>("name");
-            _pathElement = this.Q<TextField>("path");
+            _pathElement = this.Q<PropertyField>("path");
             _urlElement = this.Q<TextField>("url");
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }

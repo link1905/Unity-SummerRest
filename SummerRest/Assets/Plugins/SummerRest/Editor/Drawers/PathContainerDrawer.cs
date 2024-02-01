@@ -13,17 +13,12 @@ namespace SummerRest.Editor.Drawers
         {
             var tree = Tree;
             var formatElement = tree.Q<Foldout>("format-values");
-            var finalText = tree.Q<Label>("final-text");
             formatElement.CallThenTrackPropertyValue(property, s =>
             {
                 var valuesProp = s.FindPropertyRelative("values");
                 var shouldShowSmartFields = valuesProp.arraySize > 0;
-                var pathContainer = (PathContainer)s.boxedValue;
-                finalText.text = pathContainer.FinalText;
                 formatElement.Show(shouldShowSmartFields);
             });
-            // var textField = tree.Q<TextField>("text");
-            // textField.BindProperty(property.FindPropertyRelative("text"));
             return tree;
         }
     }

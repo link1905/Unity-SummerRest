@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <uie:PropertyField name="text" binding-path="text" style="flex-shrink: 0;" />
+    <ui:TextField picking-mode="Ignore" name="text" label="Relative path" binding-path="text" style="white-space: normal;" />
     <ui:Foldout text="Format values" name="format-values" value="true">
-        <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="final-text" />
         <uie:PropertyField name="values" binding-path="values" style="flex-shrink: 0;" />
     </ui:Foldout>
 </ui:UXML>

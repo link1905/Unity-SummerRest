@@ -45,13 +45,8 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Path of this endpoint, contributes to the process of creating <see cref="url"/> of this endpoint and its descendants <seealso cref="CacheValues"/>
         /// </summary>
-        [SerializeField] private PathContainer pathContainer;
-        [SerializeField] private string path;
-        public string Path
-        {
-            get => path;
-            set => path = value;
-        }
+        [SerializeField] private PathContainer path;
+        public string Path => path.FinalText;
         /// <summary>
         /// Form the full path of an endpoint based on its parent excluding active origin of <see cref="Domain"/> 
         /// </summary>
