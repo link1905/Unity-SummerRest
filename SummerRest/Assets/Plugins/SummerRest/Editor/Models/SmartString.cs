@@ -6,8 +6,8 @@ namespace SummerRest.Editor.Models
     [Serializable]
     public class SmartString : ISerializationCallbackReceiver
     {
-        [SerializeField] private string value;
         [SerializeField] private string key;
+        [SerializeField] private string value;
 
         // Trigger editor redraw 
         public string Value => value;

@@ -9,6 +9,7 @@ namespace SummerRest.Tests
     public class RequestBuilderTest
     {
         private const string ExampleUrl = "summerrest.com";
+        private const string ExampleUrlFormat = "summerrest.com/{0}";
         private const string ExampleUrl1 = "summerrest1.com";
         [Test]
         public void Test_Build_Param()
@@ -62,19 +63,17 @@ namespace SummerRest.Tests
             {
                 public int A { get; set; }
             }
-            public TestRequest() : base(ExampleUrl, ExampleUrl, null)
+            public TestRequest() : base(ExampleUrl, ExampleUrl, ExampleUrlFormat, new []{string.Empty}, null)
             {
                 Init();
             }
         }
         [Test]
-        public void Test_Url_Should_Be_Rebuilt_When_Change_BaseUrl()
+        public void Test_Url_Should_Be_Rebuilt_When_Change_FormatValues()
         {
-            var request = new TestRequest
-            {
-                Url = ExampleUrl1
-            };
-            Assert.AreEqual(request.AbsoluteUrl, ExampleUrl1);
+            var request = new TestRequest();
+            request.SetUrlValue(0, "my-id");
+            Assert.AreEqual(request.AbsoluteUrl, string.Format(ExampleUrlFormat, "my-id"));
         }
         [Test]
         public void Test_Url_Should_Be_Rebuilt_When_Change_Param()

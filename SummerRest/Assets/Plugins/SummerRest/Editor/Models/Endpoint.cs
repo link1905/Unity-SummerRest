@@ -50,7 +50,7 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Form the full path of an endpoint based on its parent excluding active origin of <see cref="Domain"/> 
         /// </summary>
-        protected virtual string FullPath
+        protected internal virtual string FullPath
         {
             get
             {

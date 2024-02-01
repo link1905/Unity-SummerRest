@@ -28,7 +28,7 @@ namespace SummerRest.Editor.Models
         // Active version
         [SerializeField] private string path;
         public override string Path => path;
-        protected override string FullPath => path;
+        protected internal override string FullPath => path;
         public string ActiveVersion => path;
 
         public override void RemoveFormParent()

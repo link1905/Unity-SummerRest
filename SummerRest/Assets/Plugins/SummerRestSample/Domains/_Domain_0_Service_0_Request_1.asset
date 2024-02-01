@@ -15,7 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   endpointName: SearchProduct
-  url: https://dummyjson.com/products
+  url: https://dummyjson.com/products/search
   auth:
     inherit: 2
     cache:
@@ -42,9 +42,9 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 2
+  <TreeId>k__BackingField: 3
   path:
-    text: 
+    text: search
     values: []
   contentType:
     inherit: 16
@@ -73,9 +73,9 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/products?q=phone
+  urlWithParam: https://dummyjson.com/products/search?q=phone
   latestResponse:
-    lastCall: 01/30/2024 10:06:56
+    lastCall: 2/1/2024 4:17:43 PM
     error: 
     statusCode: 200
     headers:
@@ -98,9 +98,9 @@ MonoBehaviour:
     - key: x-ratelimit-remaining
       value: 99
     - key: date
-      value: Tue, 30 Jan 2024 03:06:56 GMT
+      value: Thu, 01 Feb 2024 09:17:43 GMT
     - key: x-ratelimit-reset
-      value: 1706584022
+      value: 1706779072
     - key: content-type
       value: application/json; charset=utf-8
     - key: etag

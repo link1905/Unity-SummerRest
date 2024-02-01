@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SummerRest.Editor.DataStructures;
 using SummerRest.Runtime.DataStructures;
 using SummerRest.Runtime.Extensions;
 using UnityEngine;
@@ -10,12 +11,15 @@ namespace SummerRest.Editor.Models
 {
     // I encountered an error that ISerializationCallbackReceiver won't be called anymore after changing any serialized field 
     [Serializable]
-    public class PathContainer : ISerializationCallbackReceiver
+    public class PathContainer
     {
         [SerializeField] private string text;
         [SerializeField] private List<SmartString> values = new();
-        public string FormatText { get; private set; } 
+        public string FormatText { get; private set; }
+        // Use KeyValue for simple source generation
+        public KeyValue[] Containers => values.Select(e => new KeyValue(e.Key, e.Value)).ToArray();
         public string FinalText { get; private set; }
+        public int Count => values.Count;
         public void DetectSmartKeys()
         {
             char previousCut = default;
@@ -34,7 +38,7 @@ namespace SummerRest.Editor.Models
             }
             if (currentIdx < values.Count) values.RemoveAt(currentIdx);
         }
-        private string FormFinalText()
+        private string FormFormatText()
         {
             var builder = new StringBuilder();
             builder.Append(text);
@@ -45,18 +49,10 @@ namespace SummerRest.Editor.Models
             }
             return builder.ToString();
         }
-        public string CacheValues()
-        {
-            return FormatText;
-        }
-        public void OnBeforeSerialize()
-        {
-        }
-
-        public void OnAfterDeserialize()
+        public void CacheValues()
         {
             DetectSmartKeys();
-            FormatText = FormFinalText();
+            FormatText = FormFormatText();
             try
             {
                 FinalText = string.Format(FormatText, values.Select(e => (object)e.Value).ToArray());

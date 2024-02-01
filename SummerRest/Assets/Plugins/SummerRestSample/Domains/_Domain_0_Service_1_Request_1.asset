@@ -16,7 +16,6 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}
   endpointName: GetUser
   url: https://dummyjson.com/auth/me
-  path: me
   auth:
     inherit: 8
     cache:
@@ -43,7 +42,10 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 6
+  <TreeId>k__BackingField: 8
+  path:
+    text: me
+    values: []
   contentType:
     inherit: 16
     cache:

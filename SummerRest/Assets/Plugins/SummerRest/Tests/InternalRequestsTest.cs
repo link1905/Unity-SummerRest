@@ -183,7 +183,7 @@ namespace SummerRest.Tests
         //Proxying classes for testing only
         public class TestDataRequest : BaseDataRequest<TestDataRequest>
         {
-            public TestDataRequest() : base(TestUrl, TestAbsoluteUrl, 
+            public TestDataRequest() : base(TestUrl, TestAbsoluteUrl, null, null,
                 new AuthRequestModifier<BearerTokenAuthAppender, string>())
             {
                 Init();
@@ -201,7 +201,7 @@ namespace SummerRest.Tests
         
         public class TestMultipartRequest : BaseMultipartRequest<TestMultipartRequest>
         {
-            public TestMultipartRequest() : base(TestUrl, TestAbsoluteUrl, null)
+            public TestMultipartRequest() : base(TestUrl, TestAbsoluteUrl, null, null, null)
             {
                 Init();
             }

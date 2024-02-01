@@ -15,8 +15,8 @@ namespace SummerRest.Runtime.Requests
         /// Originally, this property only reflects on text fields (you must insert file sections manually) <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/> <br/>
         /// </summary>
         public readonly List<IMultipartFormSection> MultipartFormSections = new();
-        public BaseMultipartRequest(string url, string absoluteUrl, IRequestModifier requestModifier) : 
-            base(url, absoluteUrl, requestModifier)
+        public BaseMultipartRequest(string url, string absoluteUrl,  string urlFormat, string[] urlFormatValues, IRequestModifier requestModifier) : 
+            base(url, absoluteUrl, urlFormat, urlFormatValues, requestModifier)
         {
         }
         /// <summary>

@@ -37,11 +37,10 @@ namespace SummerRest.Editor.Requests
             }, _request.AuthContainer.GetData(), requestAdaptor);
         }
         
-        protected EditorRequest(Request request) : base(request.Url,request.UrlWithParams, null)
+        protected EditorRequest(Request request) : base(request.Url,request.UrlWithParams, null, null, null)
         {
             
             _request = request;
-            AbsoluteUrl = request.UrlWithParams;
             RedirectsLimit = request.RedirectsLimit;
             TimeoutSeconds = request.TimeoutSeconds;
             Method = request.Method;
@@ -53,7 +52,7 @@ namespace SummerRest.Editor.Requests
 
         public static EditorRequest Create(Request request) => new(request);
 
-        public EditorRequest() : base(string.Empty, string.Empty, null)
+        public EditorRequest() : base(null, null, null, null, null)
         {
         }
 

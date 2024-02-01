@@ -34,9 +34,10 @@ namespace SummerRest.Editor.Models
             }
         }
         /// <summary>
-        /// Only get texts
+        /// Completely get text fields <br/>
+        /// File fields are represented by null value  
         /// </summary>
-        public KeyValue[] TextSections => form.Where(e => e.Type == MultipartFormRowType.PlainText)
+        public KeyValue[] TextSections => form
             .Select(e => e.Pair).ToArray();
         public IEnumerable<IMultipartFormSection> FormSections 
             => form.Select(e => e.FormSection).Where(e => e is not null);

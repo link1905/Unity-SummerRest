@@ -19,25 +19,35 @@ namespace SummerRest.Runtime.Requests
         /// <summary>
         /// Absolute URL built from <see cref="Url"/> and <see cref="Params"/> 
         /// </summary>
-        public string AbsoluteUrl { get; protected set; }
-        private string _url;
-
+        public string AbsoluteUrl { get; private set; }
         /// <summary>
         /// Url of this request excluding request params <br/>
         /// Original value is your input in the plugin window
         /// </summary>
-        public string Url
+        public string Url { get; private set; }
+        public string UrlFormat { get; }
+        private readonly string[] _urlFormatValues;
+        /// <summary>
+        /// Get current embedded value at position <see cref="index"/>
+        /// </summary>
+        /// <param name="index">The formatted position. You should leverage the smart keys which you defined by accessing <see cref="Keys.UrlFormat"/></param>
+        /// <returns></returns>
+        public string GetUrlValue(int index) => _urlFormatValues[index];
+        /// <summary>
+        /// Set the value of the format url at position <see cref="index"/>
+        /// </summary>
+        /// <param name="index">The formatted position. You should leverage the smart keys which you defined by accessing <see cref="Keys.UrlFormat"/></param>
+        /// <param name="value">New value</param>
+        /// <returns></returns>
+        public void SetUrlValue(int index, string value)
         {
-            get => _url;
-            set
-            {
-                _url = value;
-                RebuildUrl();
-            }
+            _urlFormatValues[index] = value;
+            RebuildUrl(true);
         }
 
         /// <summary>
         /// Access this to modify your params in runtime<br/>
+        /// You should leverage the keys which you defined by accessing <see cref="Keys.Params"/> <br/>
         /// Please note that, this property originally contains your inputs in the plugin window
         /// </summary>
         public RequestParamContainer Params { get; } = new();
@@ -46,6 +56,7 @@ namespace SummerRest.Runtime.Requests
 
         /// <summary>
         /// Access this to modify your headers in runtime<br/>
+        /// You should leverage the keys which you defined by accessing <see cref="Keys.Headers"/> <br/>
         /// Please note that, this property originally contains your inputs in the plugin window
         /// </summary>
         public IDictionary<string, string> Headers { get; } =
@@ -70,14 +81,17 @@ namespace SummerRest.Runtime.Requests
         public ContentType? ContentType { get; set; }
         /// <summary>
         /// Used to resolve auth values in <see cref="Authenticate.Repositories.ISecretRepository"/> <seealso cref="IAuthData"/> <seealso cref="IAuthAppender{TAuthAppender,TAuthData}"/> <br/>
+        /// You should leverage the key which you defined by accessing <see cref="Keys.AuthKey"/> <br/>
         /// </summary>
         public string AuthKey { get; set; }
 
 
-        protected BaseRequest(string url, string absoluteUrl, IRequestModifier requestModifier)
+        protected BaseRequest(string url, string absoluteUrl,  string urlFormat, string[] urlFormatValues, IRequestModifier requestModifier)
         {
-            _url = url;
+            Url = url;
             AbsoluteUrl = absoluteUrl;
+            UrlFormat = urlFormat;
+            _urlFormatValues = urlFormatValues;
             _requestModifier = requestModifier;
         }
 
@@ -90,13 +104,15 @@ namespace SummerRest.Runtime.Requests
         protected void Init()
         {
             // Make the param container triggers to rebuild the Absolute URL whenever it's modified
-            Params.OnChangedParams += RebuildUrl;
+            Params.OnChangedParams += () => RebuildUrl(false);
         }
 
         // Gen this constructor
-        protected void RebuildUrl()
+        protected void RebuildUrl(bool format)
         {
-            AbsoluteUrl = IUrlBuilder.Current.BuildUrl(_url, Params.ParamMapper);
+            if (format && !string.IsNullOrEmpty(UrlFormat) && _urlFormatValues.Length > 0)
+                Url = string.Format(UrlFormat, _urlFormatValues);
+            AbsoluteUrl = IUrlBuilder.Current.BuildUrl(Url, Params.ParamMapper);
         }
 
         protected virtual void SetRequestData<TResponse>(IWebRequestAdaptor<TResponse> requestAdaptor)

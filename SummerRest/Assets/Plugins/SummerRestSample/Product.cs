@@ -7,7 +7,7 @@ namespace SummerRestSample
     public struct Product : IRequestBodyData
     {
         public int id;
-        public int title;
+        public string title;
         public string description;
         public override string ToString()
         {            

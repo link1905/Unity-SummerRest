@@ -18,7 +18,17 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private PathContainer path;
         public override string Path => path.FinalText;
-        public string UrlFormat => path.FormatText;
+
+        public string UrlFormat
+        {
+            get
+            {
+                if (path.Count == 0)
+                    return string.Empty;
+                return $"{Parent.FullPath}/{path.FormatText}";
+            }
+        }
+        public KeyValue[] UrlFormatContainers => path.Containers;
 
         /// <summary>
         /// Content type of associated requests
@@ -37,28 +47,10 @@ namespace SummerRest.Editor.Models
         /// </summary>
         [SerializeField] private RequestBody requestBody;
         [SerializeField] private string urlWithParam;
-        public string UrlWithParams
-        {
-            get => urlWithParam;
-            set => urlWithParam = value;
-        }
-        public HttpMethod Method
-        {
-            get => method;
-            set => method = value;
-        }
-        public KeyValue[] RequestParams
-        {
-            get => requestParams;
-            set => requestParams = value;
-        }
-
-        public RequestBody RequestBody
-        {
-            get => requestBody;
-            private set => requestBody = value;
-        }
-
+        public string UrlWithParams => urlWithParam;
+        public HttpMethod Method => method;
+        public KeyValue[] RequestParams => requestParams;
+        public RequestBody RequestBody => requestBody;
         
         //Properties for JSON used in source generator
         public DataFormat DataFormat => RequestBody.DataFormat;
@@ -68,6 +60,7 @@ namespace SummerRest.Editor.Models
 
         public override void CacheValues()
         {
+            path.CacheValues();
             base.CacheValues();
             urlWithParam = DefaultUrlBuilder.BuildUrl(Url, requestParams?.Select(e => (KeyValuePair<string, string>)e));
             var contentTypeCache = contentType.Cache(Parent,
@@ -123,6 +116,7 @@ namespace SummerRest.Editor.Models
             if (ContentType.HasValue)
                 writer.WriteObject(nameof(ContentType), ContentType);
             writer.WriteArray(nameof(Headers), Headers);
+            writer.WriteArray(nameof(UrlFormatContainers), UrlFormatContainers);
             writer.WriteArray(nameof(RequestParams), RequestParams);
             if (AuthContainer is not null)
                 writer.WriteObject(nameof(AuthContainer), AuthContainer);

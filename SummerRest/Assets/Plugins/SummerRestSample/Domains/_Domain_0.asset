@@ -16,7 +16,6 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 0}
   endpointName: DummyJson
   url: https://dummyjson.com/
-  path: 
   auth:
     inherit: 1
     cache:
@@ -43,13 +42,14 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 5
+  <TreeId>k__BackingField: 8
   services:
   - {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   - {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}
-  requests: []
+  requests:
+  - {fileID: 11400000, guid: 53e67e3260838734ab6d2f7548384a32, type: 2}
   versions:
     values:
     - https://dummyjson.com
     selectedIndex: 0
-  activeVersion: https://dummyjson.com
+  path: https://dummyjson.com

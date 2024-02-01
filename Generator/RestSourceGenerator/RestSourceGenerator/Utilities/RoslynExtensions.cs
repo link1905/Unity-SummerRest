@@ -31,19 +31,19 @@ namespace RestSourceGenerator.Utilities
             }
             return null;
         }
-        public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, string> builder, string separator = ", ")
+        public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, int, string> builder, string separator = ", ")
         {
-            return BuildSequentialValues(@params.Select(builder), separator);
+            var values = @params.Select(builder).Where(value => value is not null).ToArray();
+            return BuildSequentialValues(values, separator);
         }
-        public static string BuildSequentialValues(this IEnumerable<string> values, string separator = ", ")
+        public static string BuildSequentialValues(this IReadOnlyList<string> values, string separator = ", ")
         {
-            var paramsArray = values.ToArray();
-            var length = paramsArray.Length;
+            var length = values.Count;
             return length switch
             {
                 0 => "",
-                1 => paramsArray.First(),
-                _ => string.Join(separator, paramsArray)
+                1 => values.First(),
+                _ => string.Join(separator, values)
             };
         }
     }

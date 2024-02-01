@@ -19,6 +19,11 @@ namespace SummerRest.Runtime.Extensions
 
             return result.ToString();
         }
+
+        public static string NotNullValue(this string data)
+        {
+            return data ?? string.Empty;
+        }
         public static bool SplitKeyValue(this ReadOnlySpan<char> str, 
             out ReadOnlySpan<char> key,
             out ReadOnlySpan<char> value, 

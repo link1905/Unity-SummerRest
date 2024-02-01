@@ -1,5 +1,6 @@
 using System;
 using SummerRest.Editor.DataStructures;
+using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,8 +17,8 @@ namespace SummerRest.Editor.Models
             get
             {
                 if (type == MultipartFormRowType.PlainText)
-                    return new KeyValue(key, text);
-                return new KeyValue(key, file.FilePath);
+                    return new KeyValue(key, text.NotNullValue());
+                return new KeyValue(key, null);
             }
         }
         public IMultipartFormSection FormSection

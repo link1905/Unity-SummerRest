@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: _Domain_0_Service_0_Request_2
+  m_Name: _Domain_0_Service_0_Request_3
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
-  endpointName: AddProductRawText
+  endpointName: AddProductData
   url: https://dummyjson.com/products/add
   auth:
     inherit: 2
@@ -42,7 +42,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  <TreeId>k__BackingField: 4
+  <TreeId>k__BackingField: 5
   path:
     text: add
     values: []
@@ -61,21 +61,20 @@ MonoBehaviour:
   method: 1
   requestParams: []
   requestBody:
-    type: 0
-    text: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n    \"description\":
-      \"my description\"\r\n}"
+    type: 1
+    text: 
     body:
       value:
-        rid: -2
+        rid: 3742550695414071298
       typeReference:
-        classRef: 
-    serializedData: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n   
-      \"description\": \"my description\"\r\n}"
+        classRef: SummerRestSample.Product, Assembly-CSharp-firstpass
+    serializedData: "{\n    \"id\": 103,\n    \"title\": \"my product\",\n    \"description\":
+      \"it is a wonderful product\"\n}"
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/add
   latestResponse:
-    lastCall: 01/30/2024 11:28:46
+    lastCall: 2/1/2024 4:26:04 PM
     error: 
     statusCode: 200
     headers:
@@ -98,15 +97,15 @@ MonoBehaviour:
     - key: x-ratelimit-remaining
       value: 99
     - key: date
-      value: Tue, 30 Jan 2024 04:28:46 GMT
+      value: Thu, 01 Feb 2024 09:26:04 GMT
     - key: x-ratelimit-reset
-      value: 1706588932
+      value: 1706779572
     - key: content-type
       value: application/json; charset=utf-8
     - key: content-length
-      value: 62
+      value: 73
     - key: etag
-      value: W/"3e-zynflsgAWM8xi+BIjxrM/p7hd60"
+      value: W/"49-/wMl7w7rwGwjmYavqglFHpdYsTU"
     - key: vary
       value: Accept-Encoding
     - key: server
@@ -117,9 +116,13 @@ MonoBehaviour:
       rawBytes:
         isImage: 0
         data: 
-      rawBody: '{"id":101,"title":"my product","description":"my description"}'
+      rawBody: '{"id":101,"title":"my product","description":"it is a wonderful product"}'
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 3742550695414071298
+      type: {class: Product, ns: SummerRestSample, asm: Assembly-CSharp-firstpass}
+      data:
+        id: 103
+        title: my product
+        description: it is a wonderful product
