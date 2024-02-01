@@ -76,7 +76,6 @@ namespace SummerRest.Editor.Window.Elements
             // If domain => use activeVersion instead of path
             var isDomain = endpoint is Domain;
             _pathElement.label = isDomain ? "Active version" : "Relative path";
-            _pathElement.bindingPath = isDomain ? "activeVersion" : "path";
             _pathElement.SetEnabled(!isDomain);
             // If request => urlWithParams
             _urlElement.SetEnabled(false);

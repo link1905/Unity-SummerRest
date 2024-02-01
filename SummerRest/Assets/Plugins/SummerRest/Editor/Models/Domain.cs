@@ -17,16 +17,20 @@ namespace SummerRest.Editor.Models
         public override void CacheValues()
         {
             Domain = this;
-            activeVersion = versions.Value;
-            if (activeVersion is null)
+            path = versions.Value;
+            if (path is null)
             {
-                activeVersion = "http://localhost:8080";
-                versions.Values = new[] { activeVersion };
+                path = "http://localhost:8080";
+                versions.Values = new[] { path };
             }
             base.CacheValues();
         }
-        [SerializeField] private string activeVersion;
-        public string ActiveVersion => activeVersion;
+        // Active version
+        [SerializeField] private string path;
+        public override string Path => path;
+        protected override string FullPath => path;
+        public string ActiveVersion => path;
+
         public override void RemoveFormParent()
         {
         }

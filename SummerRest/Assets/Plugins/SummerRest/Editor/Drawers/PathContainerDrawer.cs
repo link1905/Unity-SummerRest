@@ -1,6 +1,7 @@
 ﻿using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
@@ -12,12 +13,12 @@ namespace SummerRest.Editor.Drawers
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
-            var formatElement = tree.Q<Foldout>("format-values");
-            formatElement.CallThenTrackPropertyValue(property, s =>
+            var valuesElement = tree.Q<PropertyField>("values");
+            valuesElement.CallThenTrackPropertyValue(property, s =>
             {
                 var valuesProp = s.FindPropertyRelative("values");
                 var shouldShowSmartFields = valuesProp.arraySize > 0;
-                formatElement.Show(shouldShowSmartFields);
+                valuesElement.Show(shouldShowSmartFields);
             });
             return tree;
         }

@@ -1,6 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:TextField picking-mode="Ignore" name="text" label="Relative path" binding-path="text" style="white-space: normal;" />
-    <ui:Foldout text="Format values" name="format-values" value="true">
-        <uie:PropertyField name="values" binding-path="values" style="flex-shrink: 0;" />
-    </ui:Foldout>
+    <uie:PropertyField name="values" binding-path="values" label="Smart values" style="flex-shrink: 0;" />
 </ui:UXML>

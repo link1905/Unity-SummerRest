@@ -1,7 +1,6 @@
 ﻿using SummerRest.Editor.Models;
-using SummerRest.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
@@ -17,7 +16,7 @@ namespace SummerRest.Editor.Drawers
             };
             var label = new Label
             {
-                style = { flexGrow = 0f, flexShrink = 0f },
+                style = { flexGrow = 0f, flexShrink = 0f, unityTextAlign = TextAnchor.MiddleCenter },
                 bindingPath = "key"
             };
             var value = new TextField

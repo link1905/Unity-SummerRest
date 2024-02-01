@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace SummerRest.Editor.Models
 {
     /// <summary>
@@ -6,6 +8,9 @@ namespace SummerRest.Editor.Models
     /// </summary>
     public class Service : EndpointContainer
     {
+        [SerializeField] private string path;
+        public override string Path => path;
+
         public override void Delete(bool fromParent)
         {
             if (fromParent)

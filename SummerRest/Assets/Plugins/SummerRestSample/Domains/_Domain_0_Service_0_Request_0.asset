@@ -14,13 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
-  endpointName: GetProduct1
-  url: https://dummyjson.com/
-  path:
-    text: '{asd}'
-    values:
-    - value: 
-      key: asd
+  endpointName: GetProduct
+  url: https://dummyjson.com/products/1
   auth:
     inherit: 2
     cache:
@@ -48,6 +43,11 @@ MonoBehaviour:
       value: 0
     value: 0
   <TreeId>k__BackingField: 1
+  path:
+    text: '{productId}'
+    values:
+    - value: 1
+      key: productId
   contentType:
     inherit: 16
     cache:
@@ -73,7 +73,7 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/
+  urlWithParam: https://dummyjson.com/products/1
   latestResponse:
     lastCall: 01/30/2024 09:58:24
     error: 

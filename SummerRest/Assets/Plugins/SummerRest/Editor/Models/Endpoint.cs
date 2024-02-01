@@ -42,15 +42,15 @@ namespace SummerRest.Editor.Models
             set => url = value;
         }
 
+
         /// <summary>
         /// Path of this endpoint, contributes to the process of creating <see cref="url"/> of this endpoint and its descendants <seealso cref="CacheValues"/>
         /// </summary>
-        [SerializeField] private PathContainer path;
-        public string Path => path.FinalText;
+        public abstract string Path { get; }
         /// <summary>
         /// Form the full path of an endpoint based on its parent excluding active origin of <see cref="Domain"/> 
         /// </summary>
-        private string FullPath
+        protected virtual string FullPath
         {
             get
             {
@@ -150,7 +150,7 @@ namespace SummerRest.Editor.Models
                 return;
             try
             {
-                url = new Uri($"{Domain.ActiveVersion}{FullPath}").AbsoluteUri;
+                url = new Uri($"{FullPath}").AbsoluteUri;
             }
             catch (Exception)
             {

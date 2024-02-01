@@ -15,10 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   endpointName: Products
-  url: https://dummyjson.com/
-  path:
-    text: 
-    values: []
+  url: https://dummyjson.com/products
   auth:
     inherit: 2
     cache:
@@ -51,3 +48,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 350ddd6371f84034e9efc60ceb76805e, type: 2}
   - {fileID: 11400000, guid: 875543813ed9da647adf6e0b921ceedc, type: 2}
   - {fileID: 11400000, guid: dc1f86e64aed0a047b5202042c3945d0, type: 2}
+  path: products

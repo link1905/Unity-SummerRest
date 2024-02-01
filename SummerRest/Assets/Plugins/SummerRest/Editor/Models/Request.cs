@@ -16,6 +16,10 @@ namespace SummerRest.Editor.Models
     /// </summary>
     public class Request : Endpoint 
     {
+        [SerializeField] private PathContainer path;
+        public override string Path => path.FinalText;
+        public string UrlFormat => path.FormatText;
+
         /// <summary>
         /// Content type of associated requests
         /// </summary>
@@ -106,6 +110,7 @@ namespace SummerRest.Editor.Models
         {
             base.WriteXml(writer);
             writer.WriteAttributeString(nameof(Url), Url);
+            writer.WriteAttributeString(nameof(UrlFormat), UrlFormat);
             writer.WriteAttributeString(nameof(UrlWithParams), UrlWithParams);
             writer.WriteAttributeString(nameof(Method), Method.ToString());
             if (TimeoutSeconds.HasValue)

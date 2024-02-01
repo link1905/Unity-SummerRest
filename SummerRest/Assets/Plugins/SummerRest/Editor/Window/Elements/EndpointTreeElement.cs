@@ -60,8 +60,16 @@ namespace SummerRest.Editor.Window.Elements
 
         private void SetPath(SerializedProperty pathContainerProp)
         {
-            var pathContainer = (PathContainer)pathContainerProp.boxedValue;
-            _path.SetTextValueWithoutNotify($"(/{pathContainer.FinalText})");
+            switch (pathContainerProp.propertyType)
+            {
+                case SerializedPropertyType.String:
+                    _path.SetTextValueWithoutNotify($"(/{pathContainerProp.stringValue})");
+                    break;
+                default:
+                    var pathContainer = (PathContainer)pathContainerProp.boxedValue;
+                    _path.SetTextValueWithoutNotify($"(/{pathContainer.FinalText})");
+                    break;
+            }
         }
 
         /// <summary>

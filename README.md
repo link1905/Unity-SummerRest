@@ -88,6 +88,11 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in the editor
   ![](Screenshots/1_guide_7_make_request.png)
+- We are tightly sticking the request to the product 1 (we need to change the path in case we refer to another product). We support smart strings in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
+  - You need to embed your dynamic strings inside "{}" eg. "{productId}"
+  - Then a list will be shown for replacing that values in the final url
+  - To continue the previous example, we change the relative path from "1" to "{productId}" 
+    ![](Screenshots/1_guide_7_1_smart_path.png)
 - You may create a searching request by using the parameters
   ![](Screenshots/1_guide_8_get_with_param.png)
 - Another request which posts data, please have a look at the request body and method fields
