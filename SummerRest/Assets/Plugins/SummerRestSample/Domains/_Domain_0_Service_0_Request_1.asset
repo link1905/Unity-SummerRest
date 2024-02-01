@@ -16,6 +16,11 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   endpointName: SearchProduct
   url: https://dummyjson.com/products/search
+  pathContainer:
+    text: 
+    format: 
+    values: []
+    finalText: 
   path: search
   auth:
     inherit: 2
@@ -24,7 +29,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: my-token-to-master-service
+      authKey: dummy-json-token
   headers:
     inherit: 2
     cache:

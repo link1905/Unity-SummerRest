@@ -16,6 +16,15 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 0}
   endpointName: DummyJsonCdn
   url: https://cdn.dummyjson.com/product-images
+  pathContainer:
+    text: text{uaaa}/{aa}aaaaa{de}
+    values:
+    - value: asdasdsad
+      key: uaaa
+    - value: asdsa
+      key: aa
+    - value: 
+      key: de
   path: 
   auth:
     inherit: 8

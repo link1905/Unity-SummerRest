@@ -45,6 +45,7 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Path of this endpoint, contributes to the process of creating <see cref="url"/> of this endpoint and its descendants <seealso cref="CacheValues"/>
         /// </summary>
+        [SerializeField] private PathContainer pathContainer;
         [SerializeField] private string path;
         public string Path
         {

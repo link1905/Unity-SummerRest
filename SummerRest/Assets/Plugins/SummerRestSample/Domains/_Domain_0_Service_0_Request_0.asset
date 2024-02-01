@@ -16,6 +16,11 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   endpointName: GetProduct1
   url: https://dummyjson.com/products/1
+  pathContainer:
+    text: 
+    values: []
+    formatText: 
+    finalText: 
   path: 1
   auth:
     inherit: 2
@@ -24,7 +29,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: my-token-to-master-service
+      authKey: dummy-json-token
   headers:
     inherit: 2
     cache:
@@ -49,13 +54,13 @@ MonoBehaviour:
     cache:
       hasValue: 0
       value:
-        <Charset>k__BackingField: 
-        <MediaType>k__BackingField: 
-        <Boundary>k__BackingField: 
+        charset: 
+        mediaType: 
+        boundary: 
     value:
-      <Charset>k__BackingField: 
-      <MediaType>k__BackingField: 
-      <Boundary>k__BackingField: 
+      charset: 
+      mediaType: 
+      boundary: 
   method: 0
   requestParams: []
   requestBody:

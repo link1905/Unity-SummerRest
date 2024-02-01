@@ -16,16 +16,16 @@ namespace SummerRest.Editor.DataStructures
         
         
         [XmlAttribute]
-        public string Key
+        public readonly string Key
         {
             get => key;
-            set => key = value;
+            set => throw new NotImplementedException();
         }
         [XmlAttribute]
-        public string Value
+        public readonly string Value
         {
             get => value;
-            set => this.value = value;
+            set => throw new NotImplementedException();
         }
         public KeyValue(string key, string value)
         {

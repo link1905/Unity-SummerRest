@@ -16,6 +16,11 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   endpointName: Auth
   url: https://dummyjson.com/auth
+  pathContainer:
+    text: 
+    values: []
+    formatText: 
+    finalText: 
   path: auth
   auth:
     inherit: 2
