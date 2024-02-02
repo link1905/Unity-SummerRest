@@ -97,7 +97,7 @@ namespace RestSourceGenerator.Metadata
             return ($@"
 IRequestModifier<AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>>.GetSingleton()", 
                 $@"
-AuthKey = SummerRest.Runtime.Authenticate.Repositories.AuthKeys.{AuthContainer.Value.AuthKey.ToClassName()};
+AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.{AuthContainer.Value.AuthKey.ToClassName()};
 ");
         }
 

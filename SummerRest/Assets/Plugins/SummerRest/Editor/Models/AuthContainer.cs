@@ -34,7 +34,7 @@ namespace SummerRest.Editor.Models
         [XmlAttribute]
         public string AppenderType
         {
-            get => appenderType?.Type?.FullName;
+            get => System.Type.GetType(appenderType.ClassRef)?.FullName;
             set => throw new NotImplementedException();
         }
 
@@ -56,7 +56,7 @@ namespace SummerRest.Editor.Models
         {
             PlainText, Data
         }
-        [XmlAttribute] public System.Type Appender => appenderType.Type;
+        [XmlAttribute] public Type Appender => appenderType.Type;
         public object GetData()
         {
             if (type == AuthType.PlainText)
@@ -66,15 +66,15 @@ namespace SummerRest.Editor.Models
         [Serializable]
         public class BodyContainer : InterfaceContainer<IAuthData>
         {
-            public System.Type TypeBasedOnAppender { get; set; }
-            public override System.Type Type => TypeBasedOnAppender;
+            public Type TypeBasedOnAppender { get; set; }
+            public override Type Type => TypeBasedOnAppender;
         }
         public void OnBeforeSerialize()
         {
         }
         public void OnAfterDeserialize()
         {
-            var selectedAppender = appenderType.Type;
+            var selectedAppender = AppenderType;
             if (selectedAppender is null)
             {
                 body.TypeBasedOnAppender = null;

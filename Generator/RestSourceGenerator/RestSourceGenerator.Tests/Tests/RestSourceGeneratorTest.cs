@@ -73,9 +73,9 @@ public class RestSourceGeneratorTest :
                        using SummerRest.Runtime.RequestComponents;
                        using SummerRest.Runtime.Parsers;
                        using UnityEngine.Networking;
-                       namespace SummerRest.Runtime.Authenticate.Repositories
+                       namespace SummerRest.Runtime.Authenticate
                        {
-                           public static partial class AuthKeys
+                           public static class AuthKeys
                            {
                                public const string MyTokenToMasterService = "my-token-to-master-service";
                            }
@@ -115,7 +115,7 @@ public class RestSourceGeneratorTest :
                                            Headers.TryAdd(Keys.Headers.Header1, "value1");
                                            Headers.TryAdd(Keys.Headers._1, "value2");
                                            Params.AddParamToList(Keys.Params.Param1, "param1-value");
-                                           AuthKey = SummerRest.Runtime.Authenticate.Repositories.AuthKeys.MyTokenToMasterService;
+                                           AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyTokenToMasterService;
                                            BodyFormat = DataFormat.Json;
                                            InitializedSerializedBody = @"I need to call the ""cat"" request";
                                            Init();
@@ -189,9 +189,9 @@ public class RestSourceGeneratorTest :
                        using SummerRest.Runtime.RequestComponents;
                        using SummerRest.Runtime.Parsers;
                        using UnityEngine.Networking;
-                       namespace SummerRest.Runtime.Authenticate.Repositories
+                       namespace SummerRest.Runtime.Authenticate
                        {
-                           public static partial class AuthKeys
+                           public static class AuthKeys
                            {
                                public const string DummyJsonToken = "dummy-json-token";
                            }
@@ -398,7 +398,7 @@ public class RestSourceGeneratorTest :
                                        public GetUser(): base("https://dummyjson.com/auth/me", "https://dummyjson.com/auth/me", null, System.Array.Empty<string>(), IRequestModifier<AuthRequestModifier<SummerRestSample.DummyJsonApiAuthAppender, System.String>>.GetSingleton())
                                        {
                                            Method = HttpMethod.Get;
-                                           AuthKey = SummerRest.Runtime.Authenticate.Repositories.AuthKeys.DummyJsonToken;
+                                           AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.DummyJsonToken;
                                            BodyFormat = DataFormat.Json;
                                            Init();
                                        }

@@ -16,10 +16,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
   authContainers:
   - type: 0
-    text: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhdHVueTAiLCJlbWFpbCI6ImF0dW55MEBzb2h1LmNvbSIsImZpcnN0TmFtZSI6IlRlcnJ5IiwibGFzdE5hbWUiOiJNZWRodXJzdCIsImdlbmRlciI6Im1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vcm9ib2hhc2gub3JnL1RlcnJ5LnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwNjU5ODkyOSwiZXhwIjoxNzA2NjAyNTI5fQ.7ZZE_z-GPZjiVDUggvxstXFx80Nf9EMcF2QbRwVx-PQ
+    text: asd
     body:
       value:
-        rid: -2
+        rid: 3742550718631641092
     key: dummy-json-token
     appenderType:
       classRef: SummerRestSample.DummyJsonApiAuthAppender, Assembly-CSharp-firstpass
@@ -32,5 +32,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 3742550718631641092
+      type: {class: BasicAuth, ns: SummerRest.Runtime.RequestComponents, asm: SummerRest}
+      data:
+        <Username>k__BackingField: 
+        <Password>k__BackingField: 

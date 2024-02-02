@@ -19,7 +19,7 @@
                         <Request TypeName="Request" EndpointName="AddProductRawText" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&#xD;&#xA;    &quot;id&quot;: 101,&#xD;&#xA;    &quot;title&quot;: &quot;my product&quot;,&#xD;&#xA;    &quot;description&quot;: &quot;my description&quot;&#xD;&#xA;}" IsMultipart="false">
                             <ContentType Charset="UTF-8" MediaType="application/json" />
                         </Request>
-                        <Request TypeName="Request" EndpointName="AddProductData" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                        <Request TypeName="Request" EndpointName="AddProductData" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&quot;id&quot;:103,&quot;title&quot;:&quot;my product&quot;,&quot;description&quot;:&quot;it is a wonderful product&quot;}" IsMultipart="false">
                             <ContentType Charset="UTF-8" MediaType="application/json" />
                         </Request>
                     </Requests>
@@ -30,14 +30,14 @@
                             <ContentType Charset="UTF-8" MediaType="application/json" />
                         </Request>
                         <Request TypeName="Request" EndpointName="GetUser" Url="https://dummyjson.com/auth/me" UrlFormat="" UrlWithParams="https://dummyjson.com/auth/me" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
-                            <AuthContainer AuthKey="dummy-json-token" />
+                            <AuthContainer AuthKey="dummy-json-token" AppenderType="SummerRestSample.DummyJsonApiAuthAppender" AuthDataType="System.String" />
                         </Request>
                     </Requests>
                 </Service>
             </Services>
             <Requests>
                 <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="z6ufMN1iPZ9TMiNynKINFQ7QYZk9W18KWQor3f1Q" />
+                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="hfiV5AKWHNxY0NrYTaAVPcbbnsWmVIFMqL8qNDlc" />
                     <SerializedForm>
                         <KeyValue Key="text" Value="my text value" />
                         <KeyValue Key="file" />
