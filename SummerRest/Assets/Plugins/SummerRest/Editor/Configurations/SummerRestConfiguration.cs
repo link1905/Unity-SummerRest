@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.TypeReference;
@@ -29,6 +30,10 @@ namespace SummerRest.Editor.Configurations
         [SerializeField] private List<AuthContainer> authContainers = new();
 
         [XmlIgnore] public List<AuthContainer> AuthContainers => authContainers;
+        [XmlArray] public string[] AuthKeys {
+            get => authContainers.Select(e => e.AuthKey).ToArray();
+            set => throw new NotImplementedException();
+        }
         
         /// <summary>
         /// Type ref of auth repository <see cref="ISecretRepository"/> <br />

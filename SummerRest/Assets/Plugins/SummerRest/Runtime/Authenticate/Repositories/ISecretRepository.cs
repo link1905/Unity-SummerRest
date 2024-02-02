@@ -11,8 +11,24 @@ namespace SummerRest.Runtime.Authenticate.Repositories
     [GeneratedDefault("SecretRepository", typeof(PlayerPrefsSecretRepository))]
     public partial interface ISecretRepository
     {
+        /// <summary>
+        /// Save data to a key
+        /// </summary>
+        /// <param name="key">Please access <see cref="AuthKeys"/> to get the hard key</param>
+        /// <param name="data"></param>
+        /// <typeparam name="TData"></typeparam>
         void Save<TData>(string key, TData data);
+        /// <summary>
+        /// Delete data from a key
+        /// </summary>
+        /// <param name="key">Please access <see cref="AuthKeys"/> to get the hard key</param>
         void Delete(string key);
+        /// <summary>
+        /// Get data of a key
+        /// </summary>
+        /// <param name="key">Please access <see cref="AuthKeys"/> to get the hard key</param>
+        /// <param name="data"></param>
+        /// <returns>Is the key existed</returns>
         bool TryGet<TData>(string key, out TData data);
     }
 }

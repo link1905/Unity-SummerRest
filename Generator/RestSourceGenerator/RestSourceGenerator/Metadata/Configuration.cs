@@ -9,5 +9,7 @@ namespace RestSourceGenerator.Metadata
         public string Assembly { get; set; }
         [XmlArray, XmlArrayItem("Domain")]
         public Request[]? Domains { get; set; }
+        [XmlArray]
+        public string[] AuthKeys { get; set; }
     }
 }

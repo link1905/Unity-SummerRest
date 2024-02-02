@@ -97,7 +97,7 @@ namespace RestSourceGenerator.Metadata
             return ($@"
 IRequestModifier<AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>>.GetSingleton()", 
                 $@"
-AuthKey = ""{AuthContainer.Value.AuthKey}"";
+AuthKey = SummerRest.Runtime.Authenticate.Repositories.AuthKeys.{AuthContainer.Value.AuthKey.ToClassName()};
 ");
         }
 
@@ -132,14 +132,12 @@ InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";");
             var (headerKeys, headers) = BuildHeaders();
             var (paramsKeys, @params) = BuildParams();
             var (authProp, authKey) = BuildAuth();
-            var authKeyConst = string.IsNullOrEmpty(authKey) ? string.Empty : $"public const string {authKey}";
             var (multipartFormKeys, body) = BuildBody();
             builder.Append($@"
 public sealed class {className} : {BuildBaseClass()}
 {{
     public static class Keys 
     {{ 
-        {authKeyConst}
         public static class UrlFormat {{
             {urlFormatKeys}
         }}

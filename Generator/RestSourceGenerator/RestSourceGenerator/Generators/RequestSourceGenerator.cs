@@ -27,20 +27,34 @@ namespace RestSourceGenerator.Generators
             context.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(nameof(RestSourceGenerator), "Start generating", 
                     "Start generating source", "Debug", DiagnosticSeverity.Info, true), Location.None));
-            var builder = new StringBuilder();
-            builder.Append(@"
+
+            var authKeys = conf.Value.AuthKeys is not { Length: > 0 }
+                ? string.Empty
+                : conf.Value.AuthKeys.BuildSequentialValues((k, _) => @$"public const int {k.ToClassName()} = ""{k}""", separator: ";") + ";";
+            var requestBuilder = new StringBuilder();
+            requestBuilder.Append($@"
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Parsers;
 using UnityEngine.Networking;
-namespace SummerRest.Runtime.Requests {");
+namespace SummerRest.Runtime.Authenticate.Repositories
+{{
+    public static partial class AuthKeys
+    {{
+        {authKeys}
+    }}
+}}
+
+namespace SummerRest.Runtime.Requests {{");
             if (conf.Value.Domains is not null)
             {
                 foreach (var request in conf.Value.Domains)
-                    request.BuildClass(builder);
+                    request.BuildClass(requestBuilder);
             }
 
-            builder.Append("}");
-            context.GenerateFormattedCode("SummerRestRequests", builder.ToString());
+            requestBuilder.Append("}");
+            
+            
+            context.GenerateFormattedCode("SummerRestRequests", requestBuilder.ToString());
             context.ReportDiagnostic(Diagnostic.Create(
                 new DiagnosticDescriptor(nameof(RestSourceGenerator), "Finish generating", 
                     "Finish generating source", "Debug", DiagnosticSeverity.Info, true), Location.None));

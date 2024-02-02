@@ -210,18 +210,18 @@ A class generated from `Request` comes up with some utility methods for calling 
 - Originally, the request's information (headers, params, url...) **is initially alighted with what you assigned in Editor**
   - Technically, we copied your inputs to the generated classes
   ```csharp
-   // This code illustrates a generated request
+   // This code only illustrates a generated request
    // The properties of this class initially copy your configures
    public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
    {
        Method = HttpMethod.Post;
-       Headers.Add("header-1", "header-value-1");
+       Headers.Add(Keys.Headers.Header1, "header-value-1");
        BodyFormat = DataFormat.Json;
        InitializedSerializedBody = @"i am a big cat";
    }
   ```
   - With **text or data** request body: we keep the serialized text in the editor 
-  - With **multipart form** request: **only text rows** are copied, your file rows are only used in the editor
+  - With **multipart form** request: **only text rows** are copied, your file rows are only used in the editor (but the file keys are still generated)
 - But you can modify them through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field in your classes
   ```csharp
   // Allias to the long name
@@ -231,8 +231,13 @@ A class generated from `Request` comes up with some utility methods for calling 
      private Request2 _myRequest;
      private void CreateRequest() {
         _myRequest = Request2.Create();
-        _myRequest.Headers.Add("run-time-header", "run-time-value");
-        _myRequest.Params.SetSingleParam("search-keyword", "player has just typed something");
+        // Instead of typing the keys yourself, you should access Keys class for getting predefined strings
+        // Request2.Keys.Headers.RunTimeHeader results in "run-time-header"
+        _myRequest.Headers.Add(Request2.Keys.Headers.RunTimeHeader, "run-time-value");
+        // Request2.Keys.Headers.UrlFormat.ProductId results in "product-id"
+        _myRequest.SetUrlValue(Request2.Keys.Headers.UrlFormat.ProductId, "my-product");
+        // Request2.Keys.Params.Search results in "search"
+        _myRequest.Params.SetSingleParam(Request2.Keys.Params.Search, "player has just typed something");
      }
   }
 
@@ -297,7 +302,7 @@ private TextureRequest _imageRequest;
 private async UniTask LoadUserData()
 {
     var userData = await _userRequest.RequestAsync<User>();
-    _imageRequest.Params.SetSingleParam("user-id", userData.UserId);
+    _imageRequest.Params.SetSingleParam(UserDataRequest.Keys.Params.UserId, userData.UserId);
     var userIcon = await _imageRequest.TextureRequestAsync();
 }
 ```
