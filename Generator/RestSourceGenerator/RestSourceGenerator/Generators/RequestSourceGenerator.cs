@@ -30,7 +30,7 @@ namespace RestSourceGenerator.Generators
 
             var authKeys = conf.Value.AuthKeys is not { Length: > 0 }
                 ? string.Empty
-                : conf.Value.AuthKeys.BuildSequentialValues((k, _) => @$"public const int {k.ToClassName()} = ""{k}""", separator: ";") + ";";
+                : conf.Value.AuthKeys.BuildSequentialValues((k, _) => @$"public const string {k.ToClassName()} = ""{k}""", separator: ";") + ";";
             var requestBuilder = new StringBuilder();
             requestBuilder.Append($@"
 using SummerRest.Runtime.RequestComponents;

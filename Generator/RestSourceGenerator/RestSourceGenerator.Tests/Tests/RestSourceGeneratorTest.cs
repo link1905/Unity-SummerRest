@@ -77,7 +77,7 @@ public class RestSourceGeneratorTest :
                        {
                            public static partial class AuthKeys
                            {
-                               public const int MyTokenToMasterService = "my-token-to-master-service";
+                               public const string MyTokenToMasterService = "my-token-to-master-service";
                            }
                        }
                        namespace SummerRest.Runtime.Requests
@@ -193,7 +193,7 @@ public class RestSourceGeneratorTest :
                        {
                            public static partial class AuthKeys
                            {
-                               public const int DummyJsonToken = "dummy-json-token";
+                               public const string DummyJsonToken = "dummy-json-token";
                            }
                        }
                        namespace SummerRest.Runtime.Requests
