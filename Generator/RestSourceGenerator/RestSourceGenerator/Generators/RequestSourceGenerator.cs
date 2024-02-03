@@ -28,9 +28,8 @@ namespace RestSourceGenerator.Generators
                 new DiagnosticDescriptor(nameof(RestSourceGenerator), "Start generating", 
                     "Start generating source", "Debug", DiagnosticSeverity.Info, true), Location.None));
 
-            var authKeys = conf.Value.AuthKeys is not { Length: > 0 }
-                ? string.Empty
-                : conf.Value.AuthKeys.BuildSequentialValues((k, _) => @$"public const string {k.ToClassName()} = ""{k}""", separator: ";") + ";";
+            var authKeys = conf.Value.BuildAuthClass();
+            
             var requestBuilder = new StringBuilder();
             requestBuilder.Append($@"
 using SummerRest.Runtime.RequestComponents;
@@ -45,14 +44,8 @@ namespace SummerRest.Runtime.Authenticate
 }}
 
 namespace SummerRest.Runtime.Requests {{");
-            if (conf.Value.Domains is not null)
-            {
-                foreach (var request in conf.Value.Domains)
-                    request.BuildClass(requestBuilder);
-            }
-
+            conf.Value.BuildDomainClasses(requestBuilder);
             requestBuilder.Append("}");
-            
             
             context.GenerateFormattedCode("SummerRestRequests", requestBuilder.ToString());
             context.ReportDiagnostic(Diagnostic.Create(

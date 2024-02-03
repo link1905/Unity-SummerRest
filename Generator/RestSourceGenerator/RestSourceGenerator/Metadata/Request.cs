@@ -8,135 +8,166 @@ namespace RestSourceGenerator.Metadata
 {
     public class Request
     {
-        [XmlAttribute]
-        public string TypeName { get; set; }
-        [XmlAttribute]
-        public string EndpointName { get; set; }
-        [XmlAttribute]
-        public string? Url { get; set; }
-        [XmlAttribute]
-        public string? UrlFormat { get; set; }
-        [XmlAttribute]
-        public string? UrlWithParams { get; set; }
-        [XmlArray]
-        public KeyValue[]? UrlFormatContainers { get; set; }
-        [XmlAttribute]
-        public HttpMethod Method { get; set; }
+        [XmlAttribute] public string TypeName { get; set; }
+        [XmlAttribute] public string EndpointName { get; set; }
+
+        public string EndpointClassName => EndpointName.ToClassName();
+        [XmlAttribute] public string? Url { get; set; }
+        [XmlAttribute] public string? UrlFormat { get; set; }
+        [XmlAttribute] public string? UrlWithParams { get; set; }
+        [XmlArray] public KeyValue[]? UrlFormatContainers { get; set; }
+        [XmlAttribute] public HttpMethod Method { get; set; }
         [XmlAttribute] public int TimeoutSeconds { get; set; } = -1;
         [XmlAttribute] public int RedirectsLimit { get; set; } = -1;
-        [XmlAttribute]
-        public DataFormat DataFormat { get; set; }
-        [XmlAttribute]
-        public string? SerializedBody { get; set; }
-        [XmlAttribute]
-        public bool IsMultipart { get; set; }
-        [XmlElement]
-        public ContentType? ContentType { get; set; }
-        [XmlArray]
-        public KeyValue[]? Headers { get; set; }
-        [XmlArray]
-        public KeyValue[]? RequestParams { get; set; }
-        [XmlElement]
-        public AuthContainer? AuthContainer { get; set; }
+        [XmlAttribute] public DataFormat DataFormat { get; set; }
+        [XmlAttribute] public string? SerializedBody { get; set; }
+        [XmlAttribute] public bool IsMultipart { get; set; }
+        [XmlElement] public ContentType? ContentType { get; set; }
+        [XmlArray] public KeyValue[]? Headers { get; set; }
+        [XmlArray] public KeyValue[]? RequestParams { get; set; }
+        [XmlElement] public AuthContainer? AuthContainer { get; set; }
+
+        [XmlArray] public KeyValue[]? SerializedForm { get; set; }
 
         [XmlArray]
-        public KeyValue[]? SerializedForm { get; set; }
-        [XmlArray]
-        [XmlArrayItem("Service")]
+        [XmlArrayItem(nameof(ProjectReflection.SummerRestConfiguration.Service))]
         public Request[]? Services { get; set; }
+
         [XmlArray]
-        [XmlArrayItem("Request")]
+        [XmlArrayItem(nameof(ProjectReflection.SummerRestConfiguration.Request))]
         public Request[]? Requests { get; set; }
-        private (string format, string keys, string values) BuildUrlFormatKeys()
+
+        public (string format, string keys, string values, string valuesArr) BuildUrlFormat()
         {
             if (UrlFormat is null || UrlFormatContainers is not { Length: > 0 })
-                return ("null", string.Empty, "System.Array.Empty<string>()");
-            var keys = UrlFormatContainers.Select(e => e.Key).BuildSequentialValues(
-                (key, idx) => $"public const int {key.ToClassName()} = {idx}", ";") + ";";
-            var valueElements = UrlFormatContainers.Select(e => e.Value).BuildSequentialValues((v, _) => $@"""{v}""");
-            var values = $"new string[] {{{valueElements}}}";
-            return ($@"""{UrlFormat}""", keys, values);
+                return (RoslynDefaultValues.Null, string.Empty, string.Empty,
+                    RoslynDefaultValues.EmptyArray(RoslynDefaultValues.String));
+            var keys = UrlFormatContainers
+                .Select((e, i) => (e.Key, i.ToString()))
+                .BuildSequentialConstants(RoslynDefaultValues.Int);
+            var values = UrlFormatContainers
+                .Select(e => e.DeconstructEmbedded())
+                .BuildSequentialConstants(RoslynDefaultValues.String);
+            var valuesArr = UrlFormatContainers
+                .Select(e => $"{ProjectReflection.SummerRestConfiguration.Request.Values}.UrlFormat.{e.Key.ToClassName()}")
+                .BuildArray(RoslynDefaultValues.String);
+            return (UrlFormat.ToEmbeddedString(), keys, values, valuesArr);
         }
 
-        private (string, string) BuildKeysAndOriginalValues(KeyValue[]? keyValues, string containerName, Func<KeyValue, string> buildAdder)
+        public static (string keys, string values, string refValues) BuildKeysValuesRefValues(KeyValue[]? keyValues,
+            string containerName, Func<KeyValue, string> buildAdder)
         {
             if (keyValues is not { Length: > 0 })
-                return (string.Empty, string.Empty);
-            // return RequestParams.BuildSequentialValues((e, _) => $@"Params.AddParamToList(""{e.Key}"", ""{e.Value}"")", ";") + ";";
-            var keys =  keyValues.BuildSequentialValues((key, _) => $@"public const string {key.Key.ToClassName()} = ""{key.Key}""", ";") + ";";
-            var values = keyValues.BuildSequentialValues((e, _) =>
+                return (string.Empty, string.Empty, string.Empty);
+            var keys = keyValues
+                .Select(e => (e.Key, e.Key.ToEmbeddedString()))
+                .BuildSequentialConstants(RoslynDefaultValues.String);
+            var values = keyValues
+                .Where(e => e.Value is not null)
+                .Select(e => (e.Key, e.Value.ToEmbeddedString()))
+                .BuildSequentialConstants(RoslynDefaultValues.String);
+            var refValues = keyValues
+                .Where(e => e.Value is not null)
+                .BuildSequentialValues((e, _) =>
             {
-                var keyProp = $"Keys.{containerName}.{e.Key.ToClassName()}";
+                var keyProp =
+                    $"{ProjectReflection.SummerRestConfiguration.Request.Keys}.{containerName}.{e.Key.ToClassName()}";
+                var valueProp =
+                    $"{ProjectReflection.SummerRestConfiguration.Request.Values}.{containerName}.{e.Key.ToClassName()}";
                 return buildAdder(new KeyValue
                 {
                     Key = keyProp,
-                    Value = e.Value
-                }); // 
-            }, ";") + ";";
-            return (keys, values);
+                    Value = valueProp
+                });
+            }, RoslynDefaultValues.SemiColons, RoslynDefaultValues.SemiColons);
+            return (keys, values, refValues);
         }
-        
-        private (string keys, string headers) BuildHeaders()
+
+        private (string keys, string values, string headers) BuildHeaders()
         {
-            return BuildKeysAndOriginalValues(Headers, "Headers", kv => $@"Headers.TryAdd({kv.Key}, ""{kv.Value}"")");
+            return BuildKeysValuesRefValues(Headers, ProjectReflection.SummerRestConfiguration.Request.Headers,
+                kv =>
+                    $@"{ProjectReflection.SummerRestConfiguration.Request.Headers}.TryAdd({kv.Key}, {kv.Value})");
         }
-        private (string keys, string @params) BuildParams()
+
+        private (string keys, string values, string @params) BuildParams()
         {
-            return BuildKeysAndOriginalValues(RequestParams, "Params", kv => $@"Params.AddParamToList({kv.Key}, ""{kv.Value}"")");
+            return BuildKeysValuesRefValues(RequestParams,
+                ProjectReflection.SummerRestConfiguration.Request.Params,
+                kv =>
+                    $@"{ProjectReflection.SummerRestConfiguration.Request.Params}.AddParamToList({kv.Key}, {kv.Value})");
         }
+
         private string BuildBaseClass()
         {
             if (!IsMultipart)
-                return $"SummerRest.Runtime.Requests.BaseDataRequest<{EndpointName.ToClassName()}>";
-            return $"SummerRest.Runtime.Requests.BaseMultipartRequest<{EndpointName.ToClassName()}>";
-        }
-        private (string authClass, string authKey) BuildAuth()
-        {
-            if (!AuthContainer.HasValue)
-                return ("null", string.Empty);
-            return ($@"
-IRequestModifier<AuthRequestModifier<{AuthContainer.Value.AppenderType}, {AuthContainer.Value.AuthDataType}>>.GetSingleton()", 
-                $@"
-AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.{AuthContainer.Value.AuthKey.ToClassName()};
-");
+                return $"{ProjectReflection.SummerRest.Runtime.Requests.BaseDataRequest}<{EndpointClassName}>";
+            return $"{ProjectReflection.SummerRest.Runtime.Requests.BaseMultipartRequest}<{EndpointClassName}>";
         }
 
-        private (string keys, string body) BuildBody()
+        public static (string authProp, string authKey) BuildAuth(AuthContainer? authContainer)
         {
-            if (!IsMultipart)
-            {
-                if (string.IsNullOrEmpty(SerializedBody))
-                    return (string.Empty, $"BodyFormat = DataFormat.{DataFormat};");
-                return (string.Empty, $@"
-BodyFormat = DataFormat.{DataFormat};
-InitializedSerializedBody = @""{SerializedBody.Replace("\"", "\"\"")}"";");
-            }
-            if (SerializedForm is not {Length: >0})
-                return (string.Empty, string.Empty);
-            return BuildKeysAndOriginalValues(SerializedForm, "MultipartFormSections", kv =>
-            {
-                if (kv.Value is null)
-                    return null;
-                return $@"MultipartFormSections.Add(new MultipartFormDataSection({kv.Key}, ""{kv.Value}""))";
-            });
+            if (!authContainer.HasValue)
+                return (RoslynDefaultValues.Null, string.Empty);
+            return (
+                $@"IRequestModifier<AuthRequestModifier<{authContainer.Value.AppenderType}, {authContainer.Value.AuthDataType}>>.GetSingleton()",
+                $@"AuthKey = {ProjectReflection.SummerRest.Runtime.Authenticate.AuthKeys}.{authContainer.Value.AuthKey.ToClassName()};");
         }
+
+        public static (string serializedValue, string body) BuildDataBody(string serializedBody, DataFormat dataFormat)
+        {
+            if (serializedBody is null)
+                return (RoslynDefaultValues.Null, $"BodyFormat = DataFormat.{dataFormat};");
+            var embeddedBody = $@"@{serializedBody.Replace("\"", "\"\"").ToEmbeddedString()}";
+            return (embeddedBody, 
+                $@"BodyFormat = DataFormat.{dataFormat};
+InitializedSerializedBody = {ProjectReflection.SummerRestConfiguration.Request.Values}.SerializedBody;");
+        }
+
+        public static (string keys, string values, string body) BuildMultipartBody(KeyValue[]? serializedForm)
+        {
+            if (serializedForm is not { Length: > 0 })
+                return (string.Empty, string.Empty, string.Empty);
+            return BuildKeysValuesRefValues(serializedForm,
+                ProjectReflection.SummerRestConfiguration.Request.MultipartFormSections,
+                kv => $@"{ProjectReflection.SummerRestConfiguration.Request.MultipartFormSections}.Add(new MultipartFormDataSection({kv.Key}, {kv.Value}))");
+        }
+
+        public static (string constValue, string contentType) BuildContentType(ContentType? contentType)
+        {
+            if (!contentType.HasValue)
+                return (RoslynDefaultValues.Null, string.Empty);
+            var contentTypeCreator = contentType.Value.ToInstance();
+            return (contentTypeCreator, $"{nameof(ContentType)} = {ProjectReflection.SummerRestConfiguration.Request.Values}.ContentType;");
+        }
+
+        public static string BuildIntField(int value, string fieldName)
+        {
+            return value >= 0 ? $"{fieldName} = {value};" : string.Empty;
+        }
+
         public void BuildRequest(StringBuilder builder)
         {
             var className = EndpointName.ToClassName();
             var method = $"HttpMethod.{Method}";
-            var timeout = TimeoutSeconds >= 0 ? $"{nameof(TimeoutSeconds)} = {TimeoutSeconds};" : string.Empty;
-            var redirects = RedirectsLimit >= 0 ? $"{nameof(RedirectsLimit)} = {RedirectsLimit};" : string.Empty;
-            var contentType = ContentType.HasValue ? 
-                $@"{nameof(ContentType)} = new ContentType(""{ContentType.Value.MediaType}"", ""{ContentType.Value.Charset}"", ""{ContentType.Value.Boundary}"");" : string.Empty;
-            var (urlFormat, urlFormatKeys, urlFormatValues) = BuildUrlFormatKeys();
-            var (headerKeys, headers) = BuildHeaders();
-            var (paramsKeys, @params) = BuildParams();
-            var (authProp, authKey) = BuildAuth();
-            var (multipartFormKeys, body) = BuildBody();
+            var timeout = BuildIntField(TimeoutSeconds, nameof(TimeoutSeconds));
+            var redirects = BuildIntField(RedirectsLimit, nameof(RedirectsLimit));
+            var (contentTypeConstValue, contentType) = BuildContentType(ContentType);
+            var (urlFormat, urlFormatKeys, urlFormatValues, urlFormatValuesArr) 
+                = BuildUrlFormat();
+            var (headerKeys, headerValues, headers) = BuildHeaders();
+            var (paramsKeys, paramsValues, @params) = BuildParams();
+            var (authProp, authKey) = BuildAuth(AuthContainer);
+
+            var (multipartFormKeys, multipartFormValues, multipartBody) = BuildMultipartBody(SerializedForm);
+            var (serializedValue, dataBody) = BuildDataBody(SerializedBody, DataFormat);
+            var body = IsMultipart ? multipartBody : dataBody;
+            // Instead of directly embed the keys and values into the class fields
+            // We create regarding static fields to decrease string allocations
             builder.Append($@"
 public sealed class {className} : {BuildBaseClass()}
 {{
-    public static class Keys 
+    public static class {ProjectReflection.SummerRestConfiguration.Request.Keys} 
     {{ 
         public static class UrlFormat {{
             {urlFormatKeys}
@@ -151,7 +182,29 @@ public sealed class {className} : {BuildBaseClass()}
             {multipartFormKeys}
         }}
     }}
-    public {className}() : base(""{Url}"", ""{UrlWithParams}"", {urlFormat}, {urlFormatValues}, {authProp}) 
+    public static class {ProjectReflection.SummerRestConfiguration.Request.Values} {{
+        public const string Url = {Url.ToEmbeddedString()};
+        public const string UrlWithParams = {UrlWithParams.ToEmbeddedString()};
+        public const string UrlFormat = {urlFormat};
+        public const string SerializedBody = {serializedValue};
+        public static readonly ContentType? ContentType = {contentTypeConstValue};
+        public static class UrlFormat {{
+            {urlFormatValues}
+        }}
+        public static class Headers {{
+            {headerValues}
+        }}
+        public static class Params {{
+            {paramsValues}
+        }}
+        public static class MultipartFormSections {{
+            {multipartFormValues}
+        }}
+    }}
+    public {className}() : base(
+            {ProjectReflection.SummerRestConfiguration.Request.Values}.Url, 
+            {ProjectReflection.SummerRestConfiguration.Request.Values}.UrlWithParams, 
+            {ProjectReflection.SummerRestConfiguration.Request.Values}.UrlFormat, {urlFormatValuesArr}, {authProp}) 
     {{
         Method = {method};
         {timeout}
@@ -166,9 +219,10 @@ public sealed class {className} : {BuildBaseClass()}
 }}
 ");
         }
+
         public void BuildClass(StringBuilder builder)
         {
-            if (TypeName == "Request")
+            if (TypeName == nameof(ProjectReflection.SummerRestConfiguration.Request))
             {
                 BuildRequest(builder);
             }
@@ -180,11 +234,13 @@ public sealed class {className} : {BuildBaseClass()}
                     foreach (var request in Requests)
                         request.BuildClass(builder);
                 }
+
                 if (Services is not null)
                 {
                     foreach (var service in Services)
                         service.BuildClass(builder);
-                }   
+                }
+
                 builder.Append("}");
             }
         }

@@ -31,20 +31,42 @@ namespace RestSourceGenerator.Utilities
             }
             return null;
         }
-        public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, int, string> builder, string separator = ", ")
+        
+        
+        public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, int, string> builder, 
+            string separator = RoslynDefaultValues.Commas, string? end = null)
         {
             var values = @params.Select(builder).Where(value => value is not null).ToArray();
-            return BuildSequentialValues(values, separator);
+            if (string.IsNullOrEmpty(end))
+                return BuildSequentialValues(values, separator);
+            return BuildSequentialValues(values, separator) + end;
         }
-        public static string BuildSequentialValues(this IReadOnlyList<string> values, string separator = ", ")
+
+        public static string BuildSequentialValues(this IReadOnlyList<string> values, string separator = RoslynDefaultValues.Commas)
         {
             var length = values.Count;
             return length switch
             {
-                0 => "",
+                0 => string.Empty,
                 1 => values.First(),
                 _ => string.Join(separator, values)
             };
+        }
+        
+        public static string BuildSequentialConstants(this IEnumerable<(string name, string value)> values, string type)
+        {
+            return values.BuildSequentialValues((tuple, _) => BuildConst(type, tuple.name, tuple.value),
+                separator: RoslynDefaultValues.SemiColons,
+                end: RoslynDefaultValues.SemiColons);
+        }
+        public static string BuildConst(string type, string name, string value)
+        {
+            return $"public const {type} {name.ToClassName()} = {value}";
+        }
+        public static string BuildArray(this IEnumerable<string> values, string type)
+        {
+            var elements = values.BuildSequentialValues((v, _) => v);
+            return $"new {type}[] {{{elements}}}";
         }
     }
 }

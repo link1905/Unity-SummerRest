@@ -1,8 +1,11 @@
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Text;
+using RestSourceGenerator.Metadata;
 using RestSourceGenerator.Utilities;
 using Xunit;
 
@@ -13,29 +16,412 @@ public class RestSourceGeneratorTest :
 {
     protected override string DefaultTestProjectName => "SummerRest";
 
-    private Task RunTest(string jsonContent, string expected)
-    {
-      var test = new RestSourceGeneratorTest
-      {
-        TestState =
-        {
-          AdditionalFiles = { ("summer-rest-generated.RestSourceGenerator.additionalfile", jsonContent) },
-          ExpectedDiagnostics =
-          {
-            new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Start generating", 
-              "Start generating source", "Debug", DiagnosticSeverity.Info, true)),
-            new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Finish generating", 
-              "Finish generating source", "Debug", DiagnosticSeverity.Info, true))
-          },
-          GeneratedSources =
-            { (typeof(Generators.RestSourceGenerator), "SummerRestRequests.g.cs", expected.FormatCode()) }
-        },
-        CompilerDiagnostics = CompilerDiagnostics.None
-      };
-      return test.RunAsync();
-    }
     [Fact]
-    public async Task Test_Generate_Request_From_Xml()
+    public void Test_Generate_Domain_Class()
+    {
+        var request = new Request
+        {
+            TypeName = "Domain",
+            EndpointName = "My domain"
+        };
+        var builder = new StringBuilder();
+        request.BuildClass(builder);
+        var result =
+            """
+public static class MyDomain { } 
+""".FormatCode();
+        Assert.Equal(result, builder.FormatCode());
+    }
+
+    [Fact]
+    public void Test_Generate_Domain_And_Service()
+    {
+        var request = new Request
+        {
+            TypeName = "Domain",
+            EndpointName = "My domain",
+            Services = new[]
+            {
+                new Request
+                {
+                    TypeName = "Service",
+                    EndpointName = "1 Service"
+                }
+            }
+        };
+        var builder = new StringBuilder();
+        request.BuildClass(builder);
+        var result =
+            """
+public static class MyDomain {
+    public static class _1Service { } 
+}
+""".FormatCode();
+        Assert.Equal(result, builder.FormatCode());
+    }
+
+    [Fact]
+    public void Test_Generate_Int_Field_When_Value_Greater_Than_Zero()
+    {
+        var timeoutResult =
+            """
+TimeoutSeconds = 1;
+""".FormatCode();
+        Assert.Equal(timeoutResult, Request.BuildIntField(1, "TimeoutSeconds"));
+    }
+
+    [Fact]
+    public void Test_Generate_Empty_Field_When_Value_Less_Than_Zero()
+    {
+        Assert.Equal(string.Empty, Request.BuildIntField(-1, "TimeoutSeconds"));
+    }
+
+    [Fact]
+    public void Test_Build_Null_Content_Type()
+    {
+        var (constValue, value) = Request.BuildContentType(null);
+        Assert.Equal("null", constValue);
+        Assert.Equal(string.Empty, value);
+    }
+
+    [Fact]
+    public void Test_Build_Content_Type()
+    {
+        var (constValue, value) = Request.BuildContentType(new ContentType
+        {
+            Charset = "ISO-8859-1",
+            MediaType = "application/JSON"
+        });
+        Assert.Equal(
+            @"new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Json, ""ISO-8859-1"", """")",
+            constValue);
+        Assert.Equal("ContentType = Values.ContentType;", value);
+    }
+
+    [Fact]
+    public void Test_Build_Null_Url_Format()
+    {
+        var request = new Request
+        {
+            UrlFormat = null,
+            UrlFormatContainers = null
+        };
+        var (format, keys, values, valuesArr) = request.BuildUrlFormat();
+        Assert.Equal("null", format);
+        Assert.Equal(string.Empty, keys);
+        Assert.Equal(string.Empty, values);
+        Assert.Equal("System.Array.Empty<string>()", valuesArr);
+    }
+
+    [Fact]
+    public void Test_Build_Url_Format_With_Array_Of_Values()
+    {
+        var request = new Request
+        {
+            UrlFormat = "{0}/{1}",
+            UrlFormatContainers = new[]
+            {
+                new KeyValue("key-1", "value-1"),
+                new KeyValue("key-2", "value-2")
+            }
+        };
+        var (format, keys, values, valuesArr) = request.BuildUrlFormat();
+        Assert.Equal(@"""{0}/{1}""", format);
+        const string expectedKeys = """
+public const int Key1 = 0;public const int Key2 = 1;
+""";
+        Assert.Equal(expectedKeys, keys);
+        const string expectedValues = """
+public const string Key1 = "value-1";public const string Key2 = "value-2";
+""";
+        Assert.Equal(expectedValues, values);
+        const string expectedRefValues = """
+new string[] {Values.UrlFormat.Key1,Values.UrlFormat.Key2}
+""";
+        Assert.Equal(expectedRefValues, valuesArr);
+    }
+
+    [Fact]
+    public void Test_Build_Null_Key_Values_RefValues()
+    {
+        var (keys, values, refValues) = Request.BuildKeysValuesRefValues(null, null, null);
+        Assert.Equal(string.Empty, keys);
+        Assert.Equal(string.Empty, values);
+        Assert.Equal(string.Empty, refValues);
+    }
+
+    [Fact]
+    public void Test_Build_Key_Values_RefValues()
+    {
+        var headers = new KeyValue[]
+        {
+            new("header-1", "header-1-value"),
+            new("header-2", "header-2-value"),
+            new("header-3", null),
+        };
+        var (keys, values, refValues) = Request.BuildKeysValuesRefValues(headers, "Headers",
+            kv => $@"Headers.TryAdd({kv.Key}, {kv.Value})");
+        const string expectedKeys = """
+public const string Header1 = "header-1";public const string Header2 = "header-2";public const string Header3 = "header-3";
+""";
+        Assert.Equal(expectedKeys, keys);
+        const string expectedValues = """
+public const string Header1 = "header-1-value";public const string Header2 = "header-2-value";
+""";
+        Assert.Equal(expectedValues, values);
+        const string expectedRefValues = """
+Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);Headers.TryAdd(Keys.Headers.Header2, Values.Headers.Header2);
+""";
+        Assert.Equal(expectedRefValues, refValues);
+    }
+
+    [Fact]
+    public void Test_Build_Null_Auth()
+    {
+        var (authProp, authKey) = Request.BuildAuth(null);
+        Assert.Equal("null", authProp);
+        Assert.Equal(string.Empty, authKey);
+    }
+
+    [Fact]
+    public void Test_Build_Auth()
+    {
+        var (authProp, authKey) = Request.BuildAuth(new AuthContainer
+        {
+            AuthKey = "my-json-token",
+            AppenderType = "BearerTokenAuthAppender",
+            AuthDataType = "string"
+        });
+        const string authExpected = """
+AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyJsonToken;
+""";
+        Assert.Equal(authExpected, authKey);
+        const string authPropExpected = """
+IRequestModifier<AuthRequestModifier<BearerTokenAuthAppender, string>>.GetSingleton()
+""";
+        Assert.Equal(authPropExpected, authProp);
+    }
+
+    [Fact]
+    public void Test_Build_Null_Data_Body()
+    {
+        var (serializedVal, body) = Request.BuildDataBody(null, DataFormat.Json);
+        Assert.Equal("null", serializedVal);
+        const string expectedBody = "BodyFormat = DataFormat.Json;";
+        Assert.Equal(expectedBody, body);
+    }
+
+    [Fact]
+    public void Test_Build_Data_Body()
+    {
+        var (serializedVal, body) = Request.BuildDataBody(@"I am a ""cat"" request", DataFormat.Json);
+        Assert.Equal(@"@""I am a """"cat"""" request""", serializedVal);
+        const string expectedBody =
+            """
+BodyFormat = DataFormat.Json;
+InitializedSerializedBody = Values.SerializedBody;
+""";
+        Assert.Equal(expectedBody, body);
+    }
+
+    [Fact]
+    public void Test_Build_Auth_Keys()
+    {
+        var conf = new Configuration
+        {
+            AuthKeys = new[]
+            {
+                "access Key",
+                "1 json_key"
+            }
+        };
+        var authKeyClass = conf.BuildAuthClass();
+        const string expected =
+            """
+public const string AccessKey = "access Key";public const string _1Json_key = "1 json_key";
+""";
+        Assert.Equal(expected, authKeyClass);
+    }
+
+    [Fact]
+    public void Test_Build_Data_Request()
+    {
+        var request = new Request
+        {
+            TypeName = "Request",
+            EndpointName = "request 1",
+            UrlFormat = "my-url.com/{0}/{1}",
+            UrlFormatContainers = new[]
+            {
+                new KeyValue("product-id", "1"),
+                new KeyValue("image-order", "2"),
+            },
+            Url = "my-url.com/1/2",
+            UrlWithParams = "my-url.com/1/2",
+            Headers = new[]
+            {
+                new KeyValue("Header-1", "Value-1"),
+                new KeyValue("Header-2", "Value-2"),
+            },
+            IsMultipart = false,
+            TimeoutSeconds = 3,
+            DataFormat = DataFormat.Json,
+            SerializedBody = "my data body",
+            ContentType = new ContentType("utf-8", "application/json", string.Empty)
+        };
+        const string expected =
+            """
+public sealed class Request1 : SummerRest.Runtime.Requests.BaseDataRequest<Request1>
+{
+   public static class Keys
+   {
+       public static class UrlFormat
+       {
+            public const int ProductId = 0;
+            public const int ImageOrder = 1;
+       }
+       public static class Headers
+       {
+           public const string Header1 = "Header-1";
+           public const string Header2 = "Header-2";
+       }
+       public static class Params
+       {
+       }
+       public static class MultipartFormSections
+       {
+       }
+   }
+    public static class Values {
+        public const string Url = "my-url.com/1/2";
+        public const string UrlWithParams = "my-url.com/1/2";
+        public const string UrlFormat = "my-url.com/{0}/{1}";
+        public const string SerializedBody = @"my data body";
+        public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Json, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "");
+        public static class UrlFormat {
+            public const string ProductId = "1";
+            public const string ImageOrder = "2";
+        }
+        public static class Headers {
+           public const string Header1 = "Value-1";
+           public const string Header2 = "Value-2";
+        }
+        public static class Params {
+        }
+        public static class MultipartFormSections {
+        }
+    }
+   public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, new string[]{Values.UrlFormat.ProductId, Values.UrlFormat.ImageOrder}, null)
+   {
+       Method = HttpMethod.Get;
+       TimeoutSeconds = 3;
+       ContentType = Values.ContentType;
+       Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);
+       Headers.TryAdd(Keys.Headers.Header2, Values.Headers.Header2);
+       BodyFormat = DataFormat.Json;
+       InitializedSerializedBody = Values.SerializedBody;
+       Init();
+   }
+}
+""";
+        var builder = new StringBuilder();
+        request.BuildClass(builder);
+        Assert.Equal(expected.FormatCode(), builder.FormatCode());
+    }
+
+        [Fact]
+    public void Test_Build_Multipart_Request()
+    {
+        var request = new Request
+        {
+            TypeName = "Request",
+            EndpointName = "Multipart request",
+            Url = "my-url.com",
+            RequestParams = new []
+            {
+              new KeyValue("param1", "value-1"),
+              new KeyValue("param_2", "value-2"),
+            },
+            UrlWithParams = "my-url.com?param1=value1&param_2=value2",
+            AuthContainer = new AuthContainer
+            {
+                AuthKey = "my-key",
+                AppenderType = "BearerTokenAppender",
+                AuthDataType = "string"
+            },
+            ContentType = new ContentType("utf-8", "multipart/form-data", "abcd1234"),
+            IsMultipart = true,
+            SerializedForm = new []
+            {
+                new KeyValue("form-key-1", "form-value-1"),
+                new KeyValue("form-key-2", "form-value-2"),
+                new KeyValue("form-file", null),
+            }
+        };
+        const string expected =
+            """
+public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipartRequest<MultipartRequest>
+{
+   public static class Keys
+   {
+       public static class UrlFormat
+       {
+       }
+       public static class Headers
+       {
+       }
+       public static class Params
+       {
+           public const string Param1 = "param1";
+           public const string Param_2 = "param_2";
+       }
+       public static class MultipartFormSections
+       {
+           public const string FormKey1 = "form-key-1";
+           public const string FormKey2 = "form-key-2";
+           public const string FormFile = "form-file";
+       }
+   }
+    public static class Values {
+        public const string Url = "my-url.com";
+        public const string UrlWithParams = "my-url.com?param1=value1&param_2=value2";
+        public const string UrlFormat = null;
+        public const string SerializedBody = null;
+        public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Multipart.FormData, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "abcd1234");
+        public static class UrlFormat {
+        }
+        public static class Headers {
+        }
+        public static class Params {
+           public const string Param1 = "value-1";
+           public const string Param_2 = "value-2";
+        }
+        public static class MultipartFormSections {
+           public const string FormKey1 = "form-value-1";
+           public const string FormKey2 = "form-value-2";
+        }
+    }
+   public MultipartRequest(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, System.Array.Empty<string>(), IRequestModifier<AuthRequestModifier<BearerTokenAppender, string>>.GetSingleton())
+   {
+       Method = HttpMethod.Get;
+       ContentType = Values.ContentType;
+       Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);
+       Params.AddParamToList(Keys.Params.Param_2, Values.Params.Param_2);
+       AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyKey;
+       MultipartFormSections.Add(new MultipartFormDataSection(Keys.MultipartFormSections.FormKey1, Values.MultipartFormSections.FormKey1));
+       MultipartFormSections.Add(new MultipartFormDataSection(Keys.MultipartFormSections.FormKey2, Values.MultipartFormSections.FormKey2));
+       Init();
+   }
+}
+""";
+        var builder = new StringBuilder();
+        request.BuildClass(builder);
+        Assert.Equal(expected.FormatCode(), builder.FormatCode());
+    }
+
+    
+    [Fact]
+    public async Task Test_Generate_Data_Request_From_Xml()
     {
         var json = """
                    <SummerRestConfiguration Assembly="SummerRest">
@@ -107,17 +493,37 @@ public class RestSourceGeneratorTest :
                                            {
                                            }
                                        }
-                                       public Request1(): base("http://domain1.com/service1/get/1", "http://domain1.com/service1/get/1?param1=param1-value", "http://domain1.com/service1/get/{0}", new string[]{"format-value-1"}, IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
+                                        public static class Values {
+                                            public const string Url = "http://domain1.com/service1/get/1";
+                                            public const string UrlWithParams = "http://domain1.com/service1/get/1?param1=param1-value";
+                                            public const string UrlFormat = "http://domain1.com/service1/get/{0}";
+                                            public const string SerializedBody = @"I need to call the ""cat"" request";
+                                            public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Text.Plain, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "");
+                                            public static class UrlFormat {
+                                                public const string FormatKey1 = "format-value-1";
+                                            }
+                                            public static class Headers {
+                                                public const string Header1 = "value1";
+                                                public const string _1 = "value2";
+                                            }
+                                            public static class Params {
+                                                public const string Param1 = "param1-value";
+                                            }
+                                            public static class MultipartFormSections {
+                                                
+                                            }
+                                        }
+                                       public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, new string[]{Values.UrlFormat.FormatKey1}, IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
                                        {
                                            Method = HttpMethod.Get;
                                            TimeoutSeconds = 0;
-                                           ContentType = new ContentType("text/plain", "UTF-8", "");
-                                           Headers.TryAdd(Keys.Headers.Header1, "value1");
-                                           Headers.TryAdd(Keys.Headers._1, "value2");
-                                           Params.AddParamToList(Keys.Params.Param1, "param1-value");
+                                           ContentType = Values.ContentType;
+                                           Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);
+                                           Headers.TryAdd(Keys.Headers._1, Values.Headers._1);
+                                           Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);
                                            AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyTokenToMasterService;
                                            BodyFormat = DataFormat.Json;
-                                           InitializedSerializedBody = @"I need to call the ""cat"" request";
+                                           InitializedSerializedBody = Values.SerializedBody;
                                            Init();
                                        }
                                    }
@@ -126,289 +532,23 @@ public class RestSourceGeneratorTest :
                        }
                        """;
 
-        await RunTest(json, expected);
+        var test = new RestSourceGeneratorTest
+        {
+            TestState =
+            {
+                AdditionalFiles = { ("summer-rest-generated.RestSourceGenerator.additionalfile", json) },
+                ExpectedDiagnostics =
+                {
+                    new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Start generating",
+                        "Start generating source", "Debug", DiagnosticSeverity.Info, true)),
+                    new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Finish generating",
+                        "Finish generating source", "Debug", DiagnosticSeverity.Info, true))
+                },
+                GeneratedSources =
+                    { (typeof(Generators.RestSourceGenerator), "SummerRestRequests.g.cs", expected.FormatCode()) }
+            },
+            CompilerDiagnostics = CompilerDiagnostics.None
+        };
+        await test.RunAsync();
     }
-    
-    [Fact]
-    public async Task Test_Generate_Complex_Api_Structure_From_Xml()
-    {
-        var json = """
-                   <SummerRestConfiguration Assembly="SummerRest">
-                       <AuthKeys>
-                           <string>dummy-json-token</string>
-                       </AuthKeys>
-                       <Domains>
-                           <Domain TypeName="Domain" EndpointName="DummyJson">
-                               <Services>
-                                   <Service TypeName="Service" EndpointName="Products">
-                                       <Requests>
-                                           <Request TypeName="Request" EndpointName="GetProduct" Url="https://dummyjson.com/products/1" UrlFormat="https://dummyjson.com/products/{0}" UrlWithParams="https://dummyjson.com/products/1" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
-                                               <UrlFormatContainers>
-                                                   <KeyValue Key="productId" Value="1" />
-                                               </UrlFormatContainers>
-                                           </Request>
-                                           <Request TypeName="Request" EndpointName="SearchProduct" Url="https://dummyjson.com/products/search" UrlFormat="" UrlWithParams="https://dummyjson.com/products/search?q=phone" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
-                                               <RequestParams>
-                                                   <KeyValue Key="q" Value="phone" />
-                                               </RequestParams>
-                                           </Request>
-                                           <Request TypeName="Request" EndpointName="AddProductRawText" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&#xD;&#xA;    &quot;id&quot;: 101,&#xD;&#xA;    &quot;title&quot;: &quot;my product&quot;,&#xD;&#xA;    &quot;description&quot;: &quot;my description&quot;&#xD;&#xA;}" IsMultipart="false">
-                                               <ContentType Charset="UTF-8" MediaType="application/json" />
-                                           </Request>
-                                           <Request TypeName="Request" EndpointName="AddProductData" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&quot;id&quot;:103,&quot;title&quot;:&quot;my product&quot;,&quot;description&quot;:&quot;it is a wonderful product&quot;}" IsMultipart="false">
-                                               <ContentType Charset="UTF-8" MediaType="application/json" />
-                                           </Request>
-                                       </Requests>
-                                   </Service>
-                                   <Service TypeName="Service" EndpointName="Auth">
-                                       <Requests>
-                                           <Request TypeName="Request" EndpointName="Login" Url="https://dummyjson.com/auth/login" UrlFormat="" UrlWithParams="https://dummyjson.com/auth/login" Method="Post" DataFormat="Json" SerializedBody="{    &#xD;&#xA;    &quot;username&quot;: &quot;atuny0&quot;,&#xD;&#xA;    &quot;password&quot;: &quot;9uQFF1Lh&quot;&#xD;&#xA;}" IsMultipart="false">
-                                               <ContentType Charset="UTF-8" MediaType="application/json" />
-                                           </Request>
-                                           <Request TypeName="Request" EndpointName="GetUser" Url="https://dummyjson.com/auth/me" UrlFormat="" UrlWithParams="https://dummyjson.com/auth/me" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
-                                               <AuthContainer AuthKey="dummy-json-token" AppenderType="SummerRestSample.DummyJsonApiAuthAppender" AuthDataType="System.String" />
-                                           </Request>
-                                       </Requests>
-                                   </Service>
-                               </Services>
-                               <Requests>
-                                   <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                                       <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="JUmGAnJMYjAWqepbCElDlxBInI8xZZuKFzTG7DNi" />
-                                       <SerializedForm>
-                                           <KeyValue Key="text" Value="my text value" />
-                                           <KeyValue Key="file" />
-                                       </SerializedForm>
-                                   </Request>
-                               </Requests>
-                           </Domain>
-                       </Domains>
-                   </SummerRestConfiguration>
-                   """;
-
-        var expected = """
-                       using SummerRest.Runtime.RequestComponents;
-                       using SummerRest.Runtime.Parsers;
-                       using UnityEngine.Networking;
-                       namespace SummerRest.Runtime.Authenticate
-                       {
-                           public static class AuthKeys
-                           {
-                               public const string DummyJsonToken = "dummy-json-token";
-                           }
-                       }
-                       namespace SummerRest.Runtime.Requests
-                       {
-                           public static class DummyJson
-                           {
-                               public sealed class Multipart : SummerRest.Runtime.Requests.BaseMultipartRequest<Multipart>
-                               {
-                                   public static class Keys
-                                   {
-                                       public static class UrlFormat
-                                       {
-                                       }
-                                       public static class Headers
-                                       {
-                                       }
-                                       public static class Params
-                                       {
-                                       }
-                                       public static class MultipartFormSections
-                                       {
-                                           public const string Text = "text";
-                                           public const string File = "file";
-                                       }
-                                   }
-                                   public Multipart(): base("https://dummyjson.com/test-multipart", "https://dummyjson.com/test-multipart", null, System.Array.Empty<string>(), null)
-                                   {
-                                       Method = HttpMethod.Post;
-                                       ContentType = new ContentType("multipart/form-data", "UTF-8", "JUmGAnJMYjAWqepbCElDlxBInI8xZZuKFzTG7DNi");
-                                       MultipartFormSections.Add(new MultipartFormDataSection(Keys.MultipartFormSections.Text, "my text value"));
-                                       Init();
-                                   }
-                               }
-                               public static class Products
-                               {
-                                   public sealed class GetProduct : SummerRest.Runtime.Requests.BaseDataRequest<GetProduct>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                               public const int ProductId = 0;
-                                           }
-                                           public static class Headers
-                                           {
-                                           }
-                       
-                                           public static class Params
-                                           {
-                                           }
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public GetProduct(): base("https://dummyjson.com/products/1", "https://dummyjson.com/products/1", "https://dummyjson.com/products/{0}", new string[]{"1"}, null)
-                                       {
-                                           Method = HttpMethod.Get;
-                                           BodyFormat = DataFormat.Json;
-                                           Init();
-                                       }
-                                   }
-                                   public sealed class SearchProduct : SummerRest.Runtime.Requests.BaseDataRequest<SearchProduct>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                           }
-                                           public static class Headers
-                                           {
-                                           }
-                                           public static class Params
-                                           {
-                                               public const string Q = "q";
-                                           }
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public SearchProduct(): base("https://dummyjson.com/products/search", "https://dummyjson.com/products/search?q=phone", null, System.Array.Empty<string>(), null)
-                                       {
-                                           Method = HttpMethod.Get;
-                                           Params.AddParamToList(Keys.Params.Q, "phone");
-                                           BodyFormat = DataFormat.Json;
-                                           Init();
-                                       }
-                                   }
-                                   public sealed class AddProductRawText : SummerRest.Runtime.Requests.BaseDataRequest<AddProductRawText>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                           }
-                       
-                                           public static class Headers
-                                           {
-                                           }
-                       
-                                           public static class Params
-                                           {
-                                           }
-                       
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public AddProductRawText(): base("https://dummyjson.com/products/add", "https://dummyjson.com/products/add", null, System.Array.Empty<string>(), null)
-                                       {
-                                           Method = HttpMethod.Post;
-                                           ContentType = new ContentType("application/json", "UTF-8", "");
-                                           BodyFormat = DataFormat.Json;
-                                           InitializedSerializedBody = @"{
-                           ""id"": 101,
-                           ""title"": ""my product"",
-                           ""description"": ""my description""
-                       }";
-                                           Init();
-                                       }
-                                   }
-                                   public sealed class AddProductData : SummerRest.Runtime.Requests.BaseDataRequest<AddProductData>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                           }
-                       
-                                           public static class Headers
-                                           {
-                                           }
-                       
-                                           public static class Params
-                                           {
-                                           }
-                       
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public AddProductData(): base("https://dummyjson.com/products/add", "https://dummyjson.com/products/add", null, System.Array.Empty<string>(), null)
-                                       {
-                                           Method = HttpMethod.Post;
-                                           ContentType = new ContentType("application/json", "UTF-8", "");
-                                           BodyFormat = DataFormat.Json;
-                                           InitializedSerializedBody = @"{""id"":103,""title"":""my product"",""description"":""it is a wonderful product""}";
-                                           Init();
-                                       }
-                                   }
-                               }
-                               public static class Auth
-                               {
-                                   public sealed class Login : SummerRest.Runtime.Requests.BaseDataRequest<Login>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                           }
-                       
-                                           public static class Headers
-                                           {
-                                           }
-                       
-                                           public static class Params
-                                           {
-                                           }
-                       
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public Login(): base("https://dummyjson.com/auth/login", "https://dummyjson.com/auth/login", null, System.Array.Empty<string>(), null)
-                                       {
-                                           Method = HttpMethod.Post;
-                                           ContentType = new ContentType("application/json", "UTF-8", "");
-                                           BodyFormat = DataFormat.Json;
-                                           InitializedSerializedBody = @"{    
-                           ""username"": ""atuny0"",
-                           ""password"": ""9uQFF1Lh""
-                       }";
-                                           Init();
-                                       }
-                                   }
-                                   public sealed class GetUser : SummerRest.Runtime.Requests.BaseDataRequest<GetUser>
-                                   {
-                                       public static class Keys
-                                       {
-                                           public static class UrlFormat
-                                           {
-                                           }
-                                           public static class Headers
-                                           {
-                                           }
-                                           public static class Params
-                                           {
-                                           }
-                                           public static class MultipartFormSections
-                                           {
-                                           }
-                                       }
-                                       public GetUser(): base("https://dummyjson.com/auth/me", "https://dummyjson.com/auth/me", null, System.Array.Empty<string>(), IRequestModifier<AuthRequestModifier<SummerRestSample.DummyJsonApiAuthAppender, System.String>>.GetSingleton())
-                                       {
-                                           Method = HttpMethod.Get;
-                                           AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.DummyJsonToken;
-                                           BodyFormat = DataFormat.Json;
-                                           Init();
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                       """;
-
-        await RunTest(json, expected);
-    }
-
 }

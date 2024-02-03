@@ -32,28 +32,11 @@ namespace SummerRest.Runtime.RequestComponents
             {
                 public const string Json = "application/json";
                 public const string Octet = "application/octet-stream";
-                public const string Pdf = "application/pdf";
-                public const string Rtf = "application/rtf";
                 public const string Soap = "application/soap+xml";
                 public const string Xml = "application/xml";
-                public const string Zip = "application/zip";
                 public const string WwwForm = "application/x-www-form-urlencoded";
             }
 
-            public static class Image
-            {
-                public const string Gif = "image/gif";
-                public const string Jpeg = "image/jpeg";
-                public const string Png = "image/png";
-                public const string Tiff = "image/tiff";
-            }
-            
-            public static class Audio
-            {
-                public const string Mpeg = "audio/mpeg";
-                public const string Wav = "audio/wav";
-            }
-            
             public static class Multipart
             {
                 public const string FormData = "multipart/form-data";
@@ -65,7 +48,6 @@ namespace SummerRest.Runtime.RequestComponents
                 public const string Html = "text/html";
                 public const string Plain = "text/plain";
                 public const string RichText = "text/richtext";
-                public const string Xml = "text/xml";
             }
         }
 
@@ -89,10 +71,8 @@ namespace SummerRest.Runtime.RequestComponents
         [SerializeField, Defaults(
                     MediaTypeNames.Application.Json, MediaTypeNames.Application.WwwForm,
                     MediaTypeNames.Application.Soap, MediaTypeNames.Application.Xml, MediaTypeNames.Application.Octet,
-                    MediaTypeNames.Text.Plain, MediaTypeNames.Text.RichText,
-                    MediaTypeNames.Multipart.FormData, MediaTypeNames.Multipart.Mixed,
-                    MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png,
-                    MediaTypeNames.Audio.Wav, MediaTypeNames.Audio.Mpeg
+                    MediaTypeNames.Text.Plain, MediaTypeNames.Text.RichText, MediaTypeNames.Text.Html,
+                    MediaTypeNames.Multipart.FormData, MediaTypeNames.Multipart.Mixed
                 )]
         private string mediaType;
         [XmlAttribute]
