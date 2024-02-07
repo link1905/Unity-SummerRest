@@ -13,10 +13,10 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// </summary>
     public interface IWebRequestAdaptorProvider : IDefaultSupport<IWebRequestAdaptorProvider, UnityWebRequestAdaptorProvider>
     {
-        IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable);
+        IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable);
         IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType);
         IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest);
         IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType);
-        IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data);
+        IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data);
     }
 }

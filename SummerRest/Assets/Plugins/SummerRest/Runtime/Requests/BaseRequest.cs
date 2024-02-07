@@ -129,11 +129,5 @@ namespace SummerRest.Runtime.Requests
                 requestAdaptor.SetHeader(k, v);
             _requestModifier?.ModifyRequestData(this, requestAdaptor);
         }
-        private IEnumerator SetRequestDataAndWait<TResponse>(
-            IWebRequestAdaptor<TResponse> requestAdaptor)
-        {
-            SetRequestData(requestAdaptor);
-            yield return requestAdaptor.RequestInstruction;
-        }
     }
 }

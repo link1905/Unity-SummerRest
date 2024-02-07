@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 namespace SummerRest.Runtime.RequestAdaptor
 {
     /// <summary>
-    /// Apply adaptor pattern to abstract underlying requester <br/>
+    /// Adaptor interface to abstract and modify metrics of the underlying requester <br/>
     /// Default adaptor is <see cref="UnityWebRequestAdaptor{TSelf,TResponse}"/> wrapping <see cref="UnityWebRequest"/>. Users can write their own adaptor (eg. DotnetHttpClient,...) by inheriting <see cref="IWebRequestAdaptor{TResponse}"/> and <see cref="IWebRequestAdaptorProvider"/>
     /// </summary>
     /// <typeparam name="TResponse"></typeparam>

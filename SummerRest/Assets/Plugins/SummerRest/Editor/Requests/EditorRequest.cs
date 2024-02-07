@@ -76,7 +76,7 @@ namespace SummerRest.Editor.Requests
             }
         }
 
-        private void SetResponseCallback(ResponseError r)
+        private void SetErrorCallback(ResponseError r)
         {
             var response = _request.LatestResponse;
             response.StatusCode = r.StatusCode;
@@ -91,15 +91,16 @@ namespace SummerRest.Editor.Requests
             response.Clear();
             if (_request.IsMultipart)
             {
-                var request = IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<string>(AbsoluteUrl, 
-                    _request.RequestBody.FormSections.ToList());
-                yield return DetailedRequestCoroutine(request, SetResponseCallback, SetResponseCallback);
+                yield return WebRequestUtility.DetailedMultipartDataRequestCoroutine<string>(AbsoluteUrl, 
+                    Method,
+                    _request.RequestBody.FormSections.ToList(), SetResponseCallback, SetErrorCallback, SetRequestData);
             }
             else
             {
-                var request = IWebRequestAdaptorProvider.Current.GetDataRequest<string>(AbsoluteUrl, Method,
-                    _request.SerializedBody, _request.ContentType?.FormedContentType);
-                yield return DetailedRequestCoroutine(request, SetResponseCallback, SetResponseCallback);
+                yield return WebRequestUtility.DetailedDataRequestCoroutine<string>(AbsoluteUrl, 
+                    Method,
+                    SetResponseCallback,
+                    _request.SerializedBody, ContentType, SetErrorCallback, SetRequestData);
             }
             callback?.Invoke();
         }

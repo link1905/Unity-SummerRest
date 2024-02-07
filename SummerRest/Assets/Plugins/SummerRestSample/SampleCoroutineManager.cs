@@ -1,13 +1,11 @@
-using System;
 using System.Linq;
-using SummerRest.Editor.Models;
 using SummerRest.Runtime.Authenticate;
 using SummerRest.Runtime.Authenticate.Repositories;
+using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine;
 using DummyJson = SummerRest.Runtime.Requests.DummyJson;
-using Random = UnityEngine.Random;
 
 namespace SummerRestSample
 {
@@ -16,12 +14,13 @@ namespace SummerRestSample
     using AddProduct = DummyJson.Products.AddProductData;
     using Login = DummyJson.Auth.Login;
     using GetUser = DummyJson.Auth.GetUser;
-    
-    internal class SampleManager : MonoBehaviour
+    using GetProductImage = DummyJsonCdn.GetProductImage;
+
+    internal class SampleCoroutineManager : MonoBehaviour
     {
         #region Simple get data
         private readonly GetProduct _getProduct = GetProduct.Create();
-        private void GetProductData(string productId)
+        public void GetProductData(string productId)
         {
             // Current format is https://dummyjson.com/products/{0}
             // Replace the placeholder with productId
@@ -30,15 +29,16 @@ namespace SummerRestSample
             Debug.LogFormat("Calling to {0} {1}", _getProduct.AbsoluteUrl, _getProduct.Method);
             
             // Simple response
-            StartCoroutine(_getProduct.RequestCoroutine<Product>(HandleGetProduct1Response));
-            // Detailed response
-            StartCoroutine(_getProduct.DetailedRequestCoroutine<Product>(HandleGetProduct1DetailedResponse));
+            StartCoroutine(_getProduct.DataRequestCoroutine<Product>(HandleGetProductResponse));
         }
-        private void HandleGetProduct1Response(Product obj)
+        private void HandleGetProductResponse(Product obj)
         {
             Debug.LogFormat("Simple response from {0}: {1}", _getProduct.AbsoluteUrl, obj);
+            
+            // Detailed response
+            StartCoroutine(_getProduct.DetailedRequestCoroutine<Product>(HandleGetProductDetailedResponse));
         }
-        private void HandleGetProduct1DetailedResponse(WebResponse<Product> obj)
+        private void HandleGetProductDetailedResponse(WebResponse<Product> obj)
         {
             Debug.LogFormat("Detailed response from {0}: {{{1}, {2}, {3}}}", _getProduct.AbsoluteUrl, 
                 obj.StatusCode, obj.ContentType.FormedContentType, obj.Data);
@@ -46,7 +46,6 @@ namespace SummerRestSample
         
         #endregion
         
-                
         #region Change request params
         private readonly SearchProduct _searchProduct = SearchProduct.Create();
         public void SearchProductData(string productId)
@@ -57,7 +56,7 @@ namespace SummerRestSample
             // You can change more properties eg. Headers, Url, Timeout...
             Debug.LogFormat("Calling to {0} {1}", _searchProduct.AbsoluteUrl, _searchProduct.Method);
             // Simple request
-            StartCoroutine(_searchProduct.RequestCoroutine<Product[]>(HandleSearchProductResponse));
+            StartCoroutine(_searchProduct.DataRequestCoroutine<Product[]>(HandleSearchProductResponse));
         }
         
         private void HandleSearchProductResponse(Product[] obj)
@@ -72,7 +71,7 @@ namespace SummerRestSample
         #region Post request body
         // This is an POST request (it's method has been generated, you do not need to set it manually)
         private readonly AddProduct _addProduct = AddProduct.Create();
-        private void AddProductData(Product product)
+        public void AddProductData(Product product)
         {
             Debug.LogFormat("Calling to {0} {1}", _addProduct.AbsoluteUrl, _addProduct.Method);
             // _addProduct.BodyData = new Product
@@ -84,16 +83,8 @@ namespace SummerRestSample
             // Change the request body before calling the endpoint
             _addProduct.BodyData = product;
             
-            StartCoroutine(_addProduct.RequestCoroutine<Product>(HandleAddProductResponse));
-            
             StartCoroutine(_addProduct.DetailedRequestCoroutine<Product>(HandleAddProductDetailedResponse));
         }
-        
-        private void HandleAddProductResponse(Product obj)
-        {
-            Debug.LogFormat("Simple response from {0}: {1}", _addProduct.AbsoluteUrl, obj);
-        }
-        
         private void HandleAddProductDetailedResponse(WebResponse<Product> obj)
         {
             Debug.LogFormat("Detailed response from {0}: {1} \n{2}\n{3}", _addProduct.AbsoluteUrl, obj.Data,
@@ -110,7 +101,8 @@ namespace SummerRestSample
         {
             // Change the request body (Account data)
             _login.BodyData = account;
-            StartCoroutine(_login.RequestCoroutine<LoginResponse>(HandleAfterLogging));
+            Debug.Log("Start to login");
+            StartCoroutine(_login.DataRequestCoroutine<LoginResponse>(HandleAfterLogging));
         }
         private void HandleAfterLogging(LoginResponse response)
         {
@@ -133,22 +125,40 @@ namespace SummerRestSample
             Debug.LogFormat("Calling to {0} {1}", _getUser.AbsoluteUrl, _getUser.Method);
             // Behind the scene, the secret value will be appended to the request automatically (by querying ISecretRepository)
             // You may debug the IAuthAppender if have any error
-            StartCoroutine(_getUser.RequestCoroutine<string>(HandleGetAuthResponse));
+            StartCoroutine(_getUser.DataRequestCoroutine<string>(HandleGetAuthResponse));
         }
         private void HandleGetAuthResponse(string data)
         {
             Debug.LogFormat("Simple response from {0}: {1}", _getProduct.AbsoluteUrl, data);
         }
         #endregion
-        
-        #region Get image request
-        
-        #endregion
-        
-        #region Request async
-#if SUMMER_REST_TASK
 
-#endif
+        // This section shows a simple guidance on downloading images
+        // Requesting audio clip is similar to this 
+        #region Get image request
+
+        private readonly GetProductImage _getProductImage;
+        /// <summary>
+        /// You should leverage generated classes in case you know the structure of the image beforehand
+        /// </summary>
+        public void GetImageByPredefinedRequest(int productId, int imgOrder)
+        {
+            _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ProductId, productId.ToString());
+            _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ImageOrder, imgOrder.ToString());
+            StartCoroutine(_getProductImage.TextureRequestCoroutine(false, ShowImage));
+        }
+
+        // In case you receive an absolute url and you do not have a predefined matching class
+        public void GetImageByAbsoluteUrl()
+        {
+            StartCoroutine(WebRequestUtility.TextureRequestCoroutine( "https://cdn.dummyjson.com/product-images/1/1.jpg", false, ShowImage));
+        }
+
+        private void ShowImage(Texture2D texture2D)
+        {
+            
+        }
         #endregion
+
     }
 }

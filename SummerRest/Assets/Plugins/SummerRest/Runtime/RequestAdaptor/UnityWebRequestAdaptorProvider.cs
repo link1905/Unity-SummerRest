@@ -14,9 +14,9 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// </summary>
     public class UnityWebRequestAdaptorProvider : IWebRequestAdaptorProvider
     {
-        public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable)
+        public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable)
         {
-            var request = UnityWebRequestTexture.GetTexture(url, readable);
+            var request = UnityWebRequestTexture.GetTexture(url, nonReadable);
             return TextureUnityWebRequestAdaptor.Create(request);
         }
         public IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType)
@@ -52,12 +52,17 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = new UnityWebRequest(url, method.ToUnityHttpMethod());
                     break;
             }
+
+            request.method = method.ToUnityHttpMethod();
             return RawUnityWebRequestAdaptor<TResponse>.Create(request);
         }
 
-        public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url, List<IMultipartFormSection> data)
+        public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
+            HttpMethod method,
+            List<IMultipartFormSection> data)
         {
             var request = UnityWebRequest.Post(url, data, Array.Empty<byte>());
+            request.method = method.ToUnityHttpMethod();
             return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);
         }
     }

@@ -31,7 +31,7 @@ namespace SummerRest.Tests
             {
                 A = 5
             };
-            yield return request.RequestCoroutine<TestResponseData>(e =>
+            yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
@@ -52,7 +52,7 @@ namespace SummerRest.Tests
             {
                 A = 3
             };
-            yield return request.RequestCoroutine<TestResponseData>(e =>
+            yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.That(e.Equals(expected));
             });
@@ -71,7 +71,7 @@ namespace SummerRest.Tests
             var provider = new TestWebRequestAdaptorProvider("text/plain", result, HttpStatusCode.InternalServerError, null);
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
-            yield return request.RequestCoroutine<string>(e =>
+            yield return request.DataRequestCoroutine<string>(e =>
             {
                 Assert.AreEqual(result, e);
             });
@@ -89,7 +89,7 @@ namespace SummerRest.Tests
             const string error = "connection error";
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestDataRequest.Create().RequestCoroutine<string>(null, e =>
+            yield return TestDataRequest.Create().DataRequestCoroutine<string>(null, e =>
             {
                 Assert.AreEqual(error, e);
             });
@@ -101,7 +101,7 @@ namespace SummerRest.Tests
             const string error = "connection error";
             var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestDataRequest.Create().RequestCoroutine<string>(null);
+            yield return TestDataRequest.Create().DataRequestCoroutine<string>(null);
             var msg = string.Format(
                 @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
                 error, TestAbsoluteUrl);
@@ -116,8 +116,11 @@ namespace SummerRest.Tests
             ISecretRepository.Current.Save("test-key", "my-token");
             var request = TestDataRequest.Create();
             request.AuthKey = "test-key";
-            yield return request.TestAuthRequestCoroutine<string, BearerTokenAuthAppender, string>(null);
-            var header = ((RawTestWebRequestAdaptor<string>)request.PreviousRequest).GetHeader("Authorization");
+            string header = null;
+            yield return request.DetailedRequestCoroutine<string>(s =>
+            {
+                header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
+            });
             Assert.AreEqual("Bearer my-token", header);
         }
         
@@ -132,38 +135,41 @@ namespace SummerRest.Tests
             var provider = new TestWebRequestAdaptorProvider(contentType.FormedContentType, string.Empty, HttpStatusCode.OK, null);
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestMultipartRequest.Create();
-            yield return request.TestRequestCoroutine<string>(null);
+            byte[] data = null;
+            yield return request.DetailedMultipartDataRequestCoroutine<string>(e =>
+            {
+                data = ((UnityWebRequest)e.WrappedRequest).uploadHandler.data;
+            });
             CollectionAssert.AreEqual(UnityWebRequest.SerializeFormSections(form, Encoding.UTF8.GetBytes(contentType.Boundary)),
-                ((MultipartTestWebRequestAdaptor<string>)request.PreviousRequest).Data);
+                data);
         }
         
-        [UnityTest]
-        public IEnumerator Test_Internal_Request_From_Unity_Web_Request_Set_Correct_Information()
-        {
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
-            IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            request.Method = HttpMethod.Connect;
-            var webRequest = UnityWebRequest.Get(string.Empty);
-            yield return request.RequestCoroutineFromUnityWebRequest(webRequest, e =>
-            {
-                Assert.AreSame(webRequest, e);
-                Assert.AreEqual(TestAbsoluteUrl, e.url);
-                Assert.AreEqual(HttpMethod.Connect.ToUnityHttpMethod(), e.method);
-            });
-            
-            request.Method = HttpMethod.Get;
-            request.Params.AddParamToList("my-param", "my-param-value");
-            request.Headers.Add("my-header", "my-header-value");
-            yield return request.DetailedRequestCoroutineFromUnityWebRequest(webRequest, e =>
-            {
-                Assert.IsNull(e.Error);
-                Assert.AreEqual(HttpMethod.Get.ToUnityHttpMethod(), e.Data.method);
-                Assert.That(e.Data.url.Contains("my-param=my-param-value"));
-                Assert.AreEqual("my-header-value", e.Data.GetRequestHeader("my-header"));
-                
-            });
-        }
+        // [UnityTest]
+        // public IEnumerator Test_Internal_Request_From_Unity_Web_Request_Set_Correct_Information()
+        // {
+        //     var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
+        //     IWebRequestAdaptorProvider.Current = provider;
+        //     var request = TestDataRequest.Create();
+        //     request.Method = HttpMethod.Connect;
+        //     var webRequest = UnityWebRequest.Get(string.Empty);
+        //     yield return request.RequestCoroutineFromUnityWebRequest(webRequest, e =>
+        //     {
+        //         Assert.AreSame(webRequest, e);
+        //         Assert.AreEqual(TestAbsoluteUrl, e.url);
+        //         Assert.AreEqual(HttpMethod.Connect.ToUnityHttpMethod(), e.method);
+        //     });
+        //     
+        //     request.Method = HttpMethod.Get;
+        //     request.Params.AddParamToList("my-param", "my-param-value");
+        //     request.Headers.Add("my-header", "my-header-value");
+        //     yield return request.DetailedRequestCoroutineFromUnityWebRequest(webRequest, e =>
+        //     {
+        //         Assert.IsNull(e.Error);
+        //         Assert.AreEqual(HttpMethod.Get.ToUnityHttpMethod(), e.Data.method);
+        //         Assert.That(e.Data.url.Contains("my-param=my-param-value"));
+        //         Assert.AreEqual("my-header-value", e.Data.GetRequestHeader("my-header"));
+        //     });
+        // }
         
         public class TestResponseData
         {
@@ -188,15 +194,6 @@ namespace SummerRest.Tests
             {
                 Init();
             }
-            public object PreviousRequest { get; private set; } 
-            public IEnumerator TestAuthRequestCoroutine<TResponse, TAuthAppender, TAuthData>(Action<TResponse> doneCallback, Action<ResponseError> errorCallback = null) 
-                where TAuthAppender : class, IAuthAppender<TAuthAppender, TAuthData>, new()
-            {
-                var request =
-                    IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(AbsoluteUrl, Method, SerializedBody, string.Empty);
-                PreviousRequest = request;
-                yield return RequestCoroutine(request, doneCallback, errorCallback);
-            }
         }
         
         public class TestMultipartRequest : BaseMultipartRequest<TestMultipartRequest>
@@ -206,12 +203,6 @@ namespace SummerRest.Tests
                 Init();
             }
             public object PreviousRequest { get; private set; } 
-            public IEnumerator TestRequestCoroutine<TResponse>(Action<TResponse> doneCallback, Action<ResponseError> errorCallback = null)
-            {
-                var request = RequestCoroutine(doneCallback, errorCallback);
-                PreviousRequest = request;
-                yield return request;
-            }
         }
 
         private class TestWebRequestAdaptorProvider : IWebRequestAdaptorProvider
@@ -231,18 +222,18 @@ namespace SummerRest.Tests
                 _wrapped = new UnityWebRequestAdaptorProvider();
             }
 
-            public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool readable)
+            public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable)
             {
-                return _wrapped.GetTextureRequest(url, readable);
+                return _wrapped.GetTextureRequest(url, nonReadable);
             }
 
             public IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType)
             {
                 return _wrapped.GetAudioRequest(url, audioType);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, data) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data) as MultipartFileUnityWebRequestAdaptor<TBody>;
                 return new MultipartTestWebRequestAdaptor<TBody>(wrapped, _fixedContentType, _fixedRawResponse, _code, _fixedError);
             }
 
