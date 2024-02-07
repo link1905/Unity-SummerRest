@@ -64,7 +64,8 @@ namespace SummerRest.Runtime.Requests
 
         /// <summary>
         /// The method of arisen requests <br/>
-        /// Please note that, this property only works with data request; texture, audio... requests automatically use <see cref="HttpMethod.Get"/>
+        /// Please note that, this property only works with data request <br/>
+        /// Texture, audio... requests automatically use <see cref="HttpMethod.Get"/>
         /// </summary>
         public HttpMethod Method { get; set; }
         /// <summary>

@@ -77,7 +77,10 @@ namespace SummerRest.Editor.Models
         public override void Delete(bool fromParent)
         {
             if (fromParent)
+            {
                 Parent.Requests.Remove(this);
+                Parent.MakeDirty();
+            }
             base.Delete(fromParent);
         }
 

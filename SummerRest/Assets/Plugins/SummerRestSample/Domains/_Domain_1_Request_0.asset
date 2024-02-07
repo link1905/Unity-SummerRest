@@ -15,14 +15,13 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   endpointName: GetProductImage
-  url: https://cdn.dummyjson.com/product-images/1/1.jpg
-  path: 1/1.jpg
+  url: https://cdn.dummyjson.com/product-images
   auth:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value:
-        authKey: dummy-json-token
+        authKey: 
     value:
       authKey: dummy-json-token
   headers:
@@ -44,6 +43,9 @@ MonoBehaviour:
       value: 0
     value: 0
   <TreeId>k__BackingField: 1
+  path:
+    text: 
+    values: []
   contentType:
     inherit: 16
     cache:
@@ -69,7 +71,7 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://cdn.dummyjson.com/product-images/1/1.jpg
+  urlWithParam: https://cdn.dummyjson.com/product-images
   latestResponse:
     lastCall: 1/30/2024 2:41:43 PM
     error: 

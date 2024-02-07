@@ -46,8 +46,8 @@ MonoBehaviour:
   path:
     text: '{productId}'
     values:
-    - value: 1
-      key: productId
+    - key: productId
+      value: 1
   contentType:
     inherit: 16
     cache:

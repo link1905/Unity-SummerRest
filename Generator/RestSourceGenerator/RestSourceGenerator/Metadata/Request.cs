@@ -185,7 +185,7 @@ public sealed class {className} : {BuildBaseClass()}
     public static class {ProjectReflection.SummerRestConfiguration.Request.Values} {{
         public const string Url = {Url.ToEmbeddedString()};
         public const string UrlWithParams = {UrlWithParams.ToEmbeddedString()};
-        public const string UrlFormat = {urlFormat};
+        public const string UrlFormatPattern = {urlFormat};
         public const string SerializedBody = {serializedValue};
         public static readonly ContentType? ContentType = {contentTypeConstValue};
         public static class UrlFormat {{
@@ -204,7 +204,7 @@ public sealed class {className} : {BuildBaseClass()}
     public {className}() : base(
             {ProjectReflection.SummerRestConfiguration.Request.Values}.Url, 
             {ProjectReflection.SummerRestConfiguration.Request.Values}.UrlWithParams, 
-            {ProjectReflection.SummerRestConfiguration.Request.Values}.UrlFormat, {urlFormatValuesArr}, {authProp}) 
+            {ProjectReflection.SummerRestConfiguration.Request.Values}.UrlFormatPattern, {urlFormatValuesArr}, {authProp}) 
     {{
         Method = {method};
         {timeout}

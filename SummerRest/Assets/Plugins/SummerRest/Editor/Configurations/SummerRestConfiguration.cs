@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.TypeReference;
+using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
@@ -86,7 +87,7 @@ namespace SummerRest.Editor.Configurations
                 {
                     // Unity does not provide any way to access name of an AssemblyDefinitionAsset
                     // We need to deserialize back into a class first to get the name
-                    var assembly = IDataSerializer.Current.Deserialize<AssemblyName>(targetAssembly.text, DataFormat.Json);
+                    var assembly = JsonUtility.FromJson<AssemblyName>(targetAssembly.text);
                     return assembly.name;
                 }
                 catch (Exception)
@@ -100,6 +101,7 @@ namespace SummerRest.Editor.Configurations
         {
             for (int i = 0; i < Domains.Count; i++)
                 Domains[i].Rename(string.Empty, i);
+            this.MakeDirty();
             AssetDatabase.SaveAssets();
         }
     }

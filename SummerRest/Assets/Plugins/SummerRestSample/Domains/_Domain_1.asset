@@ -16,18 +16,8 @@ MonoBehaviour:
   <Parent>k__BackingField: {fileID: 0}
   endpointName: DummyJsonCdn
   url: https://cdn.dummyjson.com/product-images
-  pathContainer:
-    text: text{uaaa}/{aa}aaaaa{de}
-    values:
-    - value: asdasdsad
-      key: uaaa
-    - value: asdsa
-      key: aa
-    - value: 
-      key: de
-  path: 
   auth:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value:
@@ -52,7 +42,7 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 1
+  <TreeId>k__BackingField: 2
   services: []
   requests:
   - {fileID: 11400000, guid: 48f2211dd8edb05428c3de5d5f2a5cd9, type: 2}
@@ -60,4 +50,4 @@ MonoBehaviour:
     values:
     - https://cdn.dummyjson.com/product-images
     selectedIndex: 0
-  activeVersion: https://cdn.dummyjson.com/product-images
+  path: https://cdn.dummyjson.com/product-images

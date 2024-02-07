@@ -295,7 +295,7 @@ public sealed class Request1 : SummerRest.Runtime.Requests.BaseDataRequest<Reque
     public static class Values {
         public const string Url = "my-url.com/1/2";
         public const string UrlWithParams = "my-url.com/1/2";
-        public const string UrlFormat = "my-url.com/{0}/{1}";
+        public const string UrlFormatPattern = "my-url.com/{0}/{1}";
         public const string SerializedBody = @"my data body";
         public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Json, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "");
         public static class UrlFormat {
@@ -311,7 +311,7 @@ public sealed class Request1 : SummerRest.Runtime.Requests.BaseDataRequest<Reque
         public static class MultipartFormSections {
         }
     }
-   public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, new string[]{Values.UrlFormat.ProductId, Values.UrlFormat.ImageOrder}, null)
+   public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormatPattern, new string[]{Values.UrlFormat.ProductId, Values.UrlFormat.ImageOrder}, null)
    {
        Method = HttpMethod.Get;
        TimeoutSeconds = 3;
@@ -385,7 +385,7 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
     public static class Values {
         public const string Url = "my-url.com";
         public const string UrlWithParams = "my-url.com?param1=value1&param_2=value2";
-        public const string UrlFormat = null;
+        public const string UrlFormatPattern = null;
         public const string SerializedBody = null;
         public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Multipart.FormData, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "abcd1234");
         public static class UrlFormat {
@@ -401,7 +401,7 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
            public const string FormKey2 = "form-value-2";
         }
     }
-   public MultipartRequest(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, System.Array.Empty<string>(), IRequestModifier<AuthRequestModifier<BearerTokenAppender, string>>.GetSingleton())
+   public MultipartRequest(): base(Values.Url, Values.UrlWithParams, Values.UrlFormatPattern, System.Array.Empty<string>(), IRequestModifier<AuthRequestModifier<BearerTokenAppender, string>>.GetSingleton())
    {
        Method = HttpMethod.Get;
        ContentType = Values.ContentType;
@@ -496,7 +496,7 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
                                         public static class Values {
                                             public const string Url = "http://domain1.com/service1/get/1";
                                             public const string UrlWithParams = "http://domain1.com/service1/get/1?param1=param1-value";
-                                            public const string UrlFormat = "http://domain1.com/service1/get/{0}";
+                                            public const string UrlFormatPattern = "http://domain1.com/service1/get/{0}";
                                             public const string SerializedBody = @"I need to call the ""cat"" request";
                                             public static readonly ContentType? ContentType = new ContentType(SummerRest.Runtime.RequestComponents.ContentType.MediaTypeNames.Text.Plain, SummerRest.Runtime.RequestComponents.ContentType.Encodings.Utf8, "");
                                             public static class UrlFormat {
@@ -513,7 +513,7 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
                                                 
                                             }
                                         }
-                                       public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormat, new string[]{Values.UrlFormat.FormatKey1}, IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
+                                       public Request1(): base(Values.Url, Values.UrlWithParams, Values.UrlFormatPattern, new string[]{Values.UrlFormat.FormatKey1}, IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
                                        {
                                            Method = HttpMethod.Get;
                                            TimeoutSeconds = 0;

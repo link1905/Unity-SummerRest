@@ -6,17 +6,17 @@ using UnityEngine;
 
 namespace SummerRest.Runtime.Authenticate.Appenders
 {
-    public class BasicAuthAppender : IAuthAppender<BasicAuthAppender, BasicAuth>
+    public class BasicAuthAppender : IAuthAppender<BasicAuthAppender, Account>
     {
         private const string AuthKeyword = "Basic";
-        public void Append<TResponse>(BasicAuth authData, IWebRequestAdaptor<TResponse> requestAdaptor)
+        public void Append<TResponse>(Account authData, IWebRequestAdaptor<TResponse> requestAdaptor)
         {
-            if (authData is null || string.IsNullOrEmpty(authData.Username) || string.IsNullOrEmpty(authData.Password))
+            if (string.IsNullOrEmpty(authData.username) || string.IsNullOrEmpty(authData.password))
             {
                 Debug.LogWarningFormat("Basic auth information is null or empty");
                 return;
             }
-            var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{authData.Username}:{authData.Password}"));
+            var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{authData.username}:{authData.password}"));
             requestAdaptor.SetHeader("Authorization", $"{AuthKeyword} {credentials}");
         }
     }

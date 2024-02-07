@@ -297,7 +297,6 @@ namespace SummerRest.Editor.Window.Elements
                 default:
                     return;
             }
-            endpoint.Parent.MakeDirty();
             _configuration.RenameAssets();
 
             ClearWindows();

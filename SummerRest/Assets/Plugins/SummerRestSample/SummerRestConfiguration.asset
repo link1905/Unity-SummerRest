@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  - {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   authContainers:
   - type: 0
     text: asd
@@ -32,6 +33,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 3742550718631641092
       type: {class: BasicAuth, ns: SummerRest.Runtime.RequestComponents, asm: SummerRest}
       data:

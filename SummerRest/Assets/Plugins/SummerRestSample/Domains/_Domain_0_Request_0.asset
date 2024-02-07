@@ -53,7 +53,7 @@ MonoBehaviour:
       value:
         charset: UTF-8
         mediaType: multipart/form-data
-        boundary: gdZdphOV1ASWlEa8LvYwhg8j0hM0OAJppW7zu6vH
+        boundary: xpJerlqkAzUfmoFrErwWQNeauSpwj6hah5YdfySK
     value:
       charset: 
       mediaType: 
@@ -80,7 +80,7 @@ MonoBehaviour:
       text: 
       key: file
       file:
-        filePath: C:/Users/ADMIN/Pictures/UnknownFileName.jpeg
+        filePath: 
   urlWithParam: https://dummyjson.com/test-multipart
   latestResponse:
     lastCall: 
