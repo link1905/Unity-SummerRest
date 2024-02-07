@@ -24,19 +24,29 @@ namespace SummerRest.Editor.Models
         {
             char previousCut = default;
             int currentIdx = 0;
+            // Clear all keys
+            foreach (var smartString in values)
+                smartString.Key = null;
             foreach (var (entry, c) in new StringSegment(text, '{'))
             {
-                if (previousCut == '{' && entry.SplitKeyValue(out var key, out _, separator: '}'))
+                if (previousCut == '{' 
+                    && entry.SplitKeyValue(out var key, out _, separator: '}'))
                 {
+                    var keyStr = key.ToString();
+                    // Duplicated keys => use the first one
+                    if (values.Find(e => e.Key == keyStr) is not null)
+                        continue;
                     if (currentIdx < values.Count)
-                        values[currentIdx].Key = key.ToString();
+                        values[currentIdx].Key = keyStr;
                     else
-                        values.Add(new SmartString(key.ToString()));
+                        values.Add(new SmartString(keyStr));
                     currentIdx++;
                 }
                 previousCut = c.Length > 0 ? c[0] : default;
             }
-            if (currentIdx < values.Count) values.RemoveAt(currentIdx);
+            // Remove from the latest key
+            if (currentIdx < values.Count) 
+                values.RemoveAt(currentIdx);
         }
         private string FormFormatText()
         {

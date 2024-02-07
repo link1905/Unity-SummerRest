@@ -174,6 +174,32 @@ Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);Headers.TryAdd(Keys
 """;
         Assert.Equal(expectedRefValues, refValues);
     }
+    
+    [Fact]
+    public void Test_Build_Param_Multiple_Values_RefValues()
+    {
+        var headers = new KeyValue[]
+        {
+            new("param-1", "param-1-value-1"),
+            new("param-1", "param-1-value-2"),
+            new("param-2", "param-2-value"),
+        };
+        var (keys, values, refValues) = Request.BuildKeysValuesRefValues(headers, "Params",
+            kv => $@"Params.AddParamToList({kv.Key}, {kv.Value})");
+        const string expectedKeys = """
+public const string Param1 = "param-1";public const string Param2 = "param-2";
+""";
+        Assert.Equal(expectedKeys, keys);
+        const string expectedValues = """
+public const string Param2 = "param-2-value";public const string[] Param1 = new string[] {"param-1-value-1","param-1-value-2"};
+""";
+        Assert.Equal(expectedValues, values);
+        const string expectedRefValues = """
+Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);Params.AddParamToList(Keys.Params.Param2, Values.Params.Param2);
+""";
+        Assert.Equal(expectedRefValues, refValues);
+    }
+
 
     [Fact]
     public void Test_Build_Null_Auth()
@@ -372,14 +398,14 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
        }
        public static class Params
        {
-           public const string Param1 = "param1";
            public const string Param_2 = "param_2";
+           public const string Param1 = "param1";
        }
        public static class MultipartFormSections
        {
+           public const string FormFile = "form-file";
            public const string FormKey1 = "form-key-1";
            public const string FormKey2 = "form-key-2";
-           public const string FormFile = "form-file";
        }
    }
     public static class Values {
@@ -393,8 +419,8 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
         public static class Headers {
         }
         public static class Params {
-           public const string Param1 = "value-1";
            public const string Param_2 = "value-2";
+           public const string Param1 = "value-1";
         }
         public static class MultipartFormSections {
            public const string FormKey1 = "form-value-1";
@@ -405,8 +431,8 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
    {
        Method = HttpMethod.Get;
        ContentType = Values.ContentType;
-       Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);
        Params.AddParamToList(Keys.Params.Param_2, Values.Params.Param_2);
+       Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);
        AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyKey;
        MultipartFormSections.Add(new MultipartFormDataSection(Keys.MultipartFormSections.FormKey1, Values.MultipartFormSections.FormKey1));
        MultipartFormSections.Add(new MultipartFormDataSection(Keys.MultipartFormSections.FormKey2, Values.MultipartFormSections.FormKey2));
@@ -482,8 +508,8 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
                                            }
                                            public static class Headers
                                            {
-                                               public const string Header1 = "header1";
                                                public const string _1 = "1";
+                                               public const string Header1 = "header1";
                                            }
                                            public static class Params
                                            {
@@ -503,8 +529,8 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
                                                 public const string FormatKey1 = "format-value-1";
                                             }
                                             public static class Headers {
-                                                public const string Header1 = "value1";
                                                 public const string _1 = "value2";
+                                                public const string Header1 = "value1";
                                             }
                                             public static class Params {
                                                 public const string Param1 = "param1-value";
@@ -518,8 +544,8 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
                                            Method = HttpMethod.Get;
                                            TimeoutSeconds = 0;
                                            ContentType = Values.ContentType;
-                                           Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);
                                            Headers.TryAdd(Keys.Headers._1, Values.Headers._1);
+                                           Headers.TryAdd(Keys.Headers.Header1, Values.Headers.Header1);
                                            Params.AddParamToList(Keys.Params.Param1, Values.Params.Param1);
                                            AuthKey = SummerRest.Runtime.Authenticate.AuthKeys.MyTokenToMasterService;
                                            BodyFormat = DataFormat.Json;

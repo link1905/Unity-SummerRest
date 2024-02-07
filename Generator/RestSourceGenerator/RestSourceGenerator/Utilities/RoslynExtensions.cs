@@ -39,7 +39,10 @@ namespace RestSourceGenerator.Utilities
             var values = @params.Select(builder).Where(value => value is not null).ToArray();
             if (string.IsNullOrEmpty(end))
                 return BuildSequentialValues(values, separator);
-            return BuildSequentialValues(values, separator) + end;
+            var result = BuildSequentialValues(values, separator);
+            if (string.IsNullOrEmpty(result))
+                return result;
+            return result + end;
         }
 
         public static string BuildSequentialValues(this IReadOnlyList<string> values, string separator = RoslynDefaultValues.Commas)

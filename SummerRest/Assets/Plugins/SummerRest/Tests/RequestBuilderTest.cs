@@ -88,7 +88,7 @@ namespace SummerRest.Tests
         public void Test_Url_Should_Be_Rebuilt_When_Change_Param_List()
         {
             var request = new TestRequest();
-            request.Params.AddParamsToList("id", new []{"1", "2"});
+            request.Params.AddParamToList("id", new []{"1", "2"});
             Assert.AreEqual(request.AbsoluteUrl, $"{ExampleUrl}?id=1&id=2");
             request.Params.RemoveValueFromList("id", "2");
             Assert.AreEqual(request.AbsoluteUrl, $"{ExampleUrl}?id=1");

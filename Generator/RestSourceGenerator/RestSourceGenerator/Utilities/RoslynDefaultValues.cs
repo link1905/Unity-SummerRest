@@ -11,6 +11,7 @@ namespace RestSourceGenerator.Utilities
         public const string Null = "null";
         public const string String = "string";
         public const string Int = "int";
+        public static string Array(string type) => $"{type}[]";
         public static string EmptyArray(string type) => $"System.Array.Empty<{type}>()";
     }
 }

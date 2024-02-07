@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -60,16 +62,27 @@ namespace RestSourceGenerator.Metadata
             if (keyValues is not { Length: > 0 })
                 return (string.Empty, string.Empty, string.Empty);
             var keys = keyValues
-                .Select(e => (e.Key, e.Key.ToEmbeddedString()))
+                .Select(e => e.Key)
+                .ToImmutableSortedSet()
+                .Select(e => (e, e.ToEmbeddedString()))
                 .BuildSequentialConstants(RoslynDefaultValues.String);
-            var values = keyValues
+
+            // 1 key can have multiple values 
+            var keyToValues = keyValues
                 .Where(e => e.Value is not null)
-                .Select(e => (e.Key, e.Value.ToEmbeddedString()))
+                .OrderBy(e => e.Key)
+                .ToLookup(p => p.Key);
+            var singleValues = keyToValues
+                .Where(e => e.Count() == 1)
+                .Select(e => (e.Key, e.First().Value.ToEmbeddedString()))
                 .BuildSequentialConstants(RoslynDefaultValues.String);
-            var refValues = keyValues
-                .Where(e => e.Value is not null)
-                .BuildSequentialValues((e, _) =>
-            {
+            var multipleValues = keyToValues.
+                Where(e => e.Count() >= 2)
+                .Select(e => 
+                    (e.Key, e.Select(keyValue => keyValue.Value.ToEmbeddedString()).BuildArray(RoslynDefaultValues.String)))
+                .BuildSequentialConstants(RoslynDefaultValues.Array(RoslynDefaultValues.String));
+            var refValues = keyToValues
+                .BuildSequentialValues((e, _) => {
                 var keyProp =
                     $"{ProjectReflection.SummerRestConfiguration.Request.Keys}.{containerName}.{e.Key.ToClassName()}";
                 var valueProp =
@@ -80,7 +93,7 @@ namespace RestSourceGenerator.Metadata
                     Value = valueProp
                 });
             }, RoslynDefaultValues.SemiColons, RoslynDefaultValues.SemiColons);
-            return (keys, values, refValues);
+            return (keys, string.Concat(singleValues, multipleValues), refValues);
         }
 
         private (string keys, string values, string headers) BuildHeaders()

@@ -7,7 +7,7 @@ namespace SummerRest.Runtime.Requests
     /// Contains parameters of a request <br/>
     /// Since a parameter is potential to be single or multiple (list) <br/>
     /// Use <see cref="SetSingleParam"/> if you intend to work with a single param
-    /// Use <see cref="AddParamToList"/> <see cref="AddParamsToList"/> <see cref="RemoveValueFromList"/> if you intend to work with a multi-valued param
+    /// Use <see cref="AddParamToList(string,string)"/> <see cref="RemoveValueFromList"/> if you intend to work with a multi-valued param
     /// </summary>
     public class RequestParamContainer
     {
@@ -21,7 +21,7 @@ namespace SummerRest.Runtime.Requests
             _paramMapper.TryGetValue(key, out var @params) ? @params : null;
 
         /// <summary>
-        /// Please use this method instead of <see cref="AddParamToList"/> <see cref="AddParamsToList"/> if you intend to work with a single param instead of a list <br/>
+        /// Please use this method instead of <see cref="AddParamToList(string,string)"/> if you intend to work with a single param instead of a list <br/>
         /// Technically, this method clear the param list of the key then add the new value
         /// </summary>
         /// <param name="key"></param>
@@ -86,11 +86,11 @@ namespace SummerRest.Runtime.Requests
 
         /// <summary>
         /// Add multiple values to a key <br/>
-        /// Since a param modification triggers the process of rebuilding URL, you may use this method instead of <see cref="AddParamToList"/> for better performance
+        /// Since a param modification triggers the process of rebuilding URL, you may use this method for better performance
         /// </summary>
         /// <param name="key"></param>
         /// <param name="addValues"></param>
-        public void AddParamsToList(string key, params string[] addValues)
+        public void AddParamToList(string key, params string[] addValues)
         {
             if (!_paramMapper.TryGetValue(key, out var values))
             {
