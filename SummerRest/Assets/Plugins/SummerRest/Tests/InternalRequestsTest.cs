@@ -35,7 +35,7 @@ namespace SummerRest.Tests
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.DetailedRequestCoroutine<TestResponseData>(e =>
+            yield return request.DetailedDataRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
                 Assert.IsNull(e.Error);
@@ -56,7 +56,7 @@ namespace SummerRest.Tests
             {
                 Assert.That(e.Equals(expected));
             });
-            yield return request.DetailedRequestCoroutine<TestResponseData>(e =>
+            yield return request.DetailedDataRequestCoroutine<TestResponseData>(e =>
             {
                 Assert.AreEqual(HttpStatusCode.Created, e.StatusCode);
                 Assert.IsNull(e.Error);
@@ -75,7 +75,7 @@ namespace SummerRest.Tests
             {
                 Assert.AreEqual(result, e);
             });
-            yield return request.DetailedRequestCoroutine<string>(e =>
+            yield return request.DetailedDataRequestCoroutine<string>(e =>
             {
                 Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
                 Assert.IsNull(e.Error);
@@ -117,7 +117,7 @@ namespace SummerRest.Tests
             var request = TestDataRequest.Create();
             request.AuthKey = "test-key";
             string header = null;
-            yield return request.DetailedRequestCoroutine<string>(s =>
+            yield return request.DetailedDataRequestCoroutine<string>(s =>
             {
                 header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
             });
@@ -202,7 +202,6 @@ namespace SummerRest.Tests
             {
                 Init();
             }
-            public object PreviousRequest { get; private set; } 
         }
 
         private class TestWebRequestAdaptorProvider : IWebRequestAdaptorProvider
@@ -254,7 +253,6 @@ namespace SummerRest.Tests
 
         private class MultipartTestWebRequestAdaptor<TResponse> : RawTestWebRequestAdaptor<TResponse>
         {
-            public byte[] Data => (Wrapped as MultipartFileUnityWebRequestAdaptor<TResponse>)?.Data;
             public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> wrapped, string fixedContentType, 
                 string fixedRawResponse, HttpStatusCode code, string fixedError) : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
             {

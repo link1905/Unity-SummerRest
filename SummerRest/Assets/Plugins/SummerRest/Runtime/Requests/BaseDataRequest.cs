@@ -68,7 +68,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
-        public IEnumerator DetailedRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
+        public IEnumerator DetailedDataRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
             Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.DetailedDataRequestCoroutine(AbsoluteUrl, Method,
