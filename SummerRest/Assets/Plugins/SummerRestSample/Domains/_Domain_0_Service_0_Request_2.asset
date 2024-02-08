@@ -23,7 +23,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:

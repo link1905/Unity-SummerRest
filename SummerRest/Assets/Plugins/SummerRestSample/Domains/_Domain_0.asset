@@ -21,9 +21,9 @@ MonoBehaviour:
     cache:
       hasValue: 1
       value:
-        authKey: dummy-json-token
+        authKey: DummyJsonToken
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 1
     cache:
@@ -42,7 +42,7 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  <TreeId>k__BackingField: 8
+  <TreeId>k__BackingField: 10
   services:
   - {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
   - {fileID: 11400000, guid: a3beafdedc551d34b88a85d9763c1025, type: 2}

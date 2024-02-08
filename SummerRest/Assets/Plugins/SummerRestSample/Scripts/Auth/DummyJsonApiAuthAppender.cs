@@ -1,7 +1,7 @@
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.RequestAdaptor;
 
-namespace SummerRestSample
+namespace SummerRestSample.Auth
 {
     public class DummyJsonApiAuthAppender : IAuthAppender<DummyJsonApiAuthAppender, string>
     {

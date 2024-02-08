@@ -72,6 +72,8 @@ namespace SummerRest.Editor.Models
                     return builtContentType.HasValue ? new Present<ContentType>(builtContentType.Value) : Present<ContentType>.Absent;
                 });
             ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;
+            if (UnityEditor.SerializationUtility.HasManagedReferencesWithMissingTypes(this))
+                UnityEditor.SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
         }
 
         public override void Delete(bool fromParent)

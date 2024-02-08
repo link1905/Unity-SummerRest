@@ -23,8 +23,7 @@ MonoBehaviour:
         rid: -2
     key: DummyJsonToken
     appenderType:
-      classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
-        SummerRest
+      classRef: SummerRestSample.Auth.DummyJsonApiAuthAppender, Assembly-CSharp-firstpass
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
       SummerRest

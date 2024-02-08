@@ -64,7 +64,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(url, nonReadable);
-            return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         /// <summary>
         /// Simple <see cref="AudioClip"/> request using Unity coroutine with callbacks
@@ -81,7 +81,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(url, audioType);
-            return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
                     data, contentType?.FormedContentType);
-            return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request = IWebRequestAdaptorProvider.Current
                 .GetMultipartFileRequest<TResponse>(url, method, data);
-            return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
         
@@ -159,7 +159,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(url, nonReadable);
-            return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(url, audioType);
-            return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>
                     (url, method, data, contentType?.FormedContentType);
-            return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
         /// <summary>
@@ -227,7 +227,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request = IWebRequestAdaptorProvider.Current
                 .GetMultipartFileRequest<TResponse>(url, method, data);
-            return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
+            yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
     }
 }

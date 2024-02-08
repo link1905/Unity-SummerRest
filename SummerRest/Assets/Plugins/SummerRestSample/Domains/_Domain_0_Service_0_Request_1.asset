@@ -23,13 +23,17 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
-      value: []
-    value: []
+      hasValue: 1
+      value:
+      - key: my-header
+        value: my-header-value
+    value:
+    - key: my-header
+      value: my-header-value
   timeoutSeconds:
     inherit: 2
     cache:

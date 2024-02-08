@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SummerRestSample
+namespace SummerRestSample.Models
 {
     [Serializable]
     public struct LoginResponse

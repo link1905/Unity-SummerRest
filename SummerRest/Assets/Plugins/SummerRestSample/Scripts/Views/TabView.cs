@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SummerRestSample.Scripts.Views
+namespace SummerRestSample.Views
 {
     public class TabView : MonoBehaviour
     {

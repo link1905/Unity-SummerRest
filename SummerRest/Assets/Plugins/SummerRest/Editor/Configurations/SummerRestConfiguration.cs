@@ -65,7 +65,7 @@ namespace SummerRest.Editor.Configurations
         /// <summary>
         /// The target assembly for generating <see cref="BaseRequest{TRequest}"/> classes to call apis in runtime
         /// </summary>
-        [SerializeReference] private AssemblyDefinitionAsset targetAssembly;
+        [SerializeField] private AssemblyDefinitionAsset targetAssembly;
         [Serializable]
         private class AssemblyName
         {

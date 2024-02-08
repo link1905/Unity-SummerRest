@@ -21,9 +21,9 @@ MonoBehaviour:
     cache:
       hasValue: 1
       value:
-        authKey: dummy-json-token
+        authKey: DummyJsonToken
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:

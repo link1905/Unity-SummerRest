@@ -1,7 +1,7 @@
 ﻿using System;
 using SummerRest.Runtime.RequestComponents;
 
-namespace SummerRestSample
+namespace SummerRestSample.Models
 {
     [Serializable]
     public struct Product : IRequestBodyData

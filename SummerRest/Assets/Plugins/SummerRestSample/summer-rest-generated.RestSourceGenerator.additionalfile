@@ -12,6 +12,9 @@
                             </UrlFormatContainers>
                         </Request>
                         <Request TypeName="Request" EndpointName="SearchProduct" Url="https://dummyjson.com/products/search" UrlFormat="" UrlWithParams="https://dummyjson.com/products/search?q=phone&amp;select=title&amp;select=price" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <Headers>
+                                <KeyValue Key="my-header" Value="my-header-value" />
+                            </Headers>
                             <RequestParams>
                                 <KeyValue Key="q" Value="phone" />
                                 <KeyValue Key="select" Value="title" />
@@ -39,7 +42,7 @@
             </Services>
             <Requests>
                 <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="4aqau9KpqNG3Li80ifClCkjzTAVT296pW2LkHwJP" />
+                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="eWMpb2wznS3xuDRxV3eO31Bw38JX6FjxFr4zg0PS" />
                     <SerializedForm>
                         <KeyValue Key="text" Value="my text value" />
                         <KeyValue Key="file" />

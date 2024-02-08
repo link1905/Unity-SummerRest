@@ -23,7 +23,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:
@@ -65,11 +65,11 @@ MonoBehaviour:
     text: 
     body:
       value:
-        rid: 3742550695414071298
+        rid: 8737868576002670592
       typeReference:
-        classRef: SummerRestSample.Product, Assembly-CSharp-firstpass
-    serializedData: "{\n    \"id\": 103,\n    \"title\": \"my product\",\n    \"description\":
-      \"it is a wonderful product\"\n}"
+        classRef: SummerRestSample.Models.Product, Assembly-CSharp-firstpass
+    serializedData: "{\n    \"id\": 103,\n    \"title\": \"Summer Rest\",\n    \"description\":
+      \"Wonderful plugin\"\n}"
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/add
@@ -120,9 +120,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3742550695414071298
-      type: {class: Product, ns: SummerRestSample, asm: Assembly-CSharp-firstpass}
+    - rid: 8737868576002670592
+      type: {class: Product, ns: SummerRestSample.Models, asm: Assembly-CSharp-firstpass}
       data:
         id: 103
-        title: my product
-        description: it is a wonderful product
+        title: Summer Rest
+        description: Wonderful plugin

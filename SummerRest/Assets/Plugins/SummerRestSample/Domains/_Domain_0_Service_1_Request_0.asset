@@ -23,7 +23,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:
@@ -61,15 +61,14 @@ MonoBehaviour:
   method: 1
   requestParams: []
   requestBody:
-    type: 0
+    type: 1
     text: "{    \r\n    \"username\": \"atuny0\",\r\n    \"password\": \"9uQFF1Lh\"\r\n}"
     body:
       value:
-        rid: -2
+        rid: 8737868576002670593
       typeReference:
-        classRef: 
-    serializedData: "{    \r\n    \"username\": \"atuny0\",\r\n    \"password\":
-      \"9uQFF1Lh\"\r\n}"
+        classRef: SummerRest.Runtime.RequestComponents.Account, SummerRest
+    serializedData: "{\n    \"username\": \"\",\n    \"password\": \"\"\n}"
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/auth/login
@@ -120,5 +119,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 8737868576002670593
+      type: {class: Account, ns: SummerRest.Runtime.RequestComponents, asm: SummerRest}
+      data:
+        username: 
+        password: 

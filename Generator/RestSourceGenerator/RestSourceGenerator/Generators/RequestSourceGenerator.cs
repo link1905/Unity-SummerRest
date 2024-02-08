@@ -35,6 +35,7 @@ namespace RestSourceGenerator.Generators
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Parsers;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 namespace SummerRest.Runtime.Authenticate
 {{
     public static class AuthKeys
