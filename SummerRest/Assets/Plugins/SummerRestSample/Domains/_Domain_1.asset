@@ -25,19 +25,19 @@ MonoBehaviour:
     value:
       authKey: dummy-json-token
   headers:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value: []
     value: []
   timeoutSeconds:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value: 0
     value: 0
   redirectsLimit:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value: 0

@@ -191,7 +191,7 @@ public const string Param1 = "param-1";public const string Param2 = "param-2";
 """;
         Assert.Equal(expectedKeys, keys);
         const string expectedValues = """
-public const string Param2 = "param-2-value";public const string[] Param1 = new string[] {"param-1-value-1","param-1-value-2"};
+public const string Param2 = "param-2-value";public static readonly string[] Param1 = new string[] {"param-1-value-1","param-1-value-2"};
 """;
         Assert.Equal(expectedValues, values);
         const string expectedRefValues = """

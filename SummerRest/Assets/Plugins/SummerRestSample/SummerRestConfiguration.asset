@@ -17,26 +17,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   authContainers:
   - type: 0
-    text: asd
+    text: 
     body:
       value:
-        rid: 3742550718631641092
-    key: dummy-json-token
+        rid: -2
+    key: DummyJsonToken
     appenderType:
-      classRef: SummerRestSample.DummyJsonApiAuthAppender, Assembly-CSharp-firstpass
+      classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
+        SummerRest
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
       SummerRest
   dataSerializer:
     classRef: SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest
-  targetAssembly: {fileID: 0}
+  targetAssembly: {fileID: 5897886265953266890, guid: 02f41f6caf82a0a43952cb6179925d9b, type: 3}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 3742550718631641092
-      type: {class: BasicAuth, ns: SummerRest.Runtime.RequestComponents, asm: SummerRest}
-      data:
-        <Username>k__BackingField: 
-        <Password>k__BackingField: 

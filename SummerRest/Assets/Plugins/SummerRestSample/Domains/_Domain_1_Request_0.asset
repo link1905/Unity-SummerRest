@@ -15,7 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 613c8c92d27ef484e8f91d14ee2f4c9b, type: 2}
   endpointName: GetProductImage
-  url: https://cdn.dummyjson.com/product-images
+  url: https://cdn.dummyjson.com/product-images/1/1.jpg
   auth:
     inherit: 2
     cache:
@@ -27,25 +27,29 @@ MonoBehaviour:
   headers:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: []
     value: []
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   <TreeId>k__BackingField: 1
   path:
-    text: 
-    values: []
+    text: '{productId}/{image-order}'
+    values:
+    - key: productId
+      value: 1
+    - key: image-order
+      value: 1.jpg
   contentType:
     inherit: 16
     cache:
@@ -71,9 +75,9 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://cdn.dummyjson.com/product-images
+  urlWithParam: https://cdn.dummyjson.com/product-images/1/1.jpg
   latestResponse:
-    lastCall: 1/30/2024 2:41:43 PM
+    lastCall: 2/7/2024 11:26:09 AM
     error: 
     statusCode: 200
     headers:
@@ -92,7 +96,7 @@ MonoBehaviour:
     - key: Server
       value: AmazonS3
     - key: Date
-      value: Tue, 30 Jan 2024 07:07:53 GMT
+      value: Wed, 07 Feb 2024 03:57:15 GMT
     - key: ETag
       value: '"1c1a52a1d3ecf9ccaafb34524517b2ec"'
     - key: Vary
@@ -100,13 +104,13 @@ MonoBehaviour:
     - key: X-Cache
       value: Hit from cloudfront
     - key: Via
-      value: 1.1 ffbf12c4a361dfdb73749ab145185096.cloudfront.net (CloudFront)
+      value: 1.1 f55d9e952fc309b5d493e122ed644b9a.cloudfront.net (CloudFront)
     - key: X-Amz-Cf-Pop
-      value: SGN50-P1
+      value: SGN50-P2
     - key: X-Amz-Cf-Id
-      value: 7ZHw1W-37w6vvBX5EFuFDpgMFQPtKRUdYafSq1TSHurVBE9dd7wx0g==
+      value: IgcU2gfsYIZ4Qm0-yQ71VEZAcWEFyVlCanHooDrtKlNPBJFiL5xWnA==
     - key: Age
-      value: 2029
+      value: 1737
     body:
       mediaType: image/jpeg
       fileName: UnknownFileName

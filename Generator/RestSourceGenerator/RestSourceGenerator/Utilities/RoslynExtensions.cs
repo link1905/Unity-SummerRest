@@ -62,9 +62,20 @@ namespace RestSourceGenerator.Utilities
                 separator: RoslynDefaultValues.SemiColons,
                 end: RoslynDefaultValues.SemiColons);
         }
+        
+        public static string BuildSequentialReadonly(this IEnumerable<(string name, string value)> values, string type)
+        {
+            return values.BuildSequentialValues((tuple, _) => BuildReadonly(type, tuple.name, tuple.value),
+                separator: RoslynDefaultValues.SemiColons,
+                end: RoslynDefaultValues.SemiColons);
+        }
         public static string BuildConst(string type, string name, string value)
         {
             return $"public const {type} {name.ToClassName()} = {value}";
+        }
+        public static string BuildReadonly(string type, string name, string value)
+        {
+            return $"public static readonly {type} {name.ToClassName()} = {value}";
         }
         public static string BuildArray(this IEnumerable<string> values, string type)
         {

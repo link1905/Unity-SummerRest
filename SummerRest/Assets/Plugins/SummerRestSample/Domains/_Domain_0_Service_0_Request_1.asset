@@ -62,6 +62,10 @@ MonoBehaviour:
   requestParams:
   - key: q
     value: phone
+  - key: select
+    value: title
+  - key: select
+    value: price
   requestBody:
     type: 0
     text: 
@@ -73,7 +77,7 @@ MonoBehaviour:
     serializedData: 
     textFormat: 0
     form: []
-  urlWithParam: https://dummyjson.com/products/search?q=phone
+  urlWithParam: https://dummyjson.com/products/search?q=phone&select=title&select=price
   latestResponse:
     lastCall: 2/1/2024 4:17:43 PM
     error: 

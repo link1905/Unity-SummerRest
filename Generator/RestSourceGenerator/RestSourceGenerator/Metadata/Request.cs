@@ -80,7 +80,7 @@ namespace RestSourceGenerator.Metadata
                 Where(e => e.Count() >= 2)
                 .Select(e => 
                     (e.Key, e.Select(keyValue => keyValue.Value.ToEmbeddedString()).BuildArray(RoslynDefaultValues.String)))
-                .BuildSequentialConstants(RoslynDefaultValues.Array(RoslynDefaultValues.String));
+                .BuildSequentialReadonly(RoslynDefaultValues.Array(RoslynDefaultValues.String));
             var refValues = keyToValues
                 .BuildSequentialValues((e, _) => {
                 var keyProp =
