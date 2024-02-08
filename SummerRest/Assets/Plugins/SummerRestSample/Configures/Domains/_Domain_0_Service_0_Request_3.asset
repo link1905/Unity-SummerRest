@@ -65,16 +65,16 @@ MonoBehaviour:
     text: 
     body:
       value:
-        rid: 8737868576002670592
+        rid: 8737868576002670594
       typeReference:
         classRef: SummerRestSample.Models.Product, Assembly-CSharp-firstpass
-    serializedData: "{\n    \"id\": 103,\n    \"title\": \"Summer Rest\",\n    \"description\":
+    serializedData: "{\n    \"id\": 102,\n    \"title\": \"Summer Rest\",\n    \"description\":
       \"Wonderful plugin\"\n}"
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/add
   latestResponse:
-    lastCall: 2/1/2024 4:26:04 PM
+    lastCall: 2/8/2024 10:34:55 PM
     error: 
     statusCode: 200
     headers:
@@ -97,15 +97,15 @@ MonoBehaviour:
     - key: x-ratelimit-remaining
       value: 99
     - key: date
-      value: Thu, 01 Feb 2024 09:26:04 GMT
+      value: Thu, 08 Feb 2024 15:34:57 GMT
     - key: x-ratelimit-reset
-      value: 1706779572
+      value: 1707406500
     - key: content-type
       value: application/json; charset=utf-8
     - key: content-length
-      value: 73
+      value: 65
     - key: etag
-      value: W/"49-/wMl7w7rwGwjmYavqglFHpdYsTU"
+      value: W/"41-R1xKhjwPeNxDChyVWhtbSUntbe4"
     - key: vary
       value: Accept-Encoding
     - key: server
@@ -116,13 +116,13 @@ MonoBehaviour:
       rawBytes:
         isImage: 0
         data: 
-      rawBody: '{"id":101,"title":"my product","description":"it is a wonderful product"}'
+      rawBody: '{"id":101,"title":"Summer Rest","description":"Wonderful plugin"}'
   references:
     version: 2
     RefIds:
-    - rid: 8737868576002670592
+    - rid: 8737868576002670594
       type: {class: Product, ns: SummerRestSample.Models, asm: Assembly-CSharp-firstpass}
       data:
-        id: 103
+        id: 102
         title: Summer Rest
         description: Wonderful plugin
