@@ -36,7 +36,7 @@ First and foremost, we must know the structure of an endpoint tree
 - `Request`: The terminal component of an Endpoint tree (It does not have any children)
   - A `Request` is a HTTP request (yeah that's right, you need at least 1 bounding domain to call any request), that means a Request has `method` and `body`
     ![](Screenshots/0_definition_2_request.png)
-- Inheriting resource path from parents stands out as the most crucial reason of this plugin (technically, string concatenations). So, the url of an element must be influenced by its parents (please note the url field of the previous captures)
+- Inheriting resource path from parents stands out as the most crucial benefit of this plugin (technically string concatenation). So, the url of an element must be influenced by its parents (please note the url field of the previous captures)
 
 
 Additionally, you may see these things everywhere in the plugin
@@ -47,9 +47,9 @@ Additionally, you may see these things everywhere in the plugin
    ![](Screenshots/0_definition_5_inherit_custom.png)
 - Raw text or custom class: sometimes the plugin allows to use custom class instead of raw text (request body, auth data)
   ![](Screenshots/0_definition_6_text_or_custom_plain.png) <br>
-  - Show all of types in the project is a performance killer (in spite of Editor time). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
+  - Show all types of a project is a performance killer (in spite of Editor time). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
    ![](Screenshots/0_definition_7_text_or_custom_type.png)
-  - Finally, the fields are exposed and serialized thank to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
+  - Finally, the fields are exposed and serialized thanks to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
     ```csharp
     [Serializable] //Essential attribute to make this class work with Unity Serialization
     class MyRequestBody : IRequestBodyData
@@ -88,10 +88,10 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in the editor
   ![](Screenshots/1_guide_7_make_request.png)
-- We are tightly sticking the request to the product 1 (we need to change the path in case we refer to another product). We support smart strings in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
+- We are tightly sticking the request to the product 1 (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
   - You need to embed your dynamic strings inside "{}" eg. "{productId}"
   - Then a list will be shown for replacing that values in the final url
-  - To continue the previous example, we change the relative path from "1" to "{productId}" 
+  - To continue the previous example, please change the relative path from "1" to "{productId}". Then, the final URL looks the same as the previous step
     ![](Screenshots/1_guide_7_1_smart_path.png)
 - You may create a searching request by using the parameters
   ![](Screenshots/1_guide_8_get_with_param.png)
@@ -99,7 +99,7 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_9_post_request.png)
 - Another one downloading an image (I have created a domain named DummyJsonCdn)
   ![](Screenshots/1_guide_10_image_request.png)
-
+- Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for further usages
 
 ## Auth
 
@@ -153,7 +153,7 @@ First, we need to create a request to login (and get access token)
 Then, create the respective auth container in the plugin window. Select the class you have just created as the appender and input the received token
 ![](Screenshots/2_auth_4_auth_container.png)
 
-In any Endpoint, refer to this container if you're about to authenticate requests arisen from it
+In any Endpoint, refer to this container if you're about to authenticate the requests arisen from it
 ![](Screenshots/2_auth_5_auth_request.png)
 
 
@@ -257,7 +257,7 @@ A class generated from `Request` comes up with some utility methods for calling 
         private void DoRequest()
         {
             // Request normal data
-            StartCoroutine(_myRequest.RequestCoroutine<MyResponseData>(HandleResponse, HandleError));
+            StartCoroutine(_myRequest.DataRequestCoroutine<MyResponseData>(HandleResponse, HandleError));
             // Request texture
             StartCoroutine(_myRequest.TextureRequestCoroutine(HandleResponseTexture, true));
             // Request audio clip
@@ -266,18 +266,18 @@ A class generated from `Request` comes up with some utility methods for calling 
         private void HandleResponse(MyResponseData responseData) { ... }
         private void HandleResponseTexture(Texture2D texture) { ... }
         private void HandleResponseAudioClip(AudioClip audioClip) { ... }
-        // OnError is optional, you should consider detailed calls when encountering complex errors
-        private void HandleError(string error) { ... }
+        // OnError is optional
+        private void HandleError(ResponseError error) { ... }
     }
    ```
 - The simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods
-  ```
+  ```csharp
   private void DoDetailedRequest()
   {
       // Request normal data
       StartCoroutine(_myRequest.DetailedRequestCoroutine<MyResponseData>(HandleDetailedResponse));
-      
       // Request audioClip/texture is similar to the previous step 
+      ...
   }
   private void HandleDetailedResponse(WebResponse<MyResponseData> responseData)
   {
@@ -287,6 +287,23 @@ A class generated from `Request` comes up with some utility methods for calling 
       ...
   }
   ```
+- In case you need to make an undefined request (eg. an image url). You would rather use [WebRequestUtility](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestAdaptor/WebRequestUtility.cs)
+  ```csharp
+  public void GetImageByAbsoluteUrl(string url)
+  {
+      StartCoroutine(WebRequestUtility.TextureRequestCoroutine(
+          url: url, nonReadable: false, doneCallback: ShowImage, 
+          // Use a builder to modify the request
+          adaptorBuilder: b =>
+          {
+              // Change request data if neccessary
+              b.RedirectLimit = 3;
+              b.SetHeader("my-header", "my-value");
+          }));
+  }
+  private void ShowImage(Texture2D text) { ... }
+  ```
+- Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for complete examples
 ### Async
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
@@ -310,6 +327,6 @@ private async UniTask LoadUserData()
 
 The plugin provides a most common way to deal with HTTP requests. But, you are able to embed your customizations easily 
 
-- Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [NewtonSoft package](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.0/manual/index.html), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
+- Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [JsonUtility](https://docs.unity3d.com/ScriptReference/JsonUtility.html), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
 - ISecretRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `ISecretRepository.Current`
 - There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... I do not offer default selections for them in the window because I think there is no need to change their logic
