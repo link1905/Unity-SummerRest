@@ -72,17 +72,14 @@ namespace SummerRest.Editor.Configurations
             public string name;
         }
 
-        /// <summary>
-        /// Default assembly of Unity
-        /// </summary>
-        private const string UnityFirstPass = "Assembly-CSharp-firstpass";
+
         [XmlAttribute]
         public string Assembly
         {
             get
             {
                 if (targetAssembly is null)
-                    return UnityFirstPass;
+                    return ReflectionExtensions.LoadDefaultAssembly().FullName;
                 try
                 {
                     // Unity does not provide any way to access name of an AssemblyDefinitionAsset
@@ -92,7 +89,7 @@ namespace SummerRest.Editor.Configurations
                 }
                 catch (Exception)
                 {
-                    return UnityFirstPass;
+                    return ReflectionExtensions.LoadDefaultAssembly().FullName;
                 }
             }
             set => throw new NotImplementedException();

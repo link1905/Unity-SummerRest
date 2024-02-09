@@ -5,6 +5,22 @@ namespace SummerRest.Editor.Utilities
 {
     public static class ReflectionExtensions
     {
+        /// <summary>
+        /// Default assembly of Unity
+        /// </summary>
+        private const string DefaultUnityFirstPassAssembly = "Assembly-CSharp-firstpass";
+        private const string DefaultUnityAssembly = "Assembly-CSharp";
+        public static Assembly LoadDefaultAssembly()
+        {
+            try
+            {
+                return Assembly.Load(DefaultUnityFirstPassAssembly);
+            }
+            catch (Exception)
+            {
+                return Assembly.Load(DefaultUnityAssembly);
+            }
+        }
         public static void CallGenericMethod(this object obj, string methodName, Type[] typeArguments, params object[] parameters)
         {
             Type objectType = obj.GetType();

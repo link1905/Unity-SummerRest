@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using SummerRest.Editor.TypeReference;
+using SummerRest.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace SummerRest.Editor.Drawers
             if (_cacheSelections.Count > 0)
                 return _cacheSelections;
 
-            var assembly = Assembly.Load("Assembly-CSharp-firstpass");
+            var assembly = ReflectionExtensions.LoadDefaultAssembly();
             FilterTypes(assembly, filter, _cacheSelections);
             foreach (var refAssembly in assembly.GetReferencedAssemblies())
                 FilterTypes(Assembly.Load(refAssembly), filter, _cacheSelections);
