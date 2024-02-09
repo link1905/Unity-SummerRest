@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿#if SUMMER_REST_TASK
+using Cysharp.Threading.Tasks;
 using SummerRest.Runtime.RequestAdaptor;
 
 namespace SummerRest.Runtime.Requests
@@ -27,3 +28,4 @@ namespace SummerRest.Runtime.Requests
         }       
     }
 }
+#endif
