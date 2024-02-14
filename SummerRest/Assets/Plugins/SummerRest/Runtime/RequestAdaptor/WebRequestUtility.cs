@@ -32,7 +32,7 @@ namespace SummerRest.Runtime.RequestAdaptor
                 else
                     Debug.LogErrorFormat(
                         @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
-                        msg, request.Url);
+                        msg.Message, request.Url);
             }
 
             return error;
