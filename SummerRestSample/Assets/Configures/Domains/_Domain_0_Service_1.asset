@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
+  m_Name: _Domain_0_Service_1
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  endpointName: Auths
+  url: https://dummyjson.com/auth
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        authKey: 
+    value:
+      authKey: DummyJsonToken
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: []
+    value: []
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  <TreeId>k__BackingField: 9
+  services: []
+  requests:
+  - {fileID: 11400000, guid: 829516d3e09cde64c91f7e621891ef78, type: 2}
+  - {fileID: 11400000, guid: dd053e978e97c8740938a43ad22b17d1, type: 2}
+  path: auth

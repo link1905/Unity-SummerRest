@@ -26,7 +26,7 @@
     {
       "displayName": "Sample project",
       "description": "A sample project showing how to use the plugin",
-      "path": "Samples~/SummerRestSampleProject"
+      "path": "../../../../SummerRestSample"
     }
   ]
 }

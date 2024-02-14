@@ -1,0 +1,67 @@
+<SummerRestConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SecretRepository="SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository" DataSerializer="SummerRest.Runtime.Parsers.DefaultDataSerializer" Assembly="Assembly-CSharp">
+    <name>SummerRestConfiguration</name>
+    <hideFlags>None</hideFlags>
+    <Domains>
+        <Domain TypeName="Domain" EndpointName="DummyJson">
+            <Services>
+                <Service TypeName="Service" EndpointName="Products">
+                    <Requests>
+                        <Request TypeName="Request" EndpointName="GetProduct" Url="https://dummyjson.com/products/1" UrlFormat="https://dummyjson.com/products/{0}" UrlWithParams="https://dummyjson.com/products/1" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <UrlFormatContainers>
+                                <KeyValue Key="productId" Value="1" />
+                            </UrlFormatContainers>
+                        </Request>
+                        <Request TypeName="Request" EndpointName="SearchProduct" Url="https://dummyjson.com/products/search" UrlFormat="" UrlWithParams="https://dummyjson.com/products/search?q=phone&amp;select=title&amp;select=price" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <Headers>
+                                <KeyValue Key="my-header" Value="my-header-value" />
+                            </Headers>
+                            <RequestParams>
+                                <KeyValue Key="q" Value="phone" />
+                                <KeyValue Key="select" Value="title" />
+                                <KeyValue Key="select" Value="price" />
+                            </RequestParams>
+                        </Request>
+                        <Request TypeName="Request" EndpointName="AddProductRawText" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&#xD;&#xA;    &quot;id&quot;: 101,&#xD;&#xA;    &quot;title&quot;: &quot;my product&quot;,&#xD;&#xA;    &quot;description&quot;: &quot;my description&quot;&#xD;&#xA;}" IsMultipart="false">
+                            <ContentType Charset="UTF-8" MediaType="application/json" />
+                        </Request>
+                        <Request TypeName="Request" EndpointName="AddProductData" Url="https://dummyjson.com/products/add" UrlFormat="" UrlWithParams="https://dummyjson.com/products/add" Method="Post" DataFormat="Json" SerializedBody="{&quot;id&quot;:0,&quot;title&quot;:&quot;Summer rest&quot;,&quot;description&quot;:&quot;Wonderful plugn&quot;}" IsMultipart="false">
+                            <ContentType Charset="UTF-8" MediaType="application/json" />
+                        </Request>
+                    </Requests>
+                </Service>
+                <Service TypeName="Service" EndpointName="Auths">
+                    <Requests>
+                        <Request TypeName="Request" EndpointName="Login" Url="https://dummyjson.com/auth/login" UrlFormat="" UrlWithParams="https://dummyjson.com/auth/login" Method="Post" DataFormat="Json" SerializedBody="{&quot;username&quot;:&quot;&quot;,&quot;password&quot;:&quot;&quot;}" IsMultipart="false">
+                            <ContentType Charset="UTF-8" MediaType="application/json" />
+                        </Request>
+                        <Request TypeName="Request" EndpointName="GetUser" Url="https://dummyjson.com/auth/me" UrlFormat="" UrlWithParams="https://dummyjson.com/auth/me" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                            <AuthContainer AuthKey="DummyJsonToken" AppenderType="Auth.DummyJsonApiAuthAppender" AuthDataType="System.String" />
+                        </Request>
+                    </Requests>
+                </Service>
+            </Services>
+            <Requests>
+                <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
+                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="ww2QpphEvRjFYSOztWprB1wMbmstVQuaGRCOXdgL" />
+                    <SerializedForm>
+                        <KeyValue Key="text" Value="my text value" />
+                        <KeyValue Key="file" />
+                    </SerializedForm>
+                </Request>
+            </Requests>
+        </Domain>
+        <Domain TypeName="Domain" EndpointName="DummyJsonCdn">
+            <Requests>
+                <Request TypeName="Request" EndpointName="GetProductImage" Url="https://cdn.dummyjson.com/product-images/1/1.jpg" UrlFormat="https://cdn.dummyjson.com/product-images/{0}/{1}" UrlWithParams="https://cdn.dummyjson.com/product-images/1/1.jpg" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                    <UrlFormatContainers>
+                        <KeyValue Key="productId" Value="1" />
+                        <KeyValue Key="image-order" Value="1.jpg" />
+                    </UrlFormatContainers>
+                </Request>
+            </Requests>
+        </Domain>
+    </Domains>
+    <AuthKeys>
+        <string>DummyJsonToken</string>
+    </AuthKeys>
+</SummerRestConfiguration>
