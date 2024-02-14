@@ -21,6 +21,7 @@ namespace SummerRest.Editor.Utilities
                 return Assembly.Load(DefaultUnityAssembly);
             }
         }
+        public static string LoadDefaultAssemblyName() => LoadDefaultAssembly().GetName().Name;
         public static void CallGenericMethod(this object obj, string methodName, Type[] typeArguments, params object[] parameters)
         {
             Type objectType = obj.GetType();

@@ -79,7 +79,7 @@ namespace SummerRest.Editor.Configurations
             get
             {
                 if (targetAssembly is null)
-                    return ReflectionExtensions.LoadDefaultAssembly().FullName;
+                    return ReflectionExtensions.LoadDefaultAssemblyName();
                 try
                 {
                     // Unity does not provide any way to access name of an AssemblyDefinitionAsset
@@ -89,7 +89,7 @@ namespace SummerRest.Editor.Configurations
                 }
                 catch (Exception)
                 {
-                    return ReflectionExtensions.LoadDefaultAssembly().FullName;
+                    return ReflectionExtensions.LoadDefaultAssemblyName();
                 }
             }
             set => throw new NotImplementedException();
