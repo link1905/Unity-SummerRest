@@ -22,6 +22,7 @@ namespace SummerRest.Editor.Window.Elements
         private TextField _urlElement;
         private VisualElement _requestBodyElement;
         private Button _requestBtn;
+        private Toggle _generated; 
 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
@@ -45,6 +46,7 @@ namespace SummerRest.Editor.Window.Elements
             _nameElement = this.Q<TextField>("name");
             _pathElement = this.Q<PropertyField>("path");
             _urlElement = this.Q<TextField>("url");
+            _generated = this.Q<Toggle>("generated");
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
         /// <summary>
@@ -80,6 +82,11 @@ namespace SummerRest.Editor.Window.Elements
             // If request => urlWithParams
             _urlElement.SetEnabled(false);
             _urlElement.bindingPath = endpoint is Request ? "urlWithParam" : "url";
+
+            var generated = isDomain || endpoint.Generated;
+            _generated.SetEnabled(generated);
+            _generated.text = generated ? string.Empty : "(Parent is incapable of being generated)";
+            
             ShowAdvancedSettings(isRequest);
             this.BindChildrenToProperties(serializedObj);
         }

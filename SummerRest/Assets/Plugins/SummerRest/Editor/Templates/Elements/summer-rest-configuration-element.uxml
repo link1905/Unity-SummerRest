@@ -3,8 +3,8 @@
     <ui:Template name="endpoint_UXML" src="project://database/Assets/Plugins/SummerRest/Editor/Templates/Elements/endpoint_element.uxml?fileID=9197481963319205126&amp;guid=58449a5f23d6d324ba75a61f0255e158&amp;type=3#endpoint_element" />
     <SummerRest.Editor.Window.Elements.SummerRestConfigurationElement style="flex-grow: 1;">
         <uie:Toolbar name="toolbar" style="align-self: auto; justify-content: space-between; height: auto; max-height: none;">
-            <uie:ToolbarToggle focusable="false" label="Advanced settings" name="advanced" />
-            <ui:VisualElement name="gen" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0;">
+            <uie:ToolbarToggle focusable="false" label="Advanced settings" name="advanced" style="justify-content: flex-start; align-self: auto; -unity-text-align: middle-left;" />
+            <ui:VisualElement name="gen" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0; align-self: auto; align-items: center;">
                 <uie:ToolbarButton text="Generate source to" display-tooltip-when-elided="true" name="gen-btn" style="justify-content: flex-start; align-self: auto; flex-grow: 0; align-items: auto; flex-shrink: 0;" />
                 <uie:ObjectField name="target-assembly" binding-path="targetAssembly" allow-scene-objects="false" type="UnityEditorInternal.AssemblyDefinitionAsset, UnityEditor" tooltip="Leave null to generate in Unity default assembly" focusable="false" style="flex-direction: column; min-width: auto; flex-wrap: nowrap; align-self: auto; flex-grow: 0;" />
             </ui:VisualElement>
@@ -14,7 +14,7 @@
             <uie:PropertyField binding-path="secretRepository" tooltip="Type of token repository for storing auth values" name="secret-repository" focusable="false" style="flex-shrink: 0;" />
             <uie:PropertyField binding-path="authContainers" name="auths" style="flex-shrink: 0;" />
         </ui:VisualElement>
-        <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 0; max-height: 30px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); padding-left: 0; padding-right: 0; padding-top: 0;" />
+        <ui:Instance template="domain-list" name="domains" style="align-self: stretch; height: auto; flex-shrink: 0; flex-basis: 5%; justify-content: flex-start; align-items: flex-start; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); padding-bottom: 0; max-height: 30px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); padding-left: 0; padding-right: 0; padding-top: 0; min-height: 18px;" />
         <ui:TwoPaneSplitView fixed-pane-initial-dimension="200" name="endpoint-container" style="flex-direction: row; visibility: visible;">
             <ui:VisualElement name="domain" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; align-self: stretch; justify-content: flex-start; align-items: stretch; flex-shrink: 0; min-width: 15%; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: auto;">
                 <uie:Toolbar style="align-self: stretch; align-items: auto; justify-content: flex-start; flex-direction: row; flex-grow: 0; flex-shrink: 1;">

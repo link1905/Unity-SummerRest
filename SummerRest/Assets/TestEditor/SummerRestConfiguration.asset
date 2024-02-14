@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20861b636bc4735ab70e078a61211be, type: 3}
   m_Name: SummerRestConfiguration
   m_EditorClassIdentifier: 
-  <Domains>k__BackingField: []
+  <Domains>k__BackingField:
+  - {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
   authContainers: []
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,

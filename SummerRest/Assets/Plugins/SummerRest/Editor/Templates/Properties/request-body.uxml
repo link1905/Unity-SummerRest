@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" summer="SummerRest.Editor.Window.Elements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Template name="text-or-custom" src="project://database/Assets/Plugins/SummerRest/Editor/Templates/Properties/text-or-custom.uxml?fileID=9197481963319205126&amp;guid=b0c7610fa47212d4f85f91ef7acc56a1&amp;type=3#text-or-custom" />
+    <ui:Toggle label="Generate body" name="generate" binding-path="isGenerated" tooltip="Should the body be kept in the generated code? Your input will be cloned, you may hide sensitive data eg. username, email, password..." />
     <ui:Instance template="text-or-custom" name="text-or-custom">
         <ui:Foldout text="Serialized data" name="serialized-body">
             <ui:EnumField label="Format" type="SummerRest.Runtime.RequestComponents.DataFormat, SummerRest" name="text-format" binding-path="textFormat" />

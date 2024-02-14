@@ -137,6 +137,8 @@ namespace SummerRest.Editor.Models
         
         public override void WriteXml(XmlWriter writer)
         {
+            if (!Generated)
+                return;
             base.WriteXml(writer);
             writer.WriteArray(nameof(Services), nameof(Service), services);
             writer.WriteArray(nameof(Requests), nameof(Request), requests);

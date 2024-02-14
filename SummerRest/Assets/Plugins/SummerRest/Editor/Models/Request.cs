@@ -55,9 +55,9 @@ namespace SummerRest.Editor.Models
         //Properties for JSON used in source generator
         public DataFormat DataFormat => RequestBody.DataFormat;
         public string SerializedBody => RequestBody.SerializedData(false);
-        public KeyValue[] SerializedForm => RequestBody.TextSections;
+        public KeyValue[] SerializedForm => RequestBody.CompleteTextAndNullForFileSections;
         public bool IsMultipart => requestBody.IsMultipart;
-
+        
         public override void CacheValues()
         {
             path.CacheValues();
@@ -106,6 +106,8 @@ namespace SummerRest.Editor.Models
         
         public override void WriteXml(XmlWriter writer)
         {
+            if (!Generated)
+                return;
             base.WriteXml(writer);
             writer.WriteAttributeString(nameof(Url), Url);
             writer.WriteAttributeString(nameof(UrlFormat), UrlFormat);
@@ -116,7 +118,8 @@ namespace SummerRest.Editor.Models
             if (RedirectsLimit.HasValue)
                 writer.WriteAttributeString(nameof(RedirectsLimit), RedirectsLimit.Value.ToString());
             writer.WriteAttributeString(nameof(DataFormat), DataFormat.ToString());
-            writer.WriteAttributeString(nameof(SerializedBody), SerializedBody);
+            if (RequestBody.Generated)
+                writer.WriteAttributeString(nameof(SerializedBody), SerializedBody);
             writer.WriteAttributeString(nameof(IsMultipart), IsMultipart.ToString().ToLower());
             if (ContentType.HasValue)
                 writer.WriteObject(nameof(ContentType), ContentType);
@@ -125,7 +128,8 @@ namespace SummerRest.Editor.Models
             writer.WriteArray(nameof(RequestParams), RequestParams);
             if (AuthContainer is not null)
                 writer.WriteObject(nameof(AuthContainer), AuthContainer);
-            writer.WriteArray(nameof(SerializedForm), SerializedForm);
+            if (RequestBody.Generated)
+                writer.WriteArray(nameof(SerializedForm), SerializedForm);
         }
     }
 }

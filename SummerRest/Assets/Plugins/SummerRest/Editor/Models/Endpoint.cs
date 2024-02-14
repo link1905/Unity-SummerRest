@@ -56,9 +56,12 @@ namespace SummerRest.Editor.Models
             {
                 if (Parent is null)
                     return Path;
+                var parentPath = Parent.FullPath;
                 if (string.IsNullOrEmpty(Path))
-                    return Parent.FullPath;
-                return $"{Parent.FullPath}/{Path}";
+                    return parentPath;
+                if (string.IsNullOrEmpty(parentPath))
+                    return Path;
+                return $"{parentPath}/{Path}";
             }
         }
 
@@ -91,6 +94,9 @@ namespace SummerRest.Editor.Models
         [SerializeField, InheritOrCustom]
         private InheritOrCustomContainer<int> redirectsLimit;
         public int? RedirectsLimit { get; set; }
+
+        [SerializeField] private bool isGenerated = true;
+        public bool Generated => isGenerated && (Parent is null || Parent.Generated); 
 
 
         [field: SerializeField] public int TreeId { get; protected set; }
@@ -148,13 +154,15 @@ namespace SummerRest.Editor.Models
 
             if (Domain is null)
                 return;
+            var fullPath = FullPath;
             try
             {
-                url = new Uri($"{FullPath}").AbsoluteUri;
+                url = Uri.EscapeUriString(fullPath);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Debug.LogWarningFormat("{0} is not a valid URL", url);
+                Debug.LogWarning(e.Message);
+                url = fullPath;
             }
         }
         
