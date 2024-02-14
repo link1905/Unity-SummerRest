@@ -303,7 +303,7 @@ A class generated from `Request` comes up with some utility methods for calling 
   }
   private void ShowImage(Texture2D text) { ... }
   ```
-- Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for complete examples
+- Please have a look at [Sample project](SummerRestSample) for complete examples
 ### Async
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
