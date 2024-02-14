@@ -4,7 +4,7 @@
         <ui:TextField picking-mode="Ignore" label="Service" value="filler text" name="name" binding-path="endpointName" tooltip="Also the name of the generated class, please input class name" style="align-self: stretch; flex-shrink: 0; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch;" />
         <uie:PropertyField name="path" label="Path" binding-path="path" />
         <ui:TextField picking-mode="Ignore" label="Url" name="url" readonly="true" style="align-items: stretch; align-self: stretch; flex-shrink: 0;" />
-        <ui:Toggle label="Generate code" name="generated" value="false" binding-path="isGenerated" tooltip="Should the endpoint be generated into a class (uncheck if you does not intend to call this endpoint and its children in PlayMode)" />
+        <ui:Toggle label="Generate code" name="generated" value="false" binding-path="isGenerated" tooltip="Should the endpoint be generated into a class (uncheck if you do not intend to call this endpoint and its children in PlayMode)" />
         <ui:Foldout text="Advanced settings" name="advanced-settings" value="false" style="flex-shrink: 0;" />
         <ui:VisualElement name="shared-elements" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-self: stretch; min-width: auto; min-height: auto; flex-shrink: 0;">
             <uie:PropertyField name="versions" binding-path="versions" style="align-self: stretch; flex-grow: 0; flex-shrink: 0;" />
