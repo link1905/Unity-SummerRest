@@ -93,7 +93,7 @@ namespace SummerRest.Editor.Utilities
         /// </summary>
         /// <param name="field"></param>
         /// <param name="property"></param>
-        public static void BindPropertyNoLabel(this PropertyField field, SerializedObject property)
+        public static void BindPropertyNoLabel<T>(this T field, SerializedObject property) where T : VisualElement, IBindable
         {
             field.BindProperty(property);
             field.RegisterCallback<GeometryChangedEvent>(_ =>

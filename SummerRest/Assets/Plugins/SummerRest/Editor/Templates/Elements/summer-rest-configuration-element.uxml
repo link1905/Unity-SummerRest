@@ -6,7 +6,7 @@
             <uie:ToolbarToggle focusable="false" label="Advanced settings" name="advanced" />
             <ui:VisualElement name="gen" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-shrink: 0;">
                 <uie:ToolbarButton text="Generate source to" display-tooltip-when-elided="true" name="gen-btn" style="justify-content: flex-start; align-self: auto; flex-grow: 0; align-items: auto; flex-shrink: 0;" />
-                <uie:PropertyField name="target-assembly" binding-path="targetAssembly" tooltip="Leave null to generate in Unity default assembly" style="flex-shrink: 0; flex-direction: column;" />
+                <uie:ObjectField name="target-assembly" binding-path="targetAssembly" allow-scene-objects="false" type="UnityEditorInternal.AssemblyDefinitionAsset, UnityEditor" tooltip="Leave null to generate in Unity default assembly" focusable="false" style="flex-direction: column; min-width: auto; flex-wrap: nowrap; align-self: auto; flex-grow: 0;" />
             </ui:VisualElement>
         </uie:Toolbar>
         <ui:VisualElement name="advanced-settings" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-shrink: 0;">

@@ -66,8 +66,8 @@ namespace SummerRest.Editor.Window.Elements
         /// </summary>
         private void SetupGenerateSourceButton()
         {
-            var targetAssembly = this.Q<PropertyField>("target-assembly");
-            targetAssembly.BindPropertyNoLabel(_serializedConfiguration);
+            var targetAssembly = this.Q<ObjectField>("target-assembly");
+            targetAssembly.BindProperty(_serializedConfiguration);
             var genBtn = this.Q<ToolbarButton>("gen-btn");
             genBtn.clicked += SourceGenerator.GenerateAdditionalFile;
         }
