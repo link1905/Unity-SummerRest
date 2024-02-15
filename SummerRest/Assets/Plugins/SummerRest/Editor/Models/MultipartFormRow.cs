@@ -12,14 +12,11 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private string key;
         [SerializeField] private FileReference file;
-        public KeyValue Pair
+        public KeyValue Pair(bool allowText)
         {
-            get
-            {
-                if (type == MultipartFormRowType.PlainText)
-                    return new KeyValue(key, text.NotNullValue());
-                return new KeyValue(key, null);
-            }
+            if (type == MultipartFormRowType.PlainText)
+                return new KeyValue(key, allowText ? text.NotNullValue() : null);
+            return new KeyValue(key, null);
         }
         public IMultipartFormSection FormSection
         {

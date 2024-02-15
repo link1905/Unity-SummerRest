@@ -8,7 +8,6 @@ using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
 namespace SummerRest.Editor.Models
 {
@@ -40,8 +39,8 @@ namespace SummerRest.Editor.Models
         /// Completely get text fields <br/>
         /// File fields are represented by null value  
         /// </summary>
-        public KeyValue[] CompleteTextAndNullForFileSections => form
-            .Select(e => e.Pair).ToArray();
+        public KeyValue[] RestrictedSections(bool allowText) => form
+            .Select(e => e.Pair(allowText)).ToArray();
         public IEnumerable<IMultipartFormSection> AllSections 
             => form.Select(e => e.FormSection).Where(e => e is not null);
         [Serializable]

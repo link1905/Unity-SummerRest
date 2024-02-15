@@ -13,14 +13,16 @@ namespace SummerRest.Editor.Models
     {
         [SerializeField] private string authKey;
         public string AuthKey => authKey;
-        public static implicit operator AuthContainer(AuthPointer p)
-        {
-            var authConfigure= SummerRestConfiguration.Instance.AuthContainers;
-            return authConfigure.FirstOrDefault(e => e.AuthKey == p.authKey);
-        }
+        public static implicit operator AuthContainer(AuthPointer p) => 
+            SummerRestConfiguration.Instance.AuthContainers.FirstOrDefault(e => e.AuthKey == p.authKey);
         public static implicit operator AuthPointer(AuthContainer key) => key is not null ? new AuthPointer
         {
             authKey = key.AuthKey
         } : default;
+ 
+        public bool ValidateToGenerate()
+        {
+            return (AuthContainer)this is not null;
+        }
     }
 }

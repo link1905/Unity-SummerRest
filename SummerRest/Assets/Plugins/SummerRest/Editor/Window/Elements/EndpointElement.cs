@@ -83,9 +83,9 @@ namespace SummerRest.Editor.Window.Elements
             _urlElement.SetEnabled(false);
             _urlElement.bindingPath = endpoint is Request ? "urlWithParam" : "url";
 
-            var generated = isDomain || endpoint.Generated;
+            var generated = endpoint.IsParentGenerated();
             _generated.SetEnabled(generated);
-            _generated.text = generated ? string.Empty : "(Parent is incapable of being generated)";
+            _generated.text = generated ? string.Empty : "(Auto false because an ancestor is incapable of being generated)";
             
             ShowAdvancedSettings(isRequest);
             this.BindChildrenToProperties(serializedObj);

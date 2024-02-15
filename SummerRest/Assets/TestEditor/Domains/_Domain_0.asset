@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: Anony
+  endpointName: Anonymous
   url: 
   auth:
     inherit: 8
     cache:
       hasValue: 1
       value:
-        authKey: 
+        authKey: qweqweqwec11ccaass1asdsaassd
     value:
-      authKey: 
+      authKey: qweqweqwec11ccaass1asdsaassd
   headers:
     inherit: 8
     cache:
@@ -43,8 +43,9 @@ MonoBehaviour:
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 3
-  services: []
+  <TreeId>k__BackingField: 5
+  services:
+  - {fileID: 11400000, guid: cdceeb5384385864c8cd408884019e79, type: 2}
   requests:
   - {fileID: 11400000, guid: 230952ff208216541acf38ef2def085b, type: 2}
   - {fileID: 11400000, guid: a7723476c47fa2241874d543d50e0809, type: 2}

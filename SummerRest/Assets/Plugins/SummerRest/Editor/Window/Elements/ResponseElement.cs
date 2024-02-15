@@ -31,7 +31,7 @@ namespace SummerRest.Editor.Window.Elements
                     File.WriteAllText(filePath, rawBodyProp.stringValue);
                 else
                 {
-                    using var nativeBytes = bytesProp.GetArrayValue();
+                    using var nativeBytes = bytesProp.GetByteArray();
                     File.WriteAllBytes(filePath, nativeBytes.ToArray());
                 }
             };

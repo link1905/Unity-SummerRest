@@ -96,7 +96,15 @@ namespace SummerRest.Editor.Models
         public int? RedirectsLimit { get; set; }
 
         [SerializeField] private bool isGenerated = true;
-        public bool Generated => isGenerated && (Parent is null || Parent.Generated); 
+        public bool IsSelfGenerated => isGenerated;
+
+        public bool IsParentGenerated(bool checkSelf = false)
+        {
+            // Should check self but not satisfied
+            if (checkSelf && !IsSelfGenerated)
+                return false;
+            return Parent is null || Parent.IsParentGenerated(true);
+        }
 
 
         [field: SerializeField] public int TreeId { get; protected set; }
@@ -129,6 +137,17 @@ namespace SummerRest.Editor.Models
         public virtual bool IsContainer => false;
         public virtual string TypeName => nameof(Endpoint);
 
+        public virtual void ValidateToGenerate()
+        {
+            if (!IsSelfGenerated)
+                return;
+            var endPointClassName = EndpointName.ToClassName();
+            if (Parent is not null && endPointClassName == Parent.EndpointName.ToClassName())
+                throw new Exception($"{EndpointName}({url}) uses the same generated class name with its parent ({Parent.EndpointName}): {endPointClassName}");
+            if (auth.CacheValue.HasValue && !auth.CacheValue.Value.ValidateToGenerate())
+                throw new Exception($"{EndpointName}({url}) points to an invalid auth container with key: {auth.CacheValue.Value.AuthKey}");
+        } 
+
         /// <summary>
         /// Cache the <see cref="InheritOrCustomContainer{T}"/> fields based on the <see cref="Parent"/>
         /// </summary>
@@ -151,6 +170,7 @@ namespace SummerRest.Editor.Models
             
             var authCache = auth.Cache(Parent, whenInherit: p => new Present<AuthPointer>(p.AuthContainer != null, p.AuthContainer));
             AuthContainer = authCache.HasValue ? authCache.Value : null;
+            
 
             if (Domain is null)
                 return;

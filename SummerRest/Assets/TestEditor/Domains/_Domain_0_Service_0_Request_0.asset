@@ -10,45 +10,45 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: _Domain_0_Request_0
+  m_Name: _Domain_0_Service_0_Request_0
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
-  <Parent>k__BackingField: {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
-  endpointName: Anonymous
-  url: hkhk
+  <Parent>k__BackingField: {fileID: 11400000, guid: cdceeb5384385864c8cd408884019e79, type: 2}
+  endpointName: Request 1
+  url: 
   auth:
-    inherit: 8
+    inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value:
-        authKey: qweqweqwec11ccaass1
+        authKey: 
     value:
-      authKey: qweqweqwec11ccaass1
+      authKey: 
   headers:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: []
     value: []
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
-  isGenerated: 0
-  <TreeId>k__BackingField: 1
+  isGenerated: 1
+  <TreeId>k__BackingField: 0
   path:
-    text: hkhk
+    text: 
     values: []
   contentType:
-    inherit: 16
+    inherit: 2
     cache:
       hasValue: 0
       value:
@@ -73,7 +73,7 @@ MonoBehaviour:
     isGenerated: 1
     textFormat: 0
     form: []
-  urlWithParam: hkhk
+  urlWithParam: 
   latestResponse:
     lastCall: 
     error: 

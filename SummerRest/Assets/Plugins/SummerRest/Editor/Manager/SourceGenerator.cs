@@ -19,8 +19,12 @@ namespace SummerRest.Editor.Manager
         private const string FileName = "summer-rest-generated.RestSourceGenerator.additionalfile";
         public static void GenerateAdditionalFile()
         {
-            var path = SummerRestConfiguration.Instance.GetAssetFolder() + "/" + FileName;
-            var configureXml = IDataSerializer.Current.Serialize(SummerRestConfiguration.Instance, DataFormat.Xml, true);
+            var conf = SummerRestConfiguration.Instance;
+            // Will throw exceptions at this step if the conf is not satisfied
+            conf.ValidateToGenerate();
+            
+            var path = conf.GetAssetFolder() + "/" + FileName;
+            var configureXml = IDataSerializer.Current.Serialize(conf, DataFormat.Xml, true);
             var jsonAsset = EditorAssetUtilities.LoadOrCreate(path, () => new TextAsset());
             if (jsonAsset is null)
             {

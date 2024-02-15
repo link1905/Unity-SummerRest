@@ -55,7 +55,7 @@ namespace SummerRest.Editor.Models
         //Properties for JSON used in source generator
         public DataFormat DataFormat => RequestBody.DataFormat;
         public string SerializedBody => RequestBody.SerializedData(false);
-        public KeyValue[] SerializedForm => RequestBody.CompleteTextAndNullForFileSections;
+        public KeyValue[] SerializedForm => RequestBody.RestrictedSections(RequestBody.Generated);
         public bool IsMultipart => requestBody.IsMultipart;
         
         public override void CacheValues()
@@ -106,7 +106,7 @@ namespace SummerRest.Editor.Models
         
         public override void WriteXml(XmlWriter writer)
         {
-            if (!Generated)
+            if (!IsSelfGenerated)
                 return;
             base.WriteXml(writer);
             writer.WriteAttributeString(nameof(Url), Url);
@@ -128,8 +128,7 @@ namespace SummerRest.Editor.Models
             writer.WriteArray(nameof(RequestParams), RequestParams);
             if (AuthContainer is not null)
                 writer.WriteObject(nameof(AuthContainer), AuthContainer);
-            if (RequestBody.Generated)
-                writer.WriteArray(nameof(SerializedForm), SerializedForm);
+            writer.WriteArray(nameof(SerializedForm), SerializedForm);
         }
     }
 }

@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
-    // I encountered an error that ISerializationCallbackReceiver won't be called anymore after changing any serialized field 
     [Serializable]
     public class PathContainer
     {
@@ -27,10 +26,10 @@ namespace SummerRest.Editor.Models
             // Clear all keys
             foreach (var smartString in values)
                 smartString.Key = null;
-            foreach (var (entry, c) in new StringSegment(text, '{'))
+            foreach (var (start, c) in new StringSegment(text, '{'))
             {
                 if (previousCut == '{' 
-                    && entry.SplitKeyValue(out var key, out _, separator: '}'))
+                    && start.SplitKeyValue(out var key, out _, separator: '}'))
                 {
                     var keyStr = key.ToString();
                     // Duplicated keys => use the first one
@@ -44,7 +43,7 @@ namespace SummerRest.Editor.Models
                 }
                 previousCut = c.Length > 0 ? c[0] : default;
             }
-            // Remove from the latest key
+            // Remove from the latest key to the end
             if (currentIdx < values.Count) 
                 values.RemoveAt(currentIdx);
         }
@@ -52,7 +51,7 @@ namespace SummerRest.Editor.Models
         {
             var builder = new StringBuilder();
             builder.Append(text);
-            //replace {key} => {0} to form formatter string
+            //replace {key} => {<position>} to form formatter string
             for (var i = 0; i < values.Count; i++)
             {
                 builder.Replace($"{{{values[i].Key}}}", $"{{{i}}}");

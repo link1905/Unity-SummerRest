@@ -17,38 +17,38 @@ MonoBehaviour:
   endpointName: Request 2
   url: 
   auth:
-    inherit: 2
+    inherit: 8
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        authKey: 
+        authKey: qweqweqwec11ccaass1
     value:
-      authKey: 
+      authKey: qweqweqwec11ccaass1
   headers:
     inherit: 2
     cache:
-      hasValue: 0
+      hasValue: 1
       value: []
     value: []
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 0
+      hasValue: 1
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 0
+      hasValue: 1
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 0
+  <TreeId>k__BackingField: 2
   path:
     text: 
     values: []
   contentType:
-    inherit: 2
+    inherit: 16
     cache:
       hasValue: 0
       value:

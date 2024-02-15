@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEditor.Compilation;
 using Assembly = System.Reflection.Assembly;
 
@@ -9,6 +10,38 @@ namespace SummerRest.Editor.Utilities
 {
     public static class ReflectionExtensions
     {
+        public static string ToClassName(this string value)
+        {
+            StringBuilder formattedName = new StringBuilder();
+            bool capitalizeNextChar = true;
+            foreach (var c in value)
+            {
+                if (char.IsLetterOrDigit(c) || c == '_')
+                {
+                    if (formattedName.Length == 0 && char.IsDigit(c))
+                    {
+                        // If the first character is a digit, prefix with an underscore
+                        formattedName.Append('_');
+                    }
+                    if (capitalizeNextChar)
+                    {
+                        formattedName.Append(char.ToUpper(c));
+                        capitalizeNextChar = false;
+                    }
+                    else
+                    {
+                        formattedName.Append(c);
+                    }
+                }
+                else
+                {
+                    capitalizeNextChar = true;
+                }
+            }
+
+            return formattedName.ToString();
+        }
+        
         public static IEnumerable<Assembly> GetAllAssemblies()
         {
             return CompilationPipeline.GetAssemblies().Select(e => Assembly.Load(e.name));
@@ -38,7 +71,7 @@ namespace SummerRest.Editor.Utilities
             catch (Exception)
             {
                 throw new Exception(
-                    "There is no script in default assembly of your project! Please select a target assembly or create at least 1 script");
+                    "There is no script in the default assembly of your project! Please select a target assembly or create at least 1 script in the default assembly");
             }
         }
 

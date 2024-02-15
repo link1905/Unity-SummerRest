@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -43,12 +44,23 @@ namespace SummerRest.Editor.Utilities
         {
             return serializedObject.FindPropertyRelative($"<{name}>k__BackingField");
         }
-        public static NativeArray<byte> GetArrayValue(this SerializedProperty serializedProperty)
+        public static NativeArray<byte> GetByteArray(this SerializedProperty serializedProperty)
         {
             var nativeBytes = new NativeArray<byte>(serializedProperty.arraySize, Allocator.Temp);
             for (var i = 0; i < serializedProperty.arraySize; i++)
                 nativeBytes[i] = (byte)serializedProperty.GetArrayElementAtIndex(i).intValue;
             return nativeBytes;
+        }
+        public static List<string> GetStringArray(this SerializedProperty serializedProperty, Func<SerializedProperty, string> getValue = null)
+        {
+            var result = new List<string>(serializedProperty.arraySize);
+            for (var i = 0; i < serializedProperty.arraySize; i++)
+            {
+                var element = serializedProperty.GetArrayElementAtIndex(i);
+                var val = getValue is null ? element.stringValue : getValue.Invoke(element);
+                result.Add(val);
+            }
+            return result;
         }
         /// <summary>
         /// Find all bindable children of <see cref="visualElement"/> and bind them to <see cref="serializedObject"/>
@@ -87,23 +99,7 @@ namespace SummerRest.Editor.Utilities
                 bindableElement.Unbind();
             }
         }
-        /// <summary>
-        /// A <see cref="PropertyField"/> often comes with a label displaying propertyDisplayName <br/>
-        /// This method remove that label
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="property"></param>
-        public static void BindPropertyNoLabel<T>(this T field, SerializedObject property) where T : VisualElement, IBindable
-        {
-            field.BindProperty(property);
-            field.RegisterCallback<GeometryChangedEvent>(_ =>
-            {
-                var label = field.Q<Label>();
-                if (label is null)
-                    return;
-                label.style.display = DisplayStyle.None;
-            });
-        }
+
         public static void Show(this IStyle style, bool show)
         {
             style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
@@ -122,7 +118,7 @@ namespace SummerRest.Editor.Utilities
         public static void CallThenTrackPropertyValue(
             this VisualElement element,
             SerializedProperty property,
-            Action<SerializedProperty> callback = null)
+            Action<SerializedProperty> callback)
         {
             callback?.Invoke(property);
             element.Unbind();
@@ -131,7 +127,7 @@ namespace SummerRest.Editor.Utilities
         public static void CallThenTrackPropertyValue(
             this BindableElement element,
             SerializedObject obj,
-            Action<SerializedProperty> callback = null)
+            Action<SerializedProperty> callback)
         {
             var property = obj.FindProperty(element.bindingPath);
             callback?.Invoke(property);

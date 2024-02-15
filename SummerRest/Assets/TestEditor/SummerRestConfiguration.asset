@@ -20,7 +20,15 @@ MonoBehaviour:
     body:
       value:
         rid: -2
-    key: 
+    key: qweqweqwec11ccaass1
+    appenderType:
+      classRef: 
+  - type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+    key: qweqweqwec11ccaass1asdsaassd
     appenderType:
       classRef: 
   secretRepository:

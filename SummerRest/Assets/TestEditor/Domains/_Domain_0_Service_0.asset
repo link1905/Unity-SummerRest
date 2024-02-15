@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1e6ee7f245c29d12e44e657a5dc2, type: 3}
+  m_Name: _Domain_0_Service_0
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
+  endpointName: Service 1
+  url: 
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value:
+        authKey: qweqweqwec11ccaass1
+    value:
+      authKey: 
+  headers:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: []
+    value: []
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 1
+      value: 0
+    value: 0
+  isGenerated: 0
+  <TreeId>k__BackingField: 4
+  services: []
+  requests:
+  - {fileID: 11400000, guid: 3aba6700bd7fda844b0306159251e567, type: 2}
+  path: 

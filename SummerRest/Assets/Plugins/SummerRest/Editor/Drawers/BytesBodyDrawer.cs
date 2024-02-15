@@ -36,7 +36,7 @@ namespace SummerRest.Editor.Drawers
                 image.Show(false);
                 return;
             }
-            using var nativeBytes = bytesProp.GetArrayValue();
+            using var nativeBytes = bytesProp.GetByteArray();
             var text = image.image as Texture2D ?? new Texture2D(1, 1);
             text.LoadImage(nativeBytes.ToArray());
             text.Apply(true);
