@@ -1,10 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using UnityEditor.Compilation;
+using Assembly = System.Reflection.Assembly;
 
 namespace SummerRest.Editor.Utilities
 {
     public static class ReflectionExtensions
     {
+        public static IEnumerable<Assembly> GetAllAssemblies()
+        {
+            return CompilationPipeline.GetAssemblies().Select(e => Assembly.Load(e.name));
+        } 
         /// <summary>
         /// Default assembly of Unity
         /// </summary>
@@ -21,7 +29,19 @@ namespace SummerRest.Editor.Utilities
                 return Assembly.Load(DefaultUnityAssembly);
             }
         }
-        public static string LoadDefaultAssemblyName() => LoadDefaultAssembly().GetName().Name;
+        public static string LoadDefaultAssemblyName()
+        {
+            try
+            {
+                return LoadDefaultAssembly().GetName().Name;
+            }
+            catch (Exception)
+            {
+                throw new Exception(
+                    "There is no script in default assembly of your project! Please select a target assembly or create at least 1 script");
+            }
+        }
+
         public static void CallGenericMethod(this object obj, string methodName, Type[] typeArguments, params object[] parameters)
         {
             Type objectType = obj.GetType();

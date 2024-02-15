@@ -14,7 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
-  authContainers: []
+  authContainers:
+  - type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+    key: 
+    appenderType:
+      classRef: 
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
       SummerRest
@@ -23,4 +31,6 @@ MonoBehaviour:
   targetAssembly: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
