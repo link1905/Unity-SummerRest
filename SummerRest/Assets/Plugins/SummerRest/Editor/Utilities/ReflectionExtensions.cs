@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor.Compilation;
+using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 
 namespace SummerRest.Editor.Utilities
@@ -51,6 +52,7 @@ namespace SummerRest.Editor.Utilities
         /// </summary>
         private const string DefaultUnityFirstPassAssembly = "Assembly-CSharp-firstpass";
         private const string DefaultUnityAssembly = "Assembly-CSharp";
+        private const string SummerRestAssembly = "SummerRest";
         public static Assembly LoadDefaultAssembly()
         {
             try
@@ -70,8 +72,8 @@ namespace SummerRest.Editor.Utilities
             }
             catch (Exception)
             {
-                throw new Exception(
-                    "There is no script in the default assembly of your project! Please select a target assembly or create at least 1 script in the default assembly");
+                Debug.LogWarningFormat("There is no script in the default assembly of your project! The generating process will happen in {0}", nameof(SummerRestAssembly));
+                return SummerRestAssembly;
             }
         }
 

@@ -152,8 +152,8 @@ namespace SummerRest.Editor.Models
             if (!IsSelfGenerated)
                 return;
             base.WriteXml(writer);
-            writer.WriteArray(nameof(Services), nameof(Service), services);
-            writer.WriteArray(nameof(Requests), nameof(Request), requests);
+            writer.WriteArray(nameof(Services), nameof(Service), services.Where(e => e.IsSelfGenerated).ToArray());
+            writer.WriteArray(nameof(Requests), nameof(Request), requests.Where(e => e.IsSelfGenerated).ToArray());
         }
     }
 }

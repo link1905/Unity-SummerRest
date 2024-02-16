@@ -22,7 +22,6 @@ namespace SummerRest.Editor.Configurations
         private void OnEnable()
         {
             LoadInstance();
-            Debug.LogFormat("{0} has been loaded", this);
         }
 
         /// <summary>

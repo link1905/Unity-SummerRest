@@ -16,13 +16,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a002c60d3b76cbd4ca6eea36f1349829, type: 2}
   authContainers:
   - type: 0
-    text: 
+    text: asd
     body:
       value:
         rid: -2
-    key: qweqweqwec11ccaass1
+    key: qweqweqwec11ccaass1acddd
     appenderType:
-      classRef: 
+      classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
+        SummerRest
   - type: 0
     text: 
     body:

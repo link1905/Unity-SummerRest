@@ -578,4 +578,58 @@ public sealed class MultipartRequest : SummerRest.Runtime.Requests.BaseMultipart
         };
         await test.RunAsync();
     }
+
+    [Fact]
+    public async Task Test_Generate_Data_Request_From_Xml_1()
+    {
+        var json = """
+                   <SummerRestConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SecretRepository="SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository" DataSerializer="SummerRest.Runtime.Parsers.DefaultDataSerializer" Assembly="SummerRest">
+                       <name>SummerRestConfiguration</name>
+                       <hideFlags>None</hideFlags>
+                       <Domains>
+                           <Domain TypeName="Domain" EndpointName="Anonymous">
+                               <Services>
+                                   <Service />
+                               </Services>
+                               <Requests>
+                                   <Request />
+                                   <Request TypeName="Request" EndpointName="Request 2" Url="" UrlFormat="" UrlWithParams="" Method="Get" TimeoutSeconds="0" RedirectsLimit="0" DataFormat="Json" IsMultipart="true">
+                                       <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="ZhMPWYKfRk0mUPwUMUP6f67ZSUCACivUVrt7FIYG" />
+                                       <AuthContainer AuthKey="qweqweqwec11ccaass1acddd" AppenderType="SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender" AuthDataType="System.String" />
+                                       <SerializedForm>
+                                           <KeyValue Key="key-1" />
+                                           <KeyValue Key="key-2" />
+                                       </SerializedForm>
+                                   </Request>
+                               </Requests>
+                           </Domain>
+                       </Domains>
+                       <AuthKeys>
+                           <string>qweqweqwec11ccaass1acddd</string>
+                           <string>qweqweqwec11ccaass1asdsaassd</string>
+                       </AuthKeys>
+                   </SummerRestConfiguration>
+                   """;
+
+        var expected = "";
+
+        var test = new RestSourceGeneratorTest
+        {
+            TestState =
+            {
+                AdditionalFiles = { ("summer-rest-generated.RestSourceGenerator.additionalfile", json) },
+                ExpectedDiagnostics =
+                {
+                    new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Start generating",
+                        "Start generating source", "Debug", DiagnosticSeverity.Info, true)),
+                    new DiagnosticResult(new DiagnosticDescriptor("RestSourceGenerator", "Finish generating",
+                        "Finish generating source", "Debug", DiagnosticSeverity.Info, true))
+                },
+                GeneratedSources =
+                    { (typeof(Generators.RestSourceGenerator), "SummerRestRequests.g.cs", expected.FormatCode()) }
+            },
+            CompilerDiagnostics = CompilerDiagnostics.None
+        };
+        await test.RunAsync();
+    }
 }

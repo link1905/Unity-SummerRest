@@ -141,11 +141,14 @@ namespace SummerRest.Editor.Models
         {
             if (!IsSelfGenerated)
                 return;
+            var showErrName = $"{EndpointName}({url})";
             var endPointClassName = EndpointName.ToClassName();
+            if (string.IsNullOrEmpty(endPointClassName))
+                throw new Exception($"{showErrName} uses a null (or empty) generated name");
             if (Parent is not null && endPointClassName == Parent.EndpointName.ToClassName())
-                throw new Exception($"{EndpointName}({url}) uses the same generated class name with its parent ({Parent.EndpointName}): {endPointClassName}");
+                throw new Exception($"{showErrName} uses the same generated class name with its parent ({Parent.EndpointName}): {endPointClassName}");
             if (auth.CacheValue.HasValue && !auth.CacheValue.Value.ValidateToGenerate())
-                throw new Exception($"{EndpointName}({url}) points to an invalid auth container with key: {auth.CacheValue.Value.AuthKey}");
+                throw new Exception($"{showErrName} points to an invalid auth container with key: {auth.CacheValue.Value.AuthKey}");
         } 
 
         /// <summary>

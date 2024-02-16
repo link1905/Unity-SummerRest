@@ -21,9 +21,9 @@ MonoBehaviour:
     cache:
       hasValue: 1
       value:
-        authKey: qweqweqwec11ccaass1
+        authKey: qweqweqwec11ccaass1acddd
     value:
-      authKey: qweqweqwec11ccaass1
+      authKey: qweqweqwec11ccaass1acddd
   headers:
     inherit: 2
     cache:

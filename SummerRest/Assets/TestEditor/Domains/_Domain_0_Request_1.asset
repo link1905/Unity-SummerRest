@@ -21,9 +21,9 @@ MonoBehaviour:
     cache:
       hasValue: 1
       value:
-        authKey: qweqweqwec11ccaass1
+        authKey: qweqweqwec11ccaass1acddd
     value:
-      authKey: qweqweqwec11ccaass1
+      authKey: qweqweqwec11ccaass1acddd
   headers:
     inherit: 2
     cache:
@@ -50,11 +50,11 @@ MonoBehaviour:
   contentType:
     inherit: 16
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        charset: 
-        mediaType: 
-        boundary: 
+        charset: UTF-8
+        mediaType: multipart/form-data
+        boundary: ZhMPWYKfRk0mUPwUMUP6f67ZSUCACivUVrt7FIYG
     value:
       charset: 
       mediaType: 
@@ -62,7 +62,7 @@ MonoBehaviour:
   method: 0
   requestParams: []
   requestBody:
-    type: 0
+    type: 2
     text: 
     body:
       value:
@@ -70,9 +70,19 @@ MonoBehaviour:
       typeReference:
         classRef: 
     serializedData: 
-    isGenerated: 1
+    isGenerated: 0
     textFormat: 0
-    form: []
+    form:
+    - type: 0
+      text: 
+      key: key-1
+      file:
+        filePath: 
+    - type: 0
+      text: 
+      key: key-2
+      file:
+        filePath: 
   urlWithParam: 
   latestResponse:
     lastCall: 
