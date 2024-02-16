@@ -71,7 +71,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType?.FormedContentType);
+                    data, contentType);
             return RequestAsync(request, adaptorBuilder);
         }
         
@@ -83,15 +83,17 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="method">Http method of the request <see cref="HttpMethod"/></param>
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
         public static UniTask<TResponse> MultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,             
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
             return RequestAsync(request, adaptorBuilder);
         }
 
@@ -155,10 +157,10 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType?.FormedContentType);
+                    data, contentType);
             return DetailedRequestAsync(request, adaptorBuilder);
         }
-        
+
         /// <summary>
         /// Make an async data request that uploads multipart file sections <br/>
         /// Please note that this method throws an <see cref="ResponseErrorException"/> exception when encountering issues
@@ -166,16 +168,18 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="url">Resource absolute url</param>
         /// <param name="method">Http method of the request <see cref="HttpMethod"/></param>
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
         public static UniTask<WebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,      
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
             return DetailedRequestAsync(request, adaptorBuilder);
         }
     }

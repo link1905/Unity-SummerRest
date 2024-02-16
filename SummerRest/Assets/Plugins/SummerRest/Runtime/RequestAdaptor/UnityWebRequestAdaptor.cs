@@ -20,7 +20,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         IWebRequestAdaptor<TResponse>,
         IPoolable<TSelf, UnityWebRequest> where TSelf : UnityWebRequestAdaptor<TSelf, TResponse>, new()
     {
-        protected UnityWebRequest WebRequest { get; private set; }
+        internal UnityWebRequest WebRequest { get; private set; }
         /// <summary>
         /// For audio and texture requests, we do not provide raw response for better performance
         /// </summary>
