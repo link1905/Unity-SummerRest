@@ -16,6 +16,10 @@ namespace SummerRest.Runtime.Parsers
             {
                 if (data is T str)
                     return str;
+                // Check primitive data
+                var tType = typeof(T);
+                if (tType.IsPrimitive && typeof(IConvertible).IsAssignableFrom(tType))
+                    return (T)Convert.ChangeType(data, tType);
                 switch (dataFormat)
                 {
                     case DataFormat.Json or DataFormat.PlainText:
@@ -59,7 +63,7 @@ namespace SummerRest.Runtime.Parsers
                 case DataFormat.Json:
                     return JsonUtility.ToJson(data, beauty);
                 case DataFormat.Xml:
-                    XmlSerializer xsSubmit = new XmlSerializer(typeof(T));
+                    XmlSerializer xsSubmit = new XmlSerializer(data.GetType());
                     using (var sww = new StringWriter())
                     {
                         var settings = beauty ? BeautySettings : Settings;
