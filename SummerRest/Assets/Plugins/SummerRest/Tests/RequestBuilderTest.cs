@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
@@ -10,7 +11,6 @@ namespace SummerRest.Tests
     {
         private const string ExampleUrl = "summerrest.com";
         private const string ExampleUrlFormat = "summerrest.com/{0}";
-        private const string ExampleUrl1 = "summerrest1.com";
         [Test]
         public void Test_Build_Param()
         {
@@ -57,12 +57,13 @@ namespace SummerRest.Tests
                 Assert.AreEqual(expect, result);
             }
         }
+        [Serializable]
+        public class TestRequestBody
+        {
+            public int A;
+        }
         public class TestRequest : BaseDataRequest<TestRequest>
         {
-            public class TestRequestBody
-            {
-                public int A { get; set; }
-            }
             public TestRequest() : base(ExampleUrl, ExampleUrl, ExampleUrlFormat, new []{string.Empty}, null)
             {
                 Init();
@@ -100,12 +101,12 @@ namespace SummerRest.Tests
         public void Test_Json_Serialized_Body()
         {
             var request = new TestRequest();
-            request.BodyData = new TestRequest.TestRequestBody
+            request.BodyData = new TestRequestBody
             {
                 A = 5
             };
             Assert.AreEqual(request.SerializedBody, @"{""A"":5}");
-            request.BodyData = new TestRequest.TestRequestBody
+            request.BodyData = new TestRequestBody
             {
                 A = 3
             };
@@ -115,20 +116,20 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Xml_Serialized_Body()
         {
-            var request = new TestRequest()
+            var request = new TestRequest
             {
-                BodyFormat = DataFormat.Xml
+                BodyFormat = DataFormat.Xml,
+                BodyData = new TestRequestBody
+                {
+                    A = 5
+                }
             };
-            request.BodyData = new TestRequest.TestRequestBody
-            {
-                A = 5
-            };
-            Assert.AreEqual(request.SerializedBody, "<root><A>5</A></root>");
-            request.BodyData = new TestRequest.TestRequestBody
+            Assert.AreEqual(@"<TestRequestBody xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""><A>5</A></TestRequestBody>", request.SerializedBody);
+            request.BodyData = new TestRequestBody
             {
                 A = 3
             };
-            Assert.AreEqual(request.SerializedBody, "<root><A>3</A></root>");
+            Assert.AreEqual(@"<TestRequestBody xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""><A>3</A></TestRequestBody>", request.SerializedBody);
         }
         
         [Test]
@@ -138,17 +139,17 @@ namespace SummerRest.Tests
             {
                 BodyFormat = DataFormat.Json
             };
-            request.BodyData = new TestRequest.TestRequestBody
+            request.BodyData = new TestRequestBody
             {
                 A = 5
             };
             Assert.AreEqual(request.SerializedBody, @"{""A"":5}");
             request.BodyFormat = DataFormat.Xml;
-            request.BodyData = new TestRequest.TestRequestBody
+            request.BodyData = new TestRequestBody
             {
                 A = 3
             };
-            Assert.AreEqual(request.SerializedBody, "<root><A>3</A></root>");
+            Assert.AreEqual(request.SerializedBody, @"<TestRequestBody xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""><A>3</A></TestRequestBody>");
         }
     }
 }

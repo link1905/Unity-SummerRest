@@ -94,13 +94,13 @@ namespace SummerRest.Runtime.RequestAdaptor
             {
                 if (WebRequest.uploadHandler is null)
                     return;
-                _contentType = value;
-                SetAdaptedContentType(_contentType);
+                SetAdaptedContentType(value);
             }
         }
 
         protected virtual void SetAdaptedContentType(ContentType? contentType)
         {
+            _contentType = contentType;
             if (contentType is null)
             {
                 WebRequest.uploadHandler.contentType = null;

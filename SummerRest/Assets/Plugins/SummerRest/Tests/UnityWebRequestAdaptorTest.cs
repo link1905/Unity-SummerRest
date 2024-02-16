@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine.Networking;
@@ -9,9 +8,10 @@ namespace SummerRest.Tests
 {
     public class UnityWebRequestAdaptorTest
     {
+        [Serializable]
         public class TestResponseData
         {
-            public int A { get; set; }
+            public int A;
             public bool Equals(TestResponseData other)
             {
                 return A == other.A;
@@ -30,7 +30,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Url_Apply_After_Changing_Url_Property()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             adaptor.Url = SummerUrl;
             var expected = new Uri(SummerUrl);
             Assert.AreEqual(expected.AbsoluteUri, adaptor.Url);
@@ -38,7 +38,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Header_Apply_After_Add_Header()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             adaptor.SetHeader("h1", "value1");
             adaptor.SetHeader("h2", "value2");
             Assert.AreEqual("value1", adaptor.GetHeader("h1"));
@@ -48,7 +48,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Method_Apply_After_Set_Method()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             Assert.AreEqual(HttpMethod.Get, adaptor.Method);
             adaptor.Method = HttpMethod.Post;
             Assert.AreEqual(HttpMethod.Post, adaptor.Method);
@@ -58,7 +58,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Redirect_Apply_After_Set_RedirectLimit()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             adaptor.RedirectLimit = 19;
             Assert.AreEqual(19, adaptor.RedirectLimit);
             adaptor.RedirectLimit = 5;
@@ -67,7 +67,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Timeout_Apply_After_Set_TimeoutSeconds()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             adaptor.TimeoutSeconds = 1905;
             Assert.AreEqual(1905, adaptor.TimeoutSeconds);
             adaptor.TimeoutSeconds = 3330;
@@ -83,13 +83,13 @@ namespace SummerRest.Tests
 
         [Test] public void Test_Default_Content_Type_Is_Null_When_Upload_Handler_Is_Null()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             Assert.IsNull(adaptor.ContentType);
         }
         [Test]
         public void Test_Content_Type_Null_With_Get_Request()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             Assert.IsNull(adaptor.ContentType);
             adaptor.ContentType = new ContentType();
             Assert.IsNull(adaptor.ContentType);
@@ -97,7 +97,7 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Content_Type_Apply_After_Set()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
             var result = new ContentType("application/json", "utf-8", "www123");
             adaptor.ContentType = result; 
             Assert.That(adaptor.ContentType.Equals(result));
@@ -108,15 +108,14 @@ namespace SummerRest.Tests
         {
             using var adaptor = MultipartFileUnityWebRequestAdaptor<TestResponseData>.Create(PutWebRequest);
             adaptor.ContentType = null;
-            Assert.NotNull(adaptor.ContentType);
-            Assert.IsNotEmpty(adaptor.ContentType.Value.Boundary);
+            Assert.IsNull(adaptor.ContentType);
             adaptor.ContentType = new ContentType();
             Assert.IsNotEmpty(adaptor.ContentType.Value.Boundary);
         }
         [Test]
         public void Test_Build_Json_Response()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             var expected = new TestResponseData
             {
                 A = 5
@@ -127,17 +126,17 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Build_Xml_Response()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TestResponseData>.Create(WebRequest);
             var expected = new TestResponseData
             {
                 A = 3
             };
-            var response = adaptor.BuildResponse("application/xml", "<root><A>3</A></root>");
+            var response = adaptor.BuildResponse("application/xml", "<TestResponseData><A>3</A></TestResponseData>");
             Assert.That(expected.Equals(response));
         }
         private void Test_Build_Primitive_Response<TResponse>(string json, string xml, string plain, TResponse expected)
         {
-            using var adaptor = RawUnityWebRequestAdaptor<TResponse>.Create(WebRequest);
+            using var adaptor = DataUnityWebRequestAdaptor<TResponse>.Create(WebRequest);
             var response = adaptor.BuildResponse("application/json", json);
             Assert.AreEqual(expected, response);
             response = adaptor.BuildResponse("application/xml", xml);
@@ -148,17 +147,17 @@ namespace SummerRest.Tests
         [Test]
         public void Test_Build_Primitive_String_Response()
         {
-            Test_Build_Primitive_Response("3", "<root>3</root>", "3", "3");
+            Test_Build_Primitive_Response("3", "3", "3", "3");
         }
         [Test]
         public void Test_Build_Primitive_Int_Response()
         {
-            Test_Build_Primitive_Response("3", "<root>3</root>", "3", 3);
+            Test_Build_Primitive_Response("3", "3", "3", 3);
         }
         [Test]
         public void Test_Build_Primitive_Float_Response()
         {
-            Test_Build_Primitive_Response("3.1", "<root>3.1</root>", "3.1", 3.1f);
+            Test_Build_Primitive_Response("3.1", "3.1", "3.1", 3.1f);
         }
     }
 }

@@ -61,6 +61,8 @@ namespace SummerRest.Runtime.RequestAdaptor
             HttpMethod method,
             List<IMultipartFormSection> data, ContentType? contentType)
         {
+            if (data is { Count: 0 })
+                throw new ArgumentException(@$"Multipart form body of the resource ""{url}"" is empty");
             var request = contentType is null ? UnityWebRequest.Post(url, data) : UnityWebRequest.Post(url, data, contentType.Value.BoundaryBytes);
             request.method = method.ToUnityHttpMethod();
             return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);

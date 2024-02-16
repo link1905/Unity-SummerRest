@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -10,6 +11,7 @@ using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.TestTools;
 using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
@@ -25,14 +27,14 @@ namespace SummerRest.Tests
             var provider = new TestWebRequestAdaptorProvider()
             {
                 FixedContentType = "application/json",
-                FixedRawResponse = @"{""A"":5}",
+                FixedRawResponse = @"{""a"":5}",
                 Code = HttpStatusCode.OK
             };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
             var expected = new TestResponseData
             {
-                A = 5
+                a = 5
             };
             yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
@@ -51,14 +53,14 @@ namespace SummerRest.Tests
             var provider = new TestWebRequestAdaptorProvider()
             {
                 FixedContentType = "application/xml",
-                FixedRawResponse = "<root><A>3</A></root>",
+                FixedRawResponse = "<TestResponseData><a>3</a></TestResponseData>",
                 Code = HttpStatusCode.Created
             };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
             var expected = new TestResponseData
             {
-                A = 3
+                a = 3
             };
             yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
@@ -121,7 +123,7 @@ namespace SummerRest.Tests
         [UnityTest]
         public IEnumerator Test_Internal_Audio_Request_Return_Correct_Audio()
         {
-            var result = AudioClip.Create("test-clip", 1, 1, 1, false);
+            var result = AudioClip.Create("test-clip", 44000, 1, 4400, false);
             var provider = new TestWebRequestAdaptorProvider
             {
                 Code = HttpStatusCode.OK,
@@ -168,9 +170,7 @@ namespace SummerRest.Tests
             };
             IWebRequestAdaptorProvider.Current = provider;
             yield return TestDataRequest.Create().DataRequestCoroutine<string>(null);
-            var msg = string.Format(
-                @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
-                error, TestAbsoluteUrl);
+            var msg = @"There was an missed error ""connection error"" when trying to access the resource ""http://example.com/200"". Please provide the errorCallback to catch it";
             LogAssert.Expect(LogType.Error, msg);
         }
         
@@ -194,16 +194,20 @@ namespace SummerRest.Tests
         public IEnumerator Test_Internal_Request_Append_Correct_Multipart_Form()
         {
             var contentType = ContentType.Commons.MultipartForm;
-            var form = new List<IMultipartFormSection>();
-            form.Add(new MultipartFormDataSection("form-key-1", "form-value-1"));
-            form.Add(new MultipartFormDataSection("form-key-2", "form-value-2"));
-            
+            var form = new List<IMultipartFormSection>
+            {
+                new MultipartFormDataSection("form-key-1", "form-value-1"),
+                new MultipartFormDataSection("form-key-2", "form-value-2")
+            };
+
             var provider = new TestWebRequestAdaptorProvider()
             {
                 FixedContentType = contentType.FormedContentType,
             };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestMultipartRequest.Create();
+            request.MultipartFormSections.AddRange(form);
+            request.ContentType = contentType;
             byte[] data = null;
             yield return request.DetailedMultipartDataRequestCoroutine<string>(e =>
             {
@@ -212,20 +216,20 @@ namespace SummerRest.Tests
             CollectionAssert.AreEqual(UnityWebRequest.SerializeFormSections(form, Encoding.UTF8.GetBytes(contentType.Boundary)),
                 data);
         }
-
-
+        
+        [Serializable]
         public class TestResponseData
         {
-            public int A { get; set; }
+            public int a;
 
             public bool Equals(TestResponseData other)
             {
-                return A == other.A;
+                return a == other.a;
             }
 
             public override int GetHashCode()
             {
-                return A;
+                return a;
             }
         }
         
@@ -244,6 +248,7 @@ namespace SummerRest.Tests
             public TestMultipartRequest() : base(TestUrl, TestAbsoluteUrl, null, null, null)
             {
                 Init();
+                Method = HttpMethod.Post;
             }
         }
 
@@ -255,7 +260,7 @@ namespace SummerRest.Tests
             public string FixedError { get; set; }
             public Texture2D ResponseTexture { get; set; }
             public AudioClip ResponseAudioClip { get; set; }
-            private readonly IWebRequestAdaptorProvider _wrapped;
+            private readonly IWebRequestAdaptorProvider _wrapped = new UnityWebRequestAdaptorProvider();
    
 
             public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable)
@@ -269,27 +274,37 @@ namespace SummerRest.Tests
                 var wrapped = _wrapped.GetAudioRequest(url, audioType) as AudioUnityWebRequestAdaptor;
                 return new AudioTestWebRequestAdaptor(ResponseAudioClip, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, ContentType? contentType)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data, contentType) as MultipartFileUnityWebRequestAdaptor<TBody>;
                 return new MultipartTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
 
-            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType)
+            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, ContentType? contentType)
             {
-                var r = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as RawUnityWebRequestAdaptor<TBody>;
-                return new RawTestWebRequestAdaptor<TBody>(r, FixedContentType, FixedRawResponse, Code, FixedError);
+                var wrapped = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as DataUnityWebRequestAdaptor<TBody>;
+                return new DataTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
 
         }
 
-        private class MultipartTestWebRequestAdaptor<TResponse> : RawTestWebRequestAdaptor<TResponse>
+        private class MultipartTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
+            MultipartFileUnityWebRequestAdaptor<TResponse>, TResponse>
         {
-            public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> wrapped, string fixedContentType, 
-                string fixedRawResponse, HttpStatusCode code, string fixedError) : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
+            public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> webRequest,
+                string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
+                base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
             {
+            }
+            public override IEnumerator RequestInstruction
+            {
+                get
+                {
+                    yield return null;
+                    ResponseData = Wrapped.BuildResponse(FixedContentType, FixedRawResponse);
+                }
             }
         }
         
@@ -330,28 +345,12 @@ namespace SummerRest.Tests
                 }
             }
         }
-        
-        private class DumpTestWebRequestAdaptor : BaseTestWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>
-        {
-            public DumpTestWebRequestAdaptor(DumpUnityWebRequestAdaptor wrapped, string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) 
-                : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
-            {
-                
-            }
-            public override IEnumerator RequestInstruction
-            {
-                get
-                {
-                    yield return null;
-                    ResponseData = Wrapped.BuildResponse();
-                }
-            }
-        }
+   
 
-        private class RawTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
-            RawUnityWebRequestAdaptor<TResponse>, TResponse>
+        private class DataTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
+            DataUnityWebRequestAdaptor<TResponse>, TResponse>
         {
-            public RawTestWebRequestAdaptor(RawUnityWebRequestAdaptor<TResponse> webRequest,
+            public DataTestWebRequestAdaptor(DataUnityWebRequestAdaptor<TResponse> webRequest,
                 string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
                 base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
             {
@@ -375,7 +374,9 @@ namespace SummerRest.Tests
             {
                 Wrapped.Dispose();
             }
-            public string Url { get; set; }
+            public string Url { get => Wrapped.Url;
+                set => Wrapped.Url = value;
+            }
             public void SetHeader(string key, string value)
             {
                 Wrapped.SetHeader(key, value);
@@ -434,7 +435,7 @@ namespace SummerRest.Tests
                 FixedError = fixedError;
             }
 
-            public WebResponse<TResponse> WebResponse => new(null,
+            public WebResponse<TResponse> WebResponse => new(Wrapped.WebRequest,
                 StatusCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
                 null,

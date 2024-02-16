@@ -1,6 +1,4 @@
-using System.Text;
 using SummerRest.Runtime.RequestComponents;
-using UnityEngine.Networking;
 
 namespace SummerRest.Runtime.RequestAdaptor
 {
@@ -12,19 +10,9 @@ namespace SummerRest.Runtime.RequestAdaptor
         public byte[] Data => WebRequest.uploadHandler.data;
         protected override void SetAdaptedContentType(ContentType? contentType)
         {
-            if (contentType is null)
-            {
-                base.SetAdaptedContentType(null);
-                return;
-            }
-            // If empty boundary => set a new boundary
-            if (string.IsNullOrEmpty(contentType.Value.Boundary))
-            {
-                var nonEmptyBoundaryContentType = contentType.Value.With(newBoundary: RequestComponents.ContentType.Commons.RandomBoundary);
-                WebRequest.uploadHandler.contentType = nonEmptyBoundaryContentType.FormedContentType;
-            }
-            else
-                WebRequest.uploadHandler.contentType = contentType.Value.FormedContentType;
+            if (contentType is not null && string.IsNullOrEmpty(contentType.Value.Boundary))
+                contentType = contentType.Value.With(newBoundary: RequestComponents.ContentType.Commons.RandomBoundary);
+            base.SetAdaptedContentType(contentType);
         }
     }
 }
