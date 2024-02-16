@@ -7,7 +7,7 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// <summary>
     /// Request adapting a multi-part UnityWebRequest
     /// </summary>
-    internal class MultipartFileUnityWebRequestAdaptor<TResponse> : RawUnityWebRequestAdaptor<TResponse>
+    internal class MultipartFileUnityWebRequestAdaptor<TResponse> : RawUnityWebRequestAdaptor<MultipartFileUnityWebRequestAdaptor<TResponse>, TResponse>
     {
         public byte[] Data => WebRequest.uploadHandler.data;
         protected override void SetAdaptedContentType(ContentType? contentType)

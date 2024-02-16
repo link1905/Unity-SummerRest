@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SummerRest.Runtime.Extensions;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -54,7 +53,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             }
 
             request.method = method.ToUnityHttpMethod();
-            return RawUnityWebRequestAdaptor<TResponse>.Create(request);
+            return DataUnityWebRequestAdaptor<TResponse>.Create(request);
         }
 
         public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
