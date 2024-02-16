@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: -1
+  m_PreferredHeight: 300
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -501,8 +501,8 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
+    m_BestFit: 1
+    m_MinSize: 30
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -510,7 +510,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: asdasdasd
 --- !u!1 &579150733
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,6 +821,7 @@ GameObject:
   - component: {fileID: 713580954}
   - component: {fileID: 713580956}
   - component: {fileID: 713580955}
+  - component: {fileID: 713580957}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -890,6 +891,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713580953}
   m_CullTransparentMesh: 1
+--- !u!114 &713580957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713580953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 44
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &745766523
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
@@ -1986,6 +2007,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7575460544331094559, guid: c454c69ad6ec9d94c95e1ebad4034238, type: 3}
+      propertyPath: m_Text
+      value: Login then get user data
+      objectReference: {fileID: 0}
     - target: {fileID: 7964981099817804746, guid: c454c69ad6ec9d94c95e1ebad4034238, type: 3}
       propertyPath: manager
       value: 
@@ -2526,6 +2551,10 @@ PrefabInstance:
     - target: {fileID: 7113694983393252422, guid: c454c69ad6ec9d94c95e1ebad4034238, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575460544331094559, guid: c454c69ad6ec9d94c95e1ebad4034238, type: 3}
+      propertyPath: m_Text
+      value: Login then get user data
       objectReference: {fileID: 0}
     - target: {fileID: 7964981099817804746, guid: c454c69ad6ec9d94c95e1ebad4034238, type: 3}
       propertyPath: manager

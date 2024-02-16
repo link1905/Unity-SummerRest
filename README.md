@@ -312,6 +312,7 @@ A class generated from `Request` comes up with some utility methods for calling 
 ### Async
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
+  ![](Screenshots/3_source_2_symbol.png)
 - Please note that the async methods will throw exceptions on error instead of callbacks
 ```
 public class User

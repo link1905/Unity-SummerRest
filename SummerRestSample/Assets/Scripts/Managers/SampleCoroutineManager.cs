@@ -123,7 +123,7 @@ namespace Managers
         // Requesting audio clip is similar to this 
         #region Get image request
 
-        private readonly GetProductImage _getProductImage;
+        private readonly GetProductImage _getProductImage = GetProductImage.Create();
         /// <summary>
         /// You should leverage generated classes in case you know the structure of the image beforehand
         /// </summary>
