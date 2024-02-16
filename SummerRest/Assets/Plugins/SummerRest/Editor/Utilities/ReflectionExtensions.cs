@@ -13,6 +13,8 @@ namespace SummerRest.Editor.Utilities
     {
         public static string ToClassName(this string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return null;
             StringBuilder formattedName = new StringBuilder();
             bool capitalizeNextChar = true;
             foreach (var c in value)

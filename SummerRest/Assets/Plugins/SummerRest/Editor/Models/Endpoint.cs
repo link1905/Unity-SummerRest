@@ -143,7 +143,7 @@ namespace SummerRest.Editor.Models
                 return;
             var showErrName = $"{EndpointName}({url})";
             var endPointClassName = EndpointName.ToClassName();
-            if (string.IsNullOrEmpty(endPointClassName))
+            if (string.IsNullOrEmpty(EndpointName))
                 throw new Exception($"{showErrName} uses a null (or empty) generated name");
             if (Parent is not null && endPointClassName == Parent.EndpointName.ToClassName())
                 throw new Exception($"{showErrName} uses the same generated class name with its parent ({Parent.EndpointName}): {endPointClassName}");
