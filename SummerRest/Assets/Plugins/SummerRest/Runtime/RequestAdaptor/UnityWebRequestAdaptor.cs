@@ -121,7 +121,6 @@ namespace SummerRest.Runtime.RequestAdaptor
                 IContentTypeParser.Current.ParseContentTypeFromHeader(
                     WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
                 WebRequest.GetResponseHeaders(),
-                WebRequest.error,
                 RawResponse,
                 ResponseData
             );

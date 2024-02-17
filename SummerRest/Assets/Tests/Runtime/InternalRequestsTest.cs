@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Parsers;
@@ -11,7 +13,6 @@ using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 using UnityEngine.TestTools;
 using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
@@ -21,85 +22,90 @@ namespace Tests.Runtime
     {
         private const string TestUrl = "http://example.com/";
         private const string TestAbsoluteUrl = "http://example.com/200";
-        [UnityTest]
-        public IEnumerator Test_Internal_Request_Return_200_And_Json_Data()
+        
+        
+        private static async UniTask TestSimpleAndDetailedRequestAsync<T>(
+            T result,
+            UniTask<T> simpleTask,
+            UniTask<WebResponse<T>> detailedTask,
+            HttpStatusCode code = HttpStatusCode.OK)
         {
-            var provider = new TestWebRequestAdaptorProvider()
+            var (data, response) = await UniTask.WhenAll(simpleTask, detailedTask);
+            Assert.AreEqual(result, data);
+            Assert.AreEqual(result, response.Data);
+            Assert.AreEqual(code, response.StatusCode);
+        }
+        private static IEnumerator TestSimpleAndDetailedRequestCoroutine<T>(
+            T result,
+            Func<Action<T>, IEnumerator> simpleCor,
+            Func<Action<WebResponse<T>>, IEnumerator> detailedCor,
+            HttpStatusCode code = HttpStatusCode.OK)
+        {
+            yield return simpleCor(data =>
+            {
+                Assert.AreEqual(result, data);
+            });
+            yield return detailedCor(response =>
+            {
+                Assert.AreEqual(code, response.StatusCode);
+                Assert.AreEqual(result, response.Data);
+            });
+        }
+        private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_200_And_Json_Data()
+        {
+            var provider = new TestWebRequestAdaptorProvider
             {
                 FixedContentType = "application/json",
                 FixedRawResponse = @"{""a"":5}",
                 Code = HttpStatusCode.OK
             };
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            var expected = new TestResponseData
+            return (TestDataRequest.Create(), new TestResponseData
             {
                 a = 5
-            };
-            yield return request.DataRequestCoroutine<TestResponseData>(e =>
-            {
-                Assert.That(e.Equals(expected));
-            });
-            yield return request.DetailedDataRequestCoroutine<TestResponseData>(e =>
-            {
-                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
-                Assert.IsNull(e.Error);
-                Assert.That(e.Data.Equals(expected));
             });
         }
         [UnityTest]
-        public IEnumerator Test_Internal_Request_Return_201_And_Xml_Data()
+        public IEnumerator Test_Internal_Request_Return_200_And_Json_Data()
         {
-            var provider = new TestWebRequestAdaptorProvider()
+            var (request, expected) = Setup_Test_Internal_Request_Return_200_And_Json_Data();
+            yield return TestSimpleAndDetailedRequestCoroutine(expected, 
+                c => request.DataRequestCoroutine(c),
+                c => request.DetailedDataRequestCoroutine(c));
+        }
+        [Test]
+        public async Task Test_Internal_Request_Return_200_And_Json_Data_Async()
+        {
+            var (request, expected) = Setup_Test_Internal_Request_Return_200_And_Json_Data();
+            await TestSimpleAndDetailedRequestAsync(
+                expected,
+                request.DataRequestAsync<TestResponseData>(), request.DetailedDataRequestAsync<TestResponseData>());
+        }
+        private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_201_And_Xml_Data()
+        {
+            var provider = new TestWebRequestAdaptorProvider
             {
                 FixedContentType = "application/xml",
                 FixedRawResponse = "<TestResponseData><a>3</a></TestResponseData>",
                 Code = HttpStatusCode.Created
             };
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            var expected = new TestResponseData
+            return (TestDataRequest.Create(), new TestResponseData
             {
                 a = 3
-            };
-            yield return request.DataRequestCoroutine<TestResponseData>(e =>
-            {
-                Assert.That(e.Equals(expected));
-            });
-            yield return request.DetailedDataRequestCoroutine<TestResponseData>(e =>
-            {
-                Assert.AreEqual(HttpStatusCode.Created, e.StatusCode);
-                Assert.IsNull(e.Error);
-                Assert.That(e.Data.Equals(expected));
             });
         }
-        
         [UnityTest]
-        public IEnumerator Test_Internal_Request_Return_500_And_Plain()
+        public IEnumerator Test_Internal_Request_Return_201_And_Xml_Data()
         {
-            const string result = "internal server error response";
-            var provider = new TestWebRequestAdaptorProvider()            
-            {
-                FixedContentType = "text/plain",
-                FixedRawResponse = result,
-                Code = HttpStatusCode.InternalServerError
-            };
-            IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            yield return request.DataRequestCoroutine<string>(e =>
-            {
-                Assert.AreEqual(result, e);
-            });
-            yield return request.DetailedDataRequestCoroutine<string>(e =>
-            {
-                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
-                Assert.IsNull(e.Error);
-                Assert.AreEqual(result, e.Data);
-            });
+            var (request, expected) = Setup_Test_Internal_Request_Return_201_And_Xml_Data();
+            yield return TestSimpleAndDetailedRequestCoroutine(expected, 
+                c => request.DataRequestCoroutine(c),
+                c => request.DetailedDataRequestCoroutine(c),
+                HttpStatusCode.Created);
         }
         
-        [UnityTest]
-        public IEnumerator Test_Internal_Texture_Request_Return_Correct_Texture()
+        private static (TestDataRequest, Texture2D) Setup_Test_Internal_Texture_Request_Return_Correct_Texture()
         {
             var result = new Texture2D(20, 20);
             var provider = new TestWebRequestAdaptorProvider
@@ -108,20 +114,28 @@ namespace Tests.Runtime
                 ResponseTexture = result
             };
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            yield return request.TextureRequestCoroutine(false, e =>
-            {
-                Assert.AreSame(result, e);
-            });
-            yield return request.DetailedTextureRequestCoroutine(false, e =>
-            {
-                Assert.AreSame(result, e.Data);
-                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
-            });
+            return (TestDataRequest.Create(), result);
         }
         
         [UnityTest]
-        public IEnumerator Test_Internal_Audio_Request_Return_Correct_Audio()
+        public IEnumerator Test_Internal_Texture_Request_Return_Correct_Texture()
+        {
+            var (request, expected) = Setup_Test_Internal_Texture_Request_Return_Correct_Texture();
+            yield return TestSimpleAndDetailedRequestCoroutine(expected, 
+                c => request.TextureRequestCoroutine(false, c),
+                c => request.DetailedTextureRequestCoroutine(false, c));
+        }
+        
+        [Test]
+        public async Task Test_Internal_Texture_Request_Return_Correct_Texture_Async()
+        {
+            var (request, expected) = Setup_Test_Internal_Texture_Request_Return_Correct_Texture();
+            await TestSimpleAndDetailedRequestAsync(
+                expected,
+                request.TextureRequestAsync(false), request.DetailedTextureRequestAsync(false));
+        }
+        
+        private static (TestDataRequest, AudioClip) Setup_Test_Internal_Audio_Request_Return_Correct_Audio()
         {
             var result = AudioClip.Create("test-clip", 44000, 1, 4400, false);
             var provider = new TestWebRequestAdaptorProvider
@@ -130,32 +144,88 @@ namespace Tests.Runtime
                 ResponseAudioClip = result
             };
             IWebRequestAdaptorProvider.Current = provider;
-            var request = TestDataRequest.Create();
-            yield return request.AudioRequestCoroutine(AudioType.WAV, e =>
+            return (TestDataRequest.Create(), result);
+        }
+        [UnityTest]
+        public IEnumerator Test_Internal_Audio_Request_Return_Correct_Audio()
+        {
+            var (request, expected) = Setup_Test_Internal_Audio_Request_Return_Correct_Audio();
+            yield return TestSimpleAndDetailedRequestCoroutine(expected, 
+                c => request.AudioRequestCoroutine(AudioType.WAV, c),
+                c => request.DetailedAudioRequestCoroutine(AudioType.WAV, c));
+        }
+        [Test]
+        public async Task Test_Internal_Audio_Request_Return_Correct_Audio_Async()
+        {
+            var (request, expected) = Setup_Test_Internal_Audio_Request_Return_Correct_Audio();
+            await TestSimpleAndDetailedRequestAsync(
+                expected,
+                request.AudioRequestAsync(AudioType.WAV), request.DetailedAudioRequestAsync(AudioType.WAV));
+        }
+               
+        private static (TestMultipartRequest, TestResponseData, List<IMultipartFormSection>) Setup_Test_Internal_Multipart_Form_Request()
+        {
+            var form = new List<IMultipartFormSection>
             {
-                Assert.AreSame(result, e);
-            });
-            yield return request.DetailedAudioRequestCoroutine(AudioType.WAV, e =>
+                new MultipartFormDataSection("form-key-1", "form-value-1"),
+                new MultipartFormDataSection("form-key-2", "form-value-2")
+            };
+            var provider = new TestWebRequestAdaptorProvider
             {
-                Assert.AreSame(result, e.Data);
-                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
-            });
+                Code = HttpStatusCode.Created,
+                FixedContentType = "application/json",
+                FixedRawResponse = @"{""a"":5}",
+            };
+            IWebRequestAdaptorProvider.Current = provider;
+            var request = TestMultipartRequest.Create();
+            request.MultipartFormSections.AddRange(form);
+            request.ContentType = ContentType.Commons.MultipartForm;
+            var result = new TestResponseData
+            {
+                a = 5
+            };
+            return (request, result, form);
+        }
+        [UnityTest]
+        public IEnumerator Test_Internal_Multipart_Form_Request()
+        {
+            var (request, expected, _) = Setup_Test_Internal_Multipart_Form_Request();
+            yield return TestSimpleAndDetailedRequestCoroutine(expected, 
+                c => request.MultipartDataRequestCoroutine(c),
+                c => request.DetailedMultipartDataRequestCoroutine(c),
+                HttpStatusCode.Created);
+        }
+        
+        [Test]
+        public async Task Test_Internal_Multipart_Form_Request_Async()
+        {
+            var (request, expected, _) = Setup_Test_Internal_Multipart_Form_Request();
+            await TestSimpleAndDetailedRequestAsync(
+                expected,
+                request.MultipartDataRequestAsync<TestResponseData>(), 
+                request.DetailedMultipartDataRequestAsync<TestResponseData>(),
+                HttpStatusCode.Created);
         }
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_On_Error_Callback()
         {
+            const string result = "internal server error response";
             const string error = "connection error";
-            var provider = new TestWebRequestAdaptorProvider
+            var provider = new TestWebRequestAdaptorProvider()            
             {
+                FixedContentType = "text/plain",
+                FixedRawResponse = result,
                 FixedError = error,
                 Code = HttpStatusCode.InternalServerError
             };
             IWebRequestAdaptorProvider.Current = provider;
-            yield return TestDataRequest.Create().DataRequestCoroutine<string>(null, e =>
+            var request = TestDataRequest.Create();
+            yield return request.DataRequestCoroutine<string>(null, errorCallback: err =>
             {
-                Assert.AreEqual(error, e.Message);
-                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
+                Assert.AreEqual(error, err.Message);
+                Assert.AreEqual(result, err.ErrorBody);
+                Assert.AreEqual(HttpStatusCode.InternalServerError, err.StatusCode);
             });
         }
         
@@ -175,6 +245,34 @@ namespace Tests.Runtime
         }
         
         [UnityTest]
+        public IEnumerator Test_Internal_Request_Append_Correct_Multipart_Form()
+        {
+            var (request, _, form) = Setup_Test_Internal_Multipart_Form_Request();
+            yield return request.DetailedMultipartDataRequestCoroutine<string>(response =>
+            {
+                var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
+                CollectionAssert.AreEqual(UnityWebRequest.SerializeFormSections(form, ContentType.Commons.MultipartForm.BoundaryBytes),
+                    data);
+            });
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_Internal_Request_Append_Correct_Json_Body()
+        {
+            var (request, _) = Setup_Test_Internal_Request_Return_200_And_Json_Data();
+            request.BodyData = new TestResponseData
+            {
+                a = 10
+            };
+            request.Method = HttpMethod.Post;
+            yield return request.DetailedDataRequestCoroutine<string>(response =>
+            {
+                var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
+                Assert.AreEqual(@"{""a"":10}", Encoding.UTF8.GetString(data));
+            });
+        }
+        
+        [UnityTest]
         public IEnumerator Test_Internal_Request_Append_Bearer_Header()
         {
             var provider = new TestWebRequestAdaptorProvider();
@@ -189,33 +287,7 @@ namespace Tests.Runtime
             });
             Assert.AreEqual("Bearer my-token", header);
         }
-        
-        [UnityTest]
-        public IEnumerator Test_Internal_Request_Append_Correct_Multipart_Form()
-        {
-            var contentType = ContentType.Commons.MultipartForm;
-            var form = new List<IMultipartFormSection>
-            {
-                new MultipartFormDataSection("form-key-1", "form-value-1"),
-                new MultipartFormDataSection("form-key-2", "form-value-2")
-            };
-
-            var provider = new TestWebRequestAdaptorProvider()
-            {
-                FixedContentType = contentType.FormedContentType,
-            };
-            IWebRequestAdaptorProvider.Current = provider;
-            var request = TestMultipartRequest.Create();
-            request.MultipartFormSections.AddRange(form);
-            request.ContentType = contentType;
-            byte[] data = null;
-            yield return request.DetailedMultipartDataRequestCoroutine<string>(e =>
-            {
-                data = ((UnityWebRequest)e.WrappedRequest).uploadHandler.data;
-            });
-            CollectionAssert.AreEqual(UnityWebRequest.SerializeFormSections(form, Encoding.UTF8.GetBytes(contentType.Boundary)),
-                data);
-        }
+ 
         
         [Serializable]
         public class TestResponseData
@@ -226,7 +298,12 @@ namespace Tests.Runtime
             {
                 return a == other.a;
             }
-
+            public override bool Equals(object obj)
+            {
+                if (obj is not TestResponseData comp)
+                    return false;
+                return comp.a == a;
+            }
             public override int GetHashCode()
             {
                 return a;
@@ -256,7 +333,7 @@ namespace Tests.Runtime
         {
             public string FixedContentType { get; set; }
             public string FixedRawResponse { get; set; }
-            public HttpStatusCode Code { get; set; }
+            public HttpStatusCode Code { get; set; } = HttpStatusCode.OK;
             public string FixedError { get; set; }
             public Texture2D ResponseTexture { get; set; }
             public AudioClip ResponseAudioClip { get; set; }
@@ -439,7 +516,6 @@ namespace Tests.Runtime
                 StatusCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
                 null,
-                FixedError,
                 FixedRawResponse ,
                 ResponseData
             );
