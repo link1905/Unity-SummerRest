@@ -2,8 +2,103 @@ name: CI
 on:
   push:
     branches:
-    - main
+      - main
 jobs:
-  release:
-    name: release
-    runs-on: ubuntu-lates
+  test-build-unity:
+    name: Test and build plugin
+    runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - SummerRest
+          - SummerRestSample
+        unityVersion:
+          - 2020.3.0f1
+        include:
+          - projectPath: SummerRest
+            packagePath: Assets/Plugins/SummerRest
+          - projectPath: SummerRestSample
+            packagePath: Assets
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
+          restore-keys: |
+            Library-
+      # Test
+      - uses: game-ci/unity-test-runner@v4
+        id: tests
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: UnityTests/${{ matrix.testMode }}
+      # Upload test results
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Unity test results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+      # Export custom packages (not build)
+      - name: Export packages
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          buildMethod: SummerRest.Editor.Manager.ExportPackage.Export # Path to the export method containing the namespace.
+          customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.unitypackage"
+      # Upload
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.projectPath }}.unitypackage
+          path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.unitypackage
+  test-generator:
+    name: Test source generator
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+        projectPath:
+          - Generator
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - uses: actions/cache@v3
+        name: Cache NuGet packages
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles("${{ matrix.projectPath }}/**/*.csproj") }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        working-directory: ${{ matrix.projectPath }}
+        run: dotnet restore
+      - name: Test with dotnet
+        working-directory: ${{ matrix.projectPath }}
+        run: dotnet test --logger trx --results-directory "GeneratorTests/${{ matrix.dotnet-version }}"
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Generator test results for ${{ matrix.dotnet-version }}
+          path: ${{ matrix.projectPath }}/GeneratorTests/${{ matrix.dotnet-version }}
+        if: always()
