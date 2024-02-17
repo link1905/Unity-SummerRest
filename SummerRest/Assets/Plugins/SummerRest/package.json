@@ -5,7 +5,6 @@
   "description": "A plugin works as Postman, which supports to visualize the structure of your HTTP endpoints and request to them inside Unity \nIt supports making HTTP requests and showing simple results (text, image) in Editor mode. This package also generates boilerplate codes based on your structure to simplify the process of calling HTTP endpoints in Runtime mode",
   "unity": "2019.2",
   "dependencies": {
-    "com.unity.test-framework": "1.1.33",
     "com.unity.editorcoroutines": "1.0.0"
   },
   "license": "See LICENSE.md",
