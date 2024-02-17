@@ -71,7 +71,7 @@ namespace Managers
 
                 responseView.StartCall(_searchProduct.AbsoluteUrl, _searchProduct.Method);
                 // Detailed request
-                var response = await _searchProduct.DetailedDataRequestAsync<Product[]>();
+                var response = await _searchProduct.DetailedDataRequestAsync<ProductPaging>();
                 responseView.SetResponse(response);
             }
             catch (ResponseErrorException e)
