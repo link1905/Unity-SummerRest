@@ -17,7 +17,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             IWebRequestAdaptor<TResponse> request, Action<IWebRequestAdaptor<TResponse>> adaptorBuilder,
             CancellationToken cancellationToken)
         {
-            await SetRequestDataAndWait(request, adaptorBuilder).ToUniTask(cancellationToken: cancellationToken);
+            await SetRequestDataAndWait(request, adaptorBuilder).WithCancellation(cancellationToken);
             if (request.IsError(out var msg))
                 throw new ResponseErrorException(msg);
             return request.ResponseData;

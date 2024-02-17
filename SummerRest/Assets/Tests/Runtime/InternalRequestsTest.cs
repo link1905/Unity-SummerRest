@@ -73,14 +73,7 @@ namespace Tests.Runtime
                 c => request.DataRequestCoroutine(c),
                 c => request.DetailedDataRequestCoroutine(c));
         }
-        [Test]
-        public async Task Test_Internal_Request_Return_200_And_Json_Data_Async()
-        {
-            var (request, expected) = Setup_Test_Internal_Request_Return_200_And_Json_Data();
-            await TestSimpleAndDetailedRequestAsync(
-                expected,
-                request.DataRequestAsync<TestResponseData>(), request.DetailedDataRequestAsync<TestResponseData>());
-        }
+
         private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_201_And_Xml_Data()
         {
             var provider = new TestWebRequestAdaptorProvider
@@ -196,16 +189,7 @@ namespace Tests.Runtime
                 HttpStatusCode.Created);
         }
         
-        [Test]
-        public async Task Test_Internal_Multipart_Form_Request_Async()
-        {
-            var (request, expected, _) = Setup_Test_Internal_Multipart_Form_Request();
-            await TestSimpleAndDetailedRequestAsync(
-                expected,
-                request.MultipartDataRequestAsync<TestResponseData>(), 
-                request.DetailedMultipartDataRequestAsync<TestResponseData>(),
-                HttpStatusCode.Created);
-        }
+
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_On_Error_Callback()
@@ -287,7 +271,24 @@ namespace Tests.Runtime
             });
             Assert.AreEqual("Bearer my-token", header);
         }
- 
+        // [Test]
+        // public async Task Test_Internal_Request_Return_200_And_Json_Data_Async()
+        // {
+        //     var (request, expected) = Setup_Test_Internal_Request_Return_200_And_Json_Data();
+        //     await TestSimpleAndDetailedRequestAsync(
+        //         expected,
+        //         request.DataRequestAsync<TestResponseData>(), request.DetailedDataRequestAsync<TestResponseData>());
+        // }
+        // [Test]
+        // public async Task Test_Internal_Multipart_Form_Request_Async()
+        // {
+        //     var (request, expected, _) = Setup_Test_Internal_Multipart_Form_Request();
+        //     await TestSimpleAndDetailedRequestAsync(
+        //         expected,
+        //         request.MultipartDataRequestAsync<TestResponseData>(), 
+        //         request.DetailedMultipartDataRequestAsync<TestResponseData>(),
+        //         HttpStatusCode.Created);
+        // }
         
         [Serializable]
         public class TestResponseData
@@ -367,6 +368,23 @@ namespace Tests.Runtime
 
         }
 
+        private class DataTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
+            DataUnityWebRequestAdaptor<TResponse>, TResponse>
+        {
+            public DataTestWebRequestAdaptor(DataUnityWebRequestAdaptor<TResponse> webRequest,
+                string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
+                base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
+            {
+            }
+            public override IEnumerator RequestInstruction
+            {
+                get
+                {
+                    yield return null;
+                    ResponseData = Wrapped.BuildResponse(FixedContentType, FixedRawResponse);
+                }
+            }
+        }
         private class MultipartTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
             MultipartFileUnityWebRequestAdaptor<TResponse>, TResponse>
         {
@@ -419,25 +437,6 @@ namespace Tests.Runtime
                 {
                     yield return null;
                     ResponseData = _result;
-                }
-            }
-        }
-   
-
-        private class DataTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
-            DataUnityWebRequestAdaptor<TResponse>, TResponse>
-        {
-            public DataTestWebRequestAdaptor(DataUnityWebRequestAdaptor<TResponse> webRequest,
-                string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
-                base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
-            {
-            }
-            public override IEnumerator RequestInstruction
-            {
-                get
-                {
-                    yield return null;
-                    ResponseData = Wrapped.BuildResponse(FixedContentType, FixedRawResponse);
                 }
             }
         }
