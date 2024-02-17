@@ -1,11 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine.Networking;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
     public class UnityWebRequestAdaptorTest
     {

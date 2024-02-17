@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.TestTools;
 using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
     public class AuthAppenderTests
     {

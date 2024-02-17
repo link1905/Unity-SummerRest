@@ -2,7 +2,7 @@
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
     public class ContentTypeParserTest
     {

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000}
   <Parent>k__BackingField: {fileID: 0}
-  endpointName: Anony
-  url: 
+  endpointName: MyDomain
+  url: http://localhost:8080
   auth:
     inherit: 8
     cache:
@@ -42,13 +42,15 @@ MonoBehaviour:
       hasValue: 1
       value: 0
     value: 0
-  isGenerated: 0
-  <TreeId>k__BackingField: 2
-  services: []
-  requests:
-  - {fileID: 11400000, guid: 230952ff208216541acf38ef2def085b, type: 2}
+  isGenerated: 1
+  <TreeId>k__BackingField: 3
+  services:
+  - {fileID: 11400000, guid: 33348da1e214f0246802ef803eda491a, type: 2}
+  - {fileID: 11400000, guid: 8190dc100ec52b143869362161f37b4e, type: 2}
+  - {fileID: 11400000, guid: 9f0168e204bdebb40afd6358b26ddcd2, type: 2}
+  requests: []
   versions:
     values:
-    - 
+    - http://localhost:8080
     selectedIndex: 0
-  path: 
+  path: http://localhost:8080

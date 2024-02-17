@@ -4,7 +4,7 @@ using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
     public class RequestBuilderTest
     {

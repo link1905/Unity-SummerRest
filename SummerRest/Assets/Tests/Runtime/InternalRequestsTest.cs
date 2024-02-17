@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
-using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
@@ -15,7 +13,7 @@ using UnityEngine.Networking;
 using UnityEngine.TestTools;
 using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
     public class InternalRequestsTest
     {

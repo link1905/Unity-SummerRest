@@ -6,7 +6,7 @@ using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace SummerRest.Tests
+namespace Tests.Runtime
 {
 
     public class SerializerTest
