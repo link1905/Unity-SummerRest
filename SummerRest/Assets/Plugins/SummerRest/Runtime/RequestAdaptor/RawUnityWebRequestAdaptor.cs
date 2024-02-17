@@ -9,7 +9,8 @@ namespace SummerRest.Runtime.RequestAdaptor
     /// <summary>
     /// Request adaptor deserializing the response body to C# class objects based on the content-type <seealso cref="DataFormat"/> 
     /// </summary>
-    internal class RawUnityWebRequestAdaptor<TResponse> : UnityWebRequestAdaptor<RawUnityWebRequestAdaptor<TResponse>, TResponse>
+    internal abstract class RawUnityWebRequestAdaptor<TSelf, TResponse> : UnityWebRequestAdaptor<TSelf, TResponse> 
+        where TSelf : RawUnityWebRequestAdaptor<TSelf, TResponse>, new()
     {
         private string _rawResponse;
         public override string RawResponse => _rawResponse;

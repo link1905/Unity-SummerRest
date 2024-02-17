@@ -1,4 +1,7 @@
 ﻿using Models;
+using SummerRest.Runtime.Authenticate;
+using SummerRest.Runtime.Authenticate.Repositories;
+using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine;
@@ -12,6 +15,7 @@ namespace Managers
     using AddProduct = DummyJson.Products.AddProductData;
     using Login = DummyJson.Auths.Login;
     using GetProductImage = DummyJsonCdn.GetProductImage;
+    using GetUser = DummyJson.Auths.GetUser;
 #if SUMMER_REST_TASK
     using Cysharp.Threading.Tasks;
 #endif
@@ -170,7 +174,7 @@ namespace Managers
         // Requesting audio clip is similar to this 
         #region Get image request
 
-        private readonly GetProductImage _getProductImage;
+        private readonly GetProductImage _getProductImage = GetProductImage.Create();
         /// <summary>
         /// You should leverage generated classes in case you know the structure of the image beforehand
         /// </summary>

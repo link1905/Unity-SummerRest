@@ -28,13 +28,13 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
-        public static UniTask<Texture2D> TextureRequestAsync(
+        public static async UniTask<Texture2D> TextureRequestAsync(
             string url, 
             bool nonReadable,
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(url, nonReadable);
-            return RequestAsync(request, adaptorBuilder);
+            return await RequestAsync(request, adaptorBuilder);
         }        
         /// <summary>
         /// Make an async <see cref="AudioClip"/> request <br/>
@@ -44,13 +44,13 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="audioType">Type of the audio response</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
-        public static UniTask<AudioClip> AudioRequestAsync(
+        public static async UniTask<AudioClip> AudioRequestAsync(
             string url, 
             AudioType audioType,
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(url, audioType);
-            return RequestAsync(request, adaptorBuilder);
+            return await RequestAsync(request, adaptorBuilder);
         }        
 
         /// <summary>
@@ -64,15 +64,15 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
-        public static UniTask<TResponse> DataRequestAsync<TResponse>(
+        public static async UniTask<TResponse> DataRequestAsync<TResponse>(
             string url, HttpMethod method, 
             string data = null, ContentType? contentType = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType?.FormedContentType);
-            return RequestAsync(request, adaptorBuilder);
+                    data, contentType);
+            return await RequestAsync(request, adaptorBuilder);
         }
         
         /// <summary>
@@ -83,16 +83,18 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="method">Http method of the request <see cref="HttpMethod"/></param>
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
-        public static UniTask<TResponse> MultipartDataRequestAsync<TResponse>(
+        public static async UniTask<TResponse> MultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,             
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data);
-            return RequestAsync(request, adaptorBuilder);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+            return await RequestAsync(request, adaptorBuilder);
         }
 
         
@@ -113,12 +115,12 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(string url, 
+        public static async UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(string url, 
             bool nonReadable,
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetTextureRequest(url, nonReadable);
-            return DetailedRequestAsync(request, adaptorBuilder);
+            return await DetailedRequestAsync(request, adaptorBuilder);
         }        
         /// <summary>
         /// Make a detailed async <see cref="AudioClip"/> request <br/>
@@ -128,13 +130,13 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="audioType">Type of the audio response</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(
+        public static async UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(
             string url,
             AudioType audioType,
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current.GetAudioRequest(url, audioType);
-            return DetailedRequestAsync(request, adaptorBuilder);
+            return await DetailedRequestAsync(request, adaptorBuilder);
         }        
         
         /// <summary>
@@ -148,17 +150,17 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static UniTask<WebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(
+        public static async UniTask<WebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(
             string url, HttpMethod method, 
             string data = null, ContentType? contentType = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType?.FormedContentType);
-            return DetailedRequestAsync(request, adaptorBuilder);
+                    data, contentType);
+            return await DetailedRequestAsync(request, adaptorBuilder);
         }
-        
+
         /// <summary>
         /// Make an async data request that uploads multipart file sections <br/>
         /// Please note that this method throws an <see cref="ResponseErrorException"/> exception when encountering issues
@@ -166,17 +168,19 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="url">Resource absolute url</param>
         /// <param name="method">Http method of the request <see cref="HttpMethod"/></param>
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static UniTask<WebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
+        public static async UniTask<WebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,      
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data);
-            return DetailedRequestAsync(request, adaptorBuilder);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+            return await DetailedRequestAsync(request, adaptorBuilder);
         }
     }
 }

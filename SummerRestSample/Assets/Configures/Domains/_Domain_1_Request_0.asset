@@ -23,7 +23,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: dummy-json-token
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:
@@ -42,14 +42,15 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
+  isGenerated: 1
   <TreeId>k__BackingField: 1
   path:
-    text: '{productId}/{image-order}'
+    text: '{productId}/{image-order}.jpg'
     values:
     - key: productId
       value: 1
     - key: image-order
-      value: 1.jpg
+      value: 1
   contentType:
     inherit: 16
     cache:
@@ -73,6 +74,7 @@ MonoBehaviour:
       typeReference:
         classRef: 
     serializedData: 
+    isGenerated: 1
     textFormat: 0
     form: []
   urlWithParam: https://cdn.dummyjson.com/product-images/1/1.jpg

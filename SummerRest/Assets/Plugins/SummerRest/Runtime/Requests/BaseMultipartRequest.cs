@@ -27,7 +27,7 @@ namespace SummerRest.Runtime.Requests
             Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.MultipartDataRequestCoroutine(AbsoluteUrl, Method, 
-                MultipartFormSections, doneCallback, errorCallback, SetRequestData);
+                MultipartFormSections, ContentType, doneCallback, errorCallback, SetRequestData);
         }
         /// <summary>
         /// Detailed data request that uploads multipart file sections
@@ -39,7 +39,7 @@ namespace SummerRest.Runtime.Requests
             Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.DetailedMultipartDataRequestCoroutine(AbsoluteUrl, Method, 
-                MultipartFormSections, doneCallback, errorCallback, SetRequestData);
+                MultipartFormSections, ContentType, doneCallback, errorCallback, SetRequestData);
         }
 
     }

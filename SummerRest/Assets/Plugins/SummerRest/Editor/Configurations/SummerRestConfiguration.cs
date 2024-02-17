@@ -7,12 +7,10 @@ using SummerRest.Editor.TypeReference;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
-using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
 namespace SummerRest.Editor.Configurations
 {
@@ -21,31 +19,43 @@ namespace SummerRest.Editor.Configurations
     /// </summary>
     public class SummerRestConfiguration : DataStructures.ScriptableSingleton<SummerRestConfiguration>
     {
+        private void OnEnable()
+        {
+            LoadInstance();
+        }
+
         /// <summary>
         /// Domains
         /// </summary>
         [XmlArray]
-        [field: SerializeReference] public List<Domain> Domains { get; set; } = new();
+        [field: SerializeReference]
+        public List<Domain> Domains { get; set; } = new();
 
         /// Each <see cref="AuthContainer"/> points to an auth data (userId, token...)/><br /> 
         [SerializeField] private List<AuthContainer> authContainers = new();
 
         [XmlIgnore] public List<AuthContainer> AuthContainers => authContainers;
-        [XmlArray] public string[] AuthKeys {
+
+        [XmlArray]
+        public string[] AuthKeys
+        {
             get => authContainers.Select(e => e.AuthKey).ToArray();
             set => throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// Type ref of auth repository <see cref="ISecretRepository"/> <br />
         /// Default is <see cref="PlayerPrefsSecretRepository"/>
         /// </summary>
-        [SerializeField, ClassTypeConstraint(typeof(ISecretRepository))] 
+        [SerializeField, ClassTypeConstraint(typeof(ISecretRepository))]
         private ClassTypeReference secretRepository = new(typeof(PlayerPrefsSecretRepository));
+
         [XmlAttribute]
         public string SecretRepository
         {
-            get => secretRepository.Type is null ? typeof(PlayerPrefsSecretRepository).FullName : secretRepository.Type.FullName;
+            get => secretRepository.Type is null
+                ? typeof(PlayerPrefsSecretRepository).FullName
+                : secretRepository.Type.FullName;
             set => throw new NotImplementedException();
         }
 
@@ -53,8 +63,9 @@ namespace SummerRest.Editor.Configurations
         /// Type ref of data serializer <see cref="IDataSerializer"/> <br />
         /// Default is <see cref="DefaultDataSerializer"/>
         /// </summary>
-        [SerializeField, ClassTypeConstraint(typeof(IDataSerializer))] 
+        [SerializeField, ClassTypeConstraint(typeof(IDataSerializer))]
         private ClassTypeReference dataSerializer = new(typeof(DefaultDataSerializer));
+
         [XmlAttribute]
         public string DataSerializer
         {
@@ -66,6 +77,7 @@ namespace SummerRest.Editor.Configurations
         /// The target assembly for generating <see cref="BaseRequest{TRequest}"/> classes to call apis in runtime
         /// </summary>
         [SerializeField] private AssemblyDefinitionAsset targetAssembly;
+
         [Serializable]
         private class AssemblyName
         {
@@ -93,6 +105,12 @@ namespace SummerRest.Editor.Configurations
                 }
             }
             set => throw new NotImplementedException();
+        }
+        public void ValidateToGenerate()
+        {
+            var assembly = System.Reflection.Assembly.Load(Assembly);
+            foreach (var domain in Domains)
+                domain.ValidateToGenerate();
         }
         public void RenameAssets()
         {

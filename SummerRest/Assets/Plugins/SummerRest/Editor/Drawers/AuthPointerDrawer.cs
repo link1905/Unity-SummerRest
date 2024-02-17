@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SummerRest.Editor.Configurations;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.Utilities;
@@ -25,29 +23,35 @@ namespace SummerRest.Editor.Drawers
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var tree = Tree;
-            var authConfigure= SummerRestConfiguration.Instance.AuthContainers;
-            var allIds = authConfigure.Select(e => e.AuthKey).ToList();
-            var noOption = allIds.Count == 0;
-            
             var noOptionHelpBox = tree.Q<HelpBox>("no-option");
-            var selectionsDropdown = tree.Q<DropdownField>();
-            noOptionHelpBox.Show(noOption);
-            selectionsDropdown.Show(!noOption);
-
-            var keyProp = property.FindPropertyRelative("authKey");
+            var selectionsDropdown = tree.Q<DropdownField>();            
             var previewField = tree.Q<PropertyField>("preview");
-            // Only modify dropdown and preview section when having at least 1 auth container configured
-            if (!noOption)
+            tree.CallThenTrackPropertyValue(new SerializedObject(SummerRestConfiguration.Instance).FindProperty("authContainers"), authContainersProp =>
             {
-                //Make sure the the property pointing to an auth container (default is 0)
-                selectionsDropdown.choices = allIds;
-                selectionsDropdown.RegisterValueChangedCallback(s =>
+                var allIds = authContainersProp.GetStringArray(e => e.FindPropertyRelative("key").stringValue);
+                var noOption = allIds.Count == 0;
+                
+                noOptionHelpBox.Show(noOption);
+                selectionsDropdown.Show(!noOption);
+                // Only modify dropdown and preview section when having at least 1 auth container configured
+                if (!noOption)
                 {
-                    ShowPreview(previewField, s.newValue);
-                });
-                keyProp.stringValue = allIds[GetIndex(allIds, keyProp.stringValue)];
-                keyProp.serializedObject.ApplyModifiedProperties();
-            }
+                    //Make sure the the property pointing to an auth container (default is 0)
+                    selectionsDropdown.CallThenTrackPropertyValue(property.FindPropertyRelative("authKey"), keyProp =>
+                    {
+                        var idx = GetIndex(allIds, keyProp.stringValue);
+                        selectionsDropdown.choices = allIds;
+                        selectionsDropdown.index = idx;
+                        keyProp.stringValue = allIds[idx];
+                        keyProp.serializedObject.ApplyModifiedProperties();
+                    });
+                    selectionsDropdown.RegisterValueChangedCallback(s =>
+                    {
+                        ShowPreview(previewField, s.newValue);
+                    });
+                }
+            });
+
             return tree;
         }
         private void ShowPreview(PropertyField previewField, string val)

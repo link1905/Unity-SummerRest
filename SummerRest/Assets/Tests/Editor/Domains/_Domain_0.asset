@@ -43,11 +43,8 @@ MonoBehaviour:
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 3
-  services:
-  - {fileID: 11400000, guid: 33348da1e214f0246802ef803eda491a, type: 2}
-  - {fileID: 11400000, guid: 8190dc100ec52b143869362161f37b4e, type: 2}
-  - {fileID: 11400000, guid: 9f0168e204bdebb40afd6358b26ddcd2, type: 2}
+  <TreeId>k__BackingField: 2
+  services: []
   requests: []
   versions:
     values:

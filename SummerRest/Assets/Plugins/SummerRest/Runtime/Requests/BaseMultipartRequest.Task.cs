@@ -14,7 +14,7 @@ namespace SummerRest.Runtime.Requests
         /// <returns></returns>
         public UniTask<TResponse> MultipartDataRequestAsync<TResponse>()
         {
-            return WebRequestUtility.MultipartDataRequestAsync<TResponse>(AbsoluteUrl, Method, MultipartFormSections, SetRequestData);
+            return WebRequestUtility.MultipartDataRequestAsync<TResponse>(AbsoluteUrl, Method, MultipartFormSections, ContentType, SetRequestData);
         }    
         /// <summary>
         /// Make an async data request that uploads multipart file sections <br/>
@@ -24,7 +24,7 @@ namespace SummerRest.Runtime.Requests
         /// <returns><see cref="WebResponse{TBody}"/></returns>
         public UniTask<WebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>()
         {
-            return WebRequestUtility.DetailedMultipartDataRequestAsync<TResponse>(AbsoluteUrl, Method, MultipartFormSections, SetRequestData);
+            return WebRequestUtility.DetailedMultipartDataRequestAsync<TResponse>(AbsoluteUrl, Method, MultipartFormSections, ContentType, SetRequestData);
         }       
     }
 }

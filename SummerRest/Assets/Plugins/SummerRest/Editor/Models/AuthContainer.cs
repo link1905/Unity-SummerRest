@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Xml.Serialization;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
@@ -90,6 +91,12 @@ namespace SummerRest.Editor.Models
                 type = AuthType.Data;
                 body.TypeBasedOnAppender = typeOfAuthData;
             }
+        }
+
+        public void ValidateToGenerate(Assembly assembly)
+        {
+            if (assembly is null)
+                return;
         }
     }
 }

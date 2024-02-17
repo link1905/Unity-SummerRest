@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SummerRest.Runtime.Extensions;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -29,7 +28,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             return DumpUnityWebRequestAdaptor.Create(webRequest);
         }
         public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
-            string url, HttpMethod method, string bodyData, string contentType)
+            string url, HttpMethod method, string bodyData, ContentType? contentType)
         {
             UnityWebRequest request;
             switch (method)
@@ -38,9 +37,10 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = UnityWebRequest.Get(url);
                     break;
                 case HttpMethod.Post:
-                    if (string.IsNullOrEmpty(contentType))
-                        contentType = ContentType.Commons.TextPlain.FormedContentType;
-                    request = UnityWebRequest.Post(url, bodyData, contentType);
+                    var textContentType = contentType?.FormedContentType;
+                    if (string.IsNullOrEmpty(textContentType))
+                        textContentType = ContentType.Commons.TextPlain.FormedContentType;
+                    request = UnityWebRequest.Post(url, bodyData, textContentType);
                     break;
                 case HttpMethod.Put  or HttpMethod.Patch:
                     request = UnityWebRequest.Put(url, bodyData);
@@ -54,14 +54,16 @@ namespace SummerRest.Runtime.RequestAdaptor
             }
 
             request.method = method.ToUnityHttpMethod();
-            return RawUnityWebRequestAdaptor<TResponse>.Create(request);
+            return DataUnityWebRequestAdaptor<TResponse>.Create(request);
         }
 
         public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
             HttpMethod method,
-            List<IMultipartFormSection> data)
+            List<IMultipartFormSection> data, ContentType? contentType)
         {
-            var request = UnityWebRequest.Post(url, data, Array.Empty<byte>());
+            if (data is { Count: 0 })
+                throw new ArgumentException(@$"Multipart form body of the resource ""{url}"" is empty");
+            var request = contentType is null ? UnityWebRequest.Post(url, data) : UnityWebRequest.Post(url, data, contentType.Value.BoundaryBytes);
             request.method = method.ToUnityHttpMethod();
             return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);
         }

@@ -115,6 +115,18 @@ namespace SummerRest.Editor.Models
                 endpoint.CacheValues();
             }
         }
+        
+        public override void ValidateToGenerate()
+        {
+            if (!IsSelfGenerated)
+                return;
+            base.ValidateToGenerate();
+            foreach (var request in requests)
+                request.ValidateToGenerate();
+            foreach (var service in services)
+                service.ValidateToGenerate();
+        } 
+        
         public override void CacheValues()
         {
             base.CacheValues();
@@ -137,11 +149,11 @@ namespace SummerRest.Editor.Models
         
         public override void WriteXml(XmlWriter writer)
         {
-            if (!Generated)
+            if (!IsSelfGenerated)
                 return;
             base.WriteXml(writer);
-            writer.WriteArray(nameof(Services), nameof(Service), services);
-            writer.WriteArray(nameof(Requests), nameof(Request), requests);
+            writer.WriteArray(nameof(Services), nameof(Service), services.Where(e => e.IsSelfGenerated).ToArray());
+            writer.WriteArray(nameof(Requests), nameof(Request), requests.Where(e => e.IsSelfGenerated).ToArray());
         }
     }
 }

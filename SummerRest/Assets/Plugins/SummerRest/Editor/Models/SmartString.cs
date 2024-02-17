@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace SummerRest.Editor.Models
 {
+    // I encountered an error that ISerializationCallbackReceiver won't be called anymore after changing any serialized field 
+    // So I need to create this class to leverage ISerializationCallbackReceiver instead of the KeyValue struct
     [Serializable]
     public class SmartString : ISerializationCallbackReceiver
     {

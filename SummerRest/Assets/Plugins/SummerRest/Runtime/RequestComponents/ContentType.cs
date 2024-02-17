@@ -88,15 +88,32 @@ namespace SummerRest.Runtime.RequestComponents
         /// Content-type string formed from the 3 components
         /// </summary>
         public string FormedContentType { get; }
+        public byte[] BoundaryBytes { get; }
+
+        private static void AddContentTypeComponent(StringBuilder builder, string name, string value)
+        {
+            if (string.IsNullOrEmpty(value)) 
+                return;
+            if (builder.Length > 0)
+                builder.Append("; ");
+            builder.Append($"{name}=").Append(value);
+        } 
         public static string FormedContentTypeTextFromComponents(string mediaType, string charset, string boundary)
         {
             var builder = new StringBuilder();
             builder.Append(mediaType);
             if (!string.IsNullOrEmpty(charset))
-                builder.Append($"; {Headers.CharSet}=").Append(charset);
+                AddContentTypeComponent(builder, Headers.CharSet, charset);
             if (!string.IsNullOrEmpty(boundary))
-                builder.Append($"; {Headers.Boundary}=").Append(boundary);
+                AddContentTypeComponent(builder, Headers.Boundary, boundary);
             return builder.ToString();
+        }
+
+        public static byte[] FormBoundaryBytes(string boundary)
+        {
+            if (string.IsNullOrEmpty(boundary))
+                return null;
+            return Encoding.UTF8.GetBytes(boundary); 
         }
 
         public ContentType(string mediaType = null, string charset = null, string boundary = null)
@@ -106,6 +123,7 @@ namespace SummerRest.Runtime.RequestComponents
             this.boundary = boundary;
             //Create cached content-type text
             FormedContentType = FormedContentTypeTextFromComponents(mediaType, charset, boundary);
+            BoundaryBytes = FormBoundaryBytes(boundary);
         }
         /// <summary>
         /// Create a new content type based on an existing one <br/>

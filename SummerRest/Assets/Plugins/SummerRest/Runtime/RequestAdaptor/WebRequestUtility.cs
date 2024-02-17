@@ -31,7 +31,7 @@ namespace SummerRest.Runtime.RequestAdaptor
                     errorCallback(msg);
                 else
                     Debug.LogErrorFormat(
-                        @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
+                        @"There was an missed error ""{0}"" when trying to access the resource ""{1}"". Please provide the errorCallback to catch it",
                         msg.Message, request.Url);
             }
 
@@ -105,7 +105,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType?.FormedContentType);
+                    data, contentType);
             yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
@@ -115,6 +115,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="url">Resource absolute url</param>
         /// <param name="method">Http method of the request <see cref="HttpMethod"/></param>
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <param name="doneCallback">Invoked when the request is finished without an error</param>
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
@@ -123,12 +124,13 @@ namespace SummerRest.Runtime.RequestAdaptor
             string url,
             HttpMethod method,
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<TResponse> doneCallback,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, method, data);
+                .GetMultipartFileRequest<TResponse>(url, method, data, contentType);
             yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
@@ -203,7 +205,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>
-                    (url, method, data, contentType?.FormedContentType);
+                    (url, method, data, contentType);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
@@ -215,18 +217,20 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="data">The form body of the request <seealso cref="MultipartFormDataSection"/> <see cref="MultipartFormFileSection"/></param>
         /// <param name="doneCallback">Invoked when the request is finished without an error</param>
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
+        /// <param name="contentType">Content type of the sections</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
         public static IEnumerator DetailedMultipartDataRequestCoroutine<TResponse>(
             string url,
             HttpMethod method,
             List<IMultipartFormSection> data,
+            ContentType? contentType,
             Action<WebResponse<TResponse>> doneCallback,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, method, data);
+                .GetMultipartFileRequest<TResponse>(url, method, data, contentType);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
     }

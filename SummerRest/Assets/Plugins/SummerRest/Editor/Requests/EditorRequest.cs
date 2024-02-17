@@ -93,7 +93,7 @@ namespace SummerRest.Editor.Requests
             {
                 yield return WebRequestUtility.DetailedMultipartDataRequestCoroutine<string>(AbsoluteUrl, 
                     Method,
-                    _request.RequestBody.AllSections.ToList(), SetResponseCallback, SetErrorCallback, SetRequestData);
+                    _request.RequestBody.AllSections.ToList(), ContentType, SetResponseCallback, SetErrorCallback, SetRequestData);
             }
             else
             {

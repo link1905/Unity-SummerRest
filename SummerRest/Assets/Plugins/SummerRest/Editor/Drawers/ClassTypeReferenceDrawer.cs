@@ -18,10 +18,10 @@ namespace SummerRest.Editor.Drawers
             if (_cacheSelections.Count > 0)
                 return _cacheSelections;
 
-            var assembly = ReflectionExtensions.LoadDefaultAssembly();
-            FilterTypes(assembly, filter, _cacheSelections);
-            foreach (var refAssembly in assembly.GetReferencedAssemblies())
-                FilterTypes(Assembly.Load(refAssembly), filter, _cacheSelections);
+            // var assembly = ReflectionExtensions.LoadDefaultAssembly();
+            // FilterTypes(assembly, filter, _cacheSelections);
+            foreach (var refAssembly in ReflectionExtensions.GetAllAssemblies())
+                FilterTypes(refAssembly, filter, _cacheSelections);
             _cacheSelections.Sort((a, b) => 
                 string.Compare(a.FullName, b.FullName, StringComparison.Ordinal));
 

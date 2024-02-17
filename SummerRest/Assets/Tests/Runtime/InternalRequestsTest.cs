@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -10,6 +11,7 @@ using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.TestTools;
 using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
@@ -22,12 +24,17 @@ namespace Tests.Runtime
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_200_And_Json_Data()
         {
-            var provider = new TestWebRequestAdaptorProvider("application/json", @"{""A"":5}", HttpStatusCode.OK, null);
+            var provider = new TestWebRequestAdaptorProvider()
+            {
+                FixedContentType = "application/json",
+                FixedRawResponse = @"{""a"":5}",
+                Code = HttpStatusCode.OK
+            };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
             var expected = new TestResponseData
             {
-                A = 5
+                a = 5
             };
             yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
@@ -43,12 +50,17 @@ namespace Tests.Runtime
         [UnityTest]
         public IEnumerator Test_Internal_Request_Return_201_And_Xml_Data()
         {
-            var provider = new TestWebRequestAdaptorProvider("application/xml", "<root><A>3</A></root>", HttpStatusCode.Created, null);
+            var provider = new TestWebRequestAdaptorProvider()
+            {
+                FixedContentType = "application/xml",
+                FixedRawResponse = "<TestResponseData><a>3</a></TestResponseData>",
+                Code = HttpStatusCode.Created
+            };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
             var expected = new TestResponseData
             {
-                A = 3
+                a = 3
             };
             yield return request.DataRequestCoroutine<TestResponseData>(e =>
             {
@@ -66,7 +78,12 @@ namespace Tests.Runtime
         public IEnumerator Test_Internal_Request_Return_500_And_Plain()
         {
             const string result = "internal server error response";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", result, HttpStatusCode.InternalServerError, null);
+            var provider = new TestWebRequestAdaptorProvider()            
+            {
+                FixedContentType = "text/plain",
+                FixedRawResponse = result,
+                Code = HttpStatusCode.InternalServerError
+            };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestDataRequest.Create();
             yield return request.DataRequestCoroutine<string>(e =>
@@ -82,14 +99,63 @@ namespace Tests.Runtime
         }
         
         [UnityTest]
+        public IEnumerator Test_Internal_Texture_Request_Return_Correct_Texture()
+        {
+            var result = new Texture2D(20, 20);
+            var provider = new TestWebRequestAdaptorProvider
+            {
+                Code = HttpStatusCode.OK,
+                ResponseTexture = result
+            };
+            IWebRequestAdaptorProvider.Current = provider;
+            var request = TestDataRequest.Create();
+            yield return request.TextureRequestCoroutine(false, e =>
+            {
+                Assert.AreSame(result, e);
+            });
+            yield return request.DetailedTextureRequestCoroutine(false, e =>
+            {
+                Assert.AreSame(result, e.Data);
+                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
+            });
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_Internal_Audio_Request_Return_Correct_Audio()
+        {
+            var result = AudioClip.Create("test-clip", 44000, 1, 4400, false);
+            var provider = new TestWebRequestAdaptorProvider
+            {
+                Code = HttpStatusCode.OK,
+                ResponseAudioClip = result
+            };
+            IWebRequestAdaptorProvider.Current = provider;
+            var request = TestDataRequest.Create();
+            yield return request.AudioRequestCoroutine(AudioType.WAV, e =>
+            {
+                Assert.AreSame(result, e);
+            });
+            yield return request.DetailedAudioRequestCoroutine(AudioType.WAV, e =>
+            {
+                Assert.AreSame(result, e.Data);
+                Assert.AreEqual(HttpStatusCode.OK, e.StatusCode);
+            });
+        }
+        
+        [UnityTest]
         public IEnumerator Test_Internal_Request_On_Error_Callback()
         {
             const string error = "connection error";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
+            var provider = new TestWebRequestAdaptorProvider
+            {
+                FixedError = error,
+                Code = HttpStatusCode.InternalServerError
+            };
             IWebRequestAdaptorProvider.Current = provider;
             yield return TestDataRequest.Create().DataRequestCoroutine<string>(null, e =>
             {
-                Assert.AreEqual(error, e);
+                Assert.AreEqual(error, e.Message);
+                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
             });
         }
         
@@ -97,19 +163,21 @@ namespace Tests.Runtime
         public IEnumerator Test_Internal_Request_Missing_Log_When_Error_Callback_Absent()
         {
             const string error = "connection error";
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.InternalServerError, error);
+            var provider = new TestWebRequestAdaptorProvider()            
+            {
+                FixedError = error,
+                Code = HttpStatusCode.InternalServerError
+            };
             IWebRequestAdaptorProvider.Current = provider;
             yield return TestDataRequest.Create().DataRequestCoroutine<string>(null);
-            var msg = string.Format(
-                @"There was an missed error ""{0}"" when trying to access the resource {1}. Please give errorCallback to catch it",
-                error, TestAbsoluteUrl);
+            var msg = @"There was an missed error ""connection error"" when trying to access the resource ""http://example.com/200"". Please provide the errorCallback to catch it";
             LogAssert.Expect(LogType.Error, msg);
         }
         
         [UnityTest]
         public IEnumerator Test_Internal_Request_Append_Bearer_Header()
         {
-            var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
+            var provider = new TestWebRequestAdaptorProvider();
             IWebRequestAdaptorProvider.Current = provider;
             ISecretRepository.Current.Save("test-key", "my-token");
             var request = TestDataRequest.Create();
@@ -126,13 +194,20 @@ namespace Tests.Runtime
         public IEnumerator Test_Internal_Request_Append_Correct_Multipart_Form()
         {
             var contentType = ContentType.Commons.MultipartForm;
-            var form = new List<IMultipartFormSection>();
-            form.Add(new MultipartFormDataSection("form-key-1", "form-value-1"));
-            form.Add(new MultipartFormDataSection("form-key-2", "form-value-2"));
-            
-            var provider = new TestWebRequestAdaptorProvider(contentType.FormedContentType, string.Empty, HttpStatusCode.OK, null);
+            var form = new List<IMultipartFormSection>
+            {
+                new MultipartFormDataSection("form-key-1", "form-value-1"),
+                new MultipartFormDataSection("form-key-2", "form-value-2")
+            };
+
+            var provider = new TestWebRequestAdaptorProvider()
+            {
+                FixedContentType = contentType.FormedContentType,
+            };
             IWebRequestAdaptorProvider.Current = provider;
             var request = TestMultipartRequest.Create();
+            request.MultipartFormSections.AddRange(form);
+            request.ContentType = contentType;
             byte[] data = null;
             yield return request.DetailedMultipartDataRequestCoroutine<string>(e =>
             {
@@ -142,45 +217,19 @@ namespace Tests.Runtime
                 data);
         }
         
-        // [UnityTest]
-        // public IEnumerator Test_Internal_Request_From_Unity_Web_Request_Set_Correct_Information()
-        // {
-        //     var provider = new TestWebRequestAdaptorProvider("text/plain", string.Empty, HttpStatusCode.OK, null);
-        //     IWebRequestAdaptorProvider.Current = provider;
-        //     var request = TestDataRequest.Create();
-        //     request.Method = HttpMethod.Connect;
-        //     var webRequest = UnityWebRequest.Get(string.Empty);
-        //     yield return request.RequestCoroutineFromUnityWebRequest(webRequest, e =>
-        //     {
-        //         Assert.AreSame(webRequest, e);
-        //         Assert.AreEqual(TestAbsoluteUrl, e.url);
-        //         Assert.AreEqual(HttpMethod.Connect.ToUnityHttpMethod(), e.method);
-        //     });
-        //     
-        //     request.Method = HttpMethod.Get;
-        //     request.Params.AddParamToList("my-param", "my-param-value");
-        //     request.Headers.Add("my-header", "my-header-value");
-        //     yield return request.DetailedRequestCoroutineFromUnityWebRequest(webRequest, e =>
-        //     {
-        //         Assert.IsNull(e.Error);
-        //         Assert.AreEqual(HttpMethod.Get.ToUnityHttpMethod(), e.Data.method);
-        //         Assert.That(e.Data.url.Contains("my-param=my-param-value"));
-        //         Assert.AreEqual("my-header-value", e.Data.GetRequestHeader("my-header"));
-        //     });
-        // }
-        
+        [Serializable]
         public class TestResponseData
         {
-            public int A { get; set; }
+            public int a;
 
             public bool Equals(TestResponseData other)
             {
-                return A == other.A;
+                return a == other.a;
             }
 
             public override int GetHashCode()
             {
-                return A;
+                return a;
             }
         }
         
@@ -199,84 +248,109 @@ namespace Tests.Runtime
             public TestMultipartRequest() : base(TestUrl, TestAbsoluteUrl, null, null, null)
             {
                 Init();
+                Method = HttpMethod.Post;
             }
         }
 
         private class TestWebRequestAdaptorProvider : IWebRequestAdaptorProvider
         {
-            private readonly string _fixedContentType;
-            private readonly string _fixedRawResponse;
-            private readonly HttpStatusCode _code;
-            private readonly string _fixedError;
-            private readonly IWebRequestAdaptorProvider _wrapped;
-            public TestWebRequestAdaptorProvider(string fixedContentType, string fixedRawResponse, HttpStatusCode code,
-                string fixedError)
-            {
-                this._fixedContentType = fixedContentType;
-                this._fixedRawResponse = fixedRawResponse;
-                this._code = code;
-                this._fixedError = fixedError;
-                _wrapped = new UnityWebRequestAdaptorProvider();
-            }
+            public string FixedContentType { get; set; }
+            public string FixedRawResponse { get; set; }
+            public HttpStatusCode Code { get; set; }
+            public string FixedError { get; set; }
+            public Texture2D ResponseTexture { get; set; }
+            public AudioClip ResponseAudioClip { get; set; }
+            private readonly IWebRequestAdaptorProvider _wrapped = new UnityWebRequestAdaptorProvider();
+   
 
             public IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable)
             {
-                return _wrapped.GetTextureRequest(url, nonReadable);
+                var wrapped = _wrapped.GetTextureRequest(url, nonReadable) as TextureUnityWebRequestAdaptor;
+                return new TextureTestWebRequestAdaptor(ResponseTexture, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
             public IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType)
             {
-                return _wrapped.GetAudioRequest(url, audioType);
+                var wrapped = _wrapped.GetAudioRequest(url, audioType) as AudioUnityWebRequestAdaptor;
+                return new AudioTestWebRequestAdaptor(ResponseAudioClip, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, ContentType? contentType)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data) as MultipartFileUnityWebRequestAdaptor<TBody>;
-                return new MultipartTestWebRequestAdaptor<TBody>(wrapped, _fixedContentType, _fixedRawResponse, _code, _fixedError);
-            }
-
-            public IWebRequestAdaptor<UnityWebRequest> GetFromUnityWebRequest(UnityWebRequest webRequest)
-            {
-                var wrapped = _wrapped.GetFromUnityWebRequest(webRequest) as DumpUnityWebRequestAdaptor;
-                return new DumpTestWebRequestAdaptor(wrapped, _fixedContentType, _fixedRawResponse, _code, _fixedError);
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data, contentType) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                return new MultipartTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
-            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType)
+
+            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, ContentType? contentType)
             {
-                var r = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as RawUnityWebRequestAdaptor<TBody>;
-                return new RawTestWebRequestAdaptor<TBody>(r, _fixedContentType, _fixedRawResponse, _code, _fixedError);
+                var wrapped = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as DataUnityWebRequestAdaptor<TBody>;
+                return new DataTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
 
         }
 
-        private class MultipartTestWebRequestAdaptor<TResponse> : RawTestWebRequestAdaptor<TResponse>
+        private class MultipartTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
+            MultipartFileUnityWebRequestAdaptor<TResponse>, TResponse>
         {
-            public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> wrapped, string fixedContentType, 
-                string fixedRawResponse, HttpStatusCode code, string fixedError) : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
+            public MultipartTestWebRequestAdaptor(MultipartFileUnityWebRequestAdaptor<TResponse> webRequest,
+                string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
+                base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
             {
-            }
-        }
-        private class DumpTestWebRequestAdaptor : BaseTestWebRequestAdaptor<DumpUnityWebRequestAdaptor, UnityWebRequest>
-        {
-            public DumpTestWebRequestAdaptor(DumpUnityWebRequestAdaptor wrapped, string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) 
-                : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
-            {
-                
             }
             public override IEnumerator RequestInstruction
             {
                 get
                 {
                     yield return null;
-                    ResponseData = Wrapped.BuildResponse();
+                    ResponseData = Wrapped.BuildResponse(FixedContentType, FixedRawResponse);
                 }
             }
         }
-
-        private class RawTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
-            RawUnityWebRequestAdaptor<TResponse>, TResponse>
+        
+        private class TextureTestWebRequestAdaptor : BaseTestWebRequestAdaptor<
+            TextureUnityWebRequestAdaptor, Texture2D>
         {
-            public RawTestWebRequestAdaptor(RawUnityWebRequestAdaptor<TResponse> webRequest,
+            private readonly Texture2D _result;
+            public TextureTestWebRequestAdaptor(Texture2D result, TextureUnityWebRequestAdaptor wrapped, string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) 
+                : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
+            {
+                _result = result;
+            }
+            public override IEnumerator RequestInstruction
+            {
+                get
+                {
+                    yield return null;
+                    ResponseData = _result;
+                }
+            }
+        }
+        
+        private class AudioTestWebRequestAdaptor : BaseTestWebRequestAdaptor<
+            AudioUnityWebRequestAdaptor, AudioClip>
+        {
+            private readonly AudioClip _result;
+            public AudioTestWebRequestAdaptor(AudioClip result, AudioUnityWebRequestAdaptor wrapped, string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) 
+                : base(wrapped, fixedContentType, fixedRawResponse, code, fixedError)
+            {
+                _result = result;
+            }
+            public override IEnumerator RequestInstruction
+            {
+                get
+                {
+                    yield return null;
+                    ResponseData = _result;
+                }
+            }
+        }
+   
+
+        private class DataTestWebRequestAdaptor<TResponse> : BaseTestWebRequestAdaptor<
+            DataUnityWebRequestAdaptor<TResponse>, TResponse>
+        {
+            public DataTestWebRequestAdaptor(DataUnityWebRequestAdaptor<TResponse> webRequest,
                 string fixedContentType, string fixedRawResponse, HttpStatusCode code, string fixedError) :
                 base(webRequest, fixedContentType, fixedRawResponse, code, fixedError)
             {
@@ -300,7 +374,9 @@ namespace Tests.Runtime
             {
                 Wrapped.Dispose();
             }
-            public string Url { get; set; }
+            public string Url { get => Wrapped.Url;
+                set => Wrapped.Url = value;
+            }
             public void SetHeader(string key, string value)
             {
                 Wrapped.SetHeader(key, value);
@@ -359,7 +435,7 @@ namespace Tests.Runtime
                 FixedError = fixedError;
             }
 
-            public WebResponse<TResponse> WebResponse => new(null,
+            public WebResponse<TResponse> WebResponse => new(Wrapped.WebRequest,
                 StatusCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
                 null,

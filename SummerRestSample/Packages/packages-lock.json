@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "809d23edae0df58fd0f61b4b6f67855c59d1b2fb"
+    },
     "com.summer.summer-rest": {
       "version": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest",
       "depth": 0,
@@ -8,7 +15,7 @@
         "com.unity.test-framework": "1.1.33",
         "com.unity.editorcoroutines": "1.0.0"
       },
-      "hash": "14f8689fc27be96c6ff58ac929a6bc355df9fc5b"
+      "hash": "eb4518a87af36886c5248f508051202b7278e4d1"
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",

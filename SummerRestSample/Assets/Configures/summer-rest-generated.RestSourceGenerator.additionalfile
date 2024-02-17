@@ -42,7 +42,7 @@
             </Services>
             <Requests>
                 <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="ww2QpphEvRjFYSOztWprB1wMbmstVQuaGRCOXdgL" />
+                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="ZbwQYLqbqJFhnfsDoLxkDtjSUF0DXTJpyReRtodO" />
                     <SerializedForm>
                         <KeyValue Key="text" Value="my text value" />
                         <KeyValue Key="file" />
@@ -52,10 +52,10 @@
         </Domain>
         <Domain TypeName="Domain" EndpointName="DummyJsonCdn">
             <Requests>
-                <Request TypeName="Request" EndpointName="GetProductImage" Url="https://cdn.dummyjson.com/product-images/1/1.jpg" UrlFormat="https://cdn.dummyjson.com/product-images/{0}/{1}" UrlWithParams="https://cdn.dummyjson.com/product-images/1/1.jpg" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
+                <Request TypeName="Request" EndpointName="GetProductImage" Url="https://cdn.dummyjson.com/product-images/1/1.jpg" UrlFormat="https://cdn.dummyjson.com/product-images/{0}/{1}.jpg" UrlWithParams="https://cdn.dummyjson.com/product-images/1/1.jpg" Method="Get" DataFormat="Json" SerializedBody="" IsMultipart="false">
                     <UrlFormatContainers>
                         <KeyValue Key="productId" Value="1" />
-                        <KeyValue Key="image-order" Value="1.jpg" />
+                        <KeyValue Key="image-order" Value="1" />
                     </UrlFormatContainers>
                 </Request>
             </Requests>

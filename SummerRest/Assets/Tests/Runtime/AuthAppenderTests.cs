@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
@@ -10,13 +11,13 @@ namespace Tests.Runtime
 {
     public class AuthAppenderTests
     {
-        
+        [Serializable]
         private class Account
         {
-            public string Username { get; set; }
+            public string username;
             public bool Equals(Account other)
             {
-                return Username == other.Username;
+                return username == other.username;
             }
         }
 
@@ -34,7 +35,7 @@ namespace Tests.Runtime
         {
             var expected = new Account
             {
-                Username = "username",
+                username = "username",
             };
             ISecretRepository.Current.Delete(AccountKey);
             ISecretRepository.Current.Save(AccountKey, expected);
@@ -45,7 +46,7 @@ namespace Tests.Runtime
         [Test]
         public void Test_Bearer_Token_Add_Header_To_Web_Request()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
+            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
             const string token = "My token"; 
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(token, adaptor);
             var result = adaptor.GetHeader("Authorization");
@@ -55,7 +56,7 @@ namespace Tests.Runtime
         [Test]
         public void Test_Log_Warning_When_Auth_Key_Is_Absent()
         {
-            using var adaptor = RawUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
+            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
             ISecretRepository.Current.Delete(AccountKey);
             ISecretRepository.Current.TryGet<string>(AccountKey, out var data);
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(data, adaptor);
