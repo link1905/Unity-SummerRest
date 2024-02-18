@@ -18,7 +18,7 @@ jobs:
           - SummerRest
           - SummerRestSample
         unityVersion:
-          - 2020.3.0f1
+          - 2022.3.1f1
         include:
           - projectPath: SummerRest
             packagePath: Assets/Plugins/SummerRest
@@ -43,7 +43,6 @@ jobs:
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           testMode: ${{ matrix.testMode }}
           artifactsPath: UnityTests/${{ matrix.testMode }}
       # Upload test results
@@ -58,7 +57,6 @@ jobs:
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           buildMethod: SummerRest.Editor.Manager.ExportPackage.Export # Path to the export method containing the namespace.
           customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.unitypackage"
       # Upload
