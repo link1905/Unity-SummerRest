@@ -3,27 +3,22 @@ on:
   push:
     branches:
       - main
+env:
+  UNITY_TEST_VERSIONS: "['2022.3.1f1']"
+  UNITY_EXPORT_VERSIONS: "['2022.3.1f1']"
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 jobs:
-  test-build-unity:
-    name: Test and build plugin
+  test-plugin:
+    name: Test plugin
     runs-on: ubuntu-latest
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     strategy:
       fail-fast: false
       matrix:
         projectPath:
           - SummerRest
-          - SummerRestSample
-        unityVersion:
-          - 2022.3.1f1
-        include:
-          - projectPath: SummerRest
-            packagePath: Assets/Plugins/SummerRest
-          - projectPath: SummerRestSample
-            packagePath: Assets
+        unityVersion: ${{ fromJSON(env.UNITY_TEST_VERSIONS) }}
     steps:
       # Checkout
       - name: Checkout repository
@@ -32,24 +27,48 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.projectPath }}
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ hashFiles(matrix.projectPath) }}
           restore-keys: |
+            Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ hashFiles(matrix.projectPath) }}
             Library-
       # Test
       - uses: game-ci/unity-test-runner@v4
-        if: ${{ matrix.projectPath }} == 'SummerRest'
         id: tests
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          artifactsPath: UnityTests
+          artifactsPath: UnityTests-${{ matrix.unityVersion }}
       # Upload test results
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: UnityTests
+          name: UnityTests-${{ matrix.unityVersion }}
           path: ${{ steps.tests.outputs.artifactsPath }}
+
+  export-plugin:
+    name: Export plugin
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        projectPath:
+        - SummerRest
+        unityVersion: ${{ fromJSON(env.UNITY_EXPORT_VERSIONS) }}
+        include:
+        - projectPath: SummerRest
+          packagePath: Assets/Plugins/SummerRest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ hashFiles(matrix.projectPath) }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ hashFiles(matrix.projectPath) }}
+            Library-
       # Export custom packages (not build)
       - name: Export packages
         uses: game-ci/unity-builder@v4
@@ -57,13 +76,26 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           buildMethod: SummerRest.Editor.Manager.ExportPackage.Export # Path to the export method containing the namespace.
-          customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.unitypackage"
+          customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage"
       # Upload packages
       - name: Upload packages
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.projectPath }}.unitypackage
-          path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.unitypackage
+          path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage
+  export-sample:
+    name: Export sample project
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Upload packages
+      - name: Upload packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: SampleRestSample.unitypackage
+          path: SummerRestSample/
   test-generator:
     name: Test source generator
     runs-on: ubuntu-latest
