@@ -18,7 +18,7 @@ jobs:
           - SummerRest
           - SummerRestSample
         unityVersion:
-          - 2020.3.0f1
+          - 2022.3.1f1
         include:
           - projectPath: SummerRest
             packagePath: Assets/Plugins/SummerRest
@@ -28,8 +28,6 @@ jobs:
       # Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       # Cache
       - uses: actions/cache@v3
         with:
@@ -41,16 +39,15 @@ jobs:
       - uses: game-ci/unity-test-runner@v4
         id: tests
         with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          testMode: ${{ matrix.testMode }}
-          artifactsPath: UnityTests/${{ matrix.testMode }}
+          artifactsPath: UnityTests
       # Upload test results
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: Unity test results for ${{ matrix.testMode }}
+          name: UnityTests
           path: ${{ steps.tests.outputs.artifactsPath }}
       # Export custom packages (not build)
       - name: Export packages
@@ -58,12 +55,11 @@ jobs:
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           buildMethod: SummerRest.Editor.Manager.ExportPackage.Export # Path to the export method containing the namespace.
           customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.unitypackage"
-      # Upload
+      # Upload packages
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.projectPath }}.unitypackage
           path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.unitypackage
@@ -87,7 +83,7 @@ jobs:
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles("${{ matrix.projectPath }}/**/*.csproj") }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-nuget
       - name: Install dependencies
@@ -95,10 +91,10 @@ jobs:
         run: dotnet restore
       - name: Test with dotnet
         working-directory: ${{ matrix.projectPath }}
-        run: dotnet test --logger trx --results-directory "GeneratorTests/${{ matrix.dotnet-version }}"
+        run: dotnet test --logger trx --results-directory "../GeneratorTests-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: Generator test results for ${{ matrix.dotnet-version }}
-          path: ${{ matrix.projectPath }}/GeneratorTests/${{ matrix.dotnet-version }}
+          name: GeneratorTests-${{ matrix.dotnet-version }}
+          path: GeneratorTests-${{ matrix.dotnet-version }}/
         if: always()
