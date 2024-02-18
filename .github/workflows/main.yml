@@ -37,7 +37,7 @@ jobs:
             Library-
       # Test
       - uses: game-ci/unity-test-runner@v4
-        if: matrix.projectPath == 'SummerRest'
+        if: ${{ matrix.projectPath }} == 'SummerRest'
         id: tests
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -94,12 +94,8 @@ jobs:
         working-directory: ${{ matrix.projectPath }}
         run: dotnet test --logger trx --results-directory "../GeneratorTests-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: GeneratorTests-${{ matrix.dotnet-version }}
           path: GeneratorTests-${{ matrix.dotnet-version }}/
-<<<<<<< HEAD
-        if: always()
-=======
-        if: always()
->>>>>>> c9ccb9a95e504cc552b734c399f5ff356f1b3ebc
