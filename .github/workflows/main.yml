@@ -4,8 +4,6 @@ on:
     branches:
       - main
 env:
-  UNITY_TEST_VERSIONS: "['2022.3.1f1']"
-  UNITY_EXPORT_VERSIONS: "['2022.3.1f1']"
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -18,7 +16,8 @@ jobs:
       matrix:
         projectPath:
           - SummerRest
-        unityVersion: ${{ fromJSON(env.UNITY_TEST_VERSIONS) }}
+        unityVersion:
+          - 2022.3.1f1
     steps:
       # Checkout
       - name: Checkout repository
@@ -53,7 +52,8 @@ jobs:
       matrix:
         projectPath:
         - SummerRest
-        unityVersion: ${{ fromJSON(env.UNITY_EXPORT_VERSIONS) }}
+        unityVersion:
+        - 2022.3.1f1
         include:
         - projectPath: SummerRest
           packagePath: Assets/Plugins/SummerRest
