@@ -51,14 +51,14 @@ jobs:
     strategy:
       matrix:
         projectPath:
-        - SummerRest
+          - SummerRest
         unityVersion:
-        - 2022.3.1f1
+          - 2022.3.1f1
         targetPlatform:
-        - StandaloneLinux64 # Build a Linux 64-bit standalone
+          - StandaloneLinux64 # Build a Linux 64-bit standalone
         include:
-        - projectPath: SummerRest
-          packagePath: Assets/Plugins/SummerRest
+          - projectPath: SummerRest
+            packagePath: Assets/Plugins/SummerRest
     steps:
       # Checkout
       - name: Checkout repository
@@ -75,10 +75,10 @@ jobs:
       - name: Export packages
         uses: game-ci/unity-builder@v4
         with:
+          buildMethod: Editor.ExportPackage.Export
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-	  targetPlatform: ${{ matrix.targetPlatform }}
-          buildMethod: Editor.ExportPackage.Export # Path to the export method containing the namespace.
+          targetPlatform: ${{ matrix.targetPlatform }}
           customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage"
       # Upload packages
       - name: Upload packages
@@ -86,6 +86,7 @@ jobs:
         with:
           name: ${{ matrix.projectPath }}.unitypackage
           path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage
+
   export-sample:
     name: Export sample project
     runs-on: ubuntu-latest
@@ -99,6 +100,7 @@ jobs:
         with:
           name: SampleRestSample.unitypackage
           path: SummerRestSample/
+
   test-generator:
     name: Test source generator
     runs-on: ubuntu-latest
