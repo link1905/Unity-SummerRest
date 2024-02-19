@@ -54,6 +54,8 @@ jobs:
         - SummerRest
         unityVersion:
         - 2022.3.1f1
+        targetPlatform:
+        - StandaloneLinux64 # Build a Linux 64-bit standalone
         include:
         - projectPath: SummerRest
           packagePath: Assets/Plugins/SummerRest
@@ -75,7 +77,8 @@ jobs:
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          buildMethod: SummerRest.Editor.Manager.ExportPackage.Export # Path to the export method containing the namespace.
+	  targetPlatform: ${{ matrix.targetPlatform }}
+          buildMethod: Editor.ExportPackage.Export # Path to the export method containing the namespace.
           customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage"
       # Upload packages
       - name: Upload packages

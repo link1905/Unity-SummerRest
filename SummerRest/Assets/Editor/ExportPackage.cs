@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEditor;
 
-namespace SummerRest.Editor.Manager
+namespace Editor
 {
     public static class ExportPackage
     {
