@@ -39,7 +39,7 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           artifactsPath: UnityTests-${{ matrix.unityVersion }}
       # Upload test results
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: UnityTests-${{ matrix.unityVersion }}
@@ -82,7 +82,7 @@ jobs:
           customParameters: -packagePath "${{ matrix.packagePath }}" -outputPath "Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage"
       # Upload packages
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.projectPath }}.unitypackage
           path: ${{ matrix.projectPath }}/Build/${{ matrix.projectPath }}.${{ matrix.unityVersion }}.unitypackage
@@ -96,9 +96,9 @@ jobs:
         uses: actions/checkout@v4
       # Upload packages
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: SampleRestSample.unitypackage
+          name: SampleRestSample
           path: SummerRestSample/
 
   test-generator:
@@ -132,7 +132,7 @@ jobs:
         run: dotnet test --logger trx --results-directory "../GeneratorTests-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: GeneratorTests-${{ matrix.dotnet-version }}
           path: GeneratorTests-${{ matrix.dotnet-version }}/
