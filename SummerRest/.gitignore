@@ -6,3 +6,5 @@ UserSettings/
 Library/
 *.csproj
 *.sln
+*.DotSettings
+*.DotSettings.user
