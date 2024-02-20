@@ -3,15 +3,33 @@ A plugin works as Postman, which supports to visualize the structure of your HTT
 
 This package also generates boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
+> Please note that the minimum Unity Editor version required is **2019.2**
 
 ## Installation
 ***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
 
-1. [Asset store]()
-2. Git:
-3. From Releases Page Here you can choose between the following:
-SummerRest-WithSample.vX.X.unitypackage - Same as what you find in the Asset Store
-SummerRest.vX.X.unitypackage - Same as above except without the Sample project
+### [Asset store]()
+
+### Install via Git URL:
+Requires a version of unity that supports path query parameter for git packages (Unity >= 2019.3.4f1, Unity >= 2020.1a21). You can add https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest to Package Manager
+![](Screenshots/install_0_package_manager.png)
+![](Screenshots/install_1_github_url.png)
+
+Or add "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest" to `dependencies` section in `Packages/manifest.json`
+  ```json
+  {
+    "dependencies": {
+      "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest",
+      // ... other packages
+    }
+  }
+  ```
+
+If you want to set a target version, please inserting a release tag *.*.* so you can specify a version (unless Unity takes the last version by default). For example "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"
+
+### From Releases Page:
+- `SummerRest.x.y.z.unitypackage` - only necessary assets of the plugin (x.y.z is a semantic version) 
+- `SummerRestSample.unitypackage` - a sample project shows simple usages of the plugin  
 
 ## Definitions
 
@@ -30,7 +48,7 @@ First and foremost, we must know the structure of an endpoint tree
       GetImage
       GetVideoClip
     ```
-  - The main reason why I made this component is `API Versioning`: A domain has usually more than one origin (dev, prod, test...), and you have to select the active origin.
+  - The main reason why we made this component is `API Versioning`: A domain has usually more than one origin (dev, prod, test...), and you have to select the active origin.
     ![](Screenshots/0_definition_0_domain.png)
 - `Service`: A service is nothing but an Endpoint container, it's only used to build API structure
   - A `Service` is able to have children (Service and Request)
@@ -99,23 +117,23 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_8_get_with_param.png)
 - Another request which posts data, please have a look at the request body and method fields
   ![](Screenshots/1_guide_9_post_request.png)
-- Another one downloading an image (I have created a domain named DummyJsonCdn)
+- Another one downloading an image (we have created a domain named DummyJsonCdn)
   ![](Screenshots/1_guide_10_image_request.png)
 - Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for further usages
 
 ## Auth
 
-The simple guide is only applied for public APIs. Most of the time, you work with secured APIs that need some factors (eg. JWT, api key, username/password pair...) to authenticate and authorize your operations
+The guidance above is only applied for public APIs. Most of the time, you work with secured APIs that need some factors (eg. JWT, api key, username/password pair...) to authenticate and authorize your operations
 
 ### Configure
 - The plugin supports to append auth information to your request
 - Click on `Advanced settings` to open the auth settings section
   ![](Screenshots/2_auth_0_auth_container.png)
 - You will see a list of auth containers, each of them contains a record of key, appender type and secret value
-  - Key: unique value of an auth container, which used by endpoints for referencing 
-  - Secret value: the value will be only used for **EditMode requests**, and resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in PlayMode
-  - Appender type: how the secret value will be appended into a request (typically modify the request's header), currently we support `BearerToken`, `Basic(Username/password)`,... You can make your own appender by
-    - Not reusable: Manually modify params or headers of an endpoint
+  - `Key`: unique value of an auth container, which used by endpoints for referencing 
+  - `Secret value`: the value will be only used for **EditMode requests**, and resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in PlayMode
+  - `Appender type`: how the secret value will be appended into a request (typically modify the request's header), currently we support `BearerToken`, `Basic(Username/password)`,... You can make your own appender by
+    - Not reusable: Manually modify params or headers of a request
     - Reusable: implement [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs), then the class will be listed in the type dropdown
 - For example: if you use `BearerTokenAuthAppender` with value "my-data", every requests refer to this container will be added with a header `"Authorization":"Bearer my-data"`  
 
@@ -123,9 +141,18 @@ The simple guide is only applied for public APIs. Most of the time, you work wit
 - Storing your secrets on RAM maybe a bad idea for several reasons: 
   - Can not remember logged in sessions
   - Easy to be exploited by attackers
-  - ... I don't know
+  - ... no idea :)
 - The plugin provides a single place resolving your secrets; So a request only keeps an auth key, it needs to query a repository about the secret value
-- The default repository is [PlayerPrefsSecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/PlayerPrefsSecretRepository.cs) based on PlayerPrefs. But you can implement your own by:
+```mermaid
+sequenceDiagram
+    participant A as Auth Appender
+    participant R as Requester
+    participant S as Secrets Repository
+    R->>S: This is an auth key, please give me the secret value of it
+    S->>R: Here it is
+    R->>A: Please add the secret to my requests
+```
+- The default repository is [PlayerPrefsSecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/PlayerPrefsSecretRepository.cs) based on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html). But you can implement your own by:
   - Inherit [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs)
   - Modify the default repository to your class
     1. Select the default repository in the plugin window  ![](Screenshots/2_auth_1_repository.png)
@@ -133,7 +160,7 @@ The simple guide is only applied for public APIs. Most of the time, you work wit
 
 ### Example
 
-To illustrate what I have discussed on this topic so far. I am using a short example by calling an `GetCurrentAuthUser` api, since this endpoint requires an bearer token through a header named "Authorization"
+To illustrate what we have discussed on this topic so far. We're going to use a short example by calling an `GetCurrentAuthUser` api, since this endpoint requires an bearer token through a header named "Authorization"
 
 Although this type of behaviour is supported basically [BearerTokenAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/BearerTokenAuthAppender.cs); To make it clear, we still make a new appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
 ```
@@ -314,25 +341,41 @@ A class generated from `Request` comes up with some utility methods for calling 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
   ![](Screenshots/3_source_2_symbol.png)
 - Please note that the async methods will throw exceptions on error instead of callbacks
-```
-public class User
-{
-    public string UserId { get; set; }
-}
-// Assume that UserDataRequest, TextureRequest are generated classes based on your configures in the plugin window
-private UserDataRequest _userRequest;
-private TextureRequest _imageRequest;
-private async UniTask LoadUserData()
-{
-    var userData = await _userRequest.RequestAsync<User>();
-    _imageRequest.Params.SetSingleParam(UserDataRequest.Keys.Params.UserId, userData.UserId);
-    var userIcon = await _imageRequest.TextureRequestAsync();
-}
-```
+  ```
+  private async UniTaskVoid GetProductDataAsync(int productId)
+  {
+      var getProduct = GetProduct.Create();
+      // Simple response
+      try
+      {
+          var product = await getProduct.DataRequestAsync<Product>();
+          Debug.LogFormat("My product {0}", product);
+      }
+      catch (ResponseErrorException responseErrorException)
+      {
+          //Undefined exception
+          Debug.Log("Network error {0}", responseErrorException.Error);
+      }
+      catch (Exception e)
+      {
+          //Undefined exception
+          Debug.LogException(e);
+      }
+  }
+  ```
 ### Advanced settings
 
 The plugin provides a most common way to deal with HTTP requests. But, you are able to embed your customizations easily 
 
 - Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [JsonUtility](https://docs.unity3d.com/ScriptReference/JsonUtility.html), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
 - ISecretRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `ISecretRepository.Current`
-- There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... I do not offer default selections for them in the window because I think there is no need to change their logic
+- There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... we do not offer default selections for them in the window because we suppose there is no need to change their logic
+
+## Acknowledgments
+
+We would like to express our sincere gratitude to the following dependencies
+
+- [DummyJson](https://dummyjson.com/): provides different types of REST Endpoints filled with JSON data
+- [UniTask](https://github.com/Cysharp/UniTask): provides an efficient async/await integration to Unity
+
+We extend our thanks to the developers and maintainers of these dependencies for their outstanding work and contribution to the open-source community.

@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using System;
+using Models;
 using SummerRest.Runtime.Authenticate;
 using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.RequestAdaptor;
@@ -39,8 +40,20 @@ namespace Managers
             _getProduct.SetUrlValue(GetProduct.Keys.UrlFormat.ProductId, productId.ToString());
             responseView.StartCall(_getProduct.AbsoluteUrl, _getProduct.Method);
             // Simple response
-            var product = await _getProduct.DataRequestAsync<Product>();
-            responseView.SetResponse(product);
+            try
+            {
+                var product = await _getProduct.DataRequestAsync<Product>();
+                responseView.SetResponse(product);
+            }
+            catch (ResponseErrorException responseErrorException)
+            {
+                responseView.SetError(responseErrorException.Error);
+            }
+            catch (Exception e)
+            {
+                //Undefined exception
+                Debug.LogException(e);
+            }
         }
 #endif  
         #endregion
@@ -71,8 +84,19 @@ namespace Managers
 
                 responseView.StartCall(_searchProduct.AbsoluteUrl, _searchProduct.Method);
                 // Detailed request
-                var response = await _searchProduct.DetailedDataRequestAsync<ProductPaging>();
-                responseView.SetResponse(response);
+                try
+                {
+                    var response = await _searchProduct.DetailedDataRequestAsync<ProductPaging>();
+                    responseView.SetResponse(response);
+                }
+                catch (ResponseErrorException responseErrorException)
+                {
+                    responseView.SetError(responseErrorException.Error);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
             catch (ResponseErrorException e)
             {

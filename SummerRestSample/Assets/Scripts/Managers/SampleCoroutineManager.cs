@@ -30,7 +30,8 @@ namespace Managers
             _getProduct.SetUrlValue(GetProduct.Keys.UrlFormat.ProductId, productId.ToString());
             responseView.StartCall(_getProduct.AbsoluteUrl, _getProduct.Method);
             // Simple response
-            StartCoroutine(_getProduct.DataRequestCoroutine<Product>(responseView.SetResponse, e =>
+            StartCoroutine(_getProduct.DataRequestCoroutine<Product>(responseView.SetResponse, 
+                e =>
             {
                 Debug.Log(e.Message);
             }));
