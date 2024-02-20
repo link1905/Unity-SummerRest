@@ -17,7 +17,8 @@ jobs:
         projectPath:
           - SummerRest
         unityVersion:
-          - 2022.3.1f1
+          - 2022.2.0f1
+	  - 2023.1.0f1
     steps:
       # Checkout
       - name: Checkout repository
@@ -53,7 +54,7 @@ jobs:
         projectPath:
           - SummerRest
         unityVersion:
-          - 2022.3.1f1
+          - 2022.2.0f1
         targetPlatform:
           - StandaloneLinux64 # Build a Linux 64-bit standalone
         include:
