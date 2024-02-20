@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using SummerRest.Runtime.Extensions;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             return DumpUnityWebRequestAdaptor.Create(webRequest);
         }
         public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
-            string url, HttpMethod method, string bodyData, ContentType? contentType)
+            string url, HttpMethod method, string bodyData, string contentType)
         {
             UnityWebRequest request;
             switch (method)
@@ -37,10 +38,10 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = UnityWebRequest.Get(url);
                     break;
                 case HttpMethod.Post:
-                    var textContentType = contentType?.FormedContentType;
+                    var textContentType = contentType;
                     if (string.IsNullOrEmpty(textContentType))
-                        textContentType = ContentType.Commons.TextPlain.FormedContentType;
-                    request = UnityWebRequest.Post(url, bodyData, textContentType);
+                        textContentType = ContentType.Commons.ApplicationJson.FormedContentType;
+                    request = PostFromStringData(url, bodyData, textContentType);
                     break;
                 case HttpMethod.Put  or HttpMethod.Patch:
                     request = UnityWebRequest.Put(url, bodyData);
@@ -52,20 +53,37 @@ namespace SummerRest.Runtime.RequestAdaptor
                     request = new UnityWebRequest(url, method.ToUnityHttpMethod());
                     break;
             }
-
-            request.method = method.ToUnityHttpMethod();
             return DataUnityWebRequestAdaptor<TResponse>.Create(request);
         }
-
+        private static UnityWebRequest PostFromStringData(string uri, string postData, string contentType)
+        {
+            var request = new UnityWebRequest(uri, "POST");
+            var bytes = Encoding.UTF8.GetBytes(postData);
+            request.uploadHandler = new UploadHandlerRaw(bytes);
+            request.uploadHandler.contentType = contentType;
+            return request;
+        }
         public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
-            HttpMethod method,
-            List<IMultipartFormSection> data, ContentType? contentType)
+            List<IMultipartFormSection> data, byte[] boundary)
         {
             if (data is { Count: 0 })
                 throw new ArgumentException(@$"Multipart form body of the resource ""{url}"" is empty");
-            var request = contentType is null ? UnityWebRequest.Post(url, data) : UnityWebRequest.Post(url, data, contentType.Value.BoundaryBytes);
-            request.method = method.ToUnityHttpMethod();
+            var request = PostMultipartFormData(url, data, boundary);
             return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);
+        }
+        
+        private static UnityWebRequest PostMultipartFormData(
+            string url,
+            List<IMultipartFormSection> multipartFormSections,
+            byte[] boundary)
+        {
+            var request = new UnityWebRequest(url);
+            boundary ??= UnityWebRequest.GenerateBoundary();
+            request.downloadHandler = new DownloadHandlerBuffer();
+            var data = UnityWebRequest.SerializeFormSections(multipartFormSections, boundary);
+            UploadHandler uploadHandler = new UploadHandlerRaw(data);
+            request.uploadHandler = uploadHandler;
+            return request;
         }
     }
 }

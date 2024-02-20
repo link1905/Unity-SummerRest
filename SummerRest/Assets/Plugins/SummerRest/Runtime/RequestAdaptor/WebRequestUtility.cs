@@ -105,7 +105,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType);
+                    data, contentType?.FormedContentType);
             yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
 
@@ -130,7 +130,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+                .GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
             yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
@@ -205,7 +205,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>
-                    (url, method, data, contentType);
+                    (url, method, data, contentType?.FormedContentType);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
@@ -230,7 +230,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+                .GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
     }

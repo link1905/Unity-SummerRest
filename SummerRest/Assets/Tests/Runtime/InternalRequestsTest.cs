@@ -352,14 +352,14 @@ namespace Tests.Runtime
                 var wrapped = _wrapped.GetAudioRequest(url, audioType) as AudioUnityWebRequestAdaptor;
                 return new AudioTestWebRequestAdaptor(ResponseAudioClip, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, ContentType? contentType)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data, byte[] boundary)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data, contentType) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, data, boundary) as MultipartFileUnityWebRequestAdaptor<TBody>;
                 return new MultipartTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
 
-            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, ContentType? contentType)
+            public IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType)
             {
                 var wrapped = _wrapped.GetDataRequest<TBody>(url, method, bodyData, contentType) as DataUnityWebRequestAdaptor<TBody>;
                 return new DataTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);

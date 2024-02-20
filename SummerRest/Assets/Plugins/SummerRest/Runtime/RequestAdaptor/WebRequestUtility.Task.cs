@@ -81,7 +81,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType);
+                    data, contentType?.FormedContentType);
             return await RequestAsync(request, adaptorBuilder, cancellationToken);
         }
 
@@ -105,7 +105,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             CancellationToken cancellationToken = default)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
             return await RequestAsync(request, adaptorBuilder, cancellationToken);
         }
 
@@ -177,7 +177,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         {
             using var request =
                 IWebRequestAdaptorProvider.Current.GetDataRequest<TResponse>(url, method, 
-                    data, contentType);
+                    data, contentType?.FormedContentType);
             return await DetailedRequestAsync(request, adaptorBuilder, cancellationToken);
         }
 
@@ -201,7 +201,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             CancellationToken cancellationToken = default)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
             return await DetailedRequestAsync(request, adaptorBuilder, cancellationToken);
         }
     }
