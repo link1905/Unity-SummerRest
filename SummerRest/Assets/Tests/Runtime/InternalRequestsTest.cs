@@ -271,6 +271,19 @@ namespace Tests.Runtime
             });
             Assert.AreEqual("Bearer my-token", header);
         }
+        
+        // We have no idea why the async methods below take upto minutes to run in EditMode 
+        // So, we comment them out till figuring out a solution
+        // [Test]
+        // public async Task Test_Async()
+        // {
+        //     await A().WithCancellation(default);
+        //     Debug.Log("Test async");
+        // }
+        // private static IEnumerator A()
+        // {
+        //     yield return null;
+        // }
         // [Test]
         // public async Task Test_Internal_Request_Return_200_And_Json_Data_Async()
         // {
