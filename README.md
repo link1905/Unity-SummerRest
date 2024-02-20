@@ -3,7 +3,7 @@ A plugin works as Postman, which supports to visualize the structure of your HTT
 
 This package also generates boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
-> Please note that the minimum Unity Editor version required is **2019.2**
+> Please note that the minimum Unity Editor version required is **2022.2** (because the project leverages UIToolkit new elements and Roslyn compiler)
 
 ## Installation
 ***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
