@@ -42,6 +42,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
+  isGenerated: 0
   <TreeId>k__BackingField: 1
   path:
     text: test-multipart
@@ -53,7 +54,7 @@ MonoBehaviour:
       value:
         charset: UTF-8
         mediaType: multipart/form-data
-        boundary: 9t5SlcPEaZZ0Yyn0bA09QkyhF9IdVNcg59iib5yS
+        boundary: V2zlwHg5AKglDd6ILpJBaj9a7yFr9VYjv66wM0Lj
     value:
       charset: 
       mediaType: 
@@ -69,6 +70,7 @@ MonoBehaviour:
       typeReference:
         classRef: 
     serializedData: 
+    isGenerated: 1
     textFormat: 0
     form:
     - type: 0
@@ -80,7 +82,7 @@ MonoBehaviour:
       text: 
       key: file
       file:
-        filePath: 
+        filePath: D:/Source/Unity-SummerRest/SummerRest/Packages/packages-lock.json
   urlWithParam: https://dummyjson.com/test-multipart
   latestResponse:
     lastCall: 
