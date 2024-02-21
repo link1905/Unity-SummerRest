@@ -40,15 +40,6 @@
                     </Requests>
                 </Service>
             </Services>
-            <Requests>
-                <Request TypeName="Request" EndpointName="Multipart" Url="https://dummyjson.com/test-multipart" UrlFormat="" UrlWithParams="https://dummyjson.com/test-multipart" Method="Post" DataFormat="Json" SerializedBody="" IsMultipart="true">
-                    <ContentType Charset="UTF-8" MediaType="multipart/form-data" Boundary="ZbwQYLqbqJFhnfsDoLxkDtjSUF0DXTJpyReRtodO" />
-                    <SerializedForm>
-                        <KeyValue Key="text" Value="my text value" />
-                        <KeyValue Key="file" />
-                    </SerializedForm>
-                </Request>
-            </Requests>
         </Domain>
         <Domain TypeName="Domain" EndpointName="DummyJsonCdn">
             <Requests>

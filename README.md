@@ -3,23 +3,24 @@ A plugin works as Postman, which supports to visualize the structure of your HTT
 
 This package also generates boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
-> Please note that the minimum Unity Editor version required is **2022.2** (because the project leverages UIToolkit new elements and Roslyn compiler)
+## The minimum Unity Editor version required is **2022.2** 
+Because the project leverages some Unity UIToolkit new elements and the Roslyn compiler
 
 ## Installation
 ***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
 
-### [Asset store]()
+### 1. [Asset store]()
 
-### [From Releases Page](https://github.com/risethesummer/Unity-SummerRest/releases)
+### 2. [From Releases Page](https://github.com/risethesummer/Unity-SummerRest/releases)
 - `SummerRest.x.y.z.unitypackage` - only necessary assets of the plugin (x.y.z is a semantic version) 
 - `SummerRestSample.unitypackage` - a sample project shows simple usages of the plugin  
 
-### Install via Git URL:
-Requires a version of unity that supports path query parameter for git packages (Unity >= 2019.3.4f1, Unity >= 2020.1a21). You can add https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest to Package Manager
+### 3. Install via Git URL:
+You can add https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest to Package Manager
 ![](Screenshots/install_0_package_manager.png)
 ![](Screenshots/install_1_github_url.png)
 
-Or add "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest" to `dependencies` section in `Packages/manifest.json`
+Or add `"com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest"` to `dependencies` section in `Packages/manifest.json`
   ```json
   {
     "dependencies": {
@@ -29,7 +30,7 @@ Or add "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerR
   }
   ```
 
-If you want to set a target version, please inserting a release tag x.y.z so you can specify a version on [the release page](https://github.com/risethesummer/Unity-SummerRest/releases) (unless Unity takes the last version by default). For example "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"
+If you want to set a target version, please inserting a release tag x.y.z so you can specify a version on [the release page](https://github.com/risethesummer/Unity-SummerRest/releases) (unless Unity takes the last version by default). For example `"com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"`
 
 
 ## Definitions
@@ -109,10 +110,10 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in EditMode
   ![](Screenshots/1_guide_7_make_request.png)
-- We are tightly sticking the request to the product 1 (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
+- We are tightly sticking the request to the product `1` (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
   - You need to embed your dynamic strings inside "{}" eg. "{productId}"
   - Then a list will be shown for replacing that values in the final url
-  - To continue the previous example, please change the relative path from "1" to "{productId}". Then, the final URL looks the same as the previous step
+  - To continue the previous example, please change the relative path from `1` to `{productId}`. Then, the final URL looks the same as the previous step
     ![](Screenshots/1_guide_7_1_smart_path.png)
 - You may create a searching request by using the parameters
   ![](Screenshots/1_guide_8_get_with_param.png)
@@ -120,6 +121,8 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_9_post_request.png)
 - Another one downloading an image (we have created a domain named DummyJsonCdn)
   ![](Screenshots/1_guide_10_image_request.png)
+- And another uploading multipart form data (*this endpoint does not exist, only used to depict a multipart uploading request*)
+  ![](Screenshots/1_guide_11_multipart_request.png)
 - Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for further usages
 
 ## Auth
@@ -136,7 +139,7 @@ The guidance above is only applied for public APIs. Most of the time, you work w
   - `Appender type`: how the secret value will be appended into a request (typically modify the request's header), currently we support `BearerToken`, `Basic(Username/password)`,... You can make your own appender by
     - Not reusable: Manually modify params or headers of a request
     - Reusable: implement [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs), then the class will be listed in the type dropdown
-- For example: if you use `BearerTokenAuthAppender` with value "my-data", every requests refer to this container will be added with a header `"Authorization":"Bearer my-data"`  
+- For example: if you use `BearerTokenAuthAppender` with value `my-data`, every requests refer to this container will be added with a header `"Authorization":"Bearer my-data"`  
 
 ### Secrets repository
 - Storing your secrets on RAM maybe a bad idea for several reasons: 
@@ -161,7 +164,7 @@ sequenceDiagram
 
 ### Example
 
-To illustrate what we have discussed on this topic so far. We're going to use a short example by calling an `GetCurrentAuthUser` api, since this endpoint requires an bearer token through a header named "Authorization"
+To illustrate what we have discussed on this topic so far. We're going to use a short example by calling an `GetCurrentAuthUser` api, since this endpoint requires an bearer token through a header named `Authorization`
 
 Although this type of behaviour is supported basically [BearerTokenAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/BearerTokenAuthAppender.cs); To make it clear, we still make a new appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
 ```
@@ -308,7 +311,7 @@ A class generated from `Request` comes up with some utility methods for calling 
   private void DoDetailedRequest()
   {
       // Request normal data
-      StartCoroutine(_myRequest.DetailedRequestCoroutine<MyResponseData>(HandleDetailedResponse));
+      StartCoroutine(_myRequest.DetailedDataRequestCoroutine<MyResponseData>(HandleDetailedResponse));
       // Request audioClip/texture is similar to the previous step 
       ...
   }
@@ -368,7 +371,7 @@ A class generated from `Request` comes up with some utility methods for calling 
 
 The plugin provides a most common way to deal with HTTP requests. But, you are able to embed your customizations easily 
 
-- Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [JsonUtility](https://docs.unity3d.com/ScriptReference/JsonUtility.html), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
+- Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [JsonUtility](https://docs.unity3d.com/ScriptReference/JsonUtility.html) and [XmlSerializer](https://learn.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=netstandard-2.0), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
 - ISecretRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `ISecretRepository.Current`
 - There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... we do not offer default selections for them in the window because we suppose there is no need to change their logic
 
