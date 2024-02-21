@@ -53,9 +53,7 @@ namespace SummerRest.Editor.Configurations
         [XmlAttribute]
         public string SecretRepository
         {
-            get => secretRepository.Type is null
-                ? typeof(PlayerPrefsSecretRepository).FullName
-                : secretRepository.Type.FullName;
+            get => secretRepository.Type is null ? typeof(PlayerPrefsSecretRepository).AssemblyQualifiedName : secretRepository.Type.AssemblyQualifiedName;
             set => throw new NotImplementedException();
         }
 
@@ -69,7 +67,7 @@ namespace SummerRest.Editor.Configurations
         [XmlAttribute]
         public string DataSerializer
         {
-            get => dataSerializer.Type is null ? typeof(DefaultDataSerializer).FullName : dataSerializer.Type.FullName;
+            get => dataSerializer.Type is null ? typeof(DefaultDataSerializer).AssemblyQualifiedName : dataSerializer.Type.AssemblyQualifiedName;
             set => throw new NotImplementedException();
         }
 

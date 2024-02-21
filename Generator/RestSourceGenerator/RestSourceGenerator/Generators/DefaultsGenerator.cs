@@ -41,18 +41,20 @@ namespace RestSourceGenerator.Generators
         }
         public void Execute(GeneratorExecutionContext context)
         {
-            if (context.Compilation.AssemblyName != "SummerRest")
+            var conf = ConfigLoader.LoadJsonDocument(context)?.DocumentElement;
+            // If target assembly is not configured => gen to SummerRest
+            var targetAssembly = conf?.Attributes["Assembly"]?.Value ?? "SummerRest";
+            if (context.Compilation.AssemblyName != targetAssembly)
                 return;
             if (context.SyntaxReceiver is not SyntaxReceiver receiver)
                 return;
             var interfaces = GetGeneratedInterfaces(context.Compilation, receiver);
-            var conf = ConfigLoader.LoadJsonDocument(context)?.DocumentElement;
             foreach (var (typeSymbol, att) in interfaces)
             {
                 var typeName = typeSymbol.Name;
                 var @namespace = typeSymbol.ContainingNamespace.ToDisplayString();
                 var propName = att.ConstructorArguments[0].Value as string;
-                var @default = (att.ConstructorArguments[1].Value as INamedTypeSymbol)?.ToDisplayString();
+                var @default = (att.ConstructorArguments[1].Value as INamedTypeSymbol)?.GetQualifiedTypeName();
                 string? genType;
                 if (conf?.Attributes?[propName] is {} attribute )
                     genType = attribute.Value;
@@ -67,10 +69,12 @@ namespace RestSourceGenerator.Generators
                 }
                 context.GenerateFormattedCode(typeName, $@"
 using SummerRest.Runtime.DataStructures;
+using System;
 namespace {@namespace}
 {{
-    public partial interface {typeName} : IDefaultSupport<{typeName}, {genType}>
+    public partial interface {typeName} : IDefaultSupport<{typeName}>
     {{
+        public static {typeName} Current {{ get; set; }} = ({typeName})Activator.CreateInstance(Type.GetType(""{genType}""));
     }}
 }}
 ");

@@ -32,6 +32,10 @@ namespace RestSourceGenerator.Utilities
             return null;
         }
         
+        public static string GetQualifiedTypeName(this ISymbol symbol)
+        {
+            return $"{symbol.ToDisplayString()}, {symbol.ContainingAssembly}";
+        }
         
         public static string BuildSequentialValues<T>(this IEnumerable<T> @params, Func<T, int, string> builder, 
             string separator = RoslynDefaultValues.Commas, string? end = null)

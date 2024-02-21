@@ -1,9 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using SummerRest.Runtime.Parsers;
+﻿using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine.Networking;
 
-[assembly: InternalsVisibleTo("SummerRest.Tests")]
 namespace SummerRest.Runtime.RequestAdaptor
 {
     /// <summary>

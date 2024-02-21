@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Text;
 
-[assembly: InternalsVisibleTo("SummerRest.Tests")]
 namespace SummerRest.Runtime.Extensions
 {
     internal static class StringExtensions

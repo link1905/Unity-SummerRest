@@ -42,10 +42,12 @@ public class DefaultsGeneratorTest : CSharpSourceGeneratorTest<DefaultsGenerator
         
         const string dataSerializerExpect = """
                                             using SummerRest.Runtime.DataStructures;
+                                            using System;
                                             namespace SummerRest.Runtime.Parsers
                                             {
-                                                public partial interface IDataSerializer : IDefaultSupport<IDataSerializer, SummerRest.Runtime.Parsers.DefaultDataSerializer>
+                                                public partial interface IDataSerializer : IDefaultSupport<IDataSerializer>
                                                 {
+                                                    public static IDataSerializer Current { get; set; } = (IDataSerializer)Activator.CreateInstance(Type.GetType("SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
                                                 }
                                             }
                                             """;
@@ -104,25 +106,29 @@ public class DefaultsGeneratorTest : CSharpSourceGeneratorTest<DefaultsGenerator
                               """;
         const string jsonContent = """
                                    <SummerRestConfiguration
-                                    SecretRepository="TestNamespace.TestAuthDataRepository" 
-                                    DataSerializer="TestNamespace.TestDataSerializer"/>
+                                    SecretRepository="TestNamespace.TestAuthDataRepository, SummerRest, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" 
+                                    DataSerializer="TestNamespace.TestDataSerializer, SummerRest, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"/>
                                    """;
 
         const string dataSerializerExpect = """
                                             using SummerRest.Runtime.DataStructures;
+                                            using System;
                                             namespace SummerRest.Runtime.Parsers
                                             {
-                                                public partial interface IDataSerializer : IDefaultSupport<IDataSerializer, TestNamespace.TestDataSerializer>
+                                                public partial interface IDataSerializer : IDefaultSupport<IDataSerializer>
                                                 {
+                                                    public static IDataSerializer Current { get; set; } = (IDataSerializer)Activator.CreateInstance(Type.GetType("TestNamespace.TestDataSerializer, SummerRest, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
                                                 }
                                             }
                                             """;
         const string authReposExpect = """
                                        using SummerRest.Runtime.DataStructures;
+                                       using System;
                                        namespace SummerRest.Runtime.Authenticate.TokenRepositories
                                        {
-                                           public partial interface IAuthDataRepository : IDefaultSupport<IAuthDataRepository, TestNamespace.TestAuthDataRepository>
+                                           public partial interface IAuthDataRepository : IDefaultSupport<IAuthDataRepository>
                                            {
+                                                public static IAuthDataRepository Current { get; set; } = (IAuthDataRepository)Activator.CreateInstance(Type.GetType("TestNamespace.TestAuthDataRepository, SummerRest, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
                                            }
                                        }
                                        """;
