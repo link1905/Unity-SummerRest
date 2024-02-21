@@ -6,6 +6,7 @@ namespace Tests.Editor
 {
     public class ContentTypeParserTest
     {
+        private static readonly IContentTypeParser ContentTypeParser = new DefaultContentTypeParser();        
         [Test]
         public void Test_Content_Type_To_Formed_Text()
         {
@@ -27,7 +28,7 @@ namespace Tests.Editor
         [Test]
         public void Test_Content_Type_From_Formed_Text()
         {
-            var defaultParser = IContentTypeParser.Current;
+            var defaultParser = ContentTypeParser;
             var table = new (ContentType contentType, string text)[]
             {
                 (new ContentType(charset: string.Empty, mediaType: "application/json"), "application/json"),
@@ -49,7 +50,7 @@ namespace Tests.Editor
         [Test]
         public void Test_Pass_Get_Media_Type_From_ContentType()
         {
-            var defaultParser = IContentTypeParser.Current;
+            var defaultParser = ContentTypeParser;
             var table = new (string contentType, DataFormat value)[]
             {
                 ("application/json", DataFormat.Json),
@@ -66,7 +67,7 @@ namespace Tests.Editor
         [Test]
         public void Test_Fail_Get_Media_Type_From_ContentType_Then_Use_PlainText()
         {
-            var defaultParser = IContentTypeParser.Current;
+            var defaultParser = ContentTypeParser;
             var table = new string[]
             {
                 ";charset=utf-8", 

@@ -16,10 +16,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 02345fa00a398bd4a88c12ddab013835, type: 2}
   authContainers: []
   secretRepository:
-    classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
-      SummerRest
+    classRef: Tests.Behaviour.Scripts.LogSecretRepository, Assembly-CSharp
   dataSerializer:
-    classRef: SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest
+    classRef: Tests.Behaviour.Scripts.LogDataSerializer, Assembly-CSharp
   targetAssembly: {fileID: 0}
   references:
     version: 2

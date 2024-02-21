@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
+using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.RequestAdaptor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,7 @@ namespace Tests.Editor
 {
     public class AuthAppenderTests
     {
+        private static readonly ISecretRepository SecretRepository = new PlayerPrefsSecretRepository(); 
         [Serializable]
         private class Account
         {
@@ -25,8 +27,8 @@ namespace Tests.Editor
         [Test]
         public void Test_Delete_From_Auth_Repository_Then_Can_Not_Get()
         {
-            ISecretRepository.Current.Delete(AccountKey);
-            ISecretRepository.Current.TryGet<string>(AccountKey, out var data);
+            SecretRepository.Delete(AccountKey);
+            SecretRepository.TryGet<string>(AccountKey, out var data);
             Assert.That(string.IsNullOrEmpty(data));
         }
 
@@ -37,9 +39,9 @@ namespace Tests.Editor
             {
                 username = "username",
             };
-            ISecretRepository.Current.Delete(AccountKey);
-            ISecretRepository.Current.Save(AccountKey, expected);
-            ISecretRepository.Current.TryGet<Account>(AccountKey, out var data);
+            SecretRepository.Delete(AccountKey);
+            SecretRepository.Save(AccountKey, expected);
+            SecretRepository.TryGet<Account>(AccountKey, out var data);
             Assert.That(data.Equals(expected));
         }
 
@@ -57,8 +59,8 @@ namespace Tests.Editor
         public void Test_Log_Warning_When_Auth_Key_Is_Absent()
         {
             using var adaptor = DataUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
-            ISecretRepository.Current.Delete(AccountKey);
-            ISecretRepository.Current.TryGet<string>(AccountKey, out var data);
+            SecretRepository.Delete(AccountKey);
+            SecretRepository.TryGet<string>(AccountKey, out var data);
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(data, adaptor);
             LogAssert.Expect(LogType.Warning, $@"Bearer token is null or empty");
         }

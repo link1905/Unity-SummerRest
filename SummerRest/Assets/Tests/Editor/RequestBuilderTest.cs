@@ -11,6 +11,8 @@ namespace Tests.Editor
     {
         private const string ExampleUrl = "summerrest.com";
         private const string ExampleUrlFormat = "summerrest.com/{0}";
+        private static readonly IUrlBuilder UrlBuilder = new DefaultUrlBuilder();        
+
         [Test]
         public void Test_Build_Param()
         {
@@ -50,7 +52,7 @@ namespace Tests.Editor
                     },
                     $"{ExampleUrl}?id=1&id=2&id=3&name=link&name=summer&email=link%40gmail.com&email=summer%40gmail.com")
             };
-            var builder = IUrlBuilder.Current;
+            var builder = UrlBuilder;
             foreach (var (url, parameters, expect) in table)
             {
                 var result = builder.BuildUrl(url, parameters);

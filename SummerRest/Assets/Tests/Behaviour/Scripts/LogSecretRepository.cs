@@ -13,7 +13,7 @@ namespace Tests.Behaviour.Scripts
         }
         public void Delete(string key)
         {
-            Debug.LogFormat(@"Delete ""{0}""  key", key);
+            Debug.LogFormat(@"Delete ""{0}"" key", key);
             _wrapped.Delete(key);
         }
         public bool TryGet<TData>(string key, out TData data)

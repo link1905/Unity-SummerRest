@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
+using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
@@ -14,15 +15,15 @@ using SummerRest.Runtime.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
-using ISecretRepository = SummerRest.Runtime.Authenticate.Repositories.ISecretRepository;
 
-namespace Tests.Editor
+namespace Tests.Runtime
 {
     public class InternalRequestsTest
     {
         private const string TestUrl = "http://example.com/";
         private const string TestAbsoluteUrl = "http://example.com/200";
-        
+        private static readonly ISecretRepository SecretRepository = new PlayerPrefsSecretRepository(); 
+
         
         private static async UniTask TestSimpleAndDetailedRequestAsync<T>(
             T result,
@@ -277,7 +278,7 @@ namespace Tests.Editor
         {
             var provider = new TestWebRequestAdaptorProvider();
             IWebRequestAdaptorProvider.Current = provider;
-            ISecretRepository.Current.Save("test-key", "my-token");
+            SecretRepository.Save("test-key", "my-token");
             var request = TestDataRequest.Create();
             request.AuthKey = "test-key";
             string header = null;
