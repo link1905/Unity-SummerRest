@@ -36,10 +36,14 @@ namespace SummerRest.Editor.Models
         [XmlAttribute]
         public string AppenderType
         {
-            get => AppenderTypeRef?.FullName;
+            get => Appender?.FullName;
             set => throw new NotImplementedException();
         }
-        public Type AppenderTypeRef => System.Type.GetType(appenderType.ClassRef);
+        public Type Appender
+        {
+            get => System.Type.GetType(appenderType.ClassRef);
+            internal set => appenderType.Type = value;
+        }
 
         [XmlAttribute]
         public string AuthDataType
@@ -47,19 +51,12 @@ namespace SummerRest.Editor.Models
             get => AuthData?.FullName;
             set => throw new NotImplementedException();
         }
-        private Type AuthData
-        {
-            get
-            {
-                var selectedAppender =  System.Type.GetType(appenderType.ClassRef);
-                return selectedAppender?.GetInterface(typeof(IAuthAppender<,>).FullName).GenericTypeArguments[1];
-            }
-        }
+        private Type AuthData => Appender?.GetInterface(typeof(IAuthAppender<,>).FullName).GenericTypeArguments[1];
+
         public enum AuthType
         {
             PlainText, Data
         }
-        [XmlAttribute] public Type Appender => appenderType.Type;
         public object GetData()
         {
             if (type == AuthType.PlainText)
@@ -97,9 +94,9 @@ namespace SummerRest.Editor.Models
 
         public void ValidateToGenerate(Assembly target)
         {
-            if (target is null || AppenderTypeRef is null)
+            if (target is null || AppenderType is null)
                 return;
-            if (!AppenderTypeRef.IsRunnableWith(target))
+            if (!Appender.IsRunnableWith(target))
                 throw new Exception(
                     $"The target assembly {target.FullName} does not contain (or reference) appender type {Appender}");
         }

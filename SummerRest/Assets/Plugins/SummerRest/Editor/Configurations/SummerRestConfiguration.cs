@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Serialization;
 using SummerRest.Editor.Models;
 using SummerRest.Editor.TypeReference;
@@ -106,12 +107,29 @@ namespace SummerRest.Editor.Configurations
         }
         public void ValidateToGenerate()
         {
+            ValidateDomains();
             var assembly = System.Reflection.Assembly.Load(Assembly);
+            ValidateAuthContainers(assembly);
+        }
+
+        internal void ValidateDomains()
+        {
             foreach (var domain in Domains)
                 domain.ValidateToGenerate();
+        }
+
+        internal void ValidateAuthContainers(Assembly assembly)
+        {
+            var authDuplicateKeys = authContainers.FindDuplicates(s => s.AuthKey);
+            if (authDuplicateKeys.Length > 0)
+            {
+                throw new Exception(
+                    $"The followings auth keys [{string.Join(',', authDuplicateKeys)}] are duplicated, please check your auth containers in the advanced settings section");
+            }
             foreach (var authContainer in authContainers)
                 authContainer.ValidateToGenerate(assembly);
         }
+
         public void RenameAssets()
         {
             for (int i = 0; i < Domains.Count; i++)

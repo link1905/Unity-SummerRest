@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SummerRest.Editor.Utilities
 {
@@ -14,6 +16,11 @@ namespace SummerRest.Editor.Utilities
                 for (var i = 0; i < diff; i++)
                     container.Add(default);
             }
+        }
+
+        public static TKey[] FindDuplicates<T, TKey>(this IEnumerable<T> container, Func<T, TKey> extractor)
+        {
+            return container.GroupBy(extractor).Where(g => g.Count() > 1).Select(e => e.Key).ToArray();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Policy;
 using SummerRest.Editor.Configurations;
 using UnityEngine;
 
@@ -12,17 +13,17 @@ namespace SummerRest.Editor.Models
     public struct AuthPointer
     {
         [SerializeField] private string authKey;
-        public string AuthKey => authKey;
-        public static implicit operator AuthContainer(AuthPointer p) => 
-            SummerRestConfiguration.Instance.AuthContainers.FirstOrDefault(e => e.AuthKey == p.authKey);
+        public readonly string AuthKey => authKey;
+        public AuthContainer Cache()
+        {
+            var refKey = authKey;
+            var container = SummerRestConfiguration.Instance.AuthContainers.FirstOrDefault(e => e.AuthKey == refKey);
+            return container;
+        }
+
         public static implicit operator AuthPointer(AuthContainer key) => key is not null ? new AuthPointer
         {
             authKey = key.AuthKey
         } : default;
- 
-        public bool ValidateToGenerate()
-        {
-            return (AuthContainer)this is not null;
-        }
     }
 }

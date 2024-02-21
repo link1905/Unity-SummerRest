@@ -145,10 +145,8 @@ namespace SummerRest.Editor.Models
             var endPointClassName = EndpointName.ToClassName();
             if (string.IsNullOrEmpty(EndpointName))
                 throw new Exception($"{showErrName} uses a null (or empty) generated name");
-            if (Parent is not null && endPointClassName == Parent.EndpointName.ToClassName())
+            if (this is not SummerRest.Editor.Models.Domain && endPointClassName == Parent.EndpointName.ToClassName())
                 throw new Exception($"{showErrName} uses the same generated class name with its parent ({Parent.EndpointName}): {endPointClassName}");
-            if (auth.CacheValue.HasValue && !auth.CacheValue.Value.ValidateToGenerate())
-                throw new Exception($"{showErrName} points to an invalid auth container with key: {auth.CacheValue.Value.AuthKey}");
         } 
 
         /// <summary>
@@ -172,8 +170,14 @@ namespace SummerRest.Editor.Models
             RedirectsLimit = redirectsLimitCache.HasValue ? redirectsLimitCache.Value : null;
             
             var authCache = auth.Cache(Parent, whenInherit: p => new Present<AuthPointer>(p.AuthContainer != null, p.AuthContainer));
-            AuthContainer = authCache.HasValue ? authCache.Value : null;
-            
+            if (authCache.HasValue)
+            {
+                AuthContainer = authCache.Value.Cache();
+                if (AuthContainer is null)
+                    Debug.LogError(@$"{EndpointName}({url}) with the auth key ""{authCache.Value.AuthKey}"" points to an invalid auth container");
+            }
+            else
+                AuthContainer = null;
 
             if (Domain is null)
                 return;
