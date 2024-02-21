@@ -3,12 +3,16 @@ A plugin works as Postman, which supports to visualize the structure of your HTT
 
 This package also generates boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
-> Please note that the minimum Unity Editor version required is **2019.2**
+> Please note that the minimum Unity Editor version required is **2022.2** (because the project leverages UIToolkit new elements and Roslyn compiler)
 
 ## Installation
 ***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
 
 ### [Asset store]()
+
+### [From Releases Page](https://github.com/risethesummer/Unity-SummerRest/releases)
+- `SummerRest.x.y.z.unitypackage` - only necessary assets of the plugin (x.y.z is a semantic version) 
+- `SummerRestSample.unitypackage` - a sample project shows simple usages of the plugin  
 
 ### Install via Git URL:
 Requires a version of unity that supports path query parameter for git packages (Unity >= 2019.3.4f1, Unity >= 2020.1a21). You can add https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest to Package Manager
@@ -25,11 +29,8 @@ Or add "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerR
   }
   ```
 
-If you want to set a target version, please inserting a release tag *.*.* so you can specify a version (unless Unity takes the last version by default). For example "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"
+If you want to set a target version, please inserting a release tag x.y.z so you can specify a version on [the release page](https://github.com/risethesummer/Unity-SummerRest/releases) (unless Unity takes the last version by default). For example "com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"
 
-### From Releases Page:
-- `SummerRest.x.y.z.unitypackage` - only necessary assets of the plugin (x.y.z is a semantic version) 
-- `SummerRestSample.unitypackage` - a sample project shows simple usages of the plugin  
 
 ## Definitions
 
