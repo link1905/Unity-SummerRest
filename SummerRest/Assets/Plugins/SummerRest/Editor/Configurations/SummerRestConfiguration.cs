@@ -22,6 +22,9 @@ namespace SummerRest.Editor.Configurations
     {
         private void OnEnable()
         {
+            // Just run on persistant object
+            if (!EditorUtility.IsPersistent(this))
+                return;
             LoadInstance();
         }
 

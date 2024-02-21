@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using SummerRest.Editor.Attributes;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
@@ -173,7 +174,7 @@ namespace SummerRest.Editor.Models
             if (authCache.HasValue)
             {
                 AuthContainer = authCache.Value.Cache();
-                if (AuthContainer is null)
+                if (AuthContainer is null && SummerRestConfiguration.Instance.AuthContainers.Count == 0)
                     Debug.LogError(@$"{EndpointName}({url}) with the auth key ""{authCache.Value.AuthKey}"" points to an invalid auth container");
             }
             else
