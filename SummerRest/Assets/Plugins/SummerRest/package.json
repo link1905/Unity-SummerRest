@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "displayName": "Summer Rest API for Unity",
   "description": "A plugin works as Postman, which supports to visualize the structure of your HTTP endpoints and request to them inside Unity \nIt supports making HTTP requests and showing simple results (text, image) in EditMode. This package also generates boilerplate codes based on your structure to simplify the process of calling HTTP endpoints in PlayMode",
-  "unity": "2019.2",
+  "unity": "2022.2",
   "dependencies": {
     "com.unity.editorcoroutines": "1.0.0"
   },
