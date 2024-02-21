@@ -44,6 +44,20 @@ namespace SummerRest.Editor.Utilities
 
             return formattedName.ToString();
         }
+
+        public static bool IsRunnableWith(this Type type, Assembly assembly)
+        {
+            if (type is null || assembly is null)
+                return true;
+            if (type.Assembly.FullName == assembly.FullName)
+                return true;
+            if (type.IsNotPublic)
+                return false;
+            foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
+                if (type.Assembly.FullName == referencedAssembly.FullName)
+                    return true;
+            return false;
+        }
         
         public static IEnumerable<Assembly> GetAllAssemblies()
         {

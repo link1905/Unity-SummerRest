@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Xml.Serialization;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.TypeReference;
+using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
@@ -35,9 +36,10 @@ namespace SummerRest.Editor.Models
         [XmlAttribute]
         public string AppenderType
         {
-            get => System.Type.GetType(appenderType.ClassRef)?.FullName;
+            get => AppenderTypeRef?.FullName;
             set => throw new NotImplementedException();
         }
+        public Type AppenderTypeRef => System.Type.GetType(appenderType.ClassRef);
 
         [XmlAttribute]
         public string AuthDataType
@@ -93,10 +95,13 @@ namespace SummerRest.Editor.Models
             }
         }
 
-        public void ValidateToGenerate(Assembly assembly)
+        public void ValidateToGenerate(Assembly target)
         {
-            if (assembly is null)
+            if (target is null || AppenderTypeRef is null)
                 return;
+            if (!AppenderTypeRef.IsRunnableWith(target))
+                throw new Exception(
+                    $"The target assembly {target.FullName} does not contain (or reference) appender type {Appender}");
         }
     }
 }
