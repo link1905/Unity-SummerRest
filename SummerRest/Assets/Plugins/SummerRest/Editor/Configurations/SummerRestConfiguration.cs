@@ -109,6 +109,8 @@ namespace SummerRest.Editor.Configurations
             var assembly = System.Reflection.Assembly.Load(Assembly);
             foreach (var domain in Domains)
                 domain.ValidateToGenerate();
+            foreach (var authContainer in authContainers)
+                authContainer.ValidateToGenerate(assembly);
         }
         public void RenameAssets()
         {
