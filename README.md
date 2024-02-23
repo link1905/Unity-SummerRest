@@ -1,7 +1,8 @@
-﻿# SummerRest - HTTP Endpoints Visualization Plugin for Unity
-A plugin works as Postman, which supports to visualize the structure of your HTTP endpoints and call them inside Unity
-
-This package also generates boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
+﻿# SummerRest - HTTP Endpoints Managing Plugin for Unity
+A plugin works as Postman, which supports:
+- Visualize the structure of your HTTP endpoints
+- Enable to call them inside Unity
+- Generate boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
 ## The minimum Unity Editor version required is **2022.2** 
 Because the project leverages some Unity UIToolkit new elements and the Roslyn compiler
@@ -9,7 +10,7 @@ Because the project leverages some Unity UIToolkit new elements and the Roslyn c
 ## Installation
 ***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
 
-### 1. [Asset store]()
+### 1. [Asset store](https://u3d.as/3eSA)
 
 ### 2. [From Releases Page](https://github.com/risethesummer/Unity-SummerRest/releases)
 - `SummerRest.x.y.z.unitypackage` - only necessary assets of the plugin (x.y.z is a semantic version) 
