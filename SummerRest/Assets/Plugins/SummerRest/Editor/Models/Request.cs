@@ -68,7 +68,7 @@ namespace SummerRest.Editor.Models
                 defaultWhenInvalid: InheritChoice.Auto,
                 whenInherit: null, whenAuto: () =>
                 {
-                    var builtContentType = requestBody.CacheValue();
+                    var builtContentType = requestBody.CacheValue(contentType.CacheValue.Value);
                     return builtContentType.HasValue ? new Present<ContentType>(builtContentType.Value) : Present<ContentType>.Absent;
                 });
             ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;
