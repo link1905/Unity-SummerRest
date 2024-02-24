@@ -36,16 +36,20 @@ namespace SummerRest.Editor.Window.Elements
 
         private void CreateAssets()
         {
-            var folder = AssetDatabase.GetAssetPath(_folder.value);
-            if (!AssetDatabase.IsValidFolder(folder))
+            var parentFolder = AssetDatabase.GetAssetPath(_folder.value);
+            if (!AssetDatabase.IsValidFolder(parentFolder))
                 return;
+            var folder = Path.Combine(parentFolder, PathsHolder.ContainerFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(parentFolder, PathsHolder.ContainerFolder);
             var conf = EditorAssetUtilities
                 .CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
-            var ignoreFilePath = Path.Combine(folder, ".gitignore");
+            var domainsFolder = Path.Combine(folder, PathsHolder.DomainsFolder);
             EditorAssetUtilities.CreateFolderIfNotExists(folder, PathsHolder.DomainsFolder);
-            EditorAssetUtilities.CreateFolderIfNotExists(folder,  PathsHolder.ResponsesFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(domainsFolder,  PathsHolder.ResponsesFolder);
+            var ignoreFilePath = Path.Combine(domainsFolder, PathsHolder.ResponsesFolder, ".gitignore");
             EditorAssetUtilities.LoadOrCreateTextFile(ignoreFilePath, @"
-Response/
+*
+!.gitignore
 ");
             conf.MakeDirty();
             EditorUtility.RequestScriptReload();

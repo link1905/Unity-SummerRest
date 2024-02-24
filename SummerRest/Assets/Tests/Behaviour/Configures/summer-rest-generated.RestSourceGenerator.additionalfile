@@ -1,8 +1,0 @@
-<SummerRestConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SecretRepository="Tests.Behaviour.Scripts.LogSecretRepository, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" DataSerializer="Tests.Behaviour.Scripts.LogDataSerializer, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" Assembly="Assembly-CSharp">
-    <name>SummerRestConfiguration</name>
-    <hideFlags>None</hideFlags>
-    <Domains>
-        <Domain TypeName="Domain" EndpointName="MyDomain" />
-    </Domains>
-    <AuthKeys />
-</SummerRestConfiguration>

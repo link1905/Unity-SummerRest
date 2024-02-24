@@ -16,7 +16,7 @@ namespace SummerRest.Editor.DataStructures
     public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     {
         private static T _instance;
-        public static bool Initialized => _instance is not null;
+        public static bool Initialized => _instance is not null && EditorUtility.IsPersistent(_instance);
         public static T Instance
         {
             get

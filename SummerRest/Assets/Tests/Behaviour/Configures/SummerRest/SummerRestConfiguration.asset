@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20861b636bc4735ab70e078a61211be, type: 3}
   m_Name: SummerRestConfiguration
   m_EditorClassIdentifier: 
-  <Domains>k__BackingField:
-  - {fileID: 11400000, guid: 02345fa00a398bd4a88c12ddab013835, type: 2}
+  <Domains>k__BackingField: []
   authContainers: []
   secretRepository:
-    classRef: Tests.Behaviour.Scripts.LogSecretRepository, Assembly-CSharp
+    classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
+      SummerRest
   dataSerializer:
-    classRef: Tests.Behaviour.Scripts.LogDataSerializer, Assembly-CSharp
+    classRef: SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest
   targetAssembly: {fileID: 0}
   references:
     version: 2

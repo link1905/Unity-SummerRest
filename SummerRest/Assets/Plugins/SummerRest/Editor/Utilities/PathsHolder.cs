@@ -12,6 +12,7 @@ namespace SummerRest.Editor.Utilities
         /// <summary>
         /// When used as a package
         /// </summary>
+        public const string ContainerFolder = "SummerRest";
         public const string PackageDir = "Packages/com.summer.summer-rest/Editor/Templates";
         public const string DomainsFolder = "Domains";
         public const string ResponsesFolder = "Responses";
