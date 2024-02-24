@@ -106,8 +106,5 @@ namespace SummerRest.Editor.Utilities
             AssetDatabase.GetAssetPath(obj);
         public static string GetAssetFolder(this Object obj) => 
             Path.GetDirectoryName(AssetDatabase.GetAssetPath(obj));
-
-        public static string GetAssetFolder(this Object obj, string combine) =>
-            System.IO.Path.Combine(obj.GetAssetFolder(), combine);
     }
 }

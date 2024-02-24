@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using SummerRest.Editor.Utilities;
+using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
@@ -9,23 +10,14 @@ namespace SummerRest.Editor.Drawers
     internal abstract class UIToolkitDrawer : PropertyDrawer
     {
         protected abstract string RelativeFromTemplateAssetPath { get;}
-        /// <summary>
-        /// When embed in Assets folder
-        /// </summary>
-        private const string AssetDir = "Assets/Plugins/SummerRest/Editor/Templates";
-        /// <summary>
-        /// When used as a package
-        /// </summary>
-        private const string PackageDir = "Packages/com.summer.summer-rest/Editor/Templates";
-        
         public static string RootDir
         {
             get
             {
                 // regular assets path
-                if (AssetDatabase.IsValidFolder(PackageDir))
-                    return PackageDir;
-                return AssetDir;
+                if (AssetDatabase.IsValidFolder(PathsHolder.PackageDir))
+                    return PathsHolder.PackageDir;
+                return PathsHolder.AssetDir;
             }
         }
 

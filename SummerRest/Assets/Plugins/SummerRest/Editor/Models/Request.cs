@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using SummerRest.Editor.Attributes;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
@@ -97,11 +98,12 @@ namespace SummerRest.Editor.Models
         /// Caches latest response of this request (editor-only)
         /// </summary>
         [SerializeReference] private Response latestResponse;
-        public Response LatestResponse
+        public Response LatestResponse => latestResponse ??= CreateResponse();
+        private Response CreateResponse()
         {
-            get => latestResponse;
-            set => latestResponse = value;
-        }
+            EditorAssetUtilities.CreateAndSaveObject<Response>($"{this.name}")
+            var path = PathsHolder.ResponsesPath;
+        } 
         public override string TypeName => nameof(Request);
         
         public override void WriteXml(XmlWriter writer)

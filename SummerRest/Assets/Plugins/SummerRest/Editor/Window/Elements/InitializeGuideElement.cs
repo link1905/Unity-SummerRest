@@ -42,7 +42,8 @@ namespace SummerRest.Editor.Window.Elements
             var conf = EditorAssetUtilities
                 .CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
             var ignoreFilePath = Path.Combine(folder, ".gitignore");
-            EditorAssetUtilities.CreateFolderIfNotExists(folder, "Responses");
+            EditorAssetUtilities.CreateFolderIfNotExists(folder, PathsHolder.DomainsFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(folder,  PathsHolder.ResponsesFolder);
             EditorAssetUtilities.LoadOrCreateTextFile(ignoreFilePath, @"
 Response/
 ");

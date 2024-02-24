@@ -108,9 +108,7 @@ namespace SummerRest.Editor.Window.Elements
 
         private Domain OnAddDomain()
         {
-            EditorAssetUtilities.CreateFolderIfNotExists(_configuration.GetAssetFolder(), "Domains");
-            var path = _configuration.GetAssetFolder("Domains");
-            var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(path);
+            var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(PathsHolder.DomainsPath);
             _configuration.Domains.Add(domain);
             domain.Domain = domain;
             domain.EndpointName = $"Domain {_configuration.Domains.Count}";
@@ -251,7 +249,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             if (endpoint is not EndpointContainer endpointContainer) 
                 return;
-            var path = _configuration.GetAssetFolder("Domains");
+            var path = PathsHolder.DomainsPath;
             switch (elementAddAction)
             {
                 case ElementAddAction.Service:
