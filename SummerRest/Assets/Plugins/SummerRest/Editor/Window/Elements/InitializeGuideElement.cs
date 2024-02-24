@@ -1,4 +1,5 @@
-﻿using SummerRest.Editor.Configurations;
+﻿using System.IO;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
@@ -33,6 +34,21 @@ namespace SummerRest.Editor.Window.Elements
             });
         }
 
+        private void CreateAssets()
+        {
+            var folder = AssetDatabase.GetAssetPath(_folder.value);
+            if (!AssetDatabase.IsValidFolder(folder))
+                return;
+            var conf = EditorAssetUtilities
+                .CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
+            var ignoreFilePath = Path.Combine(folder, ".gitignore");
+            EditorAssetUtilities.CreateFolderIfNotExists(folder, "Responses");
+            EditorAssetUtilities.LoadOrCreateTextFile(ignoreFilePath, @"
+Response/
+");
+            conf.MakeDirty();
+            EditorUtility.RequestScriptReload();
+        }
         private void InitAssets()
         {
             try
@@ -43,12 +59,7 @@ namespace SummerRest.Editor.Window.Elements
             {
                 if (e.Count != 0 || _folder.value is null)
                     return;
-                var folder = AssetDatabase.GetAssetPath(_folder.value);
-                if (!AssetDatabase.IsValidFolder(folder))
-                    return;
-                var conf = EditorAssetUtilities.CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
-                conf.MakeDirty();
-                EditorUtility.RequestScriptReload();
+                CreateAssets();
             }
         }
     }

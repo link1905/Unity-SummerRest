@@ -31,8 +31,7 @@ namespace SummerRest.Editor.Manager
                 Debug.LogErrorFormat("Can not create new asset file {0} at {1}", FileName, path);
                 return;
             }
-            File.WriteAllText(path, string.Empty);
-            File.WriteAllText(path, configureXml);
+            EditorAssetUtilities.WriteTextContent(path, configureXml);
             AssetDatabase.ImportAsset(path);
             // Ensure the Editor to reload to run Roslyn processes 
             EditorUtility.RequestScriptReload();

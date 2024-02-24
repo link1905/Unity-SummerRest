@@ -96,7 +96,7 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Caches latest response of this request (editor-only)
         /// </summary>
-        [SerializeField] private Response latestResponse;
+        [SerializeReference] private Response latestResponse;
         public Response LatestResponse
         {
             get => latestResponse;
