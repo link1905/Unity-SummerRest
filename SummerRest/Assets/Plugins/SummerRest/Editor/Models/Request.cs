@@ -84,6 +84,8 @@ namespace SummerRest.Editor.Models
                 Parent.Requests.Remove(this);
                 Parent.MakeDirty();
             }
+            if (latestResponse is not null)
+                latestResponse.RemoveAsset();
             base.Delete(fromParent);
         }
 
@@ -101,8 +103,10 @@ namespace SummerRest.Editor.Models
         public Response LatestResponse => latestResponse ??= CreateResponse();
         private Response CreateResponse()
         {
-            EditorAssetUtilities.CreateAndSaveObject<Response>($"{this.name}")
-            var path = PathsHolder.ResponsesPath;
+            var res = EditorAssetUtilities.CreateAndSaveObject<Response>($"{name}_Response", PathsHolder.ResponsesPath);
+            latestResponse = res;
+            this.MakeDirty();
+            return res;
         } 
         public override string TypeName => nameof(Request);
         
