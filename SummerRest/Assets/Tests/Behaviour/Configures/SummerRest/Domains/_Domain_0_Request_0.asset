@@ -15,7 +15,7 @@ MonoBehaviour:
   <Domain>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
   <Parent>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
   endpointName: Request 1
-  url: http://localhost:8080
+  url: 
   auth:
     inherit: 2
     cache:
@@ -27,28 +27,28 @@ MonoBehaviour:
   headers:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: []
     value: []
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 1
+  <TreeId>k__BackingField: 0
   path:
     text: 
     values: []
   contentType:
-    inherit: 16
+    inherit: 2
     cache:
       hasValue: 0
       value:
@@ -73,8 +73,8 @@ MonoBehaviour:
     isGenerated: 1
     textFormat: 0
     form: []
-  urlWithParam: http://localhost:8080
-  latestResponse: {fileID: 11400000, guid: 266193bac92ed05469189758ad3ffaca, type: 2}
+  urlWithParam: 
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

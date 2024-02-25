@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,9 +13,9 @@ namespace SummerRest.Editor.Models
     /// </summary>
     public class Response : ScriptableObject
     {
-        [SerializeField] private string lastCall;
+        [SerializeField, ReadonlyText] private string lastCall;
 
-        [SerializeField] private string error;
+        [SerializeField, ReadonlyText] private string error;
         public string Error
         {
             get => error;

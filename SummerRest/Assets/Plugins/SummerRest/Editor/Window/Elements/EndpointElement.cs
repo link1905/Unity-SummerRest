@@ -77,7 +77,9 @@ namespace SummerRest.Editor.Window.Elements
                 _responseElement
                     .CallThenTrackPropertyValue(serializedObj.FindProperty("latestResponse"), s =>
                     {
-                        if (s.objectReferenceValue is null)
+                        var hasResponse = s.objectReferenceValue is not null;
+                        _responseElement.Show(hasResponse);
+                        if (!hasResponse)
                             return;
                         _responseElement.ShowObjectFields(new SerializedObject(s.objectReferenceValue));
                     });
