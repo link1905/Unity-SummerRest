@@ -10,8 +10,8 @@ namespace SummerRest.Editor.Models
     [Serializable]
     public class ResponseBody
     {
-        [SerializeField] private string mediaType;
-        [SerializeField] private string fileName;
+        [SerializeField, ReadonlyText] private string mediaType;
+        [SerializeField, ReadonlyText] private string fileName;
         [SerializeField] private BytesBody rawBytes;
         [SerializeField, ResponseRawBody] private string rawBody;
         public string RawBody
