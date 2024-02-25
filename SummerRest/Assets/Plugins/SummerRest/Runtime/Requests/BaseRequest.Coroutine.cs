@@ -47,7 +47,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator DetailedTextureRequestCoroutine(
-            bool readable, Action<WebResponse<Texture2D>> doneCallback, Action<ResponseError> errorCallback = null)
+            bool readable, Action<IWebResponse<Texture2D>> doneCallback, Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.DetailedTextureRequestCoroutine(AbsoluteUrl, readable, doneCallback, errorCallback, SetRequestData);
         }
@@ -59,7 +59,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
         public IEnumerator DetailedAudioRequestCoroutine(AudioType audioType, 
-            Action<WebResponse<AudioClip>> doneCallback, Action<ResponseError> errorCallback = null)
+            Action<IWebResponse<AudioClip>> doneCallback, Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.DetailedAudioRequestCoroutine(AbsoluteUrl, audioType, doneCallback, errorCallback, SetRequestData);
         }

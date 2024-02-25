@@ -2,7 +2,7 @@ using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
 using UnityEngine;
 
-namespace Tests.Behaviour.Scripts
+namespace Customs
 {
     public class LogDataSerializer : IDataSerializer
     {

@@ -39,6 +39,7 @@ namespace SummerRest.Editor.Models
             get => Appender?.FullName;
             set => throw new NotImplementedException();
         }
+        [XmlIgnore]
         public Type Appender
         {
             get => System.Type.GetType(appenderType.ClassRef);

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Net;
 using SummerRest.Runtime.Extensions;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
@@ -115,15 +114,16 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <returns></returns>
         internal abstract TResponse BuildResponse();
 
-        public WebResponse<TResponse> WebResponse
-            => new(WebRequest,
-                (HttpStatusCode)WebRequest.responseCode,
-                IContentTypeParser.Current.ParseContentTypeFromHeader(
-                    WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
-                WebRequest.GetResponseHeaders(),
-                RawResponse,
-                ResponseData
-            );
+        public IWebResponse<TResponse> WebResponse
+        {
+            get
+            {
+                var res = UnityWebResponse<TResponse>.Create(
+                    new UnityWebResponse<TResponse>.InitData(WebRequest, ResponseData, RawResponse));
+                WebRequest = null;
+                return res;
+            }
+        }
 
         public virtual IEnumerator RequestInstruction
         {
@@ -146,8 +146,9 @@ namespace SummerRest.Runtime.RequestAdaptor
 
         public virtual void Dispose()
         {
-            WebRequest = default;
             ResponseData = default;
+            WebRequest?.Dispose();
+            WebRequest = default;
             if (Pool is null || this is not TSelf self)
                 return;
             Pool.Release(self);

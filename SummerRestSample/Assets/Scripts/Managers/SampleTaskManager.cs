@@ -83,10 +83,11 @@ namespace Managers
                 _searchProduct.TimeoutSeconds = 3;
 
                 responseView.StartCall(_searchProduct.AbsoluteUrl, _searchProduct.Method);
-                // Detailed request
+                // Detailed response
                 try
                 {
-                    var response = await _searchProduct.DetailedDataRequestAsync<ProductPaging>();
+                    // Please remember to wrap response in a using statement or call Dispose
+                    using var response = await _searchProduct.DetailedDataRequestAsync<ProductPaging>();
                     responseView.SetResponse(response);
                 }
                 catch (ResponseErrorException responseErrorException)
@@ -124,7 +125,8 @@ namespace Managers
             {
                 responseView.StartCall(_addProduct.AbsoluteUrl, _addProduct.Method);
                 _addProduct.BodyData = product;
-                var response = await _addProduct.DetailedDataRequestAsync<Product>();
+                // Please remember to wrap response in a using statement or call Dispose
+                using var response = await _addProduct.DetailedDataRequestAsync<Product>();
                 responseView.SetResponse(response);
             }
             catch (ResponseErrorException e)
@@ -216,7 +218,8 @@ namespace Managers
             _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ProductId, productId.ToString());
             _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ImageOrder, imgOrder.ToString());
             responseView.StartCall(_getProductImage.AbsoluteUrl, _getProductImage.Method);
-            var img = await _getProductImage.DetailedTextureRequestAsync(false);
+            // Please remember to wrap response in a using statement or call Dispose
+            using var img = await _getProductImage.DetailedTextureRequestAsync(false);
             responseView.SetImageResponse(img);
         }
 #endif

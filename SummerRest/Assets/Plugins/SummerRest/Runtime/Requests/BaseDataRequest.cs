@@ -6,9 +6,6 @@ using SummerRest.Runtime.RequestComponents;
 
 namespace SummerRest.Runtime.Requests
 {
-    
-    
-    
     public abstract partial class BaseDataRequest<TRequest> : BaseRequest<TRequest> where TRequest : BaseRequest<TRequest>, new() 
     {
         public BaseDataRequest(string url, string absoluteUrl,  string urlFormat, string[] urlFormatValues, IRequestModifier requestModifier) : 
@@ -68,7 +65,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
-        public IEnumerator DetailedDataRequestCoroutine<TResponse>(Action<WebResponse<TResponse>> doneCallback,
+        public IEnumerator DetailedDataRequestCoroutine<TResponse>(Action<IWebResponse<TResponse>> doneCallback,
             Action<ResponseError> errorCallback = null)
         {
             return WebRequestUtility.DetailedDataRequestCoroutine(AbsoluteUrl, Method,

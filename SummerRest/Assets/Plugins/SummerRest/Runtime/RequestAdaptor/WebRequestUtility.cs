@@ -130,13 +130,13 @@ namespace SummerRest.Runtime.RequestAdaptor
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
+                .GetMultipartFileRequest<TResponse>(url, method, data, contentType?.BoundaryBytes);
             yield return RequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
         
         
         private static IEnumerator DetailedRequestCoroutine<TResponse>(IWebRequestAdaptor<TResponse> request,
-            Action<WebResponse<TResponse>> doneCallback, 
+            Action<IWebResponse<TResponse>> doneCallback, 
             Action<ResponseError> errorCallback,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder)
         {
@@ -156,7 +156,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         public static IEnumerator DetailedTextureRequestCoroutine(
             string url,
             bool nonReadable,
-            Action<WebResponse<Texture2D>> doneCallback,
+            Action<IWebResponse<Texture2D>> doneCallback,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null)
         {
@@ -176,7 +176,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         public static IEnumerator DetailedAudioRequestCoroutine(
             string url,
             AudioType audioType,
-            Action<WebResponse<AudioClip>> doneCallback,
+            Action<IWebResponse<AudioClip>> doneCallback,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null)
         {
@@ -198,7 +198,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <returns></returns>
         public static IEnumerator DetailedDataRequestCoroutine<TResponse>(
             string url, HttpMethod method, 
-            Action<WebResponse<TResponse>> doneCallback,
+            Action<IWebResponse<TResponse>> doneCallback,
             string data = null, ContentType? contentType = null,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
@@ -225,12 +225,12 @@ namespace SummerRest.Runtime.RequestAdaptor
             HttpMethod method,
             List<IMultipartFormSection> data,
             ContentType? contentType,
-            Action<WebResponse<TResponse>> doneCallback,
+            Action<IWebResponse<TResponse>> doneCallback,
             Action<ResponseError> errorCallback = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null)
         {
             using var request = IWebRequestAdaptorProvider.Current
-                .GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
+                .GetMultipartFileRequest<TResponse>(url, method, data, contentType?.BoundaryBytes);
             yield return DetailedRequestCoroutine(request, doneCallback, errorCallback, adaptorBuilder);
         }
     }

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
+using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
@@ -28,18 +29,21 @@ namespace Tests.Runtime
         private static async UniTask TestSimpleAndDetailedRequestAsync<T>(
             T result,
             UniTask<T> simpleTask,
-            UniTask<WebResponse<T>> detailedTask,
+            UniTask<IWebResponse<T>> detailedTask,
             HttpStatusCode code = HttpStatusCode.OK)
         {
             var (data, response) = await UniTask.WhenAll(simpleTask, detailedTask);
             Assert.AreEqual(result, data);
-            Assert.AreEqual(result, response.Data);
-            Assert.AreEqual(code, response.StatusCode);
+            using (response)
+            {
+                Assert.AreEqual(result, response.Data);
+                Assert.AreEqual(code, response.StatusCode);
+            }
         }
         private static IEnumerator TestSimpleAndDetailedRequestCoroutine<T>(
             T result,
             Func<Action<T>, IEnumerator> simpleCor,
-            Func<Action<WebResponse<T>>, IEnumerator> detailedCor,
+            Func<Action<IWebResponse<T>>, IEnumerator> detailedCor,
             HttpStatusCode code = HttpStatusCode.OK)
         {
             yield return simpleCor(data =>
@@ -48,10 +52,28 @@ namespace Tests.Runtime
             });
             yield return detailedCor(response =>
             {
-                Assert.AreEqual(code, response.StatusCode);
-                Assert.AreEqual(result, response.Data);
+                using (response)
+                {
+                    Assert.AreEqual(code, response.StatusCode);
+                    Assert.AreEqual(result, response.Data);
+                }
             });
         }
+        
+        
+        [UnityTest]
+        public IEnumerator Test_Web_Request_Returned_To_Pool()
+        {
+            IWebRequestAdaptorProvider.Current = new TestWebRequestAdaptorProvider();
+            var request = TestDataRequest.Create();
+            BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.Clear();
+            Assert.AreEqual(0,BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+            yield return request.DataRequestCoroutine<string>(null);
+            Assert.AreEqual(1, BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+            yield return request.DetailedDataRequestCoroutine<string>(null);
+            Assert.AreEqual(1, BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+        }
+        
         private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_200_And_Json_Data()
         {
             var provider = new TestWebRequestAdaptorProvider
@@ -163,6 +185,7 @@ namespace Tests.Runtime
                 expected,
                 request.AudioRequestAsync(AudioType.WAV), request.DetailedAudioRequestAsync(AudioType.WAV));
         }
+
                
         private static (TestMultipartRequest, TestResponseData, List<IMultipartFormSection>) Setup_Test_Internal_Multipart_Form_Request()
         {
@@ -268,8 +291,11 @@ namespace Tests.Runtime
             request.Method = HttpMethod.Post;
             yield return request.DetailedDataRequestCoroutine<string>(response =>
             {
-                var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
-                Assert.AreEqual(@"{""a"":10}", Encoding.UTF8.GetString(data));
+                using (response)
+                {
+                    var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
+                    Assert.AreEqual(@"{""a"":10}", Encoding.UTF8.GetString(data));
+                }
             });
         }
         
@@ -284,7 +310,10 @@ namespace Tests.Runtime
             string header = null;
             yield return request.DetailedDataRequestCoroutine<string>(s =>
             {
-                header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
+                using (s)
+                {
+                    header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
+                }
             });
             Assert.AreEqual("Bearer my-token", header);
         }
@@ -351,9 +380,9 @@ namespace Tests.Runtime
                 var wrapped = _wrapped.GetAudioRequest(url, audioType) as AudioUnityWebRequestAdaptor;
                 return new AudioTestWebRequestAdaptor(ResponseAudioClip, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data, byte[] boundary)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, byte[] boundary)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, data, boundary) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data, boundary) as MultipartFileUnityWebRequestAdaptor<TBody>;
                 return new MultipartTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
@@ -509,11 +538,38 @@ namespace Tests.Runtime
                 StatusCode = code;
                 FixedError = fixedError;
             }
+            
+            public readonly struct InternalWebResponse : IWebResponse<TResponse>
+            {
+                public void Dispose()
+                {
+                    _request?.Dispose();
+                }
+                public InternalWebResponse(UnityWebRequest wrappedRequest, 
+                    HttpStatusCode statusCode, ContentType contentType, 
+                    string rawData, TResponse data)
+                {
+                    _request = wrappedRequest;
+                    StatusCode = statusCode;
+                    ContentType = contentType;
+                    RawText = rawData;
+                    Data = data;
+                    Headers = null;
+                    RawData = null;
+                }
+                private readonly UnityWebRequest _request;
+                public object WrappedRequest => _request;
+                public HttpStatusCode StatusCode { get; }
+                public ContentType ContentType { get; }
+                public IEnumerable<KeyValuePair<string, string>> Headers { get; }
+                public string RawText { get; }
+                public byte[] RawData { get; }
+                public TResponse Data { get; }
+            }
 
-            public WebResponse<TResponse> WebResponse => new(Wrapped.WebRequest,
+            public IWebResponse<TResponse> WebResponse => new InternalWebResponse(Wrapped.WebRequest,
                 StatusCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
-                null,
                 FixedRawResponse ,
                 ResponseData
             );

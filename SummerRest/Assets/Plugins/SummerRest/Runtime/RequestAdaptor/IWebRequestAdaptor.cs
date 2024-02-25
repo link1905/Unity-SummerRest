@@ -22,7 +22,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         int TimeoutSeconds { get; set; }
         ContentType? ContentType { get; set; }
         IEnumerator RequestInstruction { get; }
-        WebResponse<TResponse> WebResponse { get; }
+        IWebResponse<TResponse> WebResponse { get; }
         TResponse ResponseData { get; }
     }
 }

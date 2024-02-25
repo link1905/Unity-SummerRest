@@ -27,6 +27,12 @@ namespace Tests.Editor
         private const string SummerUrl = "https://summerrest.com";
         public static UnityWebRequest WebRequest => UnityWebRequest.Get(ExampleUrl);
         public static UnityWebRequest PutWebRequest => UnityWebRequest.Put(ExampleUrl, string.Empty);
+        [TearDown]
+        public void EndTesting()
+        {
+            WebRequest.Dispose();
+            PutWebRequest.Dispose();
+        }
         [Test]
         public void Test_Url_Apply_After_Changing_Url_Property()
         {

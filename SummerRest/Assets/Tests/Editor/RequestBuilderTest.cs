@@ -137,13 +137,13 @@ namespace Tests.Editor
         [Test]
         public void Test_Change_Serialized_Body_When_Change_Format()
         {
-            var request = new TestRequest()
+            var request = new TestRequest
             {
-                BodyFormat = DataFormat.Json
-            };
-            request.BodyData = new TestRequestBody
-            {
-                A = 5
+                BodyFormat = DataFormat.Json,
+                BodyData = new TestRequestBody
+                {
+                    A = 5
+                }
             };
             Assert.AreEqual(request.SerializedBody, @"{""A"":5}");
             request.BodyFormat = DataFormat.Xml;

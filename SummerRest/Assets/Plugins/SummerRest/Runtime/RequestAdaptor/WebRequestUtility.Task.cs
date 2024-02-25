@@ -105,12 +105,12 @@ namespace SummerRest.Runtime.RequestAdaptor
             CancellationToken cancellationToken = default)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType?.BoundaryBytes);
             return await RequestAsync(request, adaptorBuilder, cancellationToken);
         }
 
         
-        private static async UniTask<WebResponse<TResponse>> DetailedRequestAsync<TResponse>(
+        private static async UniTask<IWebResponse<TResponse>> DetailedRequestAsync<TResponse>(
             IWebRequestAdaptor<TResponse> request, Action<IWebRequestAdaptor<TResponse>> adaptorBuilder,
             CancellationToken cancellationToken)
         {
@@ -128,8 +128,8 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static async UniTask<WebResponse<Texture2D>> DetailedTextureRequestAsync(string url, 
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        public static async UniTask<IWebResponse<Texture2D>> DetailedTextureRequestAsync(string url, 
             bool nonReadable,
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null,
             CancellationToken cancellationToken = default)
@@ -146,8 +146,8 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="audioType">Type of the audio response</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static async UniTask<WebResponse<AudioClip>> DetailedAudioRequestAsync(
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        public static async UniTask<IWebResponse<AudioClip>> DetailedAudioRequestAsync(
             string url,
             AudioType audioType,
             Action<IWebRequestAdaptor<AudioClip>> adaptorBuilder = null,
@@ -168,8 +168,8 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static async UniTask<WebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        public static async UniTask<IWebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(
             string url, HttpMethod method, 
             string data = null, ContentType? contentType = null,
             Action<IWebRequestAdaptor<TResponse>> adaptorBuilder = null,
@@ -192,8 +192,8 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public static async UniTask<WebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        public static async UniTask<IWebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,      
             List<IMultipartFormSection> data,
             ContentType? contentType,
@@ -201,7 +201,7 @@ namespace SummerRest.Runtime.RequestAdaptor
             CancellationToken cancellationToken = default)
         {
             using var request =
-                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, data, contentType?.BoundaryBytes);
+                IWebRequestAdaptorProvider.Current.GetMultipartFileRequest<TResponse>(url, method, data, contentType?.BoundaryBytes);
             return await DetailedRequestAsync(request, adaptorBuilder, cancellationToken);
         }
     }

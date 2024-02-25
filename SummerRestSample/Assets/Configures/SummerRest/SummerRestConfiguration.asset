@@ -25,10 +25,9 @@ MonoBehaviour:
     appenderType:
       classRef: Auth.DummyJsonApiAuthAppender, Assembly-CSharp
   secretRepository:
-    classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
-      SummerRest
+    classRef: Customs.LogSecretRepository, Assembly-CSharp
   dataSerializer:
-    classRef: SummerRest.Runtime.Parsers.DefaultDataSerializer, SummerRest
+    classRef: Customs.LogDataSerializer, Assembly-CSharp
   targetAssembly: {fileID: 0}
   references:
     version: 2
