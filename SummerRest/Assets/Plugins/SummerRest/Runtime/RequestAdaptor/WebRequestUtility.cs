@@ -153,6 +153,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public static IEnumerator DetailedTextureRequestCoroutine(
             string url,
             bool nonReadable,
@@ -173,6 +174,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public static IEnumerator DetailedAudioRequestCoroutine(
             string url,
             AudioType audioType,
@@ -196,6 +198,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public static IEnumerator DetailedDataRequestCoroutine<TResponse>(
             string url, HttpMethod method, 
             Action<IWebResponse<TResponse>> doneCallback,
@@ -220,6 +223,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="contentType">Content type of the sections</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public static IEnumerator DetailedMultipartDataRequestCoroutine<TResponse>(
             string url,
             HttpMethod method,

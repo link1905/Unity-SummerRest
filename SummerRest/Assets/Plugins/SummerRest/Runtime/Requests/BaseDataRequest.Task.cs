@@ -24,7 +24,8 @@ namespace SummerRest.Runtime.Requests
         /// Please note that this method throws an <see cref="ResponseErrorException"/> exception when encountering issues
         /// </summary>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public UniTask<IWebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(CancellationToken cancellationToken = default)
         {
             return WebRequestUtility.DetailedDataRequestAsync<TResponse>(AbsoluteUrl, Method, 

@@ -7,7 +7,7 @@ namespace SummerRest.Runtime.Requests
 {
     /// <summary>
     /// Contains response data of a web request <br/>
-    /// Please remember to wrap this instance inside a using statement or manually call <see cref="IWebResponse{TBody}.Dispose()"/>
+    /// <remarks>Please remember to wrap this instance inside a using statement or manually call <see cref="IWebResponse{TBody}.Dispose()"/></remarks>
     /// </summary>
     /// <typeparam name="TBody"></typeparam>
     public interface IWebResponse<out TBody> : IDisposable

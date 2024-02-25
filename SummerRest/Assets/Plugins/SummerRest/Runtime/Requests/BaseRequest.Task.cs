@@ -39,7 +39,8 @@ namespace SummerRest.Runtime.Requests
         /// </summary>
         /// <param name="readable">Texture response readable</param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public UniTask<IWebResponse<Texture2D>> DetailedTextureRequestAsync(bool readable, CancellationToken cancellationToken = default)
         {
             return WebRequestUtility.DetailedTextureRequestAsync(AbsoluteUrl, readable, SetRequestData, cancellationToken);
@@ -51,7 +52,8 @@ namespace SummerRest.Runtime.Requests
         /// </summary>
         /// <param name="audioType">Type of the audio response</param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public UniTask<IWebResponse<AudioClip>> DetailedAudioRequestAsync(AudioType audioType, CancellationToken cancellationToken = default)
         {
             return WebRequestUtility.DetailedAudioRequestAsync(AbsoluteUrl, audioType, SetRequestData, cancellationToken);

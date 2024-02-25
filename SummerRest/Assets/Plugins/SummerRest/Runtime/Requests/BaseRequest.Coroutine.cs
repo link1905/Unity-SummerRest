@@ -46,6 +46,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="doneCallback">Invoked when the request is finished without an error</param>
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public IEnumerator DetailedTextureRequestCoroutine(
             bool readable, Action<IWebResponse<Texture2D>> doneCallback, Action<ResponseError> errorCallback = null)
         {
@@ -58,6 +59,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="doneCallback">Invoked when the request is finished without an error</param>
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public IEnumerator DetailedAudioRequestCoroutine(AudioType audioType, 
             Action<IWebResponse<AudioClip>> doneCallback, Action<ResponseError> errorCallback = null)
         {

@@ -35,6 +35,7 @@ namespace SummerRest.Runtime.Requests
         /// <param name="doneCallback">Invoked when the request is finished without an error</param>
         /// <param name="errorCallback">Invoked when the request is finished with an error</param>
         /// <returns></returns>
+        /// <remarks>Please remember to dispose <see cref="IWebResponse{TBody}"/> for avoiding memory leakage</remarks>
         public IEnumerator DetailedMultipartDataRequestCoroutine<TResponse>(Action<IWebResponse<TResponse>> doneCallback,
             Action<ResponseError> errorCallback = null)
         {

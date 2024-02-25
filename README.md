@@ -307,7 +307,7 @@ A class generated from `Request` comes up with some utility methods for calling 
         private void HandleError(ResponseError error) { ... }
     }
    ```
-- The simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods
+- The simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods. **Please note that you must call `IWebResponse<>.Dispose()` after finishing using it (or wrap it `using` statement)**
   ```csharp
   private void DoDetailedRequest()
   {
@@ -316,11 +316,17 @@ A class generated from `Request` comes up with some utility methods for calling 
       // Request audioClip/texture is similar to the previous step 
       ...
   }
-  private void HandleDetailedResponse(WebResponse<MyResponseData> responseData)
+  private void HandleDetailedResponse(IWebResponse<MyResponseData> responseData)
   {
-      Debug.Log(responseData.StatusCode);
-      Debug.Log(responseData.RawData);
-      Debug.Log(responseData.Data);
+      // Please wrap the response inside a using statement (or call Dispose manually)
+      using (responseData) 
+      {
+        Debug.Log(responseData.StatusCode);
+        Debug.Log(responseData.RawData);
+        Debug.Log(responseData.Data);
+      }
+      // In case you do not leverage using statement
+      // responseData.Dispose()
       ...
   }
   ```
@@ -353,8 +359,9 @@ A class generated from `Request` comes up with some utility methods for calling 
       // Simple response
       try
       {
-          var product = await getProduct.DataRequestAsync<Product>();
-          Debug.LogFormat("My product {0}", product);
+          // Please wrap the response inside a using statement (or call Dispose manually)
+          using var productResponse = await getProduct.DetailedDataRequestAsync<Product>();
+          Debug.LogFormat("My response {0}", productResponse);
       }
       catch (ResponseErrorException responseErrorException)
       {
