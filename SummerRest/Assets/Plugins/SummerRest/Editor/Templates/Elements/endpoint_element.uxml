@@ -13,7 +13,8 @@
             <uie:PropertyField name="timeout-seconds" binding-path="timeoutSeconds" style="flex-shrink: 0;" />
             <uie:PropertyField name="redirects-limit" binding-path="redirectsLimit" style="flex-shrink: 0;" />
         </ui:VisualElement>
-        <ui:Instance template="request_body_element" name="request-body-element" style="flex-grow: 0; flex-shrink: 0;" />
-        <uie:PropertyField name="response-element" binding-path="latestResponse" style="flex-shrink: 0;" />
+        <ui:Instance template="request_body_element" name="request-body-element" style="flex-grow: 0; flex-shrink: 0;">
+            <ui:VisualElement name="response-element" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-shrink: 0;" />
+        </ui:Instance>
     </SummerRest.Editor.Window.Elements.EndpointElement>
 </ui:UXML>

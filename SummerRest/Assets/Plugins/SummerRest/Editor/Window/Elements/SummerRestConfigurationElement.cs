@@ -30,7 +30,7 @@ namespace SummerRest.Editor.Window.Elements
         private void ClearWindows()
         {
             ShowEndpointsTree(null);
-            _endpointElement.UnBindAllChildren();
+            _endpointElement.Unbind();
             _endpointElement.Show(false);
         }
    
@@ -54,7 +54,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             var advancedToggle = this.Q<ToolbarToggle>("advanced");
             var advancedSettings = this.Q<VisualElement>("advanced-settings");
-            advancedSettings.BindChildrenToProperties(_serializedConfiguration);
+            advancedSettings.Bind(_serializedConfiguration);
             advancedSettings.Show(advancedToggle.value);
             advancedToggle.RegisterValueChangedCallback(e => {
                 advancedSettings.Show(e.newValue);

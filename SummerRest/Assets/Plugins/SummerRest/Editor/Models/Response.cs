@@ -28,11 +28,11 @@ namespace SummerRest.Editor.Models
             set => statusCode = value;
         }
 
-        [SerializeField] private KeyValue[] headers;
+        [SerializeField] private KeyValue[] responseHeaders;
         public KeyValue[] Headers
         {
-            get => headers;
-            set => headers = value;
+            get => responseHeaders;
+            set => responseHeaders = value;
         }
         
         [SerializeField] private ResponseBody body;
@@ -43,7 +43,7 @@ namespace SummerRest.Editor.Models
             lastCall = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             error = string.Empty;
             statusCode = HttpStatusCode.OK;
-            headers = Array.Empty<KeyValue>();
+            responseHeaders = Array.Empty<KeyValue>();
             body.Clear();
         }
     }
