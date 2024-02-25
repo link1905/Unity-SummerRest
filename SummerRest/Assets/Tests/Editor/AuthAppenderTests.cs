@@ -48,7 +48,8 @@ namespace Tests.Editor
         [Test]
         public void Test_Bearer_Token_Add_Header_To_Web_Request()
         {
-            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
+            using var r = UnityWebRequest.Get(string.Empty);
+            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(r);
             const string token = "My token"; 
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(token, adaptor);
             var result = adaptor.GetHeader("Authorization");
@@ -58,7 +59,8 @@ namespace Tests.Editor
         [Test]
         public void Test_Log_Warning_When_Auth_Key_Is_Absent()
         {
-            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(UnityWebRequest.Get(string.Empty));
+            using var r = UnityWebRequest.Get(string.Empty);
+            using var adaptor = DataUnityWebRequestAdaptor<string>.Create(r);
             SecretRepository.Delete(AccountKey);
             SecretRepository.TryGet<string>(AccountKey, out var data);
             IAuthAppender<BearerTokenAuthAppender, string>.GetSingleton().Append(data, adaptor);

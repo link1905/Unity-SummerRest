@@ -33,8 +33,11 @@ namespace Tests.Runtime
         {
             var (data, response) = await UniTask.WhenAll(simpleTask, detailedTask);
             Assert.AreEqual(result, data);
-            Assert.AreEqual(result, response.Data);
-            Assert.AreEqual(code, response.StatusCode);
+            using (response)
+            {
+                Assert.AreEqual(result, response.Data);
+                Assert.AreEqual(code, response.StatusCode);
+            }
         }
         private static IEnumerator TestSimpleAndDetailedRequestCoroutine<T>(
             T result,
@@ -48,8 +51,11 @@ namespace Tests.Runtime
             });
             yield return detailedCor(response =>
             {
-                Assert.AreEqual(code, response.StatusCode);
-                Assert.AreEqual(result, response.Data);
+                using (response)
+                {
+                    Assert.AreEqual(code, response.StatusCode);
+                    Assert.AreEqual(result, response.Data);
+                }
             });
         }
         private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_200_And_Json_Data()
@@ -268,8 +274,11 @@ namespace Tests.Runtime
             request.Method = HttpMethod.Post;
             yield return request.DetailedDataRequestCoroutine<string>(response =>
             {
-                var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
-                Assert.AreEqual(@"{""a"":10}", Encoding.UTF8.GetString(data));
+                using (response)
+                {
+                    var data = ((UnityWebRequest)response.WrappedRequest).uploadHandler.data;
+                    Assert.AreEqual(@"{""a"":10}", Encoding.UTF8.GetString(data));
+                }
             });
         }
         
@@ -284,7 +293,10 @@ namespace Tests.Runtime
             string header = null;
             yield return request.DetailedDataRequestCoroutine<string>(s =>
             {
-                header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
+                using (s)
+                {
+                    header = ((UnityWebRequest)s.WrappedRequest).GetRequestHeader("Authorization");
+                }
             });
             Assert.AreEqual("Bearer my-token", header);
         }
