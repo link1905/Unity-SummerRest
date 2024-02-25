@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using SummerRest.Runtime.RequestComponents;
 
@@ -8,7 +9,7 @@ namespace SummerRest.Runtime.Requests
     /// Contains response data of a web request
     /// </summary>
     /// <typeparam name="TBody"></typeparam>
-    public struct WebResponse<TBody>
+    public struct WebResponse<TBody> : IDisposable
     {
         public object WrappedRequest { get;  }
         public HttpStatusCode StatusCode { get;  }
@@ -26,6 +27,12 @@ namespace SummerRest.Runtime.Requests
             Headers = headers;
             RawData = rawData;
             Data = data;
+        }
+
+        public void Dispose()
+        {
+            if (WrappedRequest is IDisposable disposable)
+                disposable.Dispose();
         }
     }
 }

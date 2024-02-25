@@ -43,6 +43,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         public void Init(UnityWebRequest data)
         {
             WebRequest = data;
+            _returnWebResponse = false;
         }
 
         public void SetHeader(string key, string value)
@@ -115,15 +116,22 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <returns></returns>
         internal abstract TResponse BuildResponse();
 
+        private bool _returnWebResponse;
         public WebResponse<TResponse> WebResponse
-            => new(WebRequest,
-                (HttpStatusCode)WebRequest.responseCode,
-                IContentTypeParser.Current.ParseContentTypeFromHeader(
-                    WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
-                WebRequest.GetResponseHeaders(),
-                RawResponse,
-                ResponseData
-            );
+        {
+            get
+            {
+                _returnWebResponse = true;
+                return new WebResponse<TResponse>(WebRequest,
+                    (HttpStatusCode)WebRequest.responseCode,
+                    IContentTypeParser.Current.ParseContentTypeFromHeader(
+                        WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
+                    WebRequest.GetResponseHeaders(),
+                    RawResponse,
+                    ResponseData
+                );
+            }
+        }
 
         public virtual IEnumerator RequestInstruction
         {
@@ -146,8 +154,10 @@ namespace SummerRest.Runtime.RequestAdaptor
 
         public virtual void Dispose()
         {
-            WebRequest = default;
+            if (!_returnWebResponse)
+                WebRequest.Dispose();
             ResponseData = default;
+            WebRequest = default;
             if (Pool is null || this is not TSelf self)
                 return;
             Pool.Release(self);
