@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
+  m_Name: _Domain_0_Service_0_Request_1
+  m_EditorClassIdentifier: 
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
+  endpointName: SearchProduct
+  url: https://dummyjson.com/products/search
+  auth:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value:
+        authKey: 
+    value:
+      authKey: DummyJsonToken
+  headers:
+    inherit: 8
+    cache:
+      hasValue: 1
+      value:
+      - key: my-header
+        value: my-header-value
+    value:
+    - key: my-header
+      value: my-header-value
+  timeoutSeconds:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  redirectsLimit:
+    inherit: 2
+    cache:
+      hasValue: 0
+      value: 0
+    value: 0
+  isGenerated: 1
+  <TreeId>k__BackingField: 3
+  path:
+    text: search
+    values: []
+  contentType:
+    inherit: 16
+    cache:
+      hasValue: 0
+      value:
+        charset: 
+        mediaType: 
+        boundary: 
+    value:
+      charset: 
+      mediaType: 
+      boundary: 
+  method: 0
+  requestParams:
+  - key: q
+    value: phone
+  - key: select
+    value: title
+  - key: select
+    value: price
+  requestBody:
+    type: 0
+    text: 
+    body:
+      value:
+        rid: -2
+      typeReference:
+        classRef: 
+    serializedData: 
+    isGenerated: 1
+    textFormat: 0
+    form: []
+  urlWithParam: https://dummyjson.com/products/search?q=phone&select=title&select=price
+  latestResponse: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

@@ -42,6 +42,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
+  isGenerated: 1
   <TreeId>k__BackingField: 5
   path:
     text: add
@@ -70,53 +71,11 @@ MonoBehaviour:
         classRef: Models.Product, Assembly-CSharp
     serializedData: "{\n    \"id\": 0,\n    \"title\": \"Summer rest\",\n    \"description\":
       \"Wonderful plugn\"\n}"
+    isGenerated: 1
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/add
-  latestResponse:
-    lastCall: 2/8/2024 10:34:55 PM
-    error: 
-    statusCode: 200
-    headers:
-    - key: access-control-allow-origin
-      value: '*'
-    - key: x-dns-prefetch-control
-      value: off
-    - key: x-frame-options
-      value: SAMEORIGIN
-    - key: strict-transport-security
-      value: max-age=15552000; includeSubDomains
-    - key: x-download-options
-      value: noopen
-    - key: x-content-type-options
-      value: nosniff
-    - key: x-xss-protection
-      value: 1; mode=block
-    - key: x-ratelimit-limit
-      value: 100
-    - key: x-ratelimit-remaining
-      value: 99
-    - key: date
-      value: Thu, 08 Feb 2024 15:34:57 GMT
-    - key: x-ratelimit-reset
-      value: 1707406500
-    - key: content-type
-      value: application/json; charset=utf-8
-    - key: content-length
-      value: 65
-    - key: etag
-      value: W/"41-R1xKhjwPeNxDChyVWhtbSUntbe4"
-    - key: vary
-      value: Accept-Encoding
-    - key: server
-      value: railway
-    body:
-      mediaType: application/json
-      fileName: UnknownFileName
-      rawBytes:
-        isImage: 0
-        data: 
-      rawBody: '{"id":101,"title":"Summer Rest","description":"Wonderful plugin"}'
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:
