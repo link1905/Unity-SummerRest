@@ -22,7 +22,7 @@ namespace Views
         {
             responseBodyTxt.text = IDataSerializer.Current.Serialize(data, DataFormat.Json);
         }
-        public void SetResponse<T>(WebResponse<T> webResponse)
+        public void SetResponse<T>(IWebResponse<T> webResponse)
         {
             responseCodeTxt.text = webResponse.StatusCode.ToString();
             SetResponse(webResponse.Data);
@@ -31,7 +31,7 @@ namespace Views
         {
             image.sprite = Sprite.Create(texture2D, new Rect(0.0f, 0.0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
         }
-        public void SetImageResponse(WebResponse<Texture2D> texture2D)
+        public void SetImageResponse(IWebResponse<Texture2D> texture2D)
         {
             responseCodeTxt.text = texture2D.StatusCode.ToString();
             SetImageResponse(texture2D.Data);

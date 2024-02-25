@@ -42,6 +42,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
+  isGenerated: 1
   <TreeId>k__BackingField: 7
   path:
     text: login
@@ -69,53 +70,11 @@ MonoBehaviour:
       typeReference:
         classRef: SummerRest.Runtime.RequestComponents.Account, SummerRest
     serializedData: "{\n    \"username\": \"\",\n    \"password\": \"\"\n}"
+    isGenerated: 1
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/auth/login
-  latestResponse:
-    lastCall: 2/1/2024 4:27:02 PM
-    error: 
-    statusCode: 200
-    headers:
-    - key: access-control-allow-origin
-      value: '*'
-    - key: x-dns-prefetch-control
-      value: off
-    - key: x-frame-options
-      value: SAMEORIGIN
-    - key: strict-transport-security
-      value: max-age=15552000; includeSubDomains
-    - key: x-download-options
-      value: noopen
-    - key: x-content-type-options
-      value: nosniff
-    - key: x-xss-protection
-      value: 1; mode=block
-    - key: x-ratelimit-limit
-      value: 100
-    - key: x-ratelimit-remaining
-      value: 99
-    - key: date
-      value: Thu, 01 Feb 2024 09:27:02 GMT
-    - key: x-ratelimit-reset
-      value: 1706779632
-    - key: content-type
-      value: application/json; charset=utf-8
-    - key: content-length
-      value: 516
-    - key: etag
-      value: W/"204-yzmR6GtiwM814yTZ7sicsmq+tGM"
-    - key: vary
-      value: Accept-Encoding
-    - key: server
-      value: railway
-    body:
-      mediaType: application/json
-      fileName: UnknownFileName
-      rawBytes:
-        isImage: 0
-        data: 
-      rawBody: '{"id":1,"username":"atuny0","email":"atuny0@sohu.com","firstName":"Terry","lastName":"Medhurst","gender":"male","image":"https://robohash.org/Terry.png?set=set4","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhdHVueTAiLCJlbWFpbCI6ImF0dW55MEBzb2h1LmNvbSIsImZpcnN0TmFtZSI6IlRlcnJ5IiwibGFzdE5hbWUiOiJNZWRodXJzdCIsImdlbmRlciI6Im1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vcm9ib2hhc2gub3JnL1RlcnJ5LnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwNjc3OTYyMiwiZXhwIjoxNzA2NzgzMjIyfQ.GzQIAUe6q2Q-BbNPjFGIwcmeoyNYZ1w41Q1my5fe8Iw"}'
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

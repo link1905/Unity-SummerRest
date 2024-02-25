@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Pool;
@@ -9,21 +8,6 @@ using UnityEngine.Pool;
 
 namespace SummerRest.Runtime.Requests
 {
-    /// <summary>
-    /// Contains response data of a web request
-    /// </summary>
-    /// <typeparam name="TBody"></typeparam>
-    public interface IWebResponse<out TBody> : IDisposable
-    {
-        public object WrappedRequest { get;  }
-        public HttpStatusCode StatusCode { get;  }
-        public ContentType ContentType { get; }
-        public IEnumerable<KeyValuePair<string, string>> Headers { get; }
-        public string RawText { get;  }
-        public byte[] RawData { get; }
-        public TBody Data { get;  }
-    }
-
     public class UnityWebResponse<TResponse> : 
         IWebResponse<TResponse>, IPoolable<UnityWebResponse<TResponse>, UnityWebResponse<TResponse>.InitData>
     {
@@ -71,31 +55,4 @@ namespace SummerRest.Runtime.Requests
         public TResponse Data { get; private set; }
         public IObjectPool<UnityWebResponse<TResponse>> Pool { get; set; }
     }
-
-    // public struct WebResponse<TBody> : IDisposable
-    // {
-    //     public object WrappedRequest { get;  }
-    //     public HttpStatusCode StatusCode { get;  }
-    //     public ContentType ContentType { get; }
-    //     public IEnumerable<KeyValuePair<string, string>> Headers { get; }
-    //     public string RawData { get;  }
-    //     public TBody Data { get;  }
-    //
-    //     public WebResponse(object wrappedRequest, HttpStatusCode statusCode, ContentType contentType, 
-    //         IEnumerable<KeyValuePair<string, string>> headers, string rawData, TBody data)
-    //     {
-    //         WrappedRequest = wrappedRequest;
-    //         StatusCode = statusCode;
-    //         ContentType = contentType;
-    //         Headers = headers;
-    //         RawData = rawData;
-    //         Data = data;
-    //     }
-    //
-    //     public void Dispose()
-    //     {
-    //         if (WrappedRequest is IDisposable disposable)
-    //             disposable.Dispose();
-    //     }
-    // }
 }

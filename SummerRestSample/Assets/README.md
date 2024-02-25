@@ -3,10 +3,16 @@ This project show simple usages of the plugin [SummerRest](https://github.com/ri
 First and foremost, click on `Tools/SummerRest` to view the predefined endpoints of the sample
 
 To use the generated requests, there are some notable folders under the Asset folder: 
-- `Configures/SummerRest`: Contains the necessary items for the plugin. Please do not modify them manually
-- `Scripts/Model`: Request and response data containers. Because of using [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), please remember to use `System.Serializable` attribute (and [SerializeField](https://docs.unity3d.com/ScriptReference/SerializeField.html) with private fields)
-- `Scripts/Auth`: [DummyJsonApiAuthAppender](Scripts/Auth/DummyJsonApiAuthAppender.cs) shows how to implement a custom auth appender
-- `Scripts/Managers`
+- [Configures/SummerRest](Assets/Configures/SummerRest): Contains the necessary items for the plugin. Please do not modify them manually
+- [Scripts/Model](Assets/Scripts/Model): Request and response data containers. Because of using [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), please remember to use `System.Serializable` attribute (and [SerializeField](https://docs.unity3d.com/ScriptReference/SerializeField.html) with private fields)
+- [Scripts/Customs](Assets/Scripts/Customs): Classes under this folder demonstrate how to embed your implementations into the working flow of the plugin. 
+  - Here we create 2 customized classes [LogDataSerializer](Assets/Scripts/Customs/LogDataSerializer.cs) and [LogSecretRepository](Assets/Scripts/Customs/LogSecretRepository.cs) to log operations before sending them to the default implementations 
+  - In the plugin window, we select the classes in the `Advanced settings` section
+- [Scripts/Auth](Assets/Scripts/Auth): Shows how to implement a custom auth appender
+  - We create a customized class [DummyJsonApiAuthAppender](Assets/Scripts/Auth/DummyJsonApiAuthAppender.cs) appending a header pair `Authorization:<access-token>`
+  - Create a respective auth container with appender type is the class we've just created
+  - In the `GetUser` request, we points the auth container
+- [Scripts/Managers](Assets/Scripts/Managers)
   1. [SampleCoroutineManager](Scripts/Managers/SampleCoroutineManager.cs) shows how to call HTTP endpoints by leveraging `Coroutine` system
   2. [SampleTaskManager](Scripts/Managers/SampleTaskManager.cs) shows how to call HTTP endpoints asynchronously by using [UniTask](https://github.com/Cysharp/UniTask). To enable the code belonging to this section, you need to
      1. Import [UniTask](https://github.com/Cysharp/UniTask) package

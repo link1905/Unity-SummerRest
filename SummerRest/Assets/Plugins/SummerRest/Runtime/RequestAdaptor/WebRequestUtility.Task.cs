@@ -128,7 +128,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
         public static async UniTask<IWebResponse<Texture2D>> DetailedTextureRequestAsync(string url, 
             bool nonReadable,
             Action<IWebRequestAdaptor<Texture2D>> adaptorBuilder = null,
@@ -146,7 +146,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="audioType">Type of the audio response</param>
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
         public static async UniTask<IWebResponse<AudioClip>> DetailedAudioRequestAsync(
             string url,
             AudioType audioType,
@@ -168,7 +168,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
         public static async UniTask<IWebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(
             string url, HttpMethod method, 
             string data = null, ContentType? contentType = null,
@@ -192,7 +192,7 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <param name="adaptorBuilder">Used for modifying the request's metrics <see cref="IWebRequestAdaptor{TResponse}"/></param>
         /// <param name="cancellationToken"></param>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
-        /// <returns><see cref="WebResponse{TBody}"/></returns>
+        /// <returns><see cref="IWebResponse{TBody}"/></returns>
         public static async UniTask<IWebResponse<TResponse>> DetailedMultipartDataRequestAsync<TResponse>(
             string url, HttpMethod method,      
             List<IMultipartFormSection> data,

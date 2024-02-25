@@ -1,7 +1,7 @@
 using SummerRest.Runtime.Authenticate.Repositories;
 using UnityEngine;
 
-namespace Tests.Behaviour.Scripts
+namespace Customs
 {
     public class LogSecretRepository : ISecretRepository
     {

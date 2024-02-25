@@ -58,9 +58,13 @@ namespace Managers
             StartCoroutine(_searchProduct.DetailedDataRequestCoroutine<ProductPaging>(HandleSearchProductResponse, 
                 responseView.SetError));
         }
-        private void HandleSearchProductResponse(WebResponse<ProductPaging> response)
+        private void HandleSearchProductResponse(IWebResponse<ProductPaging> response)
         {
-            responseView.SetResponse(response);
+            // Please remember to wrap response in a using statement or call Dispose
+            using (response)
+            {
+                responseView.SetResponse(response);
+            }
         }
         
         #endregion
@@ -74,7 +78,15 @@ namespace Managers
             responseView.StartCall(_addProduct.AbsoluteUrl, _addProduct.Method);
             // Change the request body before calling the endpoint
             _addProduct.BodyData = product;
-            StartCoroutine(_addProduct.DetailedDataRequestCoroutine<Product>(responseView.SetResponse, responseView.SetError));
+            StartCoroutine(_addProduct.DetailedDataRequestCoroutine<Product>(HandleAddProductResponse, responseView.SetError));
+        }
+        private void HandleAddProductResponse(IWebResponse<Product> response)
+        {
+            // Please remember to wrap response in a using statement or call Dispose
+            using (response)
+            {
+                responseView.SetResponse(response);
+            }
         }
         #endregion
 
@@ -133,7 +145,16 @@ namespace Managers
             _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ProductId, productId.ToString());
             _getProductImage.SetUrlValue(GetProductImage.Keys.UrlFormat.ImageOrder, imgOrder.ToString());
             responseView.StartCall(_getProductImage.AbsoluteUrl, _getProductImage.Method);
-            StartCoroutine(_getProductImage.DetailedTextureRequestCoroutine(false, responseView.SetImageResponse));
+            StartCoroutine(_getProductImage.DetailedTextureRequestCoroutine(false, HandleDetailedImageResponse));
+        }
+
+        private void HandleDetailedImageResponse(IWebResponse<Texture2D> imgRes)
+        {
+            // Please remember to wrap response in a using statement or call Dispose
+            using (imgRes)
+            {
+                responseView.SetImageResponse(imgRes);
+            }
         }
 
         // In case you receive an absolute url and you do not have a predefined matching class

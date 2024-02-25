@@ -174,8 +174,8 @@ namespace SummerRest.Editor.Models
             if (authCache.HasValue)
             {
                 AuthContainer = authCache.Value.Cache();
-                if (AuthContainer is null && SummerRestConfiguration.Instance.AuthContainers.Count != 0)
-                    Debug.LogError(@$"{EndpointName}({url}) with the auth key ""{authCache.Value.AuthKey}"" points to an invalid auth container");
+                // if (AuthContainer is null && SummerRestConfiguration.Instance.AuthContainers.Count != 0)
+                // Debug.LogWarning(@$"{EndpointName}({url}) with the auth key ""{authCache.Value.AuthKey}"" points to an invalid auth container");
             }
             else
                 AuthContainer = null;

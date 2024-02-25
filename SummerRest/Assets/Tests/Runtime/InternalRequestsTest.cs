@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SummerRest.Runtime.Authenticate.Appenders;
 using SummerRest.Runtime.Authenticate.Repositories;
 using SummerRest.Runtime.Parsers;
+using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.RequestAdaptor;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
@@ -58,6 +59,21 @@ namespace Tests.Runtime
                 }
             });
         }
+        
+        
+        [UnityTest]
+        public IEnumerator Test_Web_Request_Returned_To_Pool()
+        {
+            IWebRequestAdaptorProvider.Current = new TestWebRequestAdaptorProvider();
+            var request = TestDataRequest.Create();
+            BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.Clear();
+            Assert.AreEqual(0,BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+            yield return request.DataRequestCoroutine<string>(null);
+            Assert.AreEqual(1, BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+            yield return request.DetailedDataRequestCoroutine<string>(null);
+            Assert.AreEqual(1, BasePool<DataUnityWebRequestAdaptor<string>, UnityWebRequest>.CountInactive);
+        }
+        
         private static (TestDataRequest, TestResponseData) Setup_Test_Internal_Request_Return_200_And_Json_Data()
         {
             var provider = new TestWebRequestAdaptorProvider
@@ -169,6 +185,7 @@ namespace Tests.Runtime
                 expected,
                 request.AudioRequestAsync(AudioType.WAV), request.DetailedAudioRequestAsync(AudioType.WAV));
         }
+
                
         private static (TestMultipartRequest, TestResponseData, List<IMultipartFormSection>) Setup_Test_Internal_Multipart_Form_Request()
         {
