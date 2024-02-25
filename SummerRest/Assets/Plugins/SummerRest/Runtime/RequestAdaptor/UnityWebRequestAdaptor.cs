@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Net;
 using SummerRest.Runtime.Extensions;
-using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.Pool;
 using SummerRest.Runtime.RequestComponents;
 using SummerRest.Runtime.Requests;
@@ -43,7 +42,6 @@ namespace SummerRest.Runtime.RequestAdaptor
         public void Init(UnityWebRequest data)
         {
             WebRequest = data;
-            _returnWebResponse = false;
         }
 
         public void SetHeader(string key, string value)
@@ -116,20 +114,14 @@ namespace SummerRest.Runtime.RequestAdaptor
         /// <returns></returns>
         internal abstract TResponse BuildResponse();
 
-        private bool _returnWebResponse;
-        public WebResponse<TResponse> WebResponse
+        public IWebResponse<TResponse> WebResponse
         {
             get
             {
-                _returnWebResponse = true;
-                return new WebResponse<TResponse>(WebRequest,
-                    (HttpStatusCode)WebRequest.responseCode,
-                    IContentTypeParser.Current.ParseContentTypeFromHeader(
-                        WebRequest.GetResponseHeader(IContentTypeParser.Current.ContentTypeHeaderKey)),
-                    WebRequest.GetResponseHeaders(),
-                    RawResponse,
-                    ResponseData
-                );
+                var res = UnityWebResponse<TResponse>.Create(
+                    new UnityWebResponse<TResponse>.InitData(WebRequest, ResponseData, RawResponse));
+                WebRequest = null;
+                return res;
             }
         }
 
@@ -154,9 +146,8 @@ namespace SummerRest.Runtime.RequestAdaptor
 
         public virtual void Dispose()
         {
-            if (!_returnWebResponse)
-                WebRequest.Dispose();
             ResponseData = default;
+            WebRequest?.Dispose();
             WebRequest = default;
             if (Pool is null || this is not TSelf self)
                 return;

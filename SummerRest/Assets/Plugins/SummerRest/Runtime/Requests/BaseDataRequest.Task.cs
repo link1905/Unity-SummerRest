@@ -25,7 +25,7 @@ namespace SummerRest.Runtime.Requests
         /// </summary>
         /// <typeparam name="TResponse">Type which the response data will be deserialized into</typeparam>
         /// <returns><see cref="WebResponse{TBody}"/></returns>
-        public UniTask<WebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(CancellationToken cancellationToken = default)
+        public UniTask<IWebResponse<TResponse>> DetailedDataRequestAsync<TResponse>(CancellationToken cancellationToken = default)
         {
             return WebRequestUtility.DetailedDataRequestAsync<TResponse>(AbsoluteUrl, Method, 
                 SerializedBody, ContentType, SetRequestData, cancellationToken);

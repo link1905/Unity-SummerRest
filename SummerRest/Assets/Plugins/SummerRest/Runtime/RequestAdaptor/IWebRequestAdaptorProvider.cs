@@ -16,6 +16,6 @@ namespace SummerRest.Runtime.RequestAdaptor
         IWebRequestAdaptor<Texture2D> GetTextureRequest(string url, bool nonReadable);
         IWebRequestAdaptor<AudioClip> GetAudioRequest(string url, AudioType audioType);
         IWebRequestAdaptor<TBody> GetDataRequest<TBody>(string url, HttpMethod method, string bodyData, string contentType);
-        IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data, byte[] boundary);
+        IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, byte[] boundary);
     }
 }

@@ -56,23 +56,24 @@ namespace SummerRest.Editor.Requests
         {
         }
 
-        private void SetResponseCallback(WebResponse<string> r)
+        private void SetResponseCallback(IWebResponse<string> r)
         {
-            var response = _request.LatestResponse;
-            if (r.WrappedRequest is not UnityWebRequest handler)
-                return;
-            // Set response data
-            response.StatusCode = r.StatusCode;
-            response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
-            var body = response.Body;
-            body.Clear();
-            var mediaType = body.MediaType = r.ContentType.MediaType;
-            body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
-            body.RawBody = r.RawData;
-            if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||
-                mediaType == Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Octet)
+            using (r)
             {
-                body.RawBytes.SetData(mediaType.StartsWith("image/"), handler.downloadHandler.data);
+                var response = _request.LatestResponse;
+                // Set response data
+                response.StatusCode = r.StatusCode;
+                response.Headers = r.Headers.Select(e => (KeyValue)e).ToArray();
+                var body = response.Body;
+                body.Clear();
+                var mediaType = body.MediaType = r.ContentType.MediaType;
+                body.FileName = DefaultContentTypeParser.ExtractFileName(r.Headers.FirstOrDefault(e => e.Key == "Content-Disposition").Value);
+                body.RawBody = r.RawText;
+                if (mediaType.StartsWith("image/") || mediaType.StartsWith("audio/") ||
+                    mediaType == Runtime.RequestComponents.ContentType.MediaTypeNames.Application.Octet)
+                {
+                    body.RawBytes.SetData(mediaType.StartsWith("image/"), r.RawData);
+                }
             }
         }
 

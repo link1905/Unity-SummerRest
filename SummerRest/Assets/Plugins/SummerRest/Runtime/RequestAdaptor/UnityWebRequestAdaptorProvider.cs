@@ -52,11 +52,13 @@ namespace SummerRest.Runtime.RequestAdaptor
             webRequest.uploadHandler.contentType = contentType;
         }
         public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
+            HttpMethod method,
             List<IMultipartFormSection> data, byte[] boundary)
         {
             if (data is { Count: 0 })
                 throw new ArgumentException(@$"Multipart form body of the resource ""{url}"" is empty");
             var request = PostMultipartFormData(url, data, boundary);
+            request.method = method.ToUnityHttpMethod();
             return MultipartFileUnityWebRequestAdaptor<TResponse>.Create(request);
         }
         
