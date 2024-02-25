@@ -23,7 +23,7 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: 
+      authKey: test-auth
   headers:
     inherit: 2
     cache:

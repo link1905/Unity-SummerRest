@@ -14,7 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Domains>k__BackingField:
   - {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
-  authContainers: []
+  authContainers:
+  - type: 0
+    text: test data
+    body:
+      value:
+        rid: 8737868959338987520
+    key: test-auth
+    appenderType:
+      classRef: SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender,
+        SummerRest
   secretRepository:
     classRef: SummerRest.Runtime.Authenticate.Repositories.PlayerPrefsSecretRepository,
       SummerRest
@@ -23,4 +32,9 @@ MonoBehaviour:
   targetAssembly: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 8737868959338987520
+      type: {class: Account, ns: SummerRest.Runtime.RequestComponents, asm: SummerRest}
+      data:
+        username: 
+        password: 
