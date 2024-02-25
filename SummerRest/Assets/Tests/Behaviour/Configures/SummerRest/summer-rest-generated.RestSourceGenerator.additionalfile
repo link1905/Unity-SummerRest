@@ -1,0 +1,12 @@
+<SummerRestConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SecretRepository="Tests.Behaviour.Scripts.LogSecretRepository, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" DataSerializer="Tests.Behaviour.Scripts.LogDataSerializer, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" Assembly="Assembly-CSharp">
+    <name>SummerRestConfiguration</name>
+    <hideFlags>None</hideFlags>
+    <Domains>
+        <Domain TypeName="Domain" EndpointName="Domain 1">
+            <Requests>
+                <Request TypeName="Request" EndpointName="Request 1" Url="http://localhost:8080" UrlFormat="" UrlWithParams="http://localhost:8080" Method="Get" TimeoutSeconds="0" RedirectsLimit="0" DataFormat="Json" SerializedBody="" IsMultipart="false" />
+            </Requests>
+        </Domain>
+    </Domains>
+    <AuthKeys />
+</SummerRestConfiguration>
