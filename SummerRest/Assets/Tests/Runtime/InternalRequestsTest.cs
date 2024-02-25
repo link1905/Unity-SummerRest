@@ -28,7 +28,7 @@ namespace Tests.Runtime
         private static async UniTask TestSimpleAndDetailedRequestAsync<T>(
             T result,
             UniTask<T> simpleTask,
-            UniTask<WebResponse<T>> detailedTask,
+            UniTask<IWebResponse<T>> detailedTask,
             HttpStatusCode code = HttpStatusCode.OK)
         {
             var (data, response) = await UniTask.WhenAll(simpleTask, detailedTask);
@@ -42,7 +42,7 @@ namespace Tests.Runtime
         private static IEnumerator TestSimpleAndDetailedRequestCoroutine<T>(
             T result,
             Func<Action<T>, IEnumerator> simpleCor,
-            Func<Action<WebResponse<T>>, IEnumerator> detailedCor,
+            Func<Action<IWebResponse<T>>, IEnumerator> detailedCor,
             HttpStatusCode code = HttpStatusCode.OK)
         {
             yield return simpleCor(data =>
@@ -363,9 +363,9 @@ namespace Tests.Runtime
                 var wrapped = _wrapped.GetAudioRequest(url, audioType) as AudioUnityWebRequestAdaptor;
                 return new AudioTestWebRequestAdaptor(ResponseAudioClip, wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
-            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, List<IMultipartFormSection> data, byte[] boundary)
+            public IWebRequestAdaptor<TBody> GetMultipartFileRequest<TBody>(string url, HttpMethod method, List<IMultipartFormSection> data, byte[] boundary)
             {
-                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, data, boundary) as MultipartFileUnityWebRequestAdaptor<TBody>;
+                var wrapped = _wrapped.GetMultipartFileRequest<TBody>(url, method, data, boundary) as MultipartFileUnityWebRequestAdaptor<TBody>;
                 return new MultipartTestWebRequestAdaptor<TBody>(wrapped, FixedContentType, FixedRawResponse, Code, FixedError);
             }
 
@@ -521,11 +521,38 @@ namespace Tests.Runtime
                 StatusCode = code;
                 FixedError = fixedError;
             }
+            
+            public readonly struct InternalWebResponse : IWebResponse<TResponse>
+            {
+                public void Dispose()
+                {
+                    _request?.Dispose();
+                }
+                public InternalWebResponse(UnityWebRequest wrappedRequest, 
+                    HttpStatusCode statusCode, ContentType contentType, 
+                    string rawData, TResponse data)
+                {
+                    _request = wrappedRequest;
+                    StatusCode = statusCode;
+                    ContentType = contentType;
+                    RawText = rawData;
+                    Data = data;
+                    Headers = null;
+                    RawData = null;
+                }
+                private readonly UnityWebRequest _request;
+                public object WrappedRequest => _request;
+                public HttpStatusCode StatusCode { get; }
+                public ContentType ContentType { get; }
+                public IEnumerable<KeyValuePair<string, string>> Headers { get; }
+                public string RawText { get; }
+                public byte[] RawData { get; }
+                public TResponse Data { get; }
+            }
 
-            public WebResponse<TResponse> WebResponse => new(Wrapped.WebRequest,
+            public IWebResponse<TResponse> WebResponse => new InternalWebResponse(Wrapped.WebRequest,
                 StatusCode,
                 IContentTypeParser.Current.ParseContentTypeFromHeader(FixedContentType),
-                null,
                 FixedRawResponse ,
                 ResponseData
             );
