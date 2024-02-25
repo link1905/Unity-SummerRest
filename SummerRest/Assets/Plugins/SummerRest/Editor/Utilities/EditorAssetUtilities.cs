@@ -24,9 +24,25 @@ namespace SummerRest.Editor.Utilities
             if (asset is not null) 
                 return asset;
             asset = onCreate.Invoke();
+            CreateFileIfNotExist(path);
+            return asset;
+        }
+
+        public static void CreateFileIfNotExist(string path)
+        {
             if (!File.Exists(path))
                 File.Create(path).Dispose();
-            return asset;
+        }
+        public static void LoadOrCreateTextFile(string path, string content)
+        {
+            if (!File.Exists(path))
+                File.Create(path).Dispose();
+            WriteTextContent(path, content);
+        }
+        public static void WriteTextContent(string filePath, string content)
+        {
+            File.WriteAllText(filePath, string.Empty);
+            File.WriteAllText(filePath, content);
         }
 
         public static void CreateFolderIfNotExists(string parent, string name)
@@ -90,8 +106,5 @@ namespace SummerRest.Editor.Utilities
             AssetDatabase.GetAssetPath(obj);
         public static string GetAssetFolder(this Object obj) => 
             Path.GetDirectoryName(AssetDatabase.GetAssetPath(obj));
-
-        public static string GetAssetFolder(this Object obj, string combine) =>
-            System.IO.Path.Combine(obj.GetAssetFolder(), combine);
     }
 }

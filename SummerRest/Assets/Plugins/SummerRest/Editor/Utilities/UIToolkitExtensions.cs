@@ -62,44 +62,19 @@ namespace SummerRest.Editor.Utilities
             }
             return result;
         }
-        /// <summary>
-        /// Find all bindable children of <see cref="visualElement"/> and bind them to <see cref="serializedObject"/>
-        /// </summary>
-        /// <param name="visualElement"></param>
-        /// <param name="serializedObject"></param>
-        public static void BindChildrenToProperties(this VisualElement visualElement, SerializedObject serializedObject)
-        {
-            foreach (var child in visualElement.Children())
-            {
-                if (child.childCount > 0)
-                    BindChildrenToProperties(child, serializedObject);
-                if (child is not IBindable bindableElement || string.IsNullOrEmpty(bindableElement.bindingPath))
-                    continue;
-                var prop = serializedObject.FindProperty(bindableElement.bindingPath);
-                if (prop is null)
-                {
-                    child.Show(false);
-                    child.Unbind();
-                }
-                else
-                {
-                    child.Show(true);
-                    bindableElement.BindProperty(prop);
-                }
-            }
-        } 
-        public static void UnBindAllChildren(this VisualElement visualElement)
-        {
-            foreach (var child in visualElement.Children())
-            {
-                if (child.childCount > 0)
-                    UnBindAllChildren(child);
-                if (child is not BindableElement bindableElement)
-                    continue;
-                bindableElement.Unbind();
-            }
-        }
 
+        public static void ShowObjectFields(this VisualElement container, 
+            SerializedObject serializedObj)
+        {
+            if (container.childCount == 0)
+            {
+                InspectorElement.FillDefaultInspector(container, serializedObj, null);
+                // Remove script label
+                container.Q<PropertyField>().RemoveFromHierarchy();
+            }
+            
+            container.Bind(serializedObj);
+        }
         public static void Show(this IStyle style, bool show)
         {
             style.display = show ? DisplayStyle.Flex : DisplayStyle.None;

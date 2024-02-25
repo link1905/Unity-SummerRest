@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using SummerRest.Editor.Attributes;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
@@ -68,7 +69,7 @@ namespace SummerRest.Editor.Models
                 defaultWhenInvalid: InheritChoice.Auto,
                 whenInherit: null, whenAuto: () =>
                 {
-                    var builtContentType = requestBody.CacheValue();
+                    var builtContentType = requestBody.CacheValue(contentType.CacheValue.Value);
                     return builtContentType.HasValue ? new Present<ContentType>(builtContentType.Value) : Present<ContentType>.Absent;
                 });
             ContentType = contentTypeCache.HasValue ? contentTypeCache.Value : null;
@@ -83,6 +84,8 @@ namespace SummerRest.Editor.Models
                 Parent.Requests.Remove(this);
                 Parent.MakeDirty();
             }
+            if (latestResponse is not null)
+                latestResponse.RemoveAsset();
             base.Delete(fromParent);
         }
 
@@ -96,12 +99,15 @@ namespace SummerRest.Editor.Models
         /// <summary>
         /// Caches latest response of this request (editor-only)
         /// </summary>
-        [SerializeField] private Response latestResponse;
-        public Response LatestResponse
+        [SerializeReference] private Response latestResponse;
+        public Response LatestResponse => latestResponse ??= CreateResponse();
+        private Response CreateResponse()
         {
-            get => latestResponse;
-            set => latestResponse = value;
-        }
+            var res = EditorAssetUtilities.CreateAndSaveObject<Response>($"{name}_Response", PathsHolder.ResponsesPath);
+            latestResponse = res;
+            this.MakeDirty();
+            return res;
+        } 
         public override string TypeName => nameof(Request);
         
         public override void WriteXml(XmlWriter writer)

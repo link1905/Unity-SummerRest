@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using SummerRest.Editor.Attributes;
 using SummerRest.Editor.DataStructures;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -10,12 +11,11 @@ namespace SummerRest.Editor.Models
     /// <summary>
     /// Storing values of a HTTP response (editor-only)
     /// </summary>
-    [Serializable]
-    public class Response
+    public class Response : ScriptableObject
     {
-        [SerializeField] private string lastCall;
+        [SerializeField, ReadonlyText] private string lastCall;
 
-        [SerializeField] private string error;
+        [SerializeField, ReadonlyText] private string error;
         public string Error
         {
             get => error;
@@ -29,11 +29,11 @@ namespace SummerRest.Editor.Models
             set => statusCode = value;
         }
 
-        [SerializeField] private KeyValue[] headers;
+        [SerializeField] private KeyValue[] responseHeaders;
         public KeyValue[] Headers
         {
-            get => headers;
-            set => headers = value;
+            get => responseHeaders;
+            set => responseHeaders = value;
         }
         
         [SerializeField] private ResponseBody body;
@@ -44,7 +44,7 @@ namespace SummerRest.Editor.Models
             lastCall = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             error = string.Empty;
             statusCode = HttpStatusCode.OK;
-            headers = Array.Empty<KeyValue>();
+            responseHeaders = Array.Empty<KeyValue>();
             body.Clear();
         }
     }

@@ -1,4 +1,5 @@
-﻿using SummerRest.Editor.Configurations;
+﻿using System.IO;
+using SummerRest.Editor.Configurations;
 using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using UnityEditor;
@@ -33,6 +34,26 @@ namespace SummerRest.Editor.Window.Elements
             });
         }
 
+        private void CreateAssets()
+        {
+            var parentFolder = AssetDatabase.GetAssetPath(_folder.value);
+            if (!AssetDatabase.IsValidFolder(parentFolder))
+                return;
+            var folder = Path.Combine(parentFolder, PathsHolder.ContainerFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(parentFolder, PathsHolder.ContainerFolder);
+            var conf = EditorAssetUtilities
+                .CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
+            var domainsFolder = Path.Combine(folder, PathsHolder.DomainsFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(folder, PathsHolder.DomainsFolder);
+            EditorAssetUtilities.CreateFolderIfNotExists(domainsFolder,  PathsHolder.ResponsesFolder);
+            var ignoreFilePath = Path.Combine(domainsFolder, PathsHolder.ResponsesFolder, ".gitignore");
+            EditorAssetUtilities.LoadOrCreateTextFile(ignoreFilePath, @"
+*
+!.gitignore
+");
+            conf.MakeDirty();
+            EditorUtility.RequestScriptReload();
+        }
         private void InitAssets()
         {
             try
@@ -43,12 +64,7 @@ namespace SummerRest.Editor.Window.Elements
             {
                 if (e.Count != 0 || _folder.value is null)
                     return;
-                var folder = AssetDatabase.GetAssetPath(_folder.value);
-                if (!AssetDatabase.IsValidFolder(folder))
-                    return;
-                var conf = EditorAssetUtilities.CreateAndSaveObject<SummerRestConfiguration>(nameof(SummerRestConfiguration), folder);
-                conf.MakeDirty();
-                EditorUtility.RequestScriptReload();
+                CreateAssets();
             }
         }
     }

@@ -79,7 +79,7 @@ MonoBehaviour:
     form: []
   urlWithParam: https://cdn.dummyjson.com/product-images/1/1.jpg
   latestResponse:
-    lastCall: 2/7/2024 11:26:09 AM
+    lastCall: 2/23/2024 3:36:26 AM
     error: 
     statusCode: 200
     headers:
@@ -89,30 +89,28 @@ MonoBehaviour:
       value: 7878
     - key: Connection
       value: keep-alive
+    - key: Date
+      value: Thu, 22 Feb 2024 04:31:25 GMT
     - key: Last-Modified
       value: Sat, 06 Jan 2024 13:43:55 GMT
+    - key: ETag
+      value: '"1c1a52a1d3ecf9ccaafb34524517b2ec"'
     - key: x-amz-server-side-encryption
       value: AES256
     - key: Accept-Ranges
       value: bytes
     - key: Server
       value: AmazonS3
-    - key: Date
-      value: Wed, 07 Feb 2024 03:57:15 GMT
-    - key: ETag
-      value: '"1c1a52a1d3ecf9ccaafb34524517b2ec"'
-    - key: Vary
-      value: Accept-Encoding
     - key: X-Cache
       value: Hit from cloudfront
     - key: Via
-      value: 1.1 f55d9e952fc309b5d493e122ed644b9a.cloudfront.net (CloudFront)
+      value: 1.1 03322dcb952fd7593ad1b88b9201212e.cloudfront.net (CloudFront)
     - key: X-Amz-Cf-Pop
       value: SGN50-P2
     - key: X-Amz-Cf-Id
-      value: IgcU2gfsYIZ4Qm0-yQ71VEZAcWEFyVlCanHooDrtKlNPBJFiL5xWnA==
+      value: gQEcsTefDCF8XIOnEJTHqWBBG6MblyCoukwAdE_QzoKT8w6ONpw47Q==
     - key: Age
-      value: 1737
+      value: 57901
     body:
       mediaType: image/jpeg
       fileName: UnknownFileName

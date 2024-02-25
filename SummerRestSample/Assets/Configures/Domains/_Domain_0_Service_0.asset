@@ -42,6 +42,7 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
+  isGenerated: 1
   <TreeId>k__BackingField: 6
   services: []
   requests:

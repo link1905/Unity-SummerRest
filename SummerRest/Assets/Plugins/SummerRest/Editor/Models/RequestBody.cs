@@ -72,7 +72,7 @@ namespace SummerRest.Editor.Models
             }
         }
 
-        public ContentType? CacheValue()
+        public ContentType? CacheValue(ContentType current)
         {
             serializedData = SerializedData(true);
             switch (type)
@@ -85,7 +85,11 @@ namespace SummerRest.Editor.Models
                 case RequestBodyType.Data:
                     return ContentTypeByTextFormat;
                 case RequestBodyType.MultipartForm:
-                    return ContentType.Commons.MultipartForm;
+                    var result = ContentType.Commons.MultipartForm;
+                    // Take current boundary if it is reusable
+                    if (!string.IsNullOrEmpty(current.Boundary))
+                        result = result.With(newBoundary: current.Boundary);
+                    return result;
             }
             return null;
         }

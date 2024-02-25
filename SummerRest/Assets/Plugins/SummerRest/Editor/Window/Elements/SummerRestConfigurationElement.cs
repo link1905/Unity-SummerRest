@@ -30,7 +30,7 @@ namespace SummerRest.Editor.Window.Elements
         private void ClearWindows()
         {
             ShowEndpointsTree(null);
-            _endpointElement.UnBindAllChildren();
+            _endpointElement.Unbind();
             _endpointElement.Show(false);
         }
    
@@ -54,7 +54,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             var advancedToggle = this.Q<ToolbarToggle>("advanced");
             var advancedSettings = this.Q<VisualElement>("advanced-settings");
-            advancedSettings.BindChildrenToProperties(_serializedConfiguration);
+            advancedSettings.Bind(_serializedConfiguration);
             advancedSettings.Show(advancedToggle.value);
             advancedToggle.RegisterValueChangedCallback(e => {
                 advancedSettings.Show(e.newValue);
@@ -108,9 +108,7 @@ namespace SummerRest.Editor.Window.Elements
 
         private Domain OnAddDomain()
         {
-            EditorAssetUtilities.CreateFolderIfNotExists(_configuration.GetAssetFolder(), "Domains");
-            var path = _configuration.GetAssetFolder("Domains");
-            var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(path);
+            var domain = EditorAssetUtilities.CreateAndSaveObject<Domain>(PathsHolder.DomainsPath);
             _configuration.Domains.Add(domain);
             domain.Domain = domain;
             domain.EndpointName = $"Domain {_configuration.Domains.Count}";
@@ -251,7 +249,7 @@ namespace SummerRest.Editor.Window.Elements
         {
             if (endpoint is not EndpointContainer endpointContainer) 
                 return;
-            var path = _configuration.GetAssetFolder("Domains");
+            var path = PathsHolder.DomainsPath;
             switch (elementAddAction)
             {
                 case ElementAddAction.Service:

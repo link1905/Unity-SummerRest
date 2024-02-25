@@ -21,8 +21,10 @@ namespace SummerRest.Editor.Window.Elements
         private PropertyField _pathElement;
         private TextField _urlElement;
         private VisualElement _requestBodyElement;
+        private VisualElement _responseElement;
         private Button _requestBtn;
-        private Toggle _generated; 
+        private Toggle _generated;
+        private PropertyField _versions;
 
         public new class UxmlFactory : UxmlFactory<EndpointElement, UxmlTraits>
         {
@@ -39,6 +41,7 @@ namespace SummerRest.Editor.Window.Elements
         public void Init()
         {
             _requestBodyElement = this.Q<VisualElement>("request-body-element");
+            _responseElement = this.Q<VisualElement>("response-element");
              _requestBtn = _requestBodyElement.Q<Button>("request-btn");
             _requestBtn.clicked += OnClick;
             _advancedSettingsFoldout = this.Q<Foldout>("advanced-settings");
@@ -47,6 +50,7 @@ namespace SummerRest.Editor.Window.Elements
             _pathElement = this.Q<PropertyField>("path");
             _urlElement = this.Q<TextField>("url");
             _generated = this.Q<Toggle>("generated");
+            _versions = this.Q<PropertyField>("versions");
             _sharedElementsOriginalIndex = IndexOf(_sharedElements);
         }
         /// <summary>
@@ -62,22 +66,28 @@ namespace SummerRest.Editor.Window.Elements
                 Insert(_sharedElementsOriginalIndex, _sharedElements);
         }
 
-        private void UnbindAll()
-        {
-            this.UnBindAllChildren();
-        }
-        
         public void ShowEndpoint(Endpoint endpoint)
         {
-            UnbindAll();
+            this.Unbind();
             _endpoint = endpoint;
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
-            _nameElement.label = endpoint.TypeName;
             _requestBodyElement.Show(isRequest);
+            if (isRequest)
+                _responseElement
+                    .CallThenTrackPropertyValue(serializedObj.FindProperty("latestResponse"), s =>
+                    {
+                        var hasResponse = s.objectReferenceValue is not null;
+                        _responseElement.Show(hasResponse);
+                        if (!hasResponse)
+                            return;
+                        _responseElement.ShowObjectFields(new SerializedObject(s.objectReferenceValue));
+                    });
+            _nameElement.label = endpoint.TypeName;
             // If domain => use activeVersion instead of path
             var isDomain = endpoint is Domain;
             _pathElement.label = isDomain ? "Active version" : "Relative path";
+            _versions.Show(isDomain);
             _pathElement.SetEnabled(!isDomain);
             // If request => urlWithParams
             _urlElement.SetEnabled(false);
@@ -86,9 +96,8 @@ namespace SummerRest.Editor.Window.Elements
             var generated = endpoint.IsParentGenerated();
             _generated.SetEnabled(generated);
             _generated.text = generated ? string.Empty : "(Auto false because an ancestor is incapable of being generated)";
-            
             ShowAdvancedSettings(isRequest);
-            this.BindChildrenToProperties(serializedObj);
+            this.Bind(serializedObj);
         }
     }
 }

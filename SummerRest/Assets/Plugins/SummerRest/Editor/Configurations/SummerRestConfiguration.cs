@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -108,6 +109,7 @@ namespace SummerRest.Editor.Configurations
             }
             set => throw new NotImplementedException();
         }
+
         public void ValidateToGenerate()
         {
             ValidateDomains();
@@ -133,6 +135,7 @@ namespace SummerRest.Editor.Configurations
                 authContainer.ValidateToGenerate(assembly);
         }
 
+        
         public void RenameAssets()
         {
             for (int i = 0; i < Domains.Count; i++)
