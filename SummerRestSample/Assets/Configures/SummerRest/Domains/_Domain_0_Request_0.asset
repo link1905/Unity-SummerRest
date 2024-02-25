@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
   m_Name: _Domain_0_Request_0
   m_EditorClassIdentifier: 
-  <Domain>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
-  <Parent>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
-  endpointName: Request 1
-  url: http://localhost:8080
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  endpointName: Multipart
+  url: https://dummyjson.com/test-multipart
   auth:
     inherit: 2
     cache:
@@ -23,46 +23,46 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: test-auth
+      authKey: DummyJsonToken
   headers:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: []
     value: []
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
-  isGenerated: 1
+  isGenerated: 0
   <TreeId>k__BackingField: 1
   path:
-    text: 
+    text: test-multipart
     values: []
   contentType:
     inherit: 16
     cache:
-      hasValue: 0
+      hasValue: 1
       value:
-        charset: 
-        mediaType: 
-        boundary: 
+        charset: UTF-8
+        mediaType: multipart/form-data
+        boundary: p19BQeZU6Y4WvkIHlNp6Cyw1W4GQ6YX7nMJ4Rdq3
     value:
       charset: 
       mediaType: 
       boundary: 
-  method: 0
+  method: 1
   requestParams: []
   requestBody:
-    type: 0
+    type: 2
     text: 
     body:
       value:
@@ -72,9 +72,19 @@ MonoBehaviour:
     serializedData: 
     isGenerated: 1
     textFormat: 0
-    form: []
-  urlWithParam: http://localhost:8080
-  latestResponse: {fileID: 11400000, guid: 266193bac92ed05469189758ad3ffaca, type: 2}
+    form:
+    - type: 0
+      text: my text value
+      key: text
+      file:
+        filePath: 
+    - type: 1
+      text: 
+      key: file
+      file:
+        filePath: D:/Source/Unity-SummerRest/SummerRest/Packages/packages-lock.json
+  urlWithParam: https://dummyjson.com/test-multipart
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

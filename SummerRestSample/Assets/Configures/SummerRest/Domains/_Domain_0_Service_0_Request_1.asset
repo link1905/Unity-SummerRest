@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: _Domain_0_Request_0
+  m_Name: _Domain_0_Service_0_Request_1
   m_EditorClassIdentifier: 
-  <Domain>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
-  <Parent>k__BackingField: {fileID: 11400000, guid: 30aee5e151a7b524aaf158ff8554e594, type: 2}
-  endpointName: Request 1
-  url: http://localhost:8080
+  <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
+  <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
+  endpointName: SearchProduct
+  url: https://dummyjson.com/products/search
   auth:
     inherit: 2
     cache:
@@ -23,29 +23,33 @@ MonoBehaviour:
       value:
         authKey: 
     value:
-      authKey: test-auth
+      authKey: DummyJsonToken
   headers:
-    inherit: 2
+    inherit: 8
     cache:
       hasValue: 1
-      value: []
-    value: []
+      value:
+      - key: my-header
+        value: my-header-value
+    value:
+    - key: my-header
+      value: my-header-value
   timeoutSeconds:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   redirectsLimit:
     inherit: 2
     cache:
-      hasValue: 1
+      hasValue: 0
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 1
+  <TreeId>k__BackingField: 3
   path:
-    text: 
+    text: search
     values: []
   contentType:
     inherit: 16
@@ -60,7 +64,13 @@ MonoBehaviour:
       mediaType: 
       boundary: 
   method: 0
-  requestParams: []
+  requestParams:
+  - key: q
+    value: phone
+  - key: select
+    value: title
+  - key: select
+    value: price
   requestBody:
     type: 0
     text: 
@@ -73,8 +83,8 @@ MonoBehaviour:
     isGenerated: 1
     textFormat: 0
     form: []
-  urlWithParam: http://localhost:8080
-  latestResponse: {fileID: 11400000, guid: 266193bac92ed05469189758ad3ffaca, type: 2}
+  urlWithParam: https://dummyjson.com/products/search?q=phone&select=title&select=price
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

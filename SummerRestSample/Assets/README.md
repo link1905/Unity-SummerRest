@@ -2,10 +2,11 @@ This project show simple usages of the plugin [SummerRest](https://github.com/ri
 
 First and foremost, click on `Tools/SummerRest` to view the predefined endpoints of the sample
 
-To use the generated requests, there are 2 notable folders under the Asset folder: 
-- `Model`: Request and response data containers. Because of using [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), please remember to use `System.Serializable` attribute (and [SerializeField](https://docs.unity3d.com/ScriptReference/SerializeField.html) with private fields)
-- `Auth`: [DummyJsonApiAuthAppender](Scripts/Auth/DummyJsonApiAuthAppender.cs) shows how to implement a custom auth appender
-- `Managers`
+To use the generated requests, there are some notable folders under the Asset folder: 
+- `Configures/SummerRest`: Contains the necessary items for the plugin. Please do not modify them manually
+- `Scripts/Model`: Request and response data containers. Because of using [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), please remember to use `System.Serializable` attribute (and [SerializeField](https://docs.unity3d.com/ScriptReference/SerializeField.html) with private fields)
+- `Scripts/Auth`: [DummyJsonApiAuthAppender](Scripts/Auth/DummyJsonApiAuthAppender.cs) shows how to implement a custom auth appender
+- `Scripts/Managers`
   1. [SampleCoroutineManager](Scripts/Managers/SampleCoroutineManager.cs) shows how to call HTTP endpoints by leveraging `Coroutine` system
   2. [SampleTaskManager](Scripts/Managers/SampleTaskManager.cs) shows how to call HTTP endpoints asynchronously by using [UniTask](https://github.com/Cysharp/UniTask). To enable the code belonging to this section, you need to
      1. Import [UniTask](https://github.com/Cysharp/UniTask) package

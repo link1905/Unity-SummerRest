@@ -17,13 +17,13 @@ MonoBehaviour:
   endpointName: Domain 1
   url: http://localhost:8080
   auth:
-    inherit: 8
+    inherit: 1
     cache:
       hasValue: 1
       value:
-        authKey: 
+        authKey: test-auth
     value:
-      authKey: 
+      authKey: test-auth
   headers:
     inherit: 8
     cache:
@@ -43,7 +43,7 @@ MonoBehaviour:
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 1
+  <TreeId>k__BackingField: 2
   services: []
   requests:
   - {fileID: 11400000, guid: 5318f9551a6d11643a4f03247fad22eb, type: 2}

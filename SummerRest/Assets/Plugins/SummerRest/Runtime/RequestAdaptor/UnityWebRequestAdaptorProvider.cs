@@ -31,37 +31,25 @@ namespace SummerRest.Runtime.RequestAdaptor
         public IWebRequestAdaptor<TResponse> GetDataRequest<TResponse>(
             string url, HttpMethod method, string bodyData, string contentType)
         {
-            UnityWebRequest request;
-            switch (method)
+            var request = new UnityWebRequest(url, 
+                method.ToUnityHttpMethod(), 
+                new DownloadHandlerBuffer(), 
+                null);
+            if (!string.IsNullOrEmpty(bodyData))
             {
-                case HttpMethod.Get or HttpMethod.Trace or HttpMethod.Connect or HttpMethod.Options:
-                    request = UnityWebRequest.Get(url);
-                    break;
-                case HttpMethod.Post:
-                    var textContentType = contentType;
-                    if (string.IsNullOrEmpty(textContentType))
-                        textContentType = ContentType.Commons.ApplicationJson.FormedContentType;
-                    request = PostFromStringData(url, bodyData, textContentType);
-                    break;
-                case HttpMethod.Put  or HttpMethod.Patch:
-                    request = UnityWebRequest.Put(url, bodyData);
-                    break;
-                case HttpMethod.Delete:
-                    request = UnityWebRequest.Delete(url);
-                    break;
-                default:
-                    request = new UnityWebRequest(url, method.ToUnityHttpMethod());
-                    break;
+                var textContentType = contentType;
+                if (string.IsNullOrEmpty(textContentType))
+                    textContentType = ContentType.Commons.ApplicationJson.FormedContentType;
+                AppendUploadStringData(request, bodyData, textContentType);
             }
             return DataUnityWebRequestAdaptor<TResponse>.Create(request);
         }
-        private static UnityWebRequest PostFromStringData(string uri, string postData, string contentType)
+        private static void AppendUploadStringData(UnityWebRequest webRequest, 
+            string data, string contentType)
         {
-            var request = new UnityWebRequest(uri, "POST");
-            var bytes = Encoding.UTF8.GetBytes(postData);
-            request.uploadHandler = new UploadHandlerRaw(bytes);
-            request.uploadHandler.contentType = contentType;
-            return request;
+            var bytes = Encoding.UTF8.GetBytes(data);
+            webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+            webRequest.uploadHandler.contentType = contentType;
         }
         public IWebRequestAdaptor<TResponse> GetMultipartFileRequest<TResponse>(string url,
             List<IMultipartFormSection> data, byte[] boundary)

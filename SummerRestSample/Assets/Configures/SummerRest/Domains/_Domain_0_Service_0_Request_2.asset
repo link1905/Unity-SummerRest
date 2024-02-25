@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 952dc7aaf02a0ae4782cb78a64f47711, type: 3}
-  m_Name: _Domain_0_Request_0
+  m_Name: _Domain_0_Service_0_Request_2
   m_EditorClassIdentifier: 
   <Domain>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  <Parent>k__BackingField: {fileID: 11400000, guid: 585cd15c98a417d4a8eda97ae08cbdca, type: 2}
-  endpointName: Multipart
-  url: https://dummyjson.com/test-multipart
+  <Parent>k__BackingField: {fileID: 11400000, guid: a10a6d56001fe4644abbe0c95737395a, type: 2}
+  endpointName: AddProductRawText
+  url: https://dummyjson.com/products/add
   auth:
     inherit: 2
     cache:
@@ -42,10 +42,10 @@ MonoBehaviour:
       hasValue: 0
       value: 0
     value: 0
-  isGenerated: 0
-  <TreeId>k__BackingField: 1
+  isGenerated: 1
+  <TreeId>k__BackingField: 4
   path:
-    text: test-multipart
+    text: add
     values: []
   contentType:
     inherit: 16
@@ -53,8 +53,8 @@ MonoBehaviour:
       hasValue: 1
       value:
         charset: UTF-8
-        mediaType: multipart/form-data
-        boundary: p19BQeZU6Y4WvkIHlNp6Cyw1W4GQ6YX7nMJ4Rdq3
+        mediaType: application/json
+        boundary: 
     value:
       charset: 
       mediaType: 
@@ -62,40 +62,21 @@ MonoBehaviour:
   method: 1
   requestParams: []
   requestBody:
-    type: 2
-    text: 
+    type: 0
+    text: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n    \"description\":
+      \"my description\"\r\n}"
     body:
       value:
         rid: -2
       typeReference:
         classRef: 
-    serializedData: 
+    serializedData: "{\r\n    \"id\": 101,\r\n    \"title\": \"my product\",\r\n   
+      \"description\": \"my description\"\r\n}"
     isGenerated: 1
     textFormat: 0
-    form:
-    - type: 0
-      text: my text value
-      key: text
-      file:
-        filePath: 
-    - type: 1
-      text: 
-      key: file
-      file:
-        filePath: D:/Source/Unity-SummerRest/SummerRest/Packages/packages-lock.json
-  urlWithParam: https://dummyjson.com/test-multipart
-  latestResponse:
-    lastCall: 
-    error: 
-    statusCode: 200
-    headers: []
-    body:
-      mediaType: 
-      fileName: 
-      rawBytes:
-        isImage: 0
-        data: 
-      rawBody: 
+    form: []
+  urlWithParam: https://dummyjson.com/products/add
+  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:
