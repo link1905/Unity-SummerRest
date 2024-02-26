@@ -83,6 +83,11 @@ namespace SummerRest.Editor.Utilities
             }
         }
 
+        public static bool IsPersistentAsset(this Object obj)
+        {
+            return obj is not null && EditorUtility.IsPersistent(obj);
+        }
+
         public static void MakeDirty(this Object o)
         {
             EditorUtility.SetDirty(o);

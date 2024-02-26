@@ -7,6 +7,7 @@ using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
+using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
@@ -100,7 +101,7 @@ namespace SummerRest.Editor.Models
         /// Caches latest response of this request (editor-only)
         /// </summary>
         [SerializeReference] private Response latestResponse;
-        public Response LatestResponse => latestResponse ??= CreateResponse();
+        public Response LatestResponse => latestResponse.IsPersistentAsset() ? latestResponse : latestResponse = CreateResponse();
         private Response CreateResponse()
         {
             var res = EditorAssetUtilities.CreateAndSaveObject<Response>($"{name}_Response", PathsHolder.ResponsesPath);
