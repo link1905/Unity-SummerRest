@@ -35,7 +35,22 @@ namespace SummerRest.Editor.Window.Elements
             if (_endpoint is not Request request)
                 return;
             _requestBtn.SetEnabled(false);
-            OnRequest?.Invoke(request, () => _requestBtn.SetEnabled(true));
+            OnRequest?.Invoke(request, () =>
+            {
+                _requestBtn.SetEnabled(true);
+                ShowResponse(_endpoint);
+            });
+        }
+
+        private void ShowResponse(Endpoint endpoint)
+        {
+            if (endpoint is not Request request || !request.LatestResponse.IsPersistentAsset())
+            {
+                _responseElement.Show(false);
+                return;
+            }
+            _responseElement.Show(true);
+            _responseElement.ShowObjectFields(new SerializedObject(request.LatestResponse));
         }
 
         public void Init()
@@ -70,20 +85,9 @@ namespace SummerRest.Editor.Window.Elements
         {
             this.Unbind();
             _endpoint = endpoint;
-            var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
             serializedObj.Update();
-            _requestBodyElement.Show(isRequest);
-            if (isRequest)
-                _responseElement
-                    .CallThenTrackPropertyValue(serializedObj.FindProperty("latestResponse"), s =>
-                    {
-                        var hasResponse = s.objectReferenceValue is not null;
-                        _responseElement.Show(hasResponse);
-                        if (!hasResponse)
-                            return;
-                        _responseElement.ShowObjectFields(new SerializedObject(s.objectReferenceValue));
-                    });
+            ShowResponse(endpoint);
             _nameElement.label = endpoint.TypeName;
             // If domain => use activeVersion instead of path
             var isDomain = endpoint is Domain;
@@ -97,7 +101,7 @@ namespace SummerRest.Editor.Window.Elements
             var generated = endpoint.IsParentGenerated();
             _generated.SetEnabled(generated);
             _generated.text = generated ? string.Empty : "(Auto false because an ancestor is incapable of being generated)";
-            ShowAdvancedSettings(isRequest);
+            ShowAdvancedSettings(!endpoint.IsContainer);
             this.Bind(serializedObj);
         }
     }

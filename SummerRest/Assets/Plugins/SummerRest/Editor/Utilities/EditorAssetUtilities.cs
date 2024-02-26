@@ -10,9 +10,12 @@ namespace SummerRest.Editor.Utilities
     {
         public static T CreateAndSaveObject<T>(string name, string path) where T : ScriptableObject
         {
+            var assetPath = Path.Combine(path, $"{name}.asset");
+            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            if (asset is not null)
+                return asset;
             var obj = ScriptableObject.CreateInstance<T>();
             obj.name = name;
-            var assetPath = Path.Combine(path, $"{name}.asset");
             AssetDatabase.CreateAsset(obj, assetPath);
             AssetDatabase.SaveAssets();
             return obj;

@@ -15,11 +15,7 @@ namespace SummerRest.Editor.Models
         public override void Delete(bool fromParent)
         {
             if (fromParent)
-            {
-                Parent.Services.Remove(this);
-                Parent.MakeDirty();
-            }
-            
+                RemoveFormParent();
             base.Delete(fromParent);
         }
 
@@ -28,6 +24,7 @@ namespace SummerRest.Editor.Models
             if (Parent is null)
                 return;
             Parent.Services.Remove(this);
+            Parent.MakeDirty();
         }
 
         public override string TypeName => nameof(Service);
