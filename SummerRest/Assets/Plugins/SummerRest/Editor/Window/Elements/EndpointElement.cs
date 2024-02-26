@@ -72,6 +72,7 @@ namespace SummerRest.Editor.Window.Elements
             _endpoint = endpoint;
             var isRequest = !endpoint.IsContainer;
             var serializedObj = new SerializedObject(endpoint);
+            serializedObj.Update();
             _requestBodyElement.Show(isRequest);
             if (isRequest)
                 _responseElement
