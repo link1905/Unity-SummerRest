@@ -78,7 +78,6 @@ MonoBehaviour:
     textFormat: 0
     form: []
   urlWithParam: https://cdn.dummyjson.com/product-images/1/1.jpg
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

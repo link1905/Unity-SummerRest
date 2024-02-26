@@ -43,7 +43,7 @@ MonoBehaviour:
       value: 0
     value: 0
   isGenerated: 1
-  <TreeId>k__BackingField: 7
+  <TreeId>k__BackingField: 8
   path:
     text: login
     values: []
@@ -74,7 +74,6 @@ MonoBehaviour:
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/auth/login
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

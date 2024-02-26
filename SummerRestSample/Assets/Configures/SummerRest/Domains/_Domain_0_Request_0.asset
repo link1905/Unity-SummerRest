@@ -82,9 +82,8 @@ MonoBehaviour:
       text: 
       key: file
       file:
-        filePath: D:/Source/Unity-SummerRest/SummerRest/Packages/packages-lock.json
+        filePath: 
   urlWithParam: https://dummyjson.com/test-multipart
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

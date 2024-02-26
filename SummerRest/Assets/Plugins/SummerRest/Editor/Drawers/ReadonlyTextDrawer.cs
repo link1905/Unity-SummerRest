@@ -1,5 +1,6 @@
 ﻿using SummerRest.Editor.Attributes;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace SummerRest.Editor.Drawers
@@ -14,8 +15,8 @@ namespace SummerRest.Editor.Drawers
                 label = property.displayName,
                 multiline = false,
                 isReadOnly = true,
-                bindingPath = property.name
             };
+            field.BindProperty(property);
             return field;
         }
     }

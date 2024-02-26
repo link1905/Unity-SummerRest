@@ -7,6 +7,7 @@ using SummerRest.Editor.DataStructures;
 using SummerRest.Editor.Utilities;
 using SummerRest.Runtime.Parsers;
 using SummerRest.Runtime.RequestComponents;
+using UnityEditor;
 using UnityEngine;
 
 namespace SummerRest.Editor.Models
@@ -77,14 +78,21 @@ namespace SummerRest.Editor.Models
                 UnityEditor.SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
         }
 
+        public override string Rename(string parent, int index)
+        {
+            var latestResponse = LatestResponse;
+            var newName = base.Rename(parent, index);
+            if (latestResponse.IsPersistentAsset())
+                AssetDatabase.RenameAsset(latestResponse.GetAssetPath(), $"{newName}_Response");
+            return newName;
+        }
+
         public override void Delete(bool fromParent)
         {
             if (fromParent)
-            {
-                Parent.Requests.Remove(this);
-                Parent.MakeDirty();
-            }
-            if (latestResponse is not null)
+                RemoveFormParent();
+            var latestResponse = LatestResponse;
+            if (latestResponse.IsPersistentAsset())
                 latestResponse.RemoveAsset();
             base.Delete(fromParent);
         }
@@ -94,17 +102,16 @@ namespace SummerRest.Editor.Models
             if (Parent is null)
                 return;
             Parent.Requests.Remove(this);
+            Parent.MakeDirty();
         }
 
         /// <summary>
         /// Caches latest response of this request (editor-only)
         /// </summary>
-        [SerializeReference] private Response latestResponse;
-        public Response LatestResponse => latestResponse ??= CreateResponse();
+        public Response LatestResponse => CreateResponse();
         private Response CreateResponse()
         {
             var res = EditorAssetUtilities.CreateAndSaveObject<Response>($"{name}_Response", PathsHolder.ResponsesPath);
-            latestResponse = res;
             this.MakeDirty();
             return res;
         } 
