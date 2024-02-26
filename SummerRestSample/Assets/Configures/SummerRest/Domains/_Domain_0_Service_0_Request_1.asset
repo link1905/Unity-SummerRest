@@ -84,7 +84,6 @@ MonoBehaviour:
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/search?q=phone&select=title&select=price
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

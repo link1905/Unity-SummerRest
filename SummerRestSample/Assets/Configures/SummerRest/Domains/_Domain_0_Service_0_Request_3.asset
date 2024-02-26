@@ -75,7 +75,6 @@ MonoBehaviour:
     textFormat: 0
     form: []
   urlWithParam: https://dummyjson.com/products/add
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:

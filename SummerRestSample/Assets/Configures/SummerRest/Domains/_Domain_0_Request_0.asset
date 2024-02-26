@@ -84,7 +84,6 @@ MonoBehaviour:
       file:
         filePath: 
   urlWithParam: https://dummyjson.com/test-multipart
-  latestResponse: {fileID: 0}
   references:
     version: 2
     RefIds:
