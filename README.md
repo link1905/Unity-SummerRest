@@ -1,7 +1,7 @@
 ﻿# SummerRest - HTTP Endpoints Managing Plugin for Unity
 A plugin works as Postman, which supports:
 - Visualize the structure of your HTTP endpoints
-- Enable to call them inside Unity
+- Enable to call them in EditMode
 - Generate boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
 ## The minimum Unity Editor version required is **2022.2** 
@@ -56,8 +56,8 @@ First and foremost, we must know the structure of an endpoint tree
 - `Service`: A service is nothing but an Endpoint container, it's only used to build API structure
   - A `Service` is able to have children (Service and Request)
     ![](Screenshots/0_definition_1_service.png) 
-- `Request`: The terminal component of an Endpoint tree (It does not have any children)
-  - A `Request` is a HTTP request (yeah that's right, you need at least 1 bounding domain to call any request), that means a Request has `method` and `body`
+- `Request`: The terminal component of an Endpoint tree (It's not allowed to have any child)
+  - A `Request` is a HTTP request (yeah, you need at least 1 bounding domain to call any request), that means a Request has `method`, `body` and `content-type`
     ![](Screenshots/0_definition_2_request.png)
 - Inheriting resource path from parents stands out as the most crucial benefit of this plugin (technically string concatenation). So, the url of an element must be influenced by its parents (please note the url field of the previous captures)
 
@@ -72,7 +72,7 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/0_definition_6_text_or_custom_plain.png) <br>
   - Show all types of a project is a performance killer (in spite of EditMode). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
    ![](Screenshots/0_definition_7_text_or_custom_type.png)
-  - Finally, the fields are exposed and serialized thanks to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html)
+  - Finally, the fields are exposed and serialized thanks to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), check the example below if your custom classes do not work as expected 
     ```csharp
     [Serializable] //Essential attribute to make this class work with Unity Serialization
     class MyRequestBody : IRequestBodyData
@@ -93,54 +93,54 @@ Additionally, you may see these things everywhere in the plugin
 ### Simple usage
 - After installing the plugin, click on the `Tools/SummerRest` to open the plugin window
   ![](Screenshots/1_guide_0_open.png)
-- The plugin works on an asset named **"SummerRestConfiguration"** (please do not modify it manually!), an initializing panel will be shown if the plugin does not detect the asset. You have to select a folder which contains assets belonging to the plugin <br>
+- The plugin works on an asset named **"SummerRestConfiguration"** (**please do not modify it manually!**), an initializing panel will be shown if the plugin does not detect the asset. You have to select a folder which contains assets belonging to the plugin <br>
   ![](Screenshots/1_guide_1_select_folder.png)
 - Initially, you need to define at least 1 domain, click on `Add` to create a new domain <br>
   ![](Screenshots/1_guide_2_add.png)
   ![](Screenshots/1_guide_3_domain.png)
-- A domain must have at least 1 origin, please note that origins must an absolute URL eg. https://dummyjson.com (this is a public service for testing only, please do not compromise it)
+- A Domain must have at least 1 origin, please note that origins must an absolute URL eg. https://dummyjson.com (this is a public service for testing only, please do not compromise it)
   ![](Screenshots/1_guide_4_fake_service.png)
 - Right click (or `Add` button) on an item of the domain tree view to create/delete its children
-- Domain and Service are not callable, only Request offers that feature
-  - Name: name of generated class associated with this endpoint [Source Generation](#source-generation)
-  - Path: relative path from its parent
-  - Url: absolute url formed from the parents' path and its path
-- We will create a Service named Products (relative path is activity)
+  - Domain and Service are not callable, only Request offers that feature. There are some notable fields:
+    - `Name`: name of generated class associated with this endpoint [Source Generation](#source-generation)
+	- `Path`: relative path from its parent
+	- `Url`: absolute url formed from the parents' path and its path
+- We will create a Service named `Products` (relative path is activity)
   ![](Screenshots/1_guide_5_service.png)
-- Then, create a GET Request to get the information of product **1** (or you may directly create this Request without the previous Service (Products), but remember to fill out the relative path correctly eg. products/1)
+- Then, create a GET Request to get the information of product `1` (or you may directly create this Request without the previous Service (Products), but remember to fill out the relative path correctly eg. products/1)
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in EditMode
   ![](Screenshots/1_guide_7_make_request.png)
 - We are tightly sticking the request to the product `1` (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
-  - You need to embed your dynamic strings inside "{}" eg. "{productId}"
+  - You need to embed your dynamic strings inside `"{}"` eg. "{productId}"
   - Then a list will be shown for replacing that values in the final url
   - To continue the previous example, please change the relative path from `1` to `{productId}`. Then, the final URL looks the same as the previous step
     ![](Screenshots/1_guide_7_1_smart_path.png)
-- You may create a searching request by using the parameters
+- You may create a search request by using the request parameters
   ![](Screenshots/1_guide_8_get_with_param.png)
-- Another request which posts data, please have a look at the request body and method fields
+- Another request which posts data, please note the request body and method
   ![](Screenshots/1_guide_9_post_request.png)
 - Another one downloading an image (we have created a domain named DummyJsonCdn)
   ![](Screenshots/1_guide_10_image_request.png)
 - And another uploading multipart form data (*this endpoint does not exist, only used to depict a multipart uploading request*)
   ![](Screenshots/1_guide_11_multipart_request.png)
-- Please have a look at [Sample project](SummerRest/Assets/Plugins/SummerRest/Samples~/SummerRestSample) for further usages
+- Please have a look at [Sample project](SummerRestSample) for further usages
 
 ## Auth
 
-The guidance above is only applied for public APIs. Most of the time, you work with secured APIs that need some factors (eg. JWT, api key, username/password pair...) to authenticate and authorize your operations
+The guidances above are only applied for public APIs. Most of the time, you work with secured APIs that need some factors (eg. JWT, api key, username/password pair...) to authenticate and authorize your operations
 
 ### Configure
-- The plugin supports to append auth information to your request
+- The plugin supports to append auth information to your requests automatically
 - Click on `Advanced settings` to open the auth settings section
   ![](Screenshots/2_auth_0_auth_container.png)
 - You will see a list of auth containers, each of them contains a record of key, appender type and secret value
-  - `Key`: unique value of an auth container, which used by endpoints for referencing 
+  - `Key`: unique value, which being referred by endpoints
   - `Secret value`: the value will be only used for **EditMode requests**, and resolved by an [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) in PlayMode
   - `Appender type`: how the secret value will be appended into a request (typically modify the request's header), currently we support `BearerToken`, `Basic(Username/password)`,... You can make your own appender by
-    - Not reusable: Manually modify params or headers of a request
+    - Not reusable: Manually modify params or headers of the request
     - Reusable: implement [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs), then the class will be listed in the type dropdown
-- For example: if you use `BearerTokenAuthAppender` with value `my-data`, every requests refer to this container will be added with a header `"Authorization":"Bearer my-data"`  
+  - For example: if you use `BearerTokenAuthAppender` with value `my-data` and key `my-key`, every requests refer to this container (key=`my-key`) will be added with a header `"Authorization":"Bearer my-data"`  
 
 ### Secrets repository
 - Storing your secrets on RAM maybe a bad idea for several reasons: 
@@ -167,7 +167,7 @@ sequenceDiagram
 
 To illustrate what we have discussed on this topic so far. We're going to use a short example by calling an `GetCurrentAuthUser` api, since this endpoint requires an bearer token through a header named `Authorization`
 
-Although this type of behaviour is supported basically [BearerTokenAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/BearerTokenAuthAppender.cs); To make it clear, we still make a new appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
+Although this type of behaviour is supported basically [BearerTokenAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/BearerTokenAuthAppender.cs). To make it clear, we still make a new appender by implementing [IAuthAppender](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Appenders/IAuthAppender.cs)
 ```
 // This behaves the same as what BearerTokenAuthAppender does
 public class DummyJsonApiAuthAppender : IAuthAppender<DummyJsonApiAuthAppender, string>
@@ -192,7 +192,7 @@ In any Endpoint, refer to this container if you're about to authenticate the req
 ![](Screenshots/2_auth_5_auth_request.png)
 
 
-If you only call **in EditMode**, you are able to make the request up to now, because we are taking the secret value from the window. The window is useless in PlayMode; Before calling an endpoint **in PlayMode**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
+If you only call **in EditMode**, you are able to start the request up to now, because we are taking the secret value from the window. **The window is useless in PlayMode**; Before calling an endpoint **in PlayMode**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
 ```csharp
 // Save the secret value
 
@@ -257,9 +257,9 @@ A class generated from `Request` comes up with some utility methods for calling 
         InitializedSerializedBody = @"i am a big cat";
     }
     ```
-  - With **text or data** request body: we keep the serialized text in the Editor 
-  - With **multipart form** request: **only text rows** are copied, your file rows are only used in EditMode (but the file keys are still generated)
-- But you can modify them through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field in your classes
+  - With `text or data` request body: we keep the serialized text in the Editor 
+  - With `multipart form` request: **only text rows** are copied, your file rows are only used in EditMode (but the file keys are still generated)
+- But you can modify the cloned values through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field in your classes
   ```csharp
   // Allias to the long name
   using Request2 = MyDomain.MyService.MyRequest2;
@@ -279,7 +279,7 @@ A class generated from `Request` comes up with some utility methods for calling 
   }
 
   ```
-- The plugin supports 3 types of request: data, texture, audio clip. Each of them has 2 versions: Simple (only return response body) and Detailed
+- The plugin supports 3 types of request: `data`, `texture`, `audio clip`. Each of them has 2 versions: Simple (only return response body) and Detailed (Reponse body, code, headers...)
    ```csharp
     ... // Continue from the last example
     using Request2 = MyDomain.MyService.MyRequest2;
@@ -307,7 +307,7 @@ A class generated from `Request` comes up with some utility methods for calling 
         private void HandleError(ResponseError error) { ... }
     }
    ```
-- The simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods. **Please note that you must call `IWebResponse<>.Dispose()` after finishing using it (or wrap it `using` statement)**
+- Simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods. **Please note that you must call `IWebResponse<>.Dispose()` after finishing using it (or wrap it with a `using` statement)**
   ```csharp
   private void DoDetailedRequest()
   {
@@ -330,7 +330,7 @@ A class generated from `Request` comes up with some utility methods for calling 
       ...
   }
   ```
-- In case you need to make an undefined request (eg. an image url). You would rather use [WebRequestUtility](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestAdaptor/WebRequestUtility.cs)
+- In case you need to make undefined requests (eg. an image url). You would rather use [WebRequestUtility](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestAdaptor/WebRequestUtility.cs)
   ```csharp
   public void GetImageByAbsoluteUrl(string url)
   {
@@ -377,11 +377,11 @@ A class generated from `Request` comes up with some utility methods for calling 
   ```
 ### Advanced settings
 
-The plugin provides a most common way to deal with HTTP requests. But, you are able to embed your customizations easily 
+The plugin provides the most common way to deal with HTTP requests. But, you are able to embed your implementations easily 
 
 - Data serializer: the [default serializer](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/DefaultDataSerializer.cs) bases on [JsonUtility](https://docs.unity3d.com/ScriptReference/JsonUtility.html) and [XmlSerializer](https://learn.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=netstandard-2.0), you can adapt it through the plugin window (Advanced settings section) or `IDataSerializer.Current` 
 - ISecretRepository: the default repository bases on [Unity PlayerPrefs](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html), you can adapt it through the plugin window (Advanced settings section) or `ISecretRepository.Current`
-- There are some more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... we do not offer default selections for them in the window because we suppose there is no need to change their logic
+- There are more considerations like [IContentTypeParser](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IContentTypeParser.cs), [IUrlBuilder](SummerRest/Assets/Plugins/SummerRest/Runtime/Parsers/IUrlBuilder.cs)... we do not offer default selections for them in the window because we suppose there is no need to change their logic
 
 ## Acknowledgments
 
