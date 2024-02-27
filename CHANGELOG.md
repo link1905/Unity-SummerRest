@@ -1,9 +1,8 @@
-﻿# [1.1.0]() (2020-10-02)
+﻿# [1.0.0] (2024-02-28)
+ 
+### Features [README.md](README.md)
 
-
-### Features[README.md](README.md)
-
-* First release version of the plugin
-* Support managing and calling API endpoints in Editor mode
-* Generate source codes calling and parsing transferred data
-* Add README file and sample project
+* Support to manage and call HTTP endpoints in EditMode
+* Generate source code calling and parsing transferred data in PlayMode
+* Allow to embed custom implementations
+* Add a sample project
