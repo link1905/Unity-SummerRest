@@ -1,14 +1,14 @@
-﻿# SummerRest - HTTP Endpoints Managing Plugin for Unity
-A plugin works as Postman, which supports:
+﻿# SummerRest - A Unity Plugin for Managing HTTP Endpoints
+This plugin works as Postman, which supports:
 - Visualize the structure of your HTTP endpoints
-- Enable to call them in EditMode
+- Enable to call your endpoints in EditMode
 - Generate boilerplate code based on your structure to simplify the process of calling HTTP endpoints in PlayMode
 
 ## The minimum Unity Editor version required is **2022.2** 
 Because the project leverages some Unity UIToolkit new elements and the Roslyn compiler
 
 ## Installation
-***Please do not move the plugin folder to a different position because of breaking the path constants in the plugin source***
+***Please do not move the plugin folder to a different position because of breaking path constants in the plugin source***
 
 ### 1. [Asset store](https://u3d.as/3eSA)
 
@@ -31,12 +31,12 @@ Or add `"com.summer.summer-rest": "https://github.com/risethesummer/Unity-Summer
   }
   ```
 
-If you want to set a target version, please inserting a release tag x.y.z so you can specify a version on [the release page](https://github.com/risethesummer/Unity-SummerRest/releases) (unless Unity takes the last version by default). For example `"com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"`
+If you want to set a target version, please inserting a release tag x.y.z so you can specify a version on [the release page](https://github.com/risethesummer/Unity-SummerRest/releases) (unless Unity takes the latest version by default). For example `"com.summer.summer-rest": "https://github.com/risethesummer/Unity-SummerRest.git?path=SummerRest/Assets/Plugins/SummerRest#1.0.0"`
 
 
 ## Definitions
 
-There are a few important definitions in the plugin you should know to easily get acquainted with it
+There are some important definitions in the plugin you should know to easily get acquainted with it
 
 First and foremost, we must know the structure of an endpoint tree
 - `Endpoint`: every components below are treated as `Endpoint` (technically they inherit it)
@@ -64,15 +64,15 @@ First and foremost, we must know the structure of an endpoint tree
 
 Additionally, you may see these things everywhere in the plugin
 
--  **None, Inherit, Custom, AppendToParent**: a field marked with this attribute is able to leverage value from its **closest** parent, you may set it `None` to leave it default
+-  **None, Inherit, Custom, AppendToParent**: a field marked with this attribute is able to leverage value from its **closest** parent, you may set `None` to leave it default
    ![](Screenshots/0_definition_3_inherit_inherit.png)
    ![](Screenshots/0_definition_4_inherit_append.png)
    ![](Screenshots/0_definition_5_inherit_custom.png)
-- Raw text or custom class: sometimes the plugin allows to use custom class instead of raw text (request body, auth data)
+- Raw text or custom class: at some point, the plugin allows to use a custom class instead of raw text (request body, auth data)
   ![](Screenshots/0_definition_6_text_or_custom_plain.png) <br>
-  - Show all types of a project is a performance killer (in spite of EditMode). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
+  - Showing all types of a project is a performance killer (in spite of EditMode). So, we force you to implement predefined interfaces ([IRequestBodyData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IRequestBodyData.cs), [IAuthData](SummerRest/Assets/Plugins/SummerRest/Runtime/RequestComponents/IAuthData.cs)) before showing your types in the dropdown
    ![](Screenshots/0_definition_7_text_or_custom_type.png)
-  - Finally, the fields are exposed and serialized thanks to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), check the example below if your custom classes do not work as expected 
+  - Finally, fields of a serializable class are exposed and serialized thanks to [Unity Serialization](https://docs.unity3d.com/Manual/script-Serialization.html), check the example below if your custom classes do not work as expected 
     ```csharp
     [Serializable] //Essential attribute to make this class work with Unity Serialization
     class MyRequestBody : IRequestBodyData
@@ -87,7 +87,8 @@ Additionally, you may see these things everywhere in the plugin
     You may observe that "notSerializedFieldBecausePrivate" has the wrong name, and "NotExposedBecauseUnityDoesNotRecognizeProperty" is missing from the Inspector
     ![](Screenshots/0_definition_8_text_or_custom_class.png)
       
-    **Please note that, we encounter the constraints because we are using Unity Serialization. Ignore them if you plan to use your own data serializer eg. NewtonSoft, System.Text.Json...**
+    **Please note that, we encounter the serilization constraints because we are using Unity Serialization. Ignore them if you plan to use your own data serializer eg. NewtonSoft, System.Text.Json...**
+
 ## Getting started
 
 ### Simple usage
@@ -98,7 +99,7 @@ Additionally, you may see these things everywhere in the plugin
 - Initially, you need to define at least 1 domain, click on `Add` to create a new domain <br>
   ![](Screenshots/1_guide_2_add.png)
   ![](Screenshots/1_guide_3_domain.png)
-- A Domain must have at least 1 origin, please note that origins must an absolute URL eg. https://dummyjson.com (this is a public service for testing only, please do not compromise it)
+- A Domain must have at least 1 origin, please note that origins should be absolute URLs eg. https://dummyjson.com (this is a public service for testing only, please do not compromise it)
   ![](Screenshots/1_guide_4_fake_service.png)
 - Right click (or `Add` button) on an item of the domain tree view to create/delete its children
   - Domain and Service are not callable, only Request offers that feature. There are some notable fields:
@@ -111,8 +112,8 @@ Additionally, you may see these things everywhere in the plugin
   ![](Screenshots/1_guide_6_request.png)
 - Click on `Do Request` to call your endpoint in EditMode
   ![](Screenshots/1_guide_7_make_request.png)
-- We are tightly sticking the request to the product `1` (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the path of Domain and Service are stable, so currently we do not allow it)
-  - You need to embed your dynamic strings inside `"{}"` eg. "{productId}"
+- We are tightly sticking the request to the product `1` (we need to change the path in case we refer to another product). The plugin supports `smart string` in typing the relative path of a **Request** (we consider the paths of Domain and Service are stable, so currently we do not allow it)
+  - You need to embed dynamic strings inside `"{}"` eg. "{productId}"
   - Then a list will be shown for replacing that values in the final url
   - To continue the previous example, please change the relative path from `1` to `{productId}`. Then, the final URL looks the same as the previous step
     ![](Screenshots/1_guide_7_1_smart_path.png)
@@ -192,7 +193,7 @@ In any Endpoint, refer to this container if you're about to authenticate the req
 ![](Screenshots/2_auth_5_auth_request.png)
 
 
-If you only call **in EditMode**, you are able to start the request up to now, because we are taking the secret value from the window. **The window is useless in PlayMode**; Before calling an endpoint **in PlayMode**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve its auth key
+If you only call **in EditMode**, you are able to call the request up to now, because we are taking the secret value from the window. **The window is useless in PlayMode**; Before calling an endpoint **in PlayMode**, please make sure that current [ISecretRepository](SummerRest/Assets/Plugins/SummerRest/Runtime/Authenticate/Repositories/ISecretRepository.cs) can resolve the auth key of the request
 ```csharp
 // Save the secret value
 
@@ -228,7 +229,7 @@ The generated source will be structured as what you have designed in the Editor.
               ...
       }
   ```
-- **Because of C# limitations, we can not have an embedded class having the same name as its parent and siblings, so you must manage to avoid the collisions of endpoint names (use distinct names to easily address this problem)**
+- **Because of C# limitations, we can not have an embedded class having the same name as its parent and siblings, so you must manage to avoid class name collisions (use distinct names to easily address this problem)**
 ```
 MyService
    MyService
@@ -236,7 +237,7 @@ public static class MyService {
   public static class MyService {} // => This causes the name collision error
 }  
 ```
-### Use generated classes
+### Use generated source
 > The examples below are extracted from the [Sample project](SummerRestSample)
 
 A class generated from `Request` comes up with some utility methods for calling the respective endpoint
@@ -244,10 +245,10 @@ A class generated from `Request` comes up with some utility methods for calling 
    ```csharp
    var request = MyDomain.MyService.MyRequest2.Create();
    ```
-- Originally, the request's information (headers, params, url...) **is initially alighted with what you assigned in the Editor**
-  - Technically, we copied your inputs to the generated classes
+- Originally, a request's information (headers, params, url...) **is initially alighted with what you assigned in the Editor**
+  - Technically, we copied your inputs to generated classes
     ```csharp
-    // This code only illustrates a generated request
+    // This code only illustrates a generated request, do not write it yourself
     // The properties of this class initially copy your configures
     public PostRequest() : base("http://my-domain.com/data", "http://my-domain.com/data", IRequestModifier<AuthRequestModifier<SummerRest.Runtime.Authenticate.Appenders.BearerTokenAuthAppender, System.String>>.GetSingleton())
     {
@@ -259,7 +260,7 @@ A class generated from `Request` comes up with some utility methods for calling 
     ```
   - With `text or data` request body: we keep the serialized text in the Editor 
   - With `multipart form` request: **only text rows** are copied, your file rows are only used in EditMode (but the file keys are still generated)
-- But you can modify the cloned values through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field in your classes
+- You can modify the cloned values through the object's properties (The auth key is modifiable but the appender is not). Please note that, a request object is reusable, you can keep it as a field permanently
   ```csharp
   // Allias to the long name
   using Request2 = MyDomain.MyService.MyRequest2;
@@ -307,7 +308,7 @@ A class generated from `Request` comes up with some utility methods for calling 
         private void HandleError(ResponseError error) { ... }
     }
    ```
-- Simple methods only provide you with the response body, in case you want to delve into the response. You should consider leveraging detailed methods. **Please note that you must call `IWebResponse<>.Dispose()` after finishing using it (or wrap it with a `using` statement)**
+- Simple methods only provide you with a response body, in case you want to delve into the response. You should consider leveraging detailed methods. **Please note that you must call `IWebResponse<>.Dispose()` after finishing using it (or wrap it with a `using` statement)**
   ```csharp
   private void DoDetailedRequest()
   {
@@ -351,7 +352,7 @@ A class generated from `Request` comes up with some utility methods for calling 
 - Normally, generated classes only have coroutine methods. 
 - You can enable async methods by add **"SUMMER_REST_TASK"** [Scripting Define Symbol](https://docs.unity3d.com/Manual/CustomScriptingSymbols.html) and import [UniTask](https://github.com/Cysharp/UniTask) package. Async methods are highly recommended because of simplicity
   ![](Screenshots/3_source_2_symbol.png)
-- Please note that the async methods will throw exceptions on error instead of callbacks
+- Please note that async methods throw exceptions on error instead of callbacks
   ```
   private async UniTaskVoid GetProductDataAsync(int productId)
   {
